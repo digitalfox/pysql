@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>pysql</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >pysql</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Module&nbsp;pysql
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript: void(0);" class="privatelink"
+    onclick="toggle_private();">hide private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="pysql-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="pysql-module.html">Module pysql</a></h1>
+<pre class="py-src">
+<span class="py-lineno">  1</span>  <span class="py-line"><span class="py-comment">#!/usr/bin/python</span> </span>
+<span class="py-lineno">  2</span>  <span class="py-line"><span class="py-comment"></span><span class="py-comment"># -*- coding: utf-8 -*-</span> </span>
+<span class="py-lineno">  3</span>  <span class="py-line"><span class="py-comment"></span> </span>
+<span class="py-lineno">  4</span>  <span class="py-line"><span class="py-comment"># S&#233;bastien Renard (sebastien.renard@digitalfox.org)</span> </span>
+<span class="py-lineno">  5</span>  <span class="py-line"><span class="py-comment"></span><span class="py-comment"># Code licensed under GNU GPL V2</span> </span>
+<span class="py-lineno">  6</span>  <span class="py-line"><span class="py-comment"></span> </span>
+<span class="py-lineno">  7</span>  <span class="py-line"><span class="py-docstring">"""</span> </span>
+<span class="py-lineno">  8</span>  <span class="py-line"><span class="py-docstring">Pysql is an Oracle client for all those who suffer from sqlplus.</span> </span>
+<span class="py-lineno">  9</span>  <span class="py-line"><span class="py-docstring"></span> </span>
+<span class="py-lineno"> 10</span>  <span class="py-line"><span class="py-docstring">It aims to bring confort and power to user without a heavy graphical application.</span> </span>
+<span class="py-lineno"> 11</span>  <span class="py-line"><span class="py-docstring"></span> </span>
+<span class="py-lineno"> 12</span>  <span class="py-line"><span class="py-docstring">Developpers (in order of arrival in the project) :</span> </span>
+<span class="py-lineno"> 13</span>  <span class="py-line"><span class="py-docstring">- S&#233;bastien Renard</span> </span>
+<span class="py-lineno"> 14</span>  <span class="py-line"><span class="py-docstring">- S&#233;bastien Delcros</span> </span>
+<span class="py-lineno"> 15</span>  <span class="py-line"><span class="py-docstring">- &lt;your name here if you want to contribute ! (your firstname must be Sebastien of course)</span> </span>
+<span class="py-lineno"> 16</span>  <span class="py-line"><span class="py-docstring"></span> </span>
+<span class="py-lineno"> 17</span>  <span class="py-line"><span class="py-docstring">Requirements:</span> </span>
+<span class="py-lineno"> 18</span>  <span class="py-line"><span class="py-docstring">- Mandatory:</span> </span>
+<span class="py-lineno"> 19</span>  <span class="py-line"><span class="py-docstring">    o python. Pysql has been tested with Python 2.4.x and 2.5.0</span> </span>
+<span class="py-lineno"> 20</span>  <span class="py-line"><span class="py-docstring">    o cx_Oracle : http://www.cxtools.net/default.aspx?nav=cxorlb</span> </span>
+<span class="py-lineno"> 21</span>  <span class="py-line"><span class="py-docstring">- Optionnal:</span> </span>
+<span class="py-lineno"> 22</span>  <span class="py-line"><span class="py-docstring">    o pyreadline for Windows user to have input completion</span> </span>
+<span class="py-lineno"> 23</span>  <span class="py-line"><span class="py-docstring">    o cTypes for windows user to have input completion (already included in Python 2.5)</span> </span>
+<span class="py-lineno"> 24</span>  <span class="py-line"><span class="py-docstring">    o pydot for graphical functions (show datamodel in png for example)</span> </span>
+<span class="py-lineno"> 25</span>  <span class="py-line"><span class="py-docstring">    o pyparser as a dependancy of pydot</span> </span>
+<span class="py-lineno"> 26</span>  <span class="py-line"><span class="py-docstring"></span> </span>
+<span class="py-lineno"> 27</span>  <span class="py-line"><span class="py-docstring">Supported plateforms:</span> </span>
+<span class="py-lineno"> 28</span>  <span class="py-line"><span class="py-docstring">- GNU/Linux (developper choice!)</span> </span>
+<span class="py-lineno"> 29</span>  <span class="py-line"><span class="py-docstring">- Windows (some limitations: poor completion and no colors)</span> </span>
+<span class="py-lineno"> 30</span>  <span class="py-line"><span class="py-docstring">- AIX (cx_Oracle is quite painfull to install, but all works correctly)</span> </span>
+<span class="py-lineno"> 31</span>  <span class="py-line"><span class="py-docstring"></span> </span>
+<span class="py-lineno"> 32</span>  <span class="py-line"><span class="py-docstring">Pysql should work on many other platform (like Solaris, HPUX, MacOSX, *BSD) but has not been</span> </span>
+<span class="py-lineno"> 33</span>  <span class="py-line"><span class="py-docstring">tested. Feel free to report success to the pysql team.</span> </span>
+<span class="py-lineno"> 34</span>  <span class="py-line"><span class="py-docstring"></span> </span>
+<span class="py-lineno"> 35</span>  <span class="py-line"><span class="py-docstring">Installation:</span> </span>
+<span class="py-lineno"> 36</span>  <span class="py-line"><span class="py-docstring">Very simple for the moment, you can put pysql everywhere. Just put the pysql command in your path.</span> </span>
+<span class="py-lineno"> 37</span>  <span class="py-line"><span class="py-docstring"></span> </span>
+<span class="py-lineno"> 38</span>  <span class="py-line"><span class="py-docstring">Internationalisation (i18n):</span> </span>
+<span class="py-lineno"> 39</span>  <span class="py-line"><span class="py-docstring">Pysql is available in English (base langage for developpement) and French.</span> </span>
+<span class="py-lineno"> 40</span>  <span class="py-line"><span class="py-docstring">To generate other language messages, use "i18.sh" script in the pysql directory. You'll need</span> </span>
+<span class="py-lineno"> 41</span>  <span class="py-line"><span class="py-docstring">GNU Gettext to achieve this.</span> </span>
+<span class="py-lineno"> 42</span>  <span class="py-line"><span class="py-docstring">Next, to use pysql in French, set the LANG variable to fr (export LANG=fr) &#171; et voil&#224; &#187; !</span> </span>
+<span class="py-lineno"> 43</span>  <span class="py-line"><span class="py-docstring"></span> </span>
+<span class="py-lineno"> 44</span>  <span class="py-line"><span class="py-docstring">Documentation:</span> </span>
+<span class="py-lineno"> 45</span>  <span class="py-line"><span class="py-docstring">API documentation can be found in doc/ directory.</span> </span>
+<span class="py-lineno"> 46</span>  <span class="py-line"><span class="py-docstring">User documentation is available in pysql itself. Type &#171; help &#187; to get some help.</span> </span>
+<span class="py-lineno"> 47</span>  <span class="py-line"><span class="py-docstring"></span> </span>
+<span class="py-lineno"> 48</span>  <span class="py-line"><span class="py-docstring">Modules overview:</span> </span>
+<span class="py-lineno"> 49</span>  <span class="py-line"><span class="py-docstring">- pysql.py: main module. Just used to setup i18n and fire the shell</span> </span>
+<span class="py-lineno"> 50</span>  <span class="py-line"><span class="py-docstring">- pysqlshell.py: user shell interaction. All pysql &#171; command &#187; are here.</span> </span>
+<span class="py-lineno"> 51</span>  <span class="py-line"><span class="py-docstring">                pysqlshell command handle argument parsing and display.</span> </span>
+<span class="py-lineno"> 52</span>  <span class="py-line"><span class="py-docstring">                Real works is done in pysqlfunction.</span> </span>
+<span class="py-lineno"> 53</span>  <span class="py-line"><span class="py-docstring">- pysqlfunction.py :advanced functions for pysql.</span> </span>
+<span class="py-lineno"> 54</span>  <span class="py-line"><span class="py-docstring">- pysqlconf.py: all configuration stuff (parameters, cache, history, user sql library...)</span> </span>
+<span class="py-lineno"> 55</span>  <span class="py-line"><span class="py-docstring">- pysqloraobject.py: object model for main Oracle objects (table, view, package, index).</span> </span>
+<span class="py-lineno"> 56</span>  <span class="py-line"><span class="py-docstring">                    this is used for functions like desc and edit</span> </span>
+<span class="py-lineno"> 57</span>  <span class="py-line"><span class="py-docstring">- pysqlgraphics.py: all graphical stuff that creates images with graphviz</span> </span>
+<span class="py-lineno"> 58</span>  <span class="py-line"><span class="py-docstring">- pysqlqueries.py: an effort is done to put all SQL queries in this module to have a cleaner code</span> </span>
+<span class="py-lineno"> 59</span>  <span class="py-line"><span class="py-docstring">- pysqlcolor.py: color bank definition</span> </span>
+<span class="py-lineno"> 60</span>  <span class="py-line"><span class="py-docstring">- pysqldb.py: all connection and cursor handling. Also manages background queries</span> </span>
+<span class="py-lineno"> 61</span>  <span class="py-line"><span class="py-docstring">- pysqlexception.py: all pysql defined exceptions</span> </span>
+<span class="py-lineno"> 62</span>  <span class="py-line"><span class="py-docstring"></span> </span>
+<span class="py-lineno"> 63</span>  <span class="py-line"><span class="py-docstring">Developpement conventions:</span> </span>
+<span class="py-lineno"> 64</span>  <span class="py-line"><span class="py-docstring">- classes must begin with an uppercase caracter</span> </span>
+<span class="py-lineno"> 65</span>  <span class="py-line"><span class="py-docstring">- variables must begin with a lowercase caracter and user alternate uppercase instead of _</span> </span>
+<span class="py-lineno"> 66</span>  <span class="py-line"><span class="py-docstring">- all lines must be less than 109 characters (ask developpers why)</span> </span>
+<span class="py-lineno"> 67</span>  <span class="py-line"><span class="py-docstring">- all patches must be sent to sebastien@digitalfox.org</span> </span>
+<span class="py-lineno"> 68</span>  <span class="py-line"><span class="py-docstring"></span> </span>
+<span class="py-lineno"> 69</span>  <span class="py-line"><span class="py-docstring">"""</span> </span>
+<span class="py-lineno"> 70</span>  <span class="py-line"> </span>
+<span class="py-lineno"> 71</span>  <span class="py-line"><span class="py-comment"># Python imports:</span> </span>
+<span class="py-lineno"> 72</span>  <span class="py-line"><span class="py-comment"></span><span class="py-keyword">import</span> <span class="py-name">gettext</span> </span>
+<span class="py-lineno"> 73</span>  <span class="py-line"><span class="py-keyword">import</span> <span class="py-name">locale</span> </span>
+<span class="py-lineno"> 74</span>  <span class="py-line"><span class="py-keyword">import</span> <span class="py-name">os</span> </span>
+<span class="py-lineno"> 75</span>  <span class="py-line"><span class="py-keyword">import</span> <span class="py-name">sys</span> </span>
+<span class="py-lineno"> 76</span>  <span class="py-line"><span class="py-keyword">import</span> <span class="py-name">traceback</span> </span>
+<span class="py-lineno"> 77</span>  <span class="py-line"><span class="py-keyword">from</span> <span class="py-name">os</span><span class="py-op">.</span><span class="py-name">path</span> <span class="py-keyword">import</span> <span class="py-name">dirname</span><span class="py-op">,</span> <span class="py-name">join</span> </span>
+<span class="py-lineno"> 78</span>  <span class="py-line"><span class="py-keyword">from</span> <span class="py-name">optparse</span> <span class="py-keyword">import</span> <span class="py-name">OptionParser</span> </span>
+<span class="py-lineno"> 79</span>  <span class="py-line"> </span>
+<span class="py-lineno"> 80</span>  <span class="py-line"><span class="py-comment"># Pysql imports:</span> </span>
+<span class="py-lineno"> 81</span>  <span class="py-line"><span class="py-comment"></span><span class="py-keyword">from</span> <span id="link-0" class="py-name"><a title="pysqlshell" class="py-name" href="#" onclick="doclink('link-0', 'pysqlshell', 'Module pysqlshell=pysqlshell-module.html'); return false;">pysqlshell</a></span></span> <span class="py-keyword">import</span> <span id="link-1" class="py-name"><a title="pysqlshell.PysqlShell" class="py-name" href="#" onclick="doclink('link-1', 'PysqlShell', 'Class pysqlshell.PysqlShell=pysqlshell.PysqlShell-class.html'); return false;">PysqlShell</a></span></span> </span>
+<span class="py-lineno"> 82</span>  <span class="py-line"><span class="py-keyword">from</span> <span id="link-2" class="py-name"><a title="pysqlconf" class="py-name" href="#" onclick="doclink('link-2', 'pysqlconf', 'Module pysqlconf=pysqlconf-module.html'); return false;">pysqlconf</a></span></span> <span class="py-keyword">import</span> <span id="link-3" class="py-name"><a title="pysqlconf.PysqlConf" class="py-name" href="#" onclick="doclink('link-3', 'PysqlConf', 'Class pysqlconf.PysqlConf=pysqlconf.PysqlConf-class.html'); return false;">PysqlConf</a></span></span> </span>
+<span class="py-lineno"> 83</span>  <span class="py-line"><span class="py-keyword">from</span> <span id="link-4" class="py-name"><a title="pysqlio" class="py-name" href="#" onclick="doclink('link-4', 'pysqlio', 'Module pysqlio=pysqlio-module.html'); return false;">pysqlio</a></span></span> <span class="py-keyword">import</span> <span id="link-5" class="py-name"><a title="pysqlio.PysqlIO" class="py-name" href="#" onclick="doclink('link-5', 'PysqlIO', 'Class pysqlio.PysqlIO=pysqlio.PysqlIO-class.html'); return false;">PysqlIO</a></span></span> </span>
+<span class="py-lineno"> 84</span>  <span class="py-line"><span class="py-keyword">from</span> <span id="link-6" class="py-name"><a title="pysqlexception" class="py-name" href="#" onclick="doclink('link-6', 'pysqlexception', 'Module pysqlexception=pysqlexception-module.html'); return false;">pysqlexception</a></span></span> <span class="py-keyword">import</span> <span id="link-7" class="py-name"><a title="pysqlexception.PysqlException" class="py-name" href="#" onclick="doclink('link-7', 'PysqlException', 'Class pysqlexception.PysqlException=pysqlexception.PysqlException-class.html'); return false;">PysqlException</a></span></span> </span>
+<span class="py-lineno"> 85</span>  <span class="py-line"><span class="py-keyword">import</span> <span id="link-8" class="py-name"><a title="pysqlnet" class="py-name" href="#" onclick="doclink('link-8', 'pysqlnet', 'Module pysqlnet=pysqlnet-module.html'); return false;">pysqlnet</a></span></span> </span>
+<span class="py-lineno"> 86</span>  <span class="py-line"><span class="py-keyword">import</span> <span id="link-9" class="py-name"><a title="pysqlupdate" class="py-name" href="#" onclick="doclink('link-9', 'pysqlupdate', 'Module pysqlupdate=pysqlupdate-module.html'); return false;">pysqlupdate</a></span></span> </span>
+<span class="py-lineno"> 87</span>  <span class="py-line"> </span>
+<a name="main"></a><div id="main-def"><span class="py-lineno"> 88</span> <a class="py-toggle" href="#" id="main-toggle" onclick="toggle('main'); return false;">-</a><span class="py-line"><span class="py-keyword">def</span> <a class="py-def-name" href="pysql-module.html#main">main</a><span class="py-op">(</span><span class="py-op">)</span><span class="py-op">:</span> </span>
+</div><div id="main-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="main-expanded"><span class="py-lineno"> 89</span>  <span class="py-line">    <span class="py-docstring">"""Pysql main function"""</span> </span>
+<span class="py-lineno"> 90</span>  <span class="py-line">    <span class="py-name">rc</span><span class="py-op">=</span><span class="py-number">0</span> <span class="py-comment"># Return code</span> </span>
+<span class="py-lineno"> 91</span>  <span class="py-line"> </span>
+<span class="py-lineno"> 92</span>  <span class="py-line">    <span class="py-comment"># Options &amp; args stuf</span> </span>
+<span class="py-lineno"> 93</span>  <span class="py-line"><span class="py-comment"></span>    <span class="py-op">(</span><span class="py-name">options</span><span class="py-op">,</span> <span class="py-name">argv</span><span class="py-op">)</span><span class="py-op">=</span><span id="link-10" class="py-name"><a title="pysql.parseOptions" class="py-name" href="#" onclick="doclink('link-10', 'parseOptions', 'Function pysql.parseOptions()=pysql-module.html#parseOptions'); return false;">parseOptions</a></span></span><span class="py-op">(</span><span class="py-op">)</span> </span>
+<span class="py-lineno"> 94</span>  <span class="py-line"> </span>
+<span class="py-lineno"> 95</span>  <span class="py-line">    <span class="py-comment"># i18n stuff</span> </span>
+<span class="py-lineno"> 96</span>  <span class="py-line"><span class="py-comment"></span>    <span class="py-name">gettext</span><span class="py-op">.</span><span class="py-name">install</span><span class="py-op">(</span><span class="py-string">"pysql"</span><span class="py-op">,</span> <span class="py-name">join</span><span class="py-op">(</span><span class="py-name">dirname</span><span class="py-op">(</span><span class="py-name">sys</span><span class="py-op">.</span><span class="py-name">argv</span><span class="py-op">[</span><span class="py-number">0</span><span class="py-op">]</span><span class="py-op">)</span><span class="py-op">,</span> <span class="py-string">"locale"</span><span class="py-op">)</span><span class="py-op">,</span> <span class="py-name">unicode</span><span class="py-op">=</span><span class="py-number">1</span><span class="py-op">)</span> </span>
+<span class="py-lineno"> 97</span>  <span class="py-line"> </span>
+<span class="py-lineno"> 98</span>  <span class="py-line">    <span class="py-comment"># Loads config (first time)</span> </span>
+<span class="py-lineno"> 99</span>  <span class="py-line"><span class="py-comment"></span>    <span class="py-name">conf</span><span class="py-op">=</span><span id="link-11" class="py-name"><a title="pysqlconf.PysqlConf" class="py-name" href="#" onclick="doclink('link-11', 'PysqlConf', 'Class pysqlconf.PysqlConf=pysqlconf.PysqlConf-class.html'); return false;">PysqlConf</a></span></span><span class="py-op">.</span><span id="link-12" class="py-name"><a title="pysqlconf.PysqlConf.getConfig" class="py-name" href="#" onclick="doclink('link-12', 'getConfig', 'Class Method pysqlconf.PysqlConf.getConfig()=pysqlconf.PysqlConf-class.html#getConfig'); return false;">getConfig</a></span></span><span class="py-op">(</span><span class="py-op">)</span> </span>
+<span class="py-lineno">100</span>  <span class="py-line"> </span>
+<span class="py-lineno">101</span>  <span class="py-line">    <span class="py-comment"># Sets the locale</span> </span>
+<span class="py-lineno">102</span>  <span class="py-line"><span class="py-comment"></span>    <span id="link-13" class="py-name"><a title="pysql.setLocale" class="py-name" href="#" onclick="doclink('link-13', 'setLocale', 'Function pysql.setLocale()=pysql-module.html#setLocale'); return false;">setLocale</a></span></span><span class="py-op">(</span><span class="py-name">conf</span><span class="py-op">)</span> </span>
+<span class="py-lineno">103</span>  <span class="py-line"> </span>
+<span class="py-lineno">104</span>  <span class="py-line">    <span class="py-name">stdout</span><span class="py-op">=</span><span id="link-14" class="py-name"><a title="pysqlio.PysqlIO" class="py-name" href="#" onclick="doclink('link-14', 'PysqlIO', 'Class pysqlio.PysqlIO=pysqlio.PysqlIO-class.html'); return false;">PysqlIO</a></span></span><span class="py-op">.</span><span id="link-15" class="py-name"><a title="pysqlio.PysqlIO.getIOHandler" class="py-name" href="#" onclick="doclink('link-15', 'getIOHandler', 'Class Method pysqlio.PysqlIO.getIOHandler()=pysqlio.PysqlIO-class.html#getIOHandler'); return false;">getIOHandler</a></span></span><span class="py-op">(</span><span class="py-op">)</span> </span>
+<span class="py-lineno">105</span>  <span class="py-line">    <span class="py-name">stdout</span><span class="py-op">.</span><span id="link-16" class="py-name"><a title="pysqlconf.PysqlConf.setCodec
+pysqlio.PysqlIO.setCodec" class="py-name" href="#" onclick="doclink('link-16', 'setCodec', 'Method pysqlconf.PysqlConf.setCodec()=pysqlconf.PysqlConf-class.html#setCodec,Method pysqlio.PysqlIO.setCodec()=pysqlio.PysqlIO-class.html#setCodec'); return false;">setCodec</a></span></span><span class="py-op">(</span><span class="py-name">conf</span><span class="py-op">.</span><span id="link-17" class="py-name"><a title="pysqlconf.PysqlConf.getCodec" class="py-name" href="#" onclick="doclink('link-17', 'getCodec', 'Method pysqlconf.PysqlConf.getCodec()=pysqlconf.PysqlConf-class.html#getCodec'); return false;">getCodec</a></span></span><span class="py-op">(</span><span class="py-op">)</span><span class="py-op">)</span> </span>
+<span class="py-lineno">106</span>  <span class="py-line"> </span>
+<span class="py-lineno">107</span>  <span class="py-line">    <span class="py-keyword">try</span><span class="py-op">:</span> </span>
+<span class="py-lineno">108</span>  <span class="py-line">        <span class="py-keyword">if</span> <span class="py-name">options</span><span class="py-op">.</span><span class="py-name">server</span><span class="py-op">:</span> </span>
+<span class="py-lineno">109</span>  <span class="py-line">            <span class="py-name">rc</span><span class="py-op">=</span><span id="link-18" class="py-name"><a title="pysqlnet" class="py-name" href="#" onclick="doclink('link-18', 'pysqlnet', 'Module pysqlnet=pysqlnet-module.html'); return false;">pysqlnet</a></span></span><span class="py-op">.</span><span id="link-19" class="py-name"><a title="pysqlnet.pysqlNet" class="py-name" href="#" onclick="doclink('link-19', 'pysqlNet', 'Function pysqlnet.pysqlNet()=pysqlnet-module.html#pysqlNet'); return false;">pysqlNet</a></span></span><span class="py-op">(</span><span class="py-name">options</span><span class="py-op">.</span><span class="py-name">port</span><span class="py-op">,</span> <span class="py-name">options</span><span class="py-op">.</span><span class="py-name">maxClient</span><span class="py-op">)</span> </span>
+<span class="py-lineno">110</span>  <span class="py-line">        <span class="py-keyword">elif</span> <span class="py-name">options</span><span class="py-op">.</span><span id="link-20" class="py-name"><a title="pysqlupdate.update" class="py-name" href="#" onclick="doclink('link-20', 'update', 'Function pysqlupdate.update()=pysqlupdate-module.html#update'); return false;">update</a></span></span><span class="py-op">:</span> </span>
+<span class="py-lineno">111</span>  <span class="py-line">            <span class="py-keyword">try</span><span class="py-op">:</span> </span>
+<span class="py-lineno">112</span>  <span class="py-line">                <span id="link-21" class="py-name"><a title="pysqlupdate" class="py-name" href="#" onclick="doclink('link-21', 'pysqlupdate', 'Module pysqlupdate=pysqlupdate-module.html'); return false;">pysqlupdate</a></span></span><span class="py-op">.</span><span id="link-22" class="py-name"><a title="pysqlupdate.checkForUpdate" class="py-name" href="#" onclick="doclink('link-22', 'checkForUpdate', 'Function pysqlupdate.checkForUpdate()=pysqlupdate-module.html#checkForUpdate'); return false;">checkForUpdate</a></span></span><span class="py-op">(</span><span class="py-name">options</span><span class="py-op">.</span><span class="py-name">proxyHost</span><span class="py-op">,</span> <span class="py-name">options</span><span class="py-op">.</span><span class="py-name">proxyUser</span><span class="py-op">,</span> <span class="py-name">options</span><span class="py-op">.</span><span class="py-name">proxyPassword</span><span class="py-op">)</span> </span>
+<span class="py-lineno">113</span>  <span class="py-line">            <span class="py-keyword">except</span> <span class="py-name">KeyboardInterrupt</span><span class="py-op">:</span> </span>
+<span class="py-lineno">114</span>  <span class="py-line">                <span class="py-name">stdout</span><span class="py-op">(</span><span class="py-name">_</span><span class="py-op">(</span><span class="py-string">"Aborting update"</span><span class="py-op">)</span><span class="py-op">)</span> </span>
+<span class="py-lineno">115</span>  <span class="py-line">        <span class="py-keyword">elif</span> <span class="py-name">options</span><span class="py-op">.</span><span class="py-name">version</span><span class="py-op">:</span> </span>
+<span class="py-lineno">116</span>  <span class="py-line">            <span class="py-name">stdout</span><span class="py-op">(</span><span class="py-name">_</span><span class="py-op">(</span><span class="py-string">"PySQL - %s"</span><span class="py-op">)</span> <span class="py-op">%</span> <span id="link-23" class="py-name"><a title="pysqlupdate" class="py-name" href="#" onclick="doclink('link-23', 'pysqlupdate', 'Module pysqlupdate=pysqlupdate-module.html'); return false;">pysqlupdate</a></span></span><span class="py-op">.</span><span id="link-24" class="py-name"><a title="pysqlupdate.currentVersion" class="py-name" href="#" onclick="doclink('link-24', 'currentVersion', 'Function pysqlupdate.currentVersion()=pysqlupdate-module.html#currentVersion'); return false;">currentVersion</a></span></span><span class="py-op">(</span><span class="py-op">)</span><span class="py-op">)</span> </span>
+<span class="py-lineno">117</span>  <span class="py-line">        <span class="py-keyword">else</span><span class="py-op">:</span> </span>
+<span class="py-lineno">118</span>  <span class="py-line">            <span class="py-comment"># Default is to launch pysql in standard mode (local client)</span> </span>
+<span class="py-lineno">119</span>  <span class="py-line"><span class="py-comment"></span>            <span class="py-name">shell</span><span class="py-op">=</span><span id="link-25" class="py-name"><a title="pysqlshell.PysqlShell" class="py-name" href="#" onclick="doclink('link-25', 'PysqlShell', 'Class pysqlshell.PysqlShell=pysqlshell.PysqlShell-class.html'); return false;">PysqlShell</a></span></span><span class="py-op">(</span><span class="py-name">stdout</span><span class="py-op">=</span><span class="py-name">stdout</span><span class="py-op">,</span> <span class="py-name">argv</span><span class="py-op">=</span><span class="py-name">argv</span><span class="py-op">)</span> </span>
+<span class="py-lineno">120</span>  <span class="py-line">            <span class="py-name">shell</span><span class="py-op">.</span><span id="link-26" class="py-name"><a title="pysqlshell.PysqlShell.loop" class="py-name" href="#" onclick="doclink('link-26', 'loop', 'Method pysqlshell.PysqlShell.loop()=pysqlshell.PysqlShell-class.html#loop'); return false;">loop</a></span></span><span class="py-op">(</span><span class="py-op">)</span> </span>
+<span class="py-lineno">121</span>  <span class="py-line">            <span class="py-name">rc</span><span class="py-op">=</span><span class="py-name">shell</span><span class="py-op">.</span><span class="py-name">rc</span> </span>
+<span class="py-lineno">122</span>  <span class="py-line">        <span class="py-comment"># Bye</span> </span>
+<span class="py-lineno">123</span>  <span class="py-line"><span class="py-comment"></span>        <span class="py-keyword">if</span> <span class="py-name">os</span><span class="py-op">.</span><span class="py-name">name</span><span class="py-op">==</span><span class="py-string">"nt"</span> <span class="py-keyword">and</span> <span class="py-keyword">not</span> <span class="py-name">options</span><span class="py-op">.</span><span class="py-name">version</span><span class="py-op">:</span> </span>
+<span class="py-lineno">124</span>  <span class="py-line">            <span class="py-comment"># Don't exit too fast for windows user, else they don't see error sum up</span> </span>
+<span class="py-lineno">125</span>  <span class="py-line"><span class="py-comment"></span>            <span class="py-name">stdout</span><span class="py-op">(</span><span class="py-name">_</span><span class="py-op">(</span><span class="py-string">"(press any key to exit)"</span><span class="py-op">)</span><span class="py-op">)</span> </span>
+<span class="py-lineno">126</span>  <span class="py-line">            <span class="py-name">sys</span><span class="py-op">.</span><span class="py-name">stdin</span><span class="py-op">.</span><span class="py-name">readline</span><span class="py-op">(</span><span class="py-op">)</span> </span>
+<span class="py-lineno">127</span>  <span class="py-line">    <span class="py-keyword">except</span> <span class="py-name">StandardError</span><span class="py-op">,</span> <span class="py-name">e</span><span class="py-op">:</span> </span>
+<span class="py-lineno">128</span>  <span class="py-line">        <span class="py-comment"># Just a hook for a more pleasant error handling</span> </span>
+<span class="py-lineno">129</span>  <span class="py-line"><span class="py-comment"></span>        <span class="py-keyword">print</span> <span class="py-string">"\n==&gt; Unrecoverable error. Exiting &lt;=="</span> </span>
+<span class="py-lineno">130</span>  <span class="py-line">        <span class="py-name">traceback</span><span class="py-op">.</span><span class="py-name">print_exc</span><span class="py-op">(</span><span class="py-op">)</span> </span>
+<span class="py-lineno">131</span>  <span class="py-line">        <span class="py-keyword">print</span> <span class="py-string">"\n*********************\n\n"</span> </span>
+<span class="py-lineno">132</span>  <span class="py-line">        <span class="py-keyword">print</span> <span class="py-string">"Please, send the text above to pysql@digitalfox.org"</span><span class="py-op">,</span> </span>
+<span class="py-lineno">133</span>  <span class="py-line">        <span class="py-keyword">print</span> <span class="py-string">"(press any key to exit)"</span> </span>
+<span class="py-lineno">134</span>  <span class="py-line">        <span class="py-name">sys</span><span class="py-op">.</span><span class="py-name">stdin</span><span class="py-op">.</span><span class="py-name">readline</span><span class="py-op">(</span><span class="py-op">)</span> </span>
+<span class="py-lineno">135</span>  <span class="py-line">    <span class="py-keyword">except</span> <span id="link-27" class="py-name"><a title="pysqlexception.PysqlException" class="py-name" href="#" onclick="doclink('link-27', 'PysqlException', 'Class pysqlexception.PysqlException=pysqlexception.PysqlException-class.html'); return false;">PysqlException</a></span></span><span class="py-op">,</span> <span class="py-name">e</span><span class="py-op">:</span> </span>
+<span class="py-lineno">136</span>  <span class="py-line">        <span class="py-name">msg</span><span class="py-op">=</span><span class="py-string">u"*** Pysql error ***\n\t%s"</span> <span class="py-op">%</span> <span class="py-name">e</span> </span>
+<span class="py-lineno">137</span>  <span class="py-line">        <span class="py-name">stdout</span><span class="py-op">(</span><span class="py-name">msg</span><span class="py-op">)</span> </span>
+<span class="py-lineno">138</span>  <span class="py-line"> </span>
+<span class="py-lineno">139</span>  <span class="py-line">    <span class="py-comment">#Bye!</span> </span>
+<span class="py-lineno">140</span>  <span class="py-line"><span class="py-comment"></span>    <span class="py-name">sys</span><span class="py-op">.</span><span class="py-name">exit</span><span class="py-op">(</span><span class="py-name">rc</span><span class="py-op">)</span> </span>
+</div><span class="py-lineno">141</span>  <span class="py-line"> </span>
+<a name="setLocale"></a><div id="setLocale-def"><span class="py-lineno">142</span> <a class="py-toggle" href="#" id="setLocale-toggle" onclick="toggle('setLocale'); return false;">-</a><span class="py-line"><span class="py-keyword">def</span> <a class="py-def-name" href="pysql-module.html#setLocale">setLocale</a><span class="py-op">(</span><span class="py-param">conf</span><span class="py-op">)</span><span class="py-op">:</span> </span>
+</div><div id="setLocale-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="setLocale-expanded"><span class="py-lineno">143</span>  <span class="py-line">    <span class="py-docstring">"""Sets the right encoding"""</span> </span>
+<span class="py-lineno">144</span>  <span class="py-line">    <span class="py-keyword">try</span><span class="py-op">:</span> </span>
+<span class="py-lineno">145</span>  <span class="py-line">        <span class="py-name">codec</span><span class="py-op">=</span><span class="py-name">locale</span><span class="py-op">.</span><span class="py-name">getdefaultlocale</span><span class="py-op">(</span><span class="py-op">)</span><span class="py-op">[</span><span class="py-number">1</span><span class="py-op">]</span> </span>
+<span class="py-lineno">146</span>  <span class="py-line">    <span class="py-keyword">except</span><span class="py-op">:</span> </span>
+<span class="py-lineno">147</span>  <span class="py-line">        <span class="py-comment"># default to latin-1</span> </span>
+<span class="py-lineno">148</span>  <span class="py-line"><span class="py-comment"></span>        <span class="py-name">codec</span><span class="py-op">=</span><span class="py-string">"latin-1"</span> </span>
+<span class="py-lineno">149</span>  <span class="py-line">    <span class="py-keyword">if</span> <span class="py-name">codec</span> <span class="py-keyword">is</span> <span class="py-name">None</span><span class="py-op">:</span> </span>
+<span class="py-lineno">150</span>  <span class="py-line">        <span class="py-name">codec</span><span class="py-op">=</span><span class="py-string">"latin-1"</span> </span>
+<span class="py-lineno">151</span>  <span class="py-line">    <span class="py-comment"># Tests if codec exist</span> </span>
+<span class="py-lineno">152</span>  <span class="py-line"><span class="py-comment"></span>    <span class="py-keyword">try</span><span class="py-op">:</span> </span>
+<span class="py-lineno">153</span>  <span class="py-line">        <span class="py-name">str</span><span class="py-op">(</span><span class="py-op">)</span><span class="py-op">.</span><span class="py-name">encode</span><span class="py-op">(</span><span class="py-name">codec</span><span class="py-op">)</span> </span>
+<span class="py-lineno">154</span>  <span class="py-line">    <span class="py-keyword">except</span> <span class="py-name">LookupError</span><span class="py-op">:</span> </span>
+<span class="py-lineno">155</span>  <span class="py-line">        <span class="py-name">codec</span><span class="py-op">=</span><span class="py-string">"latin-1"</span> </span>
+<span class="py-lineno">156</span>  <span class="py-line"> </span>
+<span class="py-lineno">157</span>  <span class="py-line">    <span class="py-comment"># Stores codec in config</span> </span>
+<span class="py-lineno">158</span>  <span class="py-line"><span class="py-comment"></span>    <span class="py-name">conf</span><span class="py-op">.</span><span id="link-28" class="py-name"><a title="pysqlconf.PysqlConf.setCodec
+pysqlio.PysqlIO.setCodec" class="py-name" href="#" onclick="doclink('link-28', 'setCodec', 'Method pysqlconf.PysqlConf.setCodec()=pysqlconf.PysqlConf-class.html#setCodec,Method pysqlio.PysqlIO.setCodec()=pysqlio.PysqlIO-class.html#setCodec'); return false;">setCodec</a></span></span><span class="py-op">(</span><span class="py-name">codec</span><span class="py-op">)</span> </span>
+</div><span class="py-lineno">159</span>  <span class="py-line"> </span>
+<a name="parseOptions"></a><div id="parseOptions-def"><span class="py-lineno">160</span> <a class="py-toggle" href="#" id="parseOptions-toggle" onclick="toggle('parseOptions'); return false;">-</a><span class="py-line"><span class="py-keyword">def</span> <a class="py-def-name" href="pysql-module.html#parseOptions">parseOptions</a><span class="py-op">(</span><span class="py-op">)</span><span class="py-op">:</span> </span>
+</div><div id="parseOptions-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="parseOptions-expanded"><span class="py-lineno">161</span>  <span class="py-line">    <span class="py-docstring">"""Parses pysql command argument using optparse python module"""</span> </span>
+<span class="py-lineno">162</span>  <span class="py-line">    <span class="py-name">parser</span><span class="py-op">=</span><span class="py-name">OptionParser</span><span class="py-op">(</span><span class="py-op">)</span> </span>
+<span class="py-lineno">163</span>  <span class="py-line"> </span>
+<span class="py-lineno">164</span>  <span class="py-line">    <span class="py-comment"># PysqlServer activation</span> </span>
+<span class="py-lineno">165</span>  <span class="py-line"><span class="py-comment"></span>    <span class="py-name">parser</span><span class="py-op">.</span><span class="py-name">add_option</span><span class="py-op">(</span><span class="py-string">"-s"</span><span class="py-op">,</span> <span class="py-string">"--server"</span><span class="py-op">,</span> <span class="py-name">dest</span><span class="py-op">=</span><span class="py-string">"server"</span><span class="py-op">,</span> <span class="py-name">action</span><span class="py-op">=</span><span class="py-string">"store_true"</span><span class="py-op">,</span> </span>
+<span class="py-lineno">166</span>  <span class="py-line">              <span class="py-name">help</span><span class="py-op">=</span><span class="py-string">"PySQL server mode"</span><span class="py-op">)</span> </span>
+<span class="py-lineno">167</span>  <span class="py-line"> </span>
+<span class="py-lineno">168</span>  <span class="py-line">    <span class="py-comment"># Server TCP port</span> </span>
+<span class="py-lineno">169</span>  <span class="py-line"><span class="py-comment"></span>    <span class="py-name">parser</span><span class="py-op">.</span><span class="py-name">add_option</span><span class="py-op">(</span><span class="py-string">"-p"</span><span class="py-op">,</span> <span class="py-string">"--port"</span><span class="py-op">,</span> <span class="py-name">dest</span><span class="py-op">=</span><span class="py-string">"port"</span><span class="py-op">,</span> <span class="py-name">type</span><span class="py-op">=</span><span class="py-string">"int"</span><span class="py-op">,</span> <span id="link-29" class="py-name"><a title="pysqlshell.PysqlShell.default" class="py-name" href="#" onclick="doclink('link-29', 'default', 'Method pysqlshell.PysqlShell.default()=pysqlshell.PysqlShell-class.html#default'); return false;">default</a></span></span><span class="py-op">=</span><span class="py-number">1180</span><span class="py-op">,</span> </span>
+<span class="py-lineno">170</span>  <span class="py-line">              <span class="py-name">help</span><span class="py-op">=</span><span class="py-string">"PySQL server tcp port (default is 1180)"</span><span class="py-op">)</span> </span>
+<span class="py-lineno">171</span>  <span class="py-line"> </span>
+<span class="py-lineno">172</span>  <span class="py-line">    <span class="py-comment"># Server max client</span> </span>
+<span class="py-lineno">173</span>  <span class="py-line"><span class="py-comment"></span>    <span class="py-name">parser</span><span class="py-op">.</span><span class="py-name">add_option</span><span class="py-op">(</span><span class="py-string">"-m"</span><span class="py-op">,</span> <span class="py-string">"--maxClient"</span><span class="py-op">,</span> <span class="py-name">dest</span><span class="py-op">=</span><span class="py-string">"maxClient"</span><span class="py-op">,</span> <span class="py-name">type</span><span class="py-op">=</span><span class="py-string">"int"</span><span class="py-op">,</span> <span id="link-30" class="py-name"><a title="pysqlshell.PysqlShell.default" class="py-name" href="#" onclick="doclink('link-30', 'default', 'Method pysqlshell.PysqlShell.default()=pysqlshell.PysqlShell-class.html#default'); return false;">default</a></span></span><span class="py-op">=</span><span class="py-number">5</span><span class="py-op">,</span> </span>
+<span class="py-lineno">174</span>  <span class="py-line">              <span class="py-name">help</span><span class="py-op">=</span><span class="py-string">"PySQL server maximum number of concurent clients (default is 5)"</span><span class="py-op">)</span> </span>
+<span class="py-lineno">175</span>  <span class="py-line"> </span>
+<span class="py-lineno">176</span>  <span class="py-line">    <span class="py-comment"># Version</span> </span>
+<span class="py-lineno">177</span>  <span class="py-line"><span class="py-comment"></span>    <span class="py-name">parser</span><span class="py-op">.</span><span class="py-name">add_option</span><span class="py-op">(</span><span class="py-string">"-v"</span><span class="py-op">,</span> <span class="py-string">"--version"</span><span class="py-op">,</span> <span class="py-name">dest</span><span class="py-op">=</span><span class="py-string">"version"</span><span class="py-op">,</span> <span class="py-name">action</span><span class="py-op">=</span><span class="py-string">"store_true"</span><span class="py-op">,</span> </span>
+<span class="py-lineno">178</span>  <span class="py-line">              <span class="py-name">help</span><span class="py-op">=</span><span class="py-string">"Print PySQL version"</span><span class="py-op">)</span> </span>
+<span class="py-lineno">179</span>  <span class="py-line"> </span>
+<span class="py-lineno">180</span>  <span class="py-line">    <span class="py-comment"># Update mode</span> </span>
+<span class="py-lineno">181</span>  <span class="py-line"><span class="py-comment"></span>    <span class="py-name">parser</span><span class="py-op">.</span><span class="py-name">add_option</span><span class="py-op">(</span><span class="py-string">"-u"</span><span class="py-op">,</span> <span class="py-string">"--update"</span><span class="py-op">,</span> <span class="py-name">dest</span><span class="py-op">=</span><span class="py-string">"update"</span><span class="py-op">,</span> <span class="py-name">action</span><span class="py-op">=</span><span class="py-string">"store_true"</span><span class="py-op">,</span> </span>
+<span class="py-lineno">182</span>  <span class="py-line">              <span class="py-name">help</span><span class="py-op">=</span><span class="py-string">"Check if PySQL update are available"</span><span class="py-op">)</span> </span>
+<span class="py-lineno">183</span>  <span class="py-line">    <span class="py-name">parser</span><span class="py-op">.</span><span class="py-name">add_option</span><span class="py-op">(</span><span class="py-string">"-H"</span><span class="py-op">,</span> <span class="py-string">"--proxyHost"</span><span class="py-op">,</span> <span class="py-name">dest</span><span class="py-op">=</span><span class="py-string">"proxyHost"</span><span class="py-op">,</span> <span class="py-name">type</span><span class="py-op">=</span><span class="py-string">"string"</span><span class="py-op">,</span> <span id="link-31" class="py-name"><a title="pysqlshell.PysqlShell.default" class="py-name" href="#" onclick="doclink('link-31', 'default', 'Method pysqlshell.PysqlShell.default()=pysqlshell.PysqlShell-class.html#default'); return false;">default</a></span></span><span class="py-op">=</span><span class="py-name">None</span><span class="py-op">,</span> </span>
+<span class="py-lineno">184</span>  <span class="py-line">              <span class="py-name">help</span><span class="py-op">=</span><span class="py-string">"proxy hostname for PySQL update. \t\tExemple : 'http://my-proxy.mydomain:8080'"</span><span class="py-op">)</span> </span>
+<span class="py-lineno">185</span>  <span class="py-line">    <span class="py-name">parser</span><span class="py-op">.</span><span class="py-name">add_option</span><span class="py-op">(</span><span class="py-string">"-U"</span><span class="py-op">,</span> <span class="py-string">"--proxyUser"</span><span class="py-op">,</span> <span class="py-name">dest</span><span class="py-op">=</span><span class="py-string">"proxyUser"</span><span class="py-op">,</span> <span class="py-name">type</span><span class="py-op">=</span><span class="py-string">"string"</span><span class="py-op">,</span> <span id="link-32" class="py-name"><a title="pysqlshell.PysqlShell.default" class="py-name" href="#" onclick="doclink('link-32', 'default', 'Method pysqlshell.PysqlShell.default()=pysqlshell.PysqlShell-class.html#default'); return false;">default</a></span></span><span class="py-op">=</span><span class="py-string">""</span><span class="py-op">,</span> </span>
+<span class="py-lineno">186</span>  <span class="py-line">              <span class="py-name">help</span><span class="py-op">=</span><span class="py-string">"proxy username if authentication is required"</span><span class="py-op">)</span> </span>
+<span class="py-lineno">187</span>  <span class="py-line">    <span class="py-name">parser</span><span class="py-op">.</span><span class="py-name">add_option</span><span class="py-op">(</span><span class="py-string">"-P"</span><span class="py-op">,</span> <span class="py-string">"--proxyPassword"</span><span class="py-op">,</span> <span class="py-name">dest</span><span class="py-op">=</span><span class="py-string">"proxyPassword"</span><span class="py-op">,</span> <span class="py-name">type</span><span class="py-op">=</span><span class="py-string">"string"</span><span class="py-op">,</span> <span id="link-33" class="py-name"><a title="pysqlshell.PysqlShell.default" class="py-name" href="#" onclick="doclink('link-33', 'default', 'Method pysqlshell.PysqlShell.default()=pysqlshell.PysqlShell-class.html#default'); return false;">default</a></span></span><span class="py-op">=</span><span class="py-string">""</span><span class="py-op">,</span> </span>
+<span class="py-lineno">188</span>  <span class="py-line">              <span class="py-name">help</span><span class="py-op">=</span><span class="py-string">"proxy password if authentication is required"</span><span class="py-op">)</span> </span>
+<span class="py-lineno">189</span>  <span class="py-line"> </span>
+<span class="py-lineno">190</span>  <span class="py-line">    <span class="py-keyword">return</span> <span class="py-name">parser</span><span class="py-op">.</span><span class="py-name">parse_args</span><span class="py-op">(</span><span class="py-op">)</span> </span>
+</div><span class="py-lineno">191</span>  <span class="py-line"> </span>
+<span class="py-lineno">192</span>  <span class="py-line"><span class="py-comment">###### Start Pysql ########</span> </span>
+<span class="py-lineno">193</span>  <span class="py-line"><span class="py-comment"></span><span class="py-keyword">if</span> <span class="py-name">__name__</span> <span class="py-op">==</span> <span class="py-string">"__main__"</span><span class="py-op">:</span> </span>
+<span class="py-lineno">194</span>  <span class="py-line">    <span id="link-34" class="py-name"><a title="pysql.main" class="py-name" href="#" onclick="doclink('link-34', 'main', 'Function pysql.main()=pysql-module.html#main'); return false;">main</a></span></span><span class="py-op">(</span><span class="py-op">)</span> </span>
+<span class="py-lineno">195</span>  <span class="py-line"> </span><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >pysql</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">Generated by Epydoc
+        3.0alpha3 on Sun Mar 18 18:11:30 2007</td>
+    <td align="right" class="footer">
+      <a href="http://epydoc.sourceforge.net">http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie()
+  // -->
+</script>
+  
+</body>
+</html>

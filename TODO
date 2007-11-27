@@ -1,0 +1,53 @@
+TODO
+
+*** Bugs *** 
+- les accents sont nickés sous windows
+- completion bizarre sous windows (ajout d'espaces entre les lettres)
+- lors d'un copier/coller les tabulations déclenchent la complétion et foutent le bazar...
+- gérer correctement les pb de droit sur les objets oracle (quasi fini)
+- si le prompt est en couleur l'affichage d'une commande de plus d'une ligne est tout pourri
+- gérer le cas de ce pauvre windows pour les couleurs (cf. source ipython)
+- desc un peu lent sur les tables (recherche des colonnes indexées sans doute). Investigation à faire
+- ctrl-C (break) ne marche pas toujours comme il faut : 
+	- ss unix : ok pour interrompre une requête, pas tjrs ok (dépend v. python et Oracle) pour interrompre une saisie en cours
+=> pb reproductible en ligne de cmd ss unix : la création de l'objet connection Cx_Oracle bloque l'exception keyboard interrupt
+	- ss win : nok pour interrompre une requête mais ok pour interrompre une saisie en cours...
+	
+
+*** Fonctionnalités à implémenter ***
+- implémenter la fonction archive de SQLplus
+- utiliser distutils/setuptools
+- fonction pour explorer v_$sql (top requête buffer get, top cpu etc...)
+- fonction perfstat simplifiée (perfstat snap et perfstat report)
+- gérer des profiles qui contiennent (history, cache, lib, param)
+- rendre la touche utilisée pour la complétion paramétrable
+- faire un mode interactif pour guessinfo afin de choisir l'objet souhaité par l'utilisateur en cas d'homonymie.
+- faire complétion sur les noms des commandes SQL de base
+- compléter la fonction desc
+	- desc table : ajouter les statistiques si elles existent
+	- desc trigger : indiquer table
+	- desc index : colonnes et position + nom table
+	- desc table : + PK + FK + unique
+	- desc index : info analyse profondeur+remplisssage
+- gérer des paramètres (get/set) pour : 
+	- la largeur du terminal (pour l'affichage par colonnes, à définir par defaut avec la taille du term)
+	- autres ?
+	- mieux gérer la lecture et l'enregistrement du fichier de conf (plutôt dégueu pour le moment)
+- ajouter des complétions un peu partout (en cours)
+- commande SID pour afficher la liste des SIDs
+- fonctions de recherche pour les synonyms,
+- test de surbooking tablespace/filesystem (pas possible si non local)
+- analyse table : nbre de liste chaînée, taux de fragmentation, highwatermark
+- faire une fonction watch (qui marche) pour répeter une requête toutes les n secondes
+- faire un mode "safe" qui filtre l'histo pour virer les DDL
+- visualisation et modification en ligne du code des packages, des triggers et des vues (vue : ok)
+
+*** Améliorations ***
+- générer les graph en arrière plan ?
+- rajouter une option "auto" pour le graph_program qui laisse à chaque fonction pysqlgraphics le soin de
+	prendre le bon programme
+- fonction csv pour les commandes pysql aussi (desc par exemple)
+- faire une traduction en français (en cours)
+- mieux structurer les commentaires du code pour mettre en évidence les paramètres et les valeurs retournées (en cours)
+- migrer un maximum (100% ?) de requêtes dans pysqlQueries
+- mettre en place des jeux de tests unitaire pour automatiser la non reg (en cours)

@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>pysqloraobjects.OraObject</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >pysql</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="pysqloraobjects-module.html">Module&nbsp;pysqloraobjects</a> ::
+        Class&nbsp;OraObject
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript: void(0);" class="privatelink"
+    onclick="toggle_private();">hide private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="pysqloraobjects.OraObject-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class OraObject</h1><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraObject">source&nbsp;code</a></span><br /><br />
+<center>
+<center>  <map id="uml_class_diagram_for_classdoc_12" name="uml_class_diagram_for_classdoc_12">
+<area shape="rect" href="pysqloraobjects.OraUser&#45;class.html" title="pysqloraobjects.OraUser" alt="" coords="5,285,91,323" />
+<area shape="rect" href="pysqloraobjects.OraTrigger&#45;class.html" title="pysqloraobjects.OraTrigger" alt="" coords="120,285,219,323" />
+<area shape="rect" href="pysqloraobjects.OraSegment&#45;class.html" title="pysqloraobjects.OraSegment" alt="" coords="379,285,488,323" />
+<area shape="rect" href="pysqloraobjects.OraTable&#45;class.html" title="pysqloraobjects.OraTable" alt="" coords="244,341,335,379" />
+<area shape="rect" href="pysqloraobjects.OraMaterializedView&#45;class.html" title="pysqloraobjects.OraMaterializedView" alt="" coords="364,341,521,379" />
+<area shape="rect" href="pysqloraobjects.OraIndex&#45;class.html" title="pysqloraobjects.OraIndex" alt="" coords="551,341,641,379" />
+<area shape="rect" href="pysqloraobjects.OraTabular&#45;class.html" title="pysqloraobjects.OraTabular" alt="" coords="248,285,349,323" />
+<area shape="rect" href="pysqloraobjects.OraView&#45;class.html" title="pysqloraobjects.OraView" alt="" coords="129,341,215,379" />
+<area shape="rect" href="pysqloraobjects.OraDBLink&#45;class.html" title="pysqloraobjects.OraDBLink" alt="" coords="517,285,616,323" />
+<area shape="rect" href="pysqloraobjects.OraTablespace&#45;class.html" title="pysqloraobjects.OraTablespace" alt="" coords="645,285,771,323" />
+<area shape="rect" href="pysqloraobjects.OraDirectory&#45;class.html" title="pysqloraobjects.OraDirectory" alt="" coords="800,285,909,323" />
+<area shape="rect" href="pysqloraobjects.OraProcedure&#45;class.html" title="pysqloraobjects.OraProcedure" alt="" coords="1008,341,1125,379" />
+<area shape="rect" href="pysqloraobjects.OraPackage&#45;class.html" title="pysqloraobjects.OraPackage" alt="" coords="1155,341,1264,379" />
+<area shape="rect" href="pysqloraobjects.OraSynonym&#45;class.html" title="pysqloraobjects.OraSynonym" alt="" coords="939,285,1051,323" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#setName" title="Sets name (and owner if name is given like &quot;user.object&quot;)" alt="" coords="524,36,892,55" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#getCopy" title="pysqloraobjects.OraObject.getCopy" alt="" coords="524,55,892,73" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#__str__" title="String representation (mostly used for debug purpose" alt="" coords="524,73,892,92" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#getType" title="pysqloraobjects.OraObject.getType" alt="" coords="524,92,892,111" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#getOwner" title="pysqloraobjects.OraObject.getOwner" alt="" coords="524,111,892,129" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#getFullName" title="pysqloraobjects.OraObject.getFullName" alt="" coords="524,129,892,148" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#__init__" title="Object creation" alt="" coords="524,148,892,167" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#setType" title="Sets the object type." alt="" coords="524,167,892,185" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#guessInfos" title="Guesses and sets object type and owner" alt="" coords="524,185,892,204" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#getName" title="pysqloraobjects.OraObject.getName" alt="" coords="524,204,892,223" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#getDDL" title="pysqloraobjects.OraObject.getDDL" alt="" coords="524,223,892,241" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#setOwner" title="Sets the object owner." alt="" coords="524,241,892,260" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html" title="pysqloraobjects.OraObject" alt="" coords="512,5,904,267" />
+<area shape="rect" href="pysqloraobjects.OraDatafile&#45;class.html" title="pysqloraobjects.OraDatafile" alt="" coords="1080,285,1181,323" />
+<area shape="rect" href="pysqloraobjects.OraStoredObject&#45;class.html" title="pysqloraobjects.OraStoredObject" alt="" coords="1211,285,1347,323" />
+<area shape="rect" href="pysqloraobjects.OraSequence&#45;class.html" title="pysqloraobjects.OraSequence" alt="" coords="1376,285,1493,323" />
+<area shape="rect" href="pysqloraobjects.OraFunction&#45;class.html" title="pysqloraobjects.OraFunction" alt="" coords="1293,341,1403,379" />
+<area shape="rect" href="pysqloraobjects.OraPackageBody&#45;class.html" title="pysqloraobjects.OraPackageBody" alt="" coords="1432,341,1571,379" />
+</map>
+  <img src="uml_class_diagram_for_classdoc_12.gif" alt='' usemap="#uml_class_diagram_for_classdoc_12" ismap="ismap" class="graph-without-title">
+</center></center>
+<hr />
+Father of all pysql Oracle objects<br /><br />
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+  <td width="15%" align="right" valign="top" class="summary">
+    <code class="summary-type">&nbsp;</code>
+  </td><td class="summary">
+    <span class="summary-sig"><a href="pysqloraobjects.OraObject-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">objectOwner</span>=<span class="summary-sig-default">&quot;&quot;</span>,
+        <span class="summary-sig-arg">objectName</span>=<span class="summary-sig-default">&quot;&quot;</span>,
+        <span class="summary-sig-arg">objectType</span>=<span class="summary-sig-default">&quot;&quot;</span>)</span><br />
+      Object creation
+  </td>
+</tr>
+<tr>
+  <td width="15%" align="right" valign="top" class="summary">
+    <code class="summary-type">&nbsp;</code>
+  </td><td class="summary">
+    <span class="summary-sig"><a href="pysqloraobjects.OraObject-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      String representation (mostly used for debug purpose
+  </td>
+</tr>
+<tr>
+  <td width="15%" align="right" valign="top" class="summary">
+    <code class="summary-type">&nbsp;</code>
+  </td><td class="summary">
+    <span class="summary-sig"><a href="pysqloraobjects.OraObject-class.html#getCopy" class="summary-sig-name">getCopy</a>(<span class="summary-sig-arg">self</span>)</span>
+  </td>
+</tr>
+<tr>
+  <td width="15%" align="right" valign="top" class="summary">
+    <code class="summary-type">&nbsp;</code>
+  </td><td class="summary">
+    <span class="summary-sig"><a href="pysqloraobjects.OraObject-class.html#getName" class="summary-sig-name">getName</a>(<span class="summary-sig-arg">self</span>)</span>
+  </td>
+</tr>
+<tr>
+  <td width="15%" align="right" valign="top" class="summary">
+    <code class="summary-type">&nbsp;</code>
+  </td><td class="summary">
+    <span class="summary-sig"><a href="pysqloraobjects.OraObject-class.html#getFullName" class="summary-sig-name">getFullName</a>(<span class="summary-sig-arg">self</span>)</span>
+  </td>
+</tr>
+<tr>
+  <td width="15%" align="right" valign="top" class="summary">
+    <code class="summary-type">&nbsp;</code>
+  </td><td class="summary">
+    <span class="summary-sig"><a href="pysqloraobjects.OraObject-class.html#getType" class="summary-sig-name">getType</a>(<span class="summary-sig-arg">self</span>)</span>
+  </td>
+</tr>
+<tr>
+  <td width="15%" align="right" valign="top" class="summary">
+    <code class="summary-type">&nbsp;</code>
+  </td><td class="summary">
+    <span class="summary-sig"><a href="pysqloraobjects.OraObject-class.html#getOwner" class="summary-sig-name">getOwner</a>(<span class="summary-sig-arg">self</span>)</span>
+  </td>
+</tr>
+<tr>
+  <td width="15%" align="right" valign="top" class="summary">
+    <code class="summary-type">&nbsp;</code>
+  </td><td class="summary">
+    <span class="summary-sig"><a href="pysqloraobjects.OraObject-class.html#setName" class="summary-sig-name">setName</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">objectName</span>)</span><br />
+      Sets name (and owner if name is given like 
+      &quot;user.object&quot;)
+  </td>
+</tr>
+<tr>
+  <td width="15%" align="right" valign="top" class="summary">
+    <code class="summary-type">&nbsp;</code>
+  </td><td class="summary">
+    <span class="summary-sig"><a href="pysqloraobjects.OraObject-class.html#setType" class="summary-sig-name">setType</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">objectType</span>)</span><br />
+      Sets the object type.
+  </td>
+</tr>
+<tr>
+  <td width="15%" align="right" valign="top" class="summary">
+    <code class="summary-type">&nbsp;</code>
+  </td><td class="summary">
+    <span class="summary-sig"><a href="pysqloraobjects.OraObject-class.html#setOwner" class="summary-sig-name">setOwner</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">objectOwner</span>)</span><br />
+      Sets the object owner.
+  </td>
+</tr>
+<tr>
+  <td width="15%" align="right" valign="top" class="summary">
+    <code class="summary-type">&nbsp;</code>
+  </td><td class="summary">
+    <span class="summary-sig"><a href="pysqloraobjects.OraObject-class.html#guessInfos" class="summary-sig-name">guessInfos</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">db</span>,
+        <span class="summary-sig-arg">interactive</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Guesses and sets object type and owner
+  </td>
+</tr>
+<tr>
+  <td width="15%" align="right" valign="top" class="summary">
+    <code class="summary-type">&nbsp;</code>
+  </td><td class="summary">
+    <span class="summary-sig"><a href="pysqloraobjects.OraObject-class.html#getDDL" class="summary-sig-name">getDDL</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">db</span>)</span>
+  </td>
+</tr>
+</table>
+
+<br />
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">objectOwner</span>=<span class="sig-default">&quot;&quot;</span>,
+        <span class="sig-arg">objectName</span>=<span class="sig-default">&quot;&quot;</span>,
+        <span class="sig-arg">objectType</span>=<span class="sig-default">&quot;&quot;</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraObject.__init__">source&nbsp;code</a></span>&nbsp;</span
+    ></td>
+  </table>
+  
+  Object creation
+  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+</div>
+<a name="__str__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__str__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Informal representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraObject.__str__">source&nbsp;code</a></span>&nbsp;</span
+    ></td>
+  </table>
+  
+  String representation (mostly used for debug purpose
+  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+</div>
+<a name="getCopy"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getCopy</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraObject.getCopy">source&nbsp;code</a></span>&nbsp;</span
+    ></td>
+  </table>
+  
+  
+  <dl><dt></dt><dd>
+    <dl><dt>Returns:</dt>
+        <dd>a deep copy of the current object</dd></dl>
+  </dd></dl>
+</td></tr></table>
+</div>
+<a name="getName"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getName</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraObject.getName">source&nbsp;code</a></span>&nbsp;</span
+    ></td>
+  </table>
+  
+  
+  <dl><dt></dt><dd>
+    <dl><dt>Returns:</dt>
+        <dd>object name (str)</dd></dl>
+  </dd></dl>
+</td></tr></table>
+</div>
+<a name="getFullName"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getFullName</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraObject.getFullName">source&nbsp;code</a></span>&nbsp;</span
+    ></td>
+  </table>
+  
+  
+  <dl><dt></dt><dd>
+    <dl><dt>Returns:</dt>
+        <dd>object name prefixed with owner name (str) Ex. 
+          &quot;scott.my_table&quot;</dd></dl>
+  </dd></dl>
+</td></tr></table>
+</div>
+<a name="getType"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getType</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraObject.getType">source&nbsp;code</a></span>&nbsp;</span
+    ></td>
+  </table>
+  
+  
+  <dl><dt></dt><dd>
+    <dl><dt>Returns:</dt>
+        <dd>object type (str)</dd></dl>
+  </dd></dl>
+</td></tr></table>
+</div>
+<a name="getOwner"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getOwner</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraObject.getOwner">source&nbsp;code</a></span>&nbsp;</span
+    ></td>
+  </table>
+  
+  
+  <dl><dt></dt><dd>
+    <dl><dt>Returns:</dt>
+        <dd>object owner (str)</dd></dl>
+  </dd></dl>
+</td></tr></table>
+</div>
+<a name="setName"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">setName</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">objectName</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraObject.setName">source&nbsp;code</a></span>&nbsp;</span
+    ></td>
+  </table>
+  
+  Sets name (and owner if name is given like 
+  &quot;user.object&quot;)
+  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+</div>
+<a name="setType"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">setType</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">objectType</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraObject.setType">source&nbsp;code</a></span>&nbsp;</span
+    ></td>
+  </table>
+  
+  Sets the object type.
+  <dl><dt></dt><dd>
+    <dl><dt>Parameters:</dt></dl>
+    <ul class="nomargin">
+        <li><strong class="pname"><code>objectType</code></strong> (<code>str</code>) - Oracle object type as defined in Oracle dynamic views</li>
+    </ul>
+  </dd></dl>
+</td></tr></table>
+</div>
+<a name="setOwner"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">setOwner</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">objectOwner</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraObject.setOwner">source&nbsp;code</a></span>&nbsp;</span
+    ></td>
+  </table>
+  
+  Sets the object owner. Name is uppercased. This is not fully compliant
+  with Oracle.
+  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+</div>
+<a name="guessInfos"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">guessInfos</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">db</span>,
+        <span class="sig-arg">interactive</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraObject.guessInfos">source&nbsp;code</a></span>&nbsp;</span
+    ></td>
+  </table>
+  
+  Guesses and sets object type and owner
+  <dl><dt></dt><dd>
+    <dl><dt>Parameters:</dt></dl>
+    <ul class="nomargin">
+        <li><strong class="pname"><code>db</code></strong> (<code>PysqlDb instance</code>) - Connection to Oracle</li>
+        <li><strong class="pname"><code>interactive</code></strong> (<code>bool</code>) - should we prompt user if multiple results are found? (default 
+          is False)</li>
+    </ul>
+    <dl><dt>Returns:</dt>
+        <dd>True if type and owner are guessed. In interactive mode, 
+          returns list of objects found</dd></dl>
+  </dd></dl>
+</td></tr></table>
+</div>
+<a name="getDDL"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getDDL</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">db</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraObject.getDDL">source&nbsp;code</a></span>&nbsp;</span
+    ></td>
+  </table>
+  
+  
+  <dl><dt></dt><dd>
+    <dl><dt>Returns:</dt>
+        <dd>SQL needed to create this object as a str</dd></dl>
+  </dd></dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >pysql</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">Generated by Epydoc
+        3.0alpha3 on Sun Mar 18 18:11:26 2007</td>
+    <td align="right" class="footer">
+      <a href="http://epydoc.sourceforge.net">http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie()
+  // -->
+</script>
+  
+</body>
+</html>

@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>pysqloraobjects.OraSequence</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >pysql</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="pysqloraobjects-module.html">Module&nbsp;pysqloraobjects</a> ::
+        Class&nbsp;OraSequence
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript: void(0);" class="privatelink"
+    onclick="toggle_private();">hide private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="pysqloraobjects.OraSequence-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class OraSequence</h1><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraSequence">source&nbsp;code</a></span><br /><br />
+<center>
+<center>  <map id="uml_class_diagram_for_classdoc_17" name="uml_class_diagram_for_classdoc_17">
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#setName" title="Sets name (and owner if name is given like &quot;user.object&quot;)" alt="" coords="64,36,293,55" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#getCopy" title="pysqloraobjects.OraObject.getCopy" alt="" coords="64,55,293,74" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#__str__" title="String representation (mostly used for debug purpose" alt="" coords="64,74,293,92" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#getType" title="pysqloraobjects.OraObject.getType" alt="" coords="64,92,293,111" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#getOwner" title="pysqloraobjects.OraObject.getOwner" alt="" coords="64,111,293,130" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#getFullName" title="pysqloraobjects.OraObject.getFullName" alt="" coords="64,130,293,148" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#setType" title="Sets the object type." alt="" coords="64,148,293,167" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#guessInfos" title="Guesses and sets object type and owner" alt="" coords="64,167,293,186" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#getName" title="pysqloraobjects.OraObject.getName" alt="" coords="64,186,293,204" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#getDDL" title="pysqloraobjects.OraObject.getDDL" alt="" coords="64,204,293,223" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#setOwner" title="Sets the object owner." alt="" coords="64,223,293,242" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html" title="pysqloraobjects.OraObject" alt="" coords="52,6,305,248" />
+<area shape="rect" href="pysqloraobjects.OraSequence&#45;class.html#getLast" title="Gets the last value of the sequence object" alt="" coords="17,298,340,316" />
+<area shape="rect" href="pysqloraobjects.OraSequence&#45;class.html#getStep" title="Gets the step value of the sequence object" alt="" coords="17,316,340,335" />
+<area shape="rect" href="pysqloraobjects.OraSequence&#45;class.html#getMin" title="Gets the min value of the sequence object" alt="" coords="17,335,340,354" />
+<area shape="rect" href="pysqloraobjects.OraSequence&#45;class.html#getMax" title="Gets the max value of the sequence object" alt="" coords="17,354,340,372" />
+<area shape="rect" href="pysqloraobjects.OraSequence&#45;class.html#__init__" title="Sequence creation" alt="" coords="17,372,340,391" />
+<area shape="rect" href="pysqloraobjects.OraSequence&#45;class.html" title="pysqloraobjects.OraSequence" alt="" coords="5,267,352,398" />
+</map>
+  <img src="uml_class_diagram_for_classdoc_17.gif" alt='' usemap="#uml_class_diagram_for_classdoc_17" ismap="ismap" class="graph-without-title">
+</center></center>
+<hr />
+Oracle sequence<br /><br />
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+  <td width="15%" align="right" valign="top" class="summary">
+    <code class="summary-type">&nbsp;</code>
+  </td><td class="summary">
+    <span class="summary-sig"><a href="pysqloraobjects.OraSequence-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">sequenceOwner</span>=<span class="summary-sig-default">&quot;&quot;</span>,
+        <span class="summary-sig-arg">sequenceName</span>=<span class="summary-sig-default">&quot;&quot;</span>)</span><br />
+      Sequence creation
+  </td>
+</tr>
+<tr>
+  <td width="15%" align="right" valign="top" class="summary">
+    <code class="summary-type">&nbsp;</code>
+  </td><td class="summary">
+    <span class="summary-sig"><a href="pysqloraobjects.OraSequence-class.html#getLast" class="summary-sig-name">getLast</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">db</span>)</span><br />
+      Gets the last value of the sequence object
+  </td>
+</tr>
+<tr>
+  <td width="15%" align="right" valign="top" class="summary">
+    <code class="summary-type">&nbsp;</code>
+  </td><td class="summary">
+    <span class="summary-sig"><a href="pysqloraobjects.OraSequence-class.html#getMin" class="summary-sig-name">getMin</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">db</span>)</span><br />
+      Gets the min value of the sequence object
+  </td>
+</tr>
+<tr>
+  <td width="15%" align="right" valign="top" class="summary">
+    <code class="summary-type">&nbsp;</code>
+  </td><td class="summary">
+    <span class="summary-sig"><a href="pysqloraobjects.OraSequence-class.html#getMax" class="summary-sig-name">getMax</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">db</span>)</span><br />
+      Gets the max value of the sequence object
+  </td>
+</tr>
+<tr>
+  <td width="15%" align="right" valign="top" class="summary">
+    <code class="summary-type">&nbsp;</code>
+  </td><td class="summary">
+    <span class="summary-sig"><a href="pysqloraobjects.OraSequence-class.html#getStep" class="summary-sig-name">getStep</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">db</span>)</span><br />
+      Gets the step value of the sequence object
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pysqloraobjects.OraObject-class.html">OraObject</a></code></b>:
+      <code><a href="pysqloraobjects.OraObject-class.html#__str__">__str__</a></code>,
+      <code><a href="pysqloraobjects.OraObject-class.html#getCopy">getCopy</a></code>,
+      <code><a href="pysqloraobjects.OraObject-class.html#getDDL">getDDL</a></code>,
+      <code><a href="pysqloraobjects.OraObject-class.html#getFullName">getFullName</a></code>,
+      <code><a href="pysqloraobjects.OraObject-class.html#getName">getName</a></code>,
+      <code><a href="pysqloraobjects.OraObject-class.html#getOwner">getOwner</a></code>,
+      <code><a href="pysqloraobjects.OraObject-class.html#getType">getType</a></code>,
+      <code><a href="pysqloraobjects.OraObject-class.html#guessInfos">guessInfos</a></code>,
+      <code><a href="pysqloraobjects.OraObject-class.html#setName">setName</a></code>,
+      <code><a href="pysqloraobjects.OraObject-class.html#setOwner">setOwner</a></code>,
+      <code><a href="pysqloraobjects.OraObject-class.html#setType">setType</a></code>
+      </p>
+    </td>
+  </tr>
+</table>
+
+<br />
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">sequenceOwner</span>=<span class="sig-default">&quot;&quot;</span>,
+        <span class="sig-arg">sequenceName</span>=<span class="sig-default">&quot;&quot;</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraSequence.__init__">source&nbsp;code</a></span>&nbsp;</span
+    ></td>
+  </table>
+  
+  Sequence creation
+  <dl><dt></dt><dd>
+    <dl><dt>Overrides:
+      <a href="pysqloraobjects.OraObject-class.html#__init__">OraObject.__init__</a>
+    </dt></dl>
+  </dd></dl>
+</td></tr></table>
+</div>
+<a name="getLast"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getLast</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">db</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraSequence.getLast">source&nbsp;code</a></span>&nbsp;</span
+    ></td>
+  </table>
+  
+  Gets the last value of the sequence object
+  <dl><dt></dt><dd>
+    <dl><dt>Returns:</dt>
+        <dd>full path (str)</dd></dl>
+  </dd></dl>
+</td></tr></table>
+</div>
+<a name="getMin"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getMin</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">db</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraSequence.getMin">source&nbsp;code</a></span>&nbsp;</span
+    ></td>
+  </table>
+  
+  Gets the min value of the sequence object
+  <dl><dt></dt><dd>
+    <dl><dt>Returns:</dt>
+        <dd>full path (str)</dd></dl>
+  </dd></dl>
+</td></tr></table>
+</div>
+<a name="getMax"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getMax</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">db</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraSequence.getMax">source&nbsp;code</a></span>&nbsp;</span
+    ></td>
+  </table>
+  
+  Gets the max value of the sequence object
+  <dl><dt></dt><dd>
+    <dl><dt>Returns:</dt>
+        <dd>full path (str)</dd></dl>
+  </dd></dl>
+</td></tr></table>
+</div>
+<a name="getStep"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getStep</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">db</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraSequence.getStep">source&nbsp;code</a></span>&nbsp;</span
+    ></td>
+  </table>
+  
+  Gets the step value of the sequence object
+  <dl><dt></dt><dd>
+    <dl><dt>Returns:</dt>
+        <dd>full path (str)</dd></dl>
+  </dd></dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >pysql</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">Generated by Epydoc
+        3.0alpha3 on Sun Mar 18 18:11:27 2007</td>
+    <td align="right" class="footer">
+      <a href="http://epydoc.sourceforge.net">http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie()
+  // -->
+</script>
+  
+</body>
+</html>

@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>pysqlexception</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >pysql</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Module&nbsp;pysqlexception
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript: void(0);" class="privatelink"
+    onclick="toggle_private();">hide private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="pysqlexception-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="pysqlexception-module.html">Module pysqlexception</a></h1>
+<pre class="py-src">
+<span class="py-lineno"> 1</span>  <span class="py-line"><span class="py-comment">#!/usr/bin/python</span> </span>
+<span class="py-lineno"> 2</span>  <span class="py-line"><span class="py-comment"></span><span class="py-comment"># -*- coding: utf-8 -*-</span> </span>
+<span class="py-lineno"> 3</span>  <span class="py-line"><span class="py-comment"></span> </span>
+<span class="py-lineno"> 4</span>  <span class="py-line"><span class="py-comment"># S&#233;bastien Renard (sebastien.renard@digitalfox.org)</span> </span>
+<span class="py-lineno"> 5</span>  <span class="py-line"><span class="py-comment"></span><span class="py-comment"># Code licensed under GNU GPL V2</span> </span>
+<span class="py-lineno"> 6</span>  <span class="py-line"><span class="py-comment"></span> </span>
+<span class="py-lineno"> 7</span>  <span class="py-line"><span class="py-docstring">"""This module defines all pysql exceptions"""</span> </span>
+<span class="py-lineno"> 8</span>  <span class="py-line"> </span>
+<span class="py-lineno"> 9</span>  <span class="py-line"><span class="py-comment"># Python imports</span> </span>
+<span class="py-lineno">10</span>  <span class="py-line"><span class="py-comment"></span><span class="py-keyword">from</span> <span class="py-name">time</span> <span class="py-keyword">import</span> <span class="py-name">ctime</span><span class="py-op">,</span> <span class="py-name">time</span> </span>
+<span class="py-lineno">11</span>  <span class="py-line"><span class="py-keyword">from</span> <span class="py-name">re</span> <span class="py-keyword">import</span> <span class="py-name">match</span> </span>
+<span class="py-lineno">12</span>  <span class="py-line"> </span>
+<a name="PysqlException"></a><div id="PysqlException-def"><span class="py-lineno">13</span> <a class="py-toggle" href="#" id="PysqlException-toggle" onclick="toggle('PysqlException'); return false;">-</a><span class="py-line"><span class="py-keyword">class</span> <a class="py-def-name" href="pysqlexception.PysqlException-class.html">PysqlException</a><span class="py-op">(</span><span class="py-base-class">Exception</span><span class="py-op">)</span><span class="py-op">:</span> </span>
+</div><div id="PysqlException-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="PysqlException-expanded"><span class="py-lineno">14</span>  <span class="py-line">    <span class="py-docstring">"""Pysql Exceptions"""</span> </span>
+<a name="PysqlException.__init__"></a><div id="PysqlException.__init__-def"><span class="py-lineno">15</span> <a class="py-toggle" href="#" id="PysqlException.__init__-toggle" onclick="toggle('PysqlException.__init__'); return false;">-</a><span class="py-line">    <span class="py-keyword">def</span> <a class="py-def-name" href="pysqlexception.PysqlException-class.html#__init__">__init__</a><span class="py-op">(</span><span class="py-param">self</span><span class="py-op">,</span> <span class="py-param">exception</span><span class="py-op">)</span><span class="py-op">:</span> </span>
+</div><div id="PysqlException.__init__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="PysqlException.__init__-expanded"><span class="py-lineno">16</span>  <span class="py-line">        <span class="py-comment"># instance members</span> </span>
+<span class="py-lineno">17</span>  <span class="py-line"><span class="py-comment"></span>        <span class="py-name">self</span><span class="py-op">.</span><span class="py-name">oraCode</span><span class="py-op">=</span><span class="py-string">""</span> </span>
+<span class="py-lineno">18</span>  <span class="py-line">        <span class="py-name">self</span><span class="py-op">.</span><span class="py-name">msg</span><span class="py-op">=</span><span class="py-string">""</span> </span>
+<span class="py-lineno">19</span>  <span class="py-line">        <span class="py-name">self</span><span class="py-op">.</span><span class="py-name">time</span><span class="py-op">=</span><span class="py-name">None</span> </span>
+<span class="py-lineno">20</span>  <span class="py-line"> </span>
+<span class="py-lineno">21</span>  <span class="py-line">        <span class="py-comment"># TimeStamp exception</span> </span>
+<span class="py-lineno">22</span>  <span class="py-line"><span class="py-comment"></span>        <span class="py-name">self</span><span class="py-op">.</span><span class="py-name">time</span><span class="py-op">=</span><span class="py-name">time</span><span class="py-op">(</span><span class="py-op">)</span> </span>
+<span class="py-lineno">23</span>  <span class="py-line"> </span>
+<span class="py-lineno">24</span>  <span class="py-line">        <span class="py-comment"># Sets default message</span> </span>
+<span class="py-lineno">25</span>  <span class="py-line"><span class="py-comment"></span>        <span class="py-name">self</span><span class="py-op">.</span><span class="py-name">msg</span><span class="py-op">=</span><span class="py-name">unicode</span><span class="py-op">(</span><span class="py-name">exception</span><span class="py-op">)</span> </span>
+<span class="py-lineno">26</span>  <span class="py-line"> </span>
+<span class="py-lineno">27</span>  <span class="py-line">        <span class="py-comment"># Gets ORA error code if this is an Oracle exception</span> </span>
+<span class="py-lineno">28</span>  <span class="py-line"><span class="py-comment"></span>        <span class="py-keyword">if</span> <span class="py-name">isinstance</span><span class="py-op">(</span><span class="py-name">exception</span><span class="py-op">,</span> <span id="link-0" class="py-name"><a title="pysqlexception.PysqlException" class="py-name" href="#" onclick="doclink('link-0', 'PysqlException', 'Class pysqlexception.PysqlException=pysqlexception.PysqlException-class.html'); return false;">PysqlException</a></span></span><span class="py-op">)</span><span class="py-op">:</span> </span>
+<span class="py-lineno">29</span>  <span class="py-line">            <span class="py-name">self</span><span class="py-op">.</span><span class="py-name">msg</span><span class="py-op">=</span><span class="py-name">exception</span><span class="py-op">.</span><span class="py-name">msg</span> </span>
+<span class="py-lineno">30</span>  <span class="py-line">            <span class="py-name">self</span><span class="py-op">.</span><span class="py-name">oraCode</span><span class="py-op">=</span><span class="py-name">exception</span><span class="py-op">.</span><span class="py-name">oraCode</span> </span>
+<span class="py-lineno">31</span>  <span class="py-line">            <span class="py-name">self</span><span class="py-op">.</span><span class="py-name">time</span><span class="py-op">=</span><span class="py-name">exception</span><span class="py-op">.</span><span class="py-name">time</span> </span>
+<span class="py-lineno">32</span>  <span class="py-line">        <span class="py-keyword">else</span><span class="py-op">:</span> </span>
+<span class="py-lineno">33</span>  <span class="py-line">            <span class="py-name">result</span><span class="py-op">=</span><span class="py-name">match</span><span class="py-op">(</span><span class="py-string">"(.*)(ORA-\d+): (.*)"</span><span class="py-op">,</span> <span class="py-name">unicode</span><span class="py-op">(</span><span class="py-name">exception</span><span class="py-op">)</span><span class="py-op">)</span> </span>
+<span class="py-lineno">34</span>  <span class="py-line">            <span class="py-keyword">if</span> <span class="py-name">result</span><span class="py-op">:</span> </span>
+<span class="py-lineno">35</span>  <span class="py-line">                <span class="py-name">self</span><span class="py-op">.</span><span class="py-name">oraCode</span><span class="py-op">=</span><span class="py-name">result</span><span class="py-op">.</span><span class="py-name">group</span><span class="py-op">(</span><span class="py-number">2</span><span class="py-op">)</span> </span>
+<span class="py-lineno">36</span>  <span class="py-line">                <span class="py-name">self</span><span class="py-op">.</span><span class="py-name">msg</span><span class="py-op">=</span><span class="py-name">result</span><span class="py-op">.</span><span class="py-name">group</span><span class="py-op">(</span><span class="py-number">1</span><span class="py-op">)</span><span class="py-op">+</span><span class="py-name">result</span><span class="py-op">.</span><span class="py-name">group</span><span class="py-op">(</span><span class="py-number">3</span><span class="py-op">)</span> </span>
+<span class="py-lineno">37</span>  <span class="py-line"> </span>
+<span class="py-lineno">38</span>  <span class="py-line">        <span class="py-comment"># Calls father constructor</span> </span>
+<span class="py-lineno">39</span>  <span class="py-line"><span class="py-comment"></span>        <span class="py-name">Exception</span><span class="py-op">.</span><span id="link-1" class="py-name"><a title="pysqlconf.PysqlConf.__init__
+pysqldb.BgQuery.__init__
+pysqldb.PysqlDb.__init__
+pysqlexception.PysqlActionDenied.__init__
+pysqlexception.PysqlException.__init__
+pysqlexception.PysqlNotImplemented.__init__
+pysqlio.PysqlIO.__init__
+pysqlnet.PysqlNetClient.__init__
+pysqloraobjects.OraDBLink.__init__
+pysqloraobjects.OraDatafile.__init__
+pysqloraobjects.OraDirectory.__init__
+pysqloraobjects.OraFunction.__init__
+pysqloraobjects.OraIndex.__init__
+pysqloraobjects.OraMaterializedView.__init__
+pysqloraobjects.OraObject.__init__
+pysqloraobjects.OraPackage.__init__
+pysqloraobjects.OraPackageBody.__init__
+pysqloraobjects.OraProcedure.__init__
+pysqloraobjects.OraSequence.__init__
+pysqloraobjects.OraSynonym.__init__
+pysqloraobjects.OraTable.__init__
+pysqloraobjects.OraTablespace.__init__
+pysqloraobjects.OraTrigger.__init__
+pysqloraobjects.OraUser.__init__
+pysqloraobjects.OraView.__init__
+pysqlshell.PysqlShell.__init__
+pysqlupdate.Version.__init__" class="py-name" href="#" onclick="doclink('link-1', '__init__', 'Method pysqlconf.PysqlConf.__init__()=pysqlconf.PysqlConf-class.html#__init__,Method pysqldb.BgQuery.__init__()=pysqldb.BgQuery-class.html#__init__,Method pysqldb.PysqlDb.__init__()=pysqldb.PysqlDb-class.html#__init__,Method pysqlexception.PysqlActionDenied.__init__()=pysqlexception.PysqlActionDenied-class.html#__init__,Method pysqlexception.PysqlException.__init__()=pysqlexception.PysqlException-class.html#__init__,Method pysqlexception.PysqlNotImplemented.__init__()=pysqlexception.PysqlNotImplemented-class.html#__init__,Method pysqlio.PysqlIO.__init__()=pysqlio.PysqlIO-class.html#__init__,Method pysqlnet.PysqlNetClient.__init__()=pysqlnet.PysqlNetClient-class.html#__init__,Method pysqloraobjects.OraDBLink.__init__()=pysqloraobjects.OraDBLink-class.html#__init__,Method pysqloraobjects.OraDatafile.__init__()=pysqloraobjects.OraDatafile-class.html#__init__,Method pysqloraobjects.OraDirectory.__init__()=pysqloraobjects.OraDirectory-class.html#__init__,Method pysqloraobjects.OraFunction.__init__()=pysqloraobjects.OraFunction-class.html#__init__,Method pysqloraobjects.OraIndex.__init__()=pysqloraobjects.OraIndex-class.html#__init__,Method pysqloraobjects.OraMaterializedView.__init__()=pysqloraobjects.OraMaterializedView-class.html#__init__,Method pysqloraobjects.OraObject.__init__()=pysqloraobjects.OraObject-class.html#__init__,Method pysqloraobjects.OraPackage.__init__()=pysqloraobjects.OraPackage-class.html#__init__,Method pysqloraobjects.OraPackageBody.__init__()=pysqloraobjects.OraPackageBody-class.html#__init__,Method pysqloraobjects.OraProcedure.__init__()=pysqloraobjects.OraProcedure-class.html#__init__,Method pysqloraobjects.OraSequence.__init__()=pysqloraobjects.OraSequence-class.html#__init__,Method pysqloraobjects.OraSynonym.__init__()=pysqloraobjects.OraSynonym-class.html#__init__,Method pysqloraobjects.OraTable.__init__()=pysqloraobjects.OraTable-class.html#__init__,Method pysqloraobjects.OraTablespace.__init__()=pysqloraobjects.OraTablespace-class.html#__init__,Method pysqloraobjects.OraTrigger.__init__()=pysqloraobjects.OraTrigger-class.html#__init__,Method pysqloraobjects.OraUser.__init__()=pysqloraobjects.OraUser-class.html#__init__,Method pysqloraobjects.OraView.__init__()=pysqloraobjects.OraView-class.html#__init__,Method pysqlshell.PysqlShell.__init__()=pysqlshell.PysqlShell-class.html#__init__,Method pysqlupdate.Version.__init__()=pysqlupdate.Version-class.html#__init__'); return false;">__init__</a></span></span><span class="py-op">(</span><span class="py-name">self</span><span class="py-op">,</span> <span class="py-name">exception</span><span class="py-op">)</span> </span>
+</div><span class="py-lineno">40</span>  <span class="py-line"> </span>
+<a name="PysqlException.getTimeStamp"></a><div id="PysqlException.getTimeStamp-def"><span class="py-lineno">41</span> <a class="py-toggle" href="#" id="PysqlException.getTimeStamp-toggle" onclick="toggle('PysqlException.getTimeStamp'); return false;">-</a><span class="py-line">    <span class="py-keyword">def</span> <a class="py-def-name" href="pysqlexception.PysqlException-class.html#getTimeStamp">getTimeStamp</a><span class="py-op">(</span><span class="py-param">self</span><span class="py-op">)</span><span class="py-op">:</span> </span>
+</div><div id="PysqlException.getTimeStamp-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="PysqlException.getTimeStamp-expanded"><span class="py-lineno">42</span>  <span class="py-line">        <span class="py-docstring">"""@return: exception creation timestamp as a formated string"""</span> </span>
+<span class="py-lineno">43</span>  <span class="py-line">        <span class="py-keyword">return</span> <span class="py-name">ctime</span><span class="py-op">(</span><span class="py-name">self</span><span class="py-op">.</span><span class="py-name">time</span><span class="py-op">)</span> </span>
+</div><span class="py-lineno">44</span>  <span class="py-line"> </span>
+<a name="PysqlException.__str__"></a><div id="PysqlException.__str__-def"><span class="py-lineno">45</span> <a class="py-toggle" href="#" id="PysqlException.__str__-toggle" onclick="toggle('PysqlException.__str__'); return false;">-</a><span class="py-line">    <span class="py-keyword">def</span> <a class="py-def-name" href="pysqlexception.PysqlException-class.html#__str__">__str__</a><span class="py-op">(</span><span class="py-param">self</span><span class="py-op">)</span><span class="py-op">:</span> </span>
+</div><div id="PysqlException.__str__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="PysqlException.__str__-expanded"><span class="py-lineno">46</span>  <span class="py-line">        <span class="py-keyword">if</span> <span class="py-name">self</span><span class="py-op">.</span><span class="py-name">oraCode</span><span class="py-op">==</span><span class="py-string">""</span><span class="py-op">:</span> </span>
+<span class="py-lineno">47</span>  <span class="py-line">            <span class="py-keyword">return</span> <span class="py-name">self</span><span class="py-op">.</span><span class="py-name">msg</span> </span>
+<span class="py-lineno">48</span>  <span class="py-line">        <span class="py-keyword">else</span><span class="py-op">:</span> </span>
+<span class="py-lineno">49</span>  <span class="py-line">            <span class="py-keyword">return</span> <span class="py-name">self</span><span class="py-op">.</span><span class="py-name">oraCode</span> <span class="py-op">+</span><span class="py-string">"-"</span> <span class="py-op">+</span> <span class="py-name">self</span><span class="py-op">.</span><span class="py-name">msg</span> </span>
+</div></div><span class="py-lineno">50</span>  <span class="py-line"> </span>
+<a name="PysqlNotImplemented"></a><div id="PysqlNotImplemented-def"><span class="py-lineno">51</span> <a class="py-toggle" href="#" id="PysqlNotImplemented-toggle" onclick="toggle('PysqlNotImplemented'); return false;">-</a><span class="py-line"><span class="py-keyword">class</span> <a class="py-def-name" href="pysqlexception.PysqlNotImplemented-class.html">PysqlNotImplemented</a><span class="py-op">(</span><span class="py-base-class">PysqlException</span><span class="py-op">)</span><span class="py-op">:</span> </span>
+</div><div id="PysqlNotImplemented-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="PysqlNotImplemented-expanded"><span class="py-lineno">52</span>  <span class="py-line">    <span class="py-docstring">"""Indicates function not yet implemented"""</span> </span>
+<a name="PysqlNotImplemented.__init__"></a><div id="PysqlNotImplemented.__init__-def"><span class="py-lineno">53</span> <a class="py-toggle" href="#" id="PysqlNotImplemented.__init__-toggle" onclick="toggle('PysqlNotImplemented.__init__'); return false;">-</a><span class="py-line">    <span class="py-keyword">def</span> <a class="py-def-name" href="pysqlexception.PysqlNotImplemented-class.html#__init__">__init__</a><span class="py-op">(</span><span class="py-param">self</span><span class="py-op">)</span><span class="py-op">:</span> </span>
+</div><div id="PysqlNotImplemented.__init__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="PysqlNotImplemented.__init__-expanded"><span class="py-lineno">54</span>  <span class="py-line">        <span id="link-2" class="py-name"><a title="pysqlexception.PysqlException" class="py-name" href="#" onclick="doclink('link-2', 'PysqlException', 'Class pysqlexception.PysqlException=pysqlexception.PysqlException-class.html'); return false;">PysqlException</a></span></span><span class="py-op">.</span><span id="link-3" class="py-name"><a title="pysqlconf.PysqlConf.__init__
+pysqldb.BgQuery.__init__
+pysqldb.PysqlDb.__init__
+pysqlexception.PysqlActionDenied.__init__
+pysqlexception.PysqlException.__init__
+pysqlexception.PysqlNotImplemented.__init__
+pysqlio.PysqlIO.__init__
+pysqlnet.PysqlNetClient.__init__
+pysqloraobjects.OraDBLink.__init__
+pysqloraobjects.OraDatafile.__init__
+pysqloraobjects.OraDirectory.__init__
+pysqloraobjects.OraFunction.__init__
+pysqloraobjects.OraIndex.__init__
+pysqloraobjects.OraMaterializedView.__init__
+pysqloraobjects.OraObject.__init__
+pysqloraobjects.OraPackage.__init__
+pysqloraobjects.OraPackageBody.__init__
+pysqloraobjects.OraProcedure.__init__
+pysqloraobjects.OraSequence.__init__
+pysqloraobjects.OraSynonym.__init__
+pysqloraobjects.OraTable.__init__
+pysqloraobjects.OraTablespace.__init__
+pysqloraobjects.OraTrigger.__init__
+pysqloraobjects.OraUser.__init__
+pysqloraobjects.OraView.__init__
+pysqlshell.PysqlShell.__init__
+pysqlupdate.Version.__init__" class="py-name" href="#" onclick="doclink('link-3', '__init__', 'Method pysqlconf.PysqlConf.__init__()=pysqlconf.PysqlConf-class.html#__init__,Method pysqldb.BgQuery.__init__()=pysqldb.BgQuery-class.html#__init__,Method pysqldb.PysqlDb.__init__()=pysqldb.PysqlDb-class.html#__init__,Method pysqlexception.PysqlActionDenied.__init__()=pysqlexception.PysqlActionDenied-class.html#__init__,Method pysqlexception.PysqlException.__init__()=pysqlexception.PysqlException-class.html#__init__,Method pysqlexception.PysqlNotImplemented.__init__()=pysqlexception.PysqlNotImplemented-class.html#__init__,Method pysqlio.PysqlIO.__init__()=pysqlio.PysqlIO-class.html#__init__,Method pysqlnet.PysqlNetClient.__init__()=pysqlnet.PysqlNetClient-class.html#__init__,Method pysqloraobjects.OraDBLink.__init__()=pysqloraobjects.OraDBLink-class.html#__init__,Method pysqloraobjects.OraDatafile.__init__()=pysqloraobjects.OraDatafile-class.html#__init__,Method pysqloraobjects.OraDirectory.__init__()=pysqloraobjects.OraDirectory-class.html#__init__,Method pysqloraobjects.OraFunction.__init__()=pysqloraobjects.OraFunction-class.html#__init__,Method pysqloraobjects.OraIndex.__init__()=pysqloraobjects.OraIndex-class.html#__init__,Method pysqloraobjects.OraMaterializedView.__init__()=pysqloraobjects.OraMaterializedView-class.html#__init__,Method pysqloraobjects.OraObject.__init__()=pysqloraobjects.OraObject-class.html#__init__,Method pysqloraobjects.OraPackage.__init__()=pysqloraobjects.OraPackage-class.html#__init__,Method pysqloraobjects.OraPackageBody.__init__()=pysqloraobjects.OraPackageBody-class.html#__init__,Method pysqloraobjects.OraProcedure.__init__()=pysqloraobjects.OraProcedure-class.html#__init__,Method pysqloraobjects.OraSequence.__init__()=pysqloraobjects.OraSequence-class.html#__init__,Method pysqloraobjects.OraSynonym.__init__()=pysqloraobjects.OraSynonym-class.html#__init__,Method pysqloraobjects.OraTable.__init__()=pysqloraobjects.OraTable-class.html#__init__,Method pysqloraobjects.OraTablespace.__init__()=pysqloraobjects.OraTablespace-class.html#__init__,Method pysqloraobjects.OraTrigger.__init__()=pysqloraobjects.OraTrigger-class.html#__init__,Method pysqloraobjects.OraUser.__init__()=pysqloraobjects.OraUser-class.html#__init__,Method pysqloraobjects.OraView.__init__()=pysqloraobjects.OraView-class.html#__init__,Method pysqlshell.PysqlShell.__init__()=pysqlshell.PysqlShell-class.html#__init__,Method pysqlupdate.Version.__init__()=pysqlupdate.Version-class.html#__init__'); return false;">__init__</a></span></span><span class="py-op">(</span><span class="py-name">self</span><span class="py-op">,</span> <span class="py-name">_</span><span class="py-op">(</span><span class="py-string">"Not yet implemented"</span><span class="py-op">)</span><span class="py-op">)</span> </span>
+</div></div><span class="py-lineno">55</span>  <span class="py-line"> </span>
+<a name="PysqlActionDenied"></a><div id="PysqlActionDenied-def"><span class="py-lineno">56</span> <a class="py-toggle" href="#" id="PysqlActionDenied-toggle" onclick="toggle('PysqlActionDenied'); return false;">-</a><span class="py-line"><span class="py-keyword">class</span> <a class="py-def-name" href="pysqlexception.PysqlActionDenied-class.html">PysqlActionDenied</a><span class="py-op">(</span><span class="py-base-class">PysqlException</span><span class="py-op">)</span><span class="py-op">:</span> </span>
+</div><div id="PysqlActionDenied-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="PysqlActionDenied-expanded"><span class="py-lineno">57</span>  <span class="py-line">    <span class="py-docstring">"""Indicates user is not granted to perform this action"""</span> </span>
+<a name="PysqlActionDenied.__init__"></a><div id="PysqlActionDenied.__init__-def"><span class="py-lineno">58</span> <a class="py-toggle" href="#" id="PysqlActionDenied.__init__-toggle" onclick="toggle('PysqlActionDenied.__init__'); return false;">-</a><span class="py-line">    <span class="py-keyword">def</span> <a class="py-def-name" href="pysqlexception.PysqlActionDenied-class.html#__init__">__init__</a><span class="py-op">(</span><span class="py-param">self</span><span class="py-op">,</span> <span class="py-param">message</span><span class="py-op">)</span><span class="py-op">:</span> </span>
+</div><div id="PysqlActionDenied.__init__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="PysqlActionDenied.__init__-expanded"><span class="py-lineno">59</span>  <span class="py-line">        <span id="link-4" class="py-name"><a title="pysqlexception.PysqlException" class="py-name" href="#" onclick="doclink('link-4', 'PysqlException', 'Class pysqlexception.PysqlException=pysqlexception.PysqlException-class.html'); return false;">PysqlException</a></span></span><span class="py-op">.</span><span id="link-5" class="py-name"><a title="pysqlconf.PysqlConf.__init__
+pysqldb.BgQuery.__init__
+pysqldb.PysqlDb.__init__
+pysqlexception.PysqlActionDenied.__init__
+pysqlexception.PysqlException.__init__
+pysqlexception.PysqlNotImplemented.__init__
+pysqlio.PysqlIO.__init__
+pysqlnet.PysqlNetClient.__init__
+pysqloraobjects.OraDBLink.__init__
+pysqloraobjects.OraDatafile.__init__
+pysqloraobjects.OraDirectory.__init__
+pysqloraobjects.OraFunction.__init__
+pysqloraobjects.OraIndex.__init__
+pysqloraobjects.OraMaterializedView.__init__
+pysqloraobjects.OraObject.__init__
+pysqloraobjects.OraPackage.__init__
+pysqloraobjects.OraPackageBody.__init__
+pysqloraobjects.OraProcedure.__init__
+pysqloraobjects.OraSequence.__init__
+pysqloraobjects.OraSynonym.__init__
+pysqloraobjects.OraTable.__init__
+pysqloraobjects.OraTablespace.__init__
+pysqloraobjects.OraTrigger.__init__
+pysqloraobjects.OraUser.__init__
+pysqloraobjects.OraView.__init__
+pysqlshell.PysqlShell.__init__
+pysqlupdate.Version.__init__" class="py-name" href="#" onclick="doclink('link-5', '__init__', 'Method pysqlconf.PysqlConf.__init__()=pysqlconf.PysqlConf-class.html#__init__,Method pysqldb.BgQuery.__init__()=pysqldb.BgQuery-class.html#__init__,Method pysqldb.PysqlDb.__init__()=pysqldb.PysqlDb-class.html#__init__,Method pysqlexception.PysqlActionDenied.__init__()=pysqlexception.PysqlActionDenied-class.html#__init__,Method pysqlexception.PysqlException.__init__()=pysqlexception.PysqlException-class.html#__init__,Method pysqlexception.PysqlNotImplemented.__init__()=pysqlexception.PysqlNotImplemented-class.html#__init__,Method pysqlio.PysqlIO.__init__()=pysqlio.PysqlIO-class.html#__init__,Method pysqlnet.PysqlNetClient.__init__()=pysqlnet.PysqlNetClient-class.html#__init__,Method pysqloraobjects.OraDBLink.__init__()=pysqloraobjects.OraDBLink-class.html#__init__,Method pysqloraobjects.OraDatafile.__init__()=pysqloraobjects.OraDatafile-class.html#__init__,Method pysqloraobjects.OraDirectory.__init__()=pysqloraobjects.OraDirectory-class.html#__init__,Method pysqloraobjects.OraFunction.__init__()=pysqloraobjects.OraFunction-class.html#__init__,Method pysqloraobjects.OraIndex.__init__()=pysqloraobjects.OraIndex-class.html#__init__,Method pysqloraobjects.OraMaterializedView.__init__()=pysqloraobjects.OraMaterializedView-class.html#__init__,Method pysqloraobjects.OraObject.__init__()=pysqloraobjects.OraObject-class.html#__init__,Method pysqloraobjects.OraPackage.__init__()=pysqloraobjects.OraPackage-class.html#__init__,Method pysqloraobjects.OraPackageBody.__init__()=pysqloraobjects.OraPackageBody-class.html#__init__,Method pysqloraobjects.OraProcedure.__init__()=pysqloraobjects.OraProcedure-class.html#__init__,Method pysqloraobjects.OraSequence.__init__()=pysqloraobjects.OraSequence-class.html#__init__,Method pysqloraobjects.OraSynonym.__init__()=pysqloraobjects.OraSynonym-class.html#__init__,Method pysqloraobjects.OraTable.__init__()=pysqloraobjects.OraTable-class.html#__init__,Method pysqloraobjects.OraTablespace.__init__()=pysqloraobjects.OraTablespace-class.html#__init__,Method pysqloraobjects.OraTrigger.__init__()=pysqloraobjects.OraTrigger-class.html#__init__,Method pysqloraobjects.OraUser.__init__()=pysqloraobjects.OraUser-class.html#__init__,Method pysqloraobjects.OraView.__init__()=pysqloraobjects.OraView-class.html#__init__,Method pysqlshell.PysqlShell.__init__()=pysqlshell.PysqlShell-class.html#__init__,Method pysqlupdate.Version.__init__()=pysqlupdate.Version-class.html#__init__'); return false;">__init__</a></span></span><span class="py-op">(</span><span class="py-name">self</span><span class="py-op">,</span> <span class="py-name">_</span><span class="py-op">(</span><span class="py-string">"Action denied: %s"</span><span class="py-op">)</span> <span class="py-op">%</span> <span class="py-name">message</span><span class="py-op">)</span> </span>
+</div></div><span class="py-lineno">60</span>  <span class="py-line"> </span><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >pysql</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">Generated by Epydoc
+        3.0alpha3 on Sun Mar 18 18:11:29 2007</td>
+    <td align="right" class="footer">
+      <a href="http://epydoc.sourceforge.net">http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie()
+  // -->
+</script>
+  
+</body>
+</html>

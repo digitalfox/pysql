@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>pysqloraobjects.OraMaterializedView</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >pysql</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="pysqloraobjects-module.html">Module&nbsp;pysqloraobjects</a> ::
+        Class&nbsp;OraMaterializedView
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript: void(0);" class="privatelink"
+    onclick="toggle_private();">hide private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="pysqloraobjects.OraMaterializedView-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class OraMaterializedView</h1><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraMaterializedView">source&nbsp;code</a></span><br /><br />
+<center>
+<center>  <map id="uml_class_diagram_for_classdoc_11" name="uml_class_diagram_for_classdoc_11">
+<area shape="rect" href="pysqloraobjects.OraTabular&#45;class.html#getTableColumns" title="Gets table or view columns" alt="" coords="17,297,207,316" />
+<area shape="rect" href="pysqloraobjects.OraTabular&#45;class.html#getNumberOfColumns" title="pysqloraobjects.OraTabular.getNumberOfColumns" alt="" coords="17,316,207,335" />
+<area shape="rect" href="pysqloraobjects.OraTabular&#45;class.html#getRowCount" title="pysqloraobjects.OraTabular.getRowCount" alt="" coords="17,335,207,353" />
+<area shape="rect" href="pysqloraobjects.OraTabular&#45;class.html#getComment" title="pysqloraobjects.OraTabular.getComment" alt="" coords="17,353,207,372" />
+<area shape="rect" href="pysqloraobjects.OraTabular&#45;class.html" title="pysqloraobjects.OraTabular" alt="" coords="5,267,219,379" />
+<area shape="rect" href="pysqloraobjects.OraMaterializedView&#45;class.html#getSQL" title="pysqloraobjects.OraMaterializedView.getSQL" alt="" coords="81,428,361,447" />
+<area shape="rect" href="pysqloraobjects.OraMaterializedView&#45;class.html#__init__" title="Materialized view creation" alt="" coords="81,447,361,465" />
+<area shape="rect" href="pysqloraobjects.OraMaterializedView&#45;class.html" title="pysqloraobjects.OraMaterializedView" alt="" coords="69,397,373,472" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#setName" title="Sets name (and owner if name is given like &quot;user.object&quot;)" alt="" coords="107,36,336,55" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#getCopy" title="pysqloraobjects.OraObject.getCopy" alt="" coords="107,55,336,73" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#__str__" title="String representation (mostly used for debug purpose" alt="" coords="107,73,336,92" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#getType" title="pysqloraobjects.OraObject.getType" alt="" coords="107,92,336,111" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#getOwner" title="pysqloraobjects.OraObject.getOwner" alt="" coords="107,111,336,129" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#getFullName" title="pysqloraobjects.OraObject.getFullName" alt="" coords="107,129,336,148" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#setType" title="Sets the object type." alt="" coords="107,148,336,167" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#guessInfos" title="Guesses and sets object type and owner" alt="" coords="107,167,336,185" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#getName" title="pysqloraobjects.OraObject.getName" alt="" coords="107,185,336,204" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#getDDL" title="pysqloraobjects.OraObject.getDDL" alt="" coords="107,204,336,223" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html#setOwner" title="Sets the object owner." alt="" coords="107,223,336,241" />
+<area shape="rect" href="pysqloraobjects.OraObject&#45;class.html" title="pysqloraobjects.OraObject" alt="" coords="95,5,348,248" />
+<area shape="rect" href="pysqloraobjects.OraSegment&#45;class.html#getTablespace" title="pysqloraobjects.OraSegment.getTablespace" alt="" coords="260,325,404,344" />
+<area shape="rect" href="pysqloraobjects.OraSegment&#45;class.html" title="pysqloraobjects.OraSegment" alt="" coords="248,295,416,351" />
+</map>
+  <img src="uml_class_diagram_for_classdoc_11.gif" alt='' usemap="#uml_class_diagram_for_classdoc_11" ismap="ismap" class="graph-without-title">
+</center></center>
+<hr />
+Oracle materialized view<br /><br />
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+  <td width="15%" align="right" valign="top" class="summary">
+    <code class="summary-type">&nbsp;</code>
+  </td><td class="summary">
+    <span class="summary-sig"><a href="pysqloraobjects.OraMaterializedView-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">mviewOwner</span>=<span class="summary-sig-default">&quot;&quot;</span>,
+        <span class="summary-sig-arg">mviewName</span>=<span class="summary-sig-default">&quot;&quot;</span>)</span><br />
+      Materialized view creation
+  </td>
+</tr>
+<tr>
+  <td width="15%" align="right" valign="top" class="summary">
+    <code class="summary-type">&nbsp;</code>
+  </td><td class="summary">
+    <span class="summary-sig"><a href="pysqloraobjects.OraMaterializedView-class.html#getSQL" class="summary-sig-name">getSQL</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">db</span>)</span>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pysqloraobjects.OraTabular-class.html">OraTabular</a></code></b>:
+      <code><a href="pysqloraobjects.OraTabular-class.html#getComment">getComment</a></code>,
+      <code><a href="pysqloraobjects.OraTabular-class.html#getNumberOfColumns">getNumberOfColumns</a></code>,
+      <code><a href="pysqloraobjects.OraTabular-class.html#getRowCount">getRowCount</a></code>,
+      <code><a href="pysqloraobjects.OraTabular-class.html#getTableColumns">getTableColumns</a></code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pysqloraobjects.OraObject-class.html">OraObject</a></code></b>:
+      <code><a href="pysqloraobjects.OraObject-class.html#__str__">__str__</a></code>,
+      <code><a href="pysqloraobjects.OraObject-class.html#getCopy">getCopy</a></code>,
+      <code><a href="pysqloraobjects.OraObject-class.html#getDDL">getDDL</a></code>,
+      <code><a href="pysqloraobjects.OraObject-class.html#getFullName">getFullName</a></code>,
+      <code><a href="pysqloraobjects.OraObject-class.html#getName">getName</a></code>,
+      <code><a href="pysqloraobjects.OraObject-class.html#getOwner">getOwner</a></code>,
+      <code><a href="pysqloraobjects.OraObject-class.html#getType">getType</a></code>,
+      <code><a href="pysqloraobjects.OraObject-class.html#guessInfos">guessInfos</a></code>,
+      <code><a href="pysqloraobjects.OraObject-class.html#setName">setName</a></code>,
+      <code><a href="pysqloraobjects.OraObject-class.html#setOwner">setOwner</a></code>,
+      <code><a href="pysqloraobjects.OraObject-class.html#setType">setType</a></code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pysqloraobjects.OraSegment-class.html">OraSegment</a></code></b>:
+      <code><a href="pysqloraobjects.OraSegment-class.html#getTablespace">getTablespace</a></code>
+      </p>
+    </td>
+  </tr>
+</table>
+
+<br />
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">mviewOwner</span>=<span class="sig-default">&quot;&quot;</span>,
+        <span class="sig-arg">mviewName</span>=<span class="sig-default">&quot;&quot;</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraMaterializedView.__init__">source&nbsp;code</a></span>&nbsp;</span
+    ></td>
+  </table>
+  
+  Materialized view creation
+  <dl><dt></dt><dd>
+    <dl><dt>Overrides:
+      <a href="pysqloraobjects.OraObject-class.html#__init__">OraObject.__init__</a>
+    </dt></dl>
+  </dd></dl>
+</td></tr></table>
+</div>
+<a name="getSQL"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getSQL</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">db</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pysqloraobjects-pysrc.html#OraMaterializedView.getSQL">source&nbsp;code</a></span>&nbsp;</span
+    ></td>
+  </table>
+  
+  
+  <dl><dt></dt><dd>
+    <dl><dt>Returns:</dt>
+        <dd>SQL code behind the materialized view</dd></dl>
+  </dd></dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >pysql</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">Generated by Epydoc
+        3.0alpha3 on Sun Mar 18 18:11:25 2007</td>
+    <td align="right" class="footer">
+      <a href="http://epydoc.sourceforge.net">http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie()
+  // -->
+</script>
+  
+</body>
+</html>
