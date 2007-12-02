@@ -2,6 +2,9 @@
 #
 #
 # Extract i18n messages from python source and create pys.pot file
+
+cd $(dirname $0)/..
+
 pygettext.py -d pysql -p po *.py
 
 for lang in $(ls po | grep -v .pot)
