@@ -8,7 +8,7 @@
 """SQL queries ordered by theme in dictionary"""
 
 # pylint: disable-msg=C0103
-searchObjectSqlRequest={
+searchObjectSql={
     "datafile"  :    ("""select 'Datafiles', file_name from dba_data_files
                 where  (%s) /*%s*/ order by %s""", "file_name"),
     "directory" :    ("""select owner, directory_name from all_directories

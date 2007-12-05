@@ -46,7 +46,13 @@ def compare(schemaA, schemaB):
 
     for schema in (schemaA, schemaB):
         dbList[schema]=PysqlDb(schema)
-        result=dbList[schema].executeAll(searchObjectSql["table"], ["%", schema.split("/")[0].upper()])
+        keyword=searchObjectSql["table"][1]
+        print keyword
+        whereClause="""%s like '%%'""" % keyword
+        sql=searchObjectSql["table"][0] % ( 
+                        whereClause, schema.split("/")[0].upper(), keyword)
+        print sql
+        result=dbList[schema].executeAll(sql)
         tables[schema]=[i[1] for i in result]
 
     for item in list(ndiff(tables[schemaA], tables[schemaB])):
@@ -629,8 +635,8 @@ def searchObject(db, objectType, objectName, objectOwner):
     result={}
     objectType=objectType.lower()
     try:
-        sql=searchObjectSqlRequest[objectType][0]
-        keyword=searchObjectSqlRequest[objectType][1]
+        sql=searchObjectSql[objectType][0]
+        keyword=searchObjectSql[objectType][1]
         if len(objectName.split())==1:
             # Single word search. Just add wildcart % if needed
             whereClause="%s like '%s'" % (keyword, addWildCardIfNeeded(objectName))
