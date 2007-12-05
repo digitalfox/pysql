@@ -629,14 +629,13 @@ def searchObject(db, objectType, objectName, objectOwner):
     result={}
     objectType=objectType.lower()
     try:
-        objects=db.executeAll(searchObjectSql[objectType], [objectName, objectOwner])
         sql=searchObjectSqlRequest[objectType][0]
         keyword=searchObjectSqlRequest[objectType][1]
         if len(objectName.split())==1:
             # Single word search. Just add wildcart % if needed
-            whereClause="%s like '%s'" % (keyword, addWildCardIfNeeded(objectName.upper()))
+            whereClause="%s like '%s'" % (keyword, addWildCardIfNeeded(objectName))
         else:
-            whereClause=generateWhere(keyword, objectName.upper())
+            whereClause=generateWhere(keyword, objectName)
         print sql % (whereClause, objectOwner, keyword)
         #TODO: push sql request in history to help users ?
         objects=db.executeAll(sql % (whereClause, objectOwner, keyword))
