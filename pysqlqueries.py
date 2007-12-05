@@ -8,6 +8,11 @@
 """SQL queries ordered by theme in dictionary"""
 
 # pylint: disable-msg=C0103
+searchObjectSqlRequest={
+    "table"     :    ("""select owner, table_name
+                from all_tables
+                where %s and owner like '%s' order by %s""", "table_name")
+    }
 
 searchObjectSql={
     "datafile"  :    """select 'Datafiles', file_name

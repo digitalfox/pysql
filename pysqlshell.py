@@ -1333,11 +1333,13 @@ class PysqlShell(cmd.Cmd):
             (objectOwner, objectName)=objectName.split(".")
         except ValueError:
             pass
-        # Second, with a space
-        try:
-            (objectOwner, objectName)=objectName.split(" ")
-        except ValueError:
-            pass
+        # We cannot tolerate anymore space separator between schema and object name
+        # as it become argument separator
+#        # Second, with a space
+#        try:
+#            (objectOwner, objectName)=objectName.split(" ")
+#        except ValueError:
+#            pass
         objectOwner=objectOwner.upper()
         # If no name if given, searches for all
         if objectName=="":

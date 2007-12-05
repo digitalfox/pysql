@@ -24,7 +24,7 @@ from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
 from pysqlconf import PysqlConf
 from pysqlio import PysqlIO
 from pysqldb import PysqlDb
-from pysqlhelpers import colorDiff, convert, addWildCardIfNeeded
+from pysqlhelpers import colorDiff, convert, addWildCardIfNeeded, generateWhere
 
 # High level pysql functions
 def count(db, objectName):
@@ -627,10 +627,19 @@ def showServerParameter(db, param=""):
 def searchObject(db, objectType, objectName, objectOwner):
     """Searches for Oracle objects by name with wildcard if needed"""
     result={}
-    objectName=addWildCardIfNeeded(objectName.upper())
     objectType=objectType.lower()
     try:
         objects=db.executeAll(searchObjectSql[objectType], [objectName, objectOwner])
+        sql=searchObjectSqlRequest[objectType][0]
+        keyword=searchObjectSqlRequest[objectType][1]
+        if len(objectName.split())==1:
+            # Single word search. Just add wildcart % if needed
+            whereClause="%s like '%s'" % (keyword, addWildCardIfNeeded(objectName.upper()))
+        else:
+            whereClause=generateWhere(keyword, objectName.upper())
+        print sql % (whereClause, objectOwner, keyword)
+        #TODO: push sql request in history to help users ?
+        objects=db.executeAll(sql % (whereClause, objectOwner, keyword))
     except KeyError, e:
         raise PysqlException(_("SQL entry not defined for searchObjectSql: %s") % objectType)
     # Returns a dict with key=schemaNAme and Value=list of object

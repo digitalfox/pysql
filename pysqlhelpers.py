@@ -9,7 +9,7 @@
 
 # Python imports:
 import os
-from re import match, sub
+from re import match, sub, I as IGNORECASE
 import datetime
 from cx_Oracle import LOB
 
@@ -103,6 +103,52 @@ def itemLength(item):
         return item.size()
     else:
         return len(item)
+
+def generateWhere(keyword, objectName):
+    """ Generate where clause from pysql syntax to filter Oracle object
+    Pysql syntax : pattern1 or (pattern2 and pattern3). Pattern are all accepted Oracle like pattern
+    @arg objectName: pysql where clause syntax as a list of words
+    @return: SQL where clause"""
+    #TODO: test this and make it bullet proof
+    result=[]
+    endsWithParenthisis=False
+    startsWithParenthisis=True
+    lastWordWasOperand=True
+    for word in objectName.split():
+        # Keep and remove start & end parenthisis
+        if word.startswith("("):
+            startsWithParenthisis=True
+            result.append("(")
+            word=word[1:]
+        if word.endswith(")"):
+            endsWithParenthisis=True
+            word=word[:-1]
+        # Handle boolean operator
+        if match("and|or", word, IGNORECASE):
+            if startsWithParenthisis or lastWordWasOperand:
+                # Operator at begin of phrase (just after parenthisis)
+                # Or two operators following
+                raise PysqlException(_("Operator %s was not expected at word %s" % (word.upper(), len(result)+1)))
+            result.append(word)
+            lastWordWasOperand=True
+            startsWithParenthisis=False
+        # Construct like clause 
+        elif len(word)>0 and lastWordWasOperand:
+            if word.startswith("!"):
+                operand="not like"
+                word=word[1:]
+            else:
+                operand="like"
+            lastWordWasOperand=False
+            startsWithParenthisis=False
+            result.append("%s %s '%s'" % (keyword, operand, word))
+        elif len(word)>0 and not lastWordWasOperand:
+            # Terms of clause must be separted by operators
+            raise PysqlException(_("Operator (AND/OR) expected at word %s" % (len(result)+1)))
+        if endsWithParenthisis:
+            endsWithParenthisis=False
+            result.append(")")
+    return " ".join(result)
 
 def removeComment(line, comment=False):
     """Removes SQL comments from line
