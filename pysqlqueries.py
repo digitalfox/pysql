@@ -9,48 +9,30 @@
 
 # pylint: disable-msg=C0103
 searchObjectSqlRequest={
-    "table"     :    ("""select owner, table_name
-                from all_tables
-                where %s and owner like '%s' order by %s""", "table_name")
-    }
-
-searchObjectSql={
-    "datafile"  :    """select 'Datafiles', file_name
-                from dba_data_files
-                where file_name like :1 and :2=:2""",
-    "directory" :    """select owner, directory_name
-                from all_directories
-                where directory_name like :1 and owner like :2""",
-    "index"     :    """select owner, index_name
-                from all_indexes
-                where index_name like :1 and owner like :2 order by index_name""",
-    "function"  :    """select distinct owner, name
-                from all_source
-                where name like :1 and owner like :2 and type='FUNCTION' order by name""",
-    "package"   :    """select distinct owner, name
-                from all_source
-                where name like :1 and owner like :2 and type='PACKAGE' order by name""",
-    "procedure" :    """select distinct owner, name
-                from all_source
-                where name like :1 and owner like :2 and type='PROCEDURE' order by name""",
-    "sequence"  :    """select sequence_owner, sequence_name
-                from all_sequences
-                where sequence_name like :1 and sequence_owner like :2 order by sequence_name""",
-    "synonym"   :    """select owner, synonym_name
-                from all_synonyms
-                where synonym_name like :1 and owner like :2 order by synonym_name""",
-    "tablespace":    """select 'Tablespaces', tablespace_name
-                from dba_tablespaces
-                where tablespace_name like :1 and :2=:2""",
-    "table"     :    """select owner, table_name
-                from all_tables
-                where table_name like :1 and owner like :2 order by table_name""",
-    "trigger"   :    """select owner, trigger_name
-                from all_triggers
-                where trigger_name like :1 and owner like :2 order by trigger_name""",
-    "view"      :    """select owner, view_name
-                from all_views
-                where view_name like :1 and owner like :2 order by view_name"""
+    "datafile"  :    ("""select 'Datafiles', file_name from dba_data_files
+                where  (%s) /*%s*/ order by %s""", "file_name"),
+    "directory" :    ("""select owner, directory_name from all_directories
+                where  (%s) and owner like '%s' order by %s""", "directory_name"),
+    "index"     :    ("""select owner, index_name from all_indexes 
+                where (%s) and owner like '%s' order by %s""", "index_name"),
+    "function"  :    ("""select distinct owner, name from all_source
+                where (%s) and owner like '%s' and type='FUNCTION' order by %s""", "name"),
+    "package"   :    ("""select distinct owner, name from all_source
+                where (%s) and owner like '%s' and type='PACKAGE' order by %s""", "name"),
+    "procedure" :    ("""select distinct owner, name from all_source
+                where (%s) and owner like '%s' and type='PROCEDURE' order by %s""", "name"),
+    "sequence"  :    ("""select sequence_owner, sequence_name from all_sequences
+                where (%s) and sequence_owner like '%s' order by %s""", "sequence_name"),
+    "synonym"   :    ("""select owner, synonym_name from all_synonyms
+                where (%s) and owner like '%s' order by %s""", "synonym_name"),
+    "table"     :    ("""select owner, table_name from all_tables
+                where (%s) and owner like '%s' order by %s""", "table_name"),
+    "tablespace":    ("""select 'Tablespaces', tablespace_name from dba_tablespaces
+                where (%s) /*%s*/ order by %s""", "tablespace_name"),
+    "trigger"   :    ("""select owner, trigger_name from all_triggers
+                where (%s) and owner like '%s' order by %s""", "trigger_name"),
+    "view"      :    ("""select owner, view_name from all_views
+                where (%s) and owner like '%s' order by %s""", "view_name")
     }
 
 guessInfoSql={
