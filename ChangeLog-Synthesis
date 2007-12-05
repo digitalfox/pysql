@@ -1,0 +1,61 @@
+V.10 2007/03/18
+Table data comparison is now working.
+
+V0.9 2007/02/04
+This release uses color in comparisons to highlight what has changed. The
+compare function can also compare two tables (in the same or different
+schema), not just two schema.
+
+V0.8 2007/01/21
+This release adds a schema "compare" function with table column name, type
+comment, and indexed comparison. Just type e.g. "compare scott/tiger@test
+scotty/tigrou@test". This relerase will not show a column twice when the same
+table is found in different schema.
+
+V0.7 2007/01/06
+A "disk usage" graphical function was added to display where the most space is
+consumed. Just type "du" or "du scott" to get a graphical view of space used
+by tables and indexes for each tablespace. Like all other graphical functions,
+this one is powered by graphviz.
+
+V0.6 2006/12/13
+This release adds support for CLOB objects. It adds server output support (for
+dmbs_output.put_line().
+
+V0.5 2006/12/09
+The image viewer preferred by the user is called to show the graph just
+generated. The update mode (pysql -u) was added to update pysql online (see
+pysql -h for proxy options). The ed function was changed so that it only puts
+a new statement in the history instead of executing it. The / function was
+changed to be more sqlplus compliant. Specifically, it does not execute the
+last command but only the last SQL statement. The Oracle dictionary reading
+strategy was changed so that it does not use both user_* and all_* views, but
+uses all_* only. The Oracle hint is respected when removing comments. Alpha
+telnet protocol negotiation was added for pysqlnet.
+
+V0.4 2006/12/03
+A new graphical "dependencies" function was added to output a graph with
+children and parent objects. Statement hints (/*+...) are no longer removed
+like as if they were comments. Minor code cleanup and bugfixes were made. The
+French translation was improved, but is not yet finished.
+
+V0.3 - 2006/11/30
+This release adds a pkgtree function to produce a graphical tree of
+function/procedure calls inside a package. It adds more details to the session
+detail command (session "d") with current statement and current statement
+explain plan. Pysql has now a "server mode" that allows you to make pysql
+listen to a TCP socket to be used remotely by thin client (telnet). Readline
+features are not yet available in server mode. You can use a custom separator
+between columns (the default is still space). Completion now works if object
+names are prefixed with the schema. There are other minor features and
+bugfixes. 
+
+V0.2 - 2006/11/26
+Code cleanup and documentation updates. A transposed selection bug has been
+fixed. The I/O layer has been rewritten to prepare for I/O other than screen
+(file, TCP socket, etc.). More unit tests have been added.
+
+V0.1 - 2006/11/21
+This version is fully usable. New features include graphical data models with
+graphviz, DDL printing of every object, code browsing, and detailed
+descriptions with indexed columns and comments.
