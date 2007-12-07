@@ -50,7 +50,6 @@ def compare(schemaA, schemaB):
         whereClause="""%s like '%%'""" % keyword
         sql=searchObjectSql["table"][0] % ( 
                         whereClause, schema.split("/")[0].upper(), keyword)
-        print sql
         result=dbList[schema].executeAll(sql)
         tables[schema]=[i[1] for i in result]
 
@@ -151,10 +150,8 @@ def compareTableData(schemaA, schemaB, tableNameA, tableNameB, dbList):
          _("Unable to compare data of tables that does not have a common structure (columns name and type)"))
     
     if tablePK["A"]==tablePK["B"] and tablePK["A"]: # identical and not None
-        #print "(DEBUG) PK identical for both table"
         order="order by %s" % (", ".join(tablePK["A"]))
     else:
-        #print "(DEBUG) using column order"
         order="order by %s" % ", ".join(str(i+1) for i in range(tableNCol["A"]))
     for schema, tableName in (("A", tableNameA), ("B", tableNameB)):
         # test cursor size. Should make a quick bench to choose the good one
@@ -167,22 +164,18 @@ def compareTableData(schemaA, schemaB, tableNameA, tableNameB, dbList):
     while moreRows["A"] and moreRows["B"]:
         for schema in ("A", "B"):
             result[schema], moreRows[schema]=dbList[schema].fetchNext()
-            #print "(debug) end of fetch"
             if result[schema]:
                 #TODO: performance of this part is very very bad
                 result[schema]=["     ".join([str(i) for i in line])
                             for line in result[schema]]
-            #print "(debug) end of formating"
         for line in colorDiff(ndiff(result["A"], result["B"])):
             if line[0]!=" ":
                 if diff and line[2:]==diff[-1][2:]:
                     diff.pop() # simple double removing for one line decay only
                 else:
                     diff.append(line)
-        #print "(debug) end of diff"
     for sign, schema in (("-", "A"), ("+", "B")):
         while moreRows[schema]:
-            print "(debug) there's more rows in schema %s" % schema
             result[schema], moreRows[schema]=dbList[schema].fetchNext()
             result[schema]=["     ".join([str(i) for i in line])
                             for line in result[schema]] # This code should be factorised with above
@@ -195,34 +188,26 @@ def compareTableData(schemaA, schemaB, tableNameA, tableNameB, dbList):
     newBuffer=[]
     newBlock=True # Flag to indicate we have to start a new matching block
     i=0
-    #print "(debug) diff length : %s" % len(diff)
     diff.append(" ") # Add a mark to allow final lines processing
     toBeRemoved=[]   # List of item index to be removed
     for line in diff:
-        #print "(debug) Line %d" % i
         newSign=line[0]
         if oldSign==newSign or newBlock:
             # Append to new Buffer
-            #print "(debug) appending to newBuffer (newBlock : %s)" % newBlock
             newBuffer.append(line[2:])
             newBlock=False
         else:
             if newBuffer==oldBuffer:
                 # Detect doublons
-                #print "(debug) double detected"
                 for j in range(len(newBuffer)*2):
                     toBeRemoved.append(i-j-1)
                 newBlock=True
             # Changing to next block
-            #print "(debug) changing to second block"
             oldBuffer=newBuffer
             newBuffer=[line[2:]]
         oldSign=newSign
         i+=1
-    #print "(debug)Removed : %s" % len(toBeRemoved)
-    #print toBeRemoved
     diff=[diff[i] for i in xrange(len(diff)-1) if i not in toBeRemoved]
-    #print "new diff length : %s" % len(diff)
     return diff
 
 def ddl(db, objectName):
@@ -641,7 +626,6 @@ def searchObject(db, objectType, objectName, objectOwner):
             whereClause="%s like '%s'" % (keyword, addWildCardIfNeeded(objectName))
         else:
             whereClause=generateWhere(keyword, objectName)
-        print sql % (whereClause, objectOwner, keyword)
         #TODO: push sql request in history to help users ?
         objects=db.executeAll(sql % (whereClause, objectOwner, keyword))
     except KeyError, e:

@@ -124,10 +124,13 @@ def datamodel(db, userName, tableFilter=None, withColumns=True):
     stdout(GREEN+_("Datamodel saved as ")+filename+RESET)
     viewImage(filename)
 
-def dependencies(db, objectName, dir="both"):
+def dependencies(db, objectName, direction="both"):
     """Displays object dependencies as a picture
        The generation of the picture is powered by Graphviz (http://www.graphviz.org)
        through the PyDot API (http://www.dkbza.org/pydot.html)
+       @param db: pysql db connection
+       @param objectName: name of the oracle object on which dependancies are computed
+       @param direction: direction of the dependancy graph. Can be "onto", "from" or "both"
     """
     # Tries to import pydot module
     try:
@@ -153,9 +156,9 @@ def dependencies(db, objectName, dir="both"):
 
     graph=Dot(prog=prog, overlap="false", splines="true", rankdir="TB")
 
-    if dir=="onto" or dir=="from":
-        dirList=[dir]
-    elif dir=="both":
+    if direction=="onto" or direction=="from":
+        dirList=[direction]
+    elif direction=="both":
         dirList=["onto", "from"]
     else:
         dirList=[]
@@ -268,7 +271,6 @@ def diskusage(db, userName, withIndexes=False):
 
     # Tablespaces
     tablespaces=db.executeAll(diskusageSql["TablespacesFromOwner"], [userName])
-    nbTablespaces=len(tablespaces)
     for tablespace in tablespaces:
         tablespaceName=str(tablespace[0])
         subGraph=Subgraph("cluster_"+tablespaceName, label=tablespaceName, bgcolor="palegreen")
@@ -280,7 +282,6 @@ def diskusage(db, userName, withIndexes=False):
         for table in tables:
             #TODO: handle database encoding instead of just using str()
             tableName=str(table[0])
-            #print "TABLE="+str(table)
             if table[1] is None:
                 stdout(BOLD+RED+_("""Warning: table "%s" removed because no statistics have been found""") \
                            % (tableName) +RESET)
@@ -297,10 +298,6 @@ def diskusage(db, userName, withIndexes=False):
             height=round(log(num_rows)/10, 3)
             width=round(sqrt(avg_row_len)/5, 3)
             label=tableName +"\\n("+str(size)+" MB)"
-            #     +"\\n (#rows="+str(num_rows)+")" \
-            #     +"\\n (height="+str(height)+"'')"
-            #print "tablespace="+tablespaceName+"; table="+tableName+ \
-            #            "; height="+str(height)+"; width="+str(width)
             subGraph.add_node(Node(tableName, label=label, shape="box", style="filled", \
                                    color=bordercolor, fillcolor=tablecolor, \
                                    fontname="arial", fontcolor=fontcolor, fontsize=fontsize-2, \

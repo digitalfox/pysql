@@ -11,14 +11,12 @@ import cmd
 import sys
 import os
 import readline
-import locale
 import datetime
 from cx_Oracle import DatabaseError, LOB
 from re import findall, match, sub
 from os.path import expandvars
 from time import sleep, time
 from getpass import getpass
-from threading import enumerate
 
 # Pysql imports:
 from pysqldb import PysqlDb, BgQuery
@@ -607,16 +605,17 @@ class PysqlShell(cmd.Cmd):
         self.__checkArg(arg, ">=1")
         arg=arg.split()
         objectname=arg[0]
+        direction=""
         try:
             if arg[1] in ("onto", "from", "both"):
-                dir=arg[1]
+                direction=arg[1]
             else:
                 message=_("""Unknown value for parameter "" """)
                 message+=_("Type help dependencies to get the correct syntax")
                 raise PysqlException(message)
         except IndexError:
-            dir="both"
-        pysqlgraphics.dependencies(self.db, objectname, dir)
+            direction="both"
+        pysqlgraphics.dependencies(self.db, objectname, direction)
 
     def do_diskusage(self, arg):
         """Exports disk usage as a picture"""
@@ -1338,13 +1337,6 @@ class PysqlShell(cmd.Cmd):
             (objectOwner, objectName)=objectName.split(".")
         except ValueError:
             pass
-        # We cannot tolerate anymore space separator between schema and object name
-        # as it become argument separator
-#        # Second, with a space
-#        try:
-#            (objectOwner, objectName)=objectName.split(" ")
-#        except ValueError:
-#            pass
         objectOwner=objectOwner.upper()
         # If no name if given, searches for all
         if objectName=="":
