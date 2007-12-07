@@ -29,10 +29,21 @@ from pysqlhelpers import colorDiff, convert, addWildCardIfNeeded, generateWhere
 # High level pysql functions
 def count(db, objectName):
     """Counts rows in a table
-    @arg objectName: table name
+    @arg objectName: table/view/M.View name
     @arg db: connection object
     @return: number of rows (int)"""
-    return OraTabular(objectName=objectName).getRowCount(db)
+    # Gets the object type and owner
+    oraObject=OraObject(objectName=objectName)
+    oraObject.guessInfos(db)
+    # Tries to resolve synonym and describe the target
+    if oraObject.getType()=="SYNONYM":
+        oraObject=oraObject.getTarget(db)
+        if oraObject.getType()=="SYNONYM":
+            # cannot desc, too much synonym recursion
+            raise PysqlException(_("Too much synonym recursion"))
+    if oraObject.getType() not in ("TABLE", "VIEW", "MATERIALIZED VIEW"):
+        raise PysqlException(_("Cannot count rows of such object : %s" % oraObject.getType()))
+    return oraObject.getRowCount(db)
 
 def compare(schemaA, schemaB):
     """Compare two Oracle schema and return the difference"""
