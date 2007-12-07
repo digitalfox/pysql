@@ -47,7 +47,6 @@ def compare(schemaA, schemaB):
     for schema in (schemaA, schemaB):
         dbList[schema]=PysqlDb(schema)
         keyword=searchObjectSql["table"][1]
-        print keyword
         whereClause="""%s like '%%'""" % keyword
         sql=searchObjectSql["table"][0] % ( 
                         whereClause, schema.split("/")[0].upper(), keyword)

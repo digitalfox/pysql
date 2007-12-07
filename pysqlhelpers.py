@@ -104,17 +104,18 @@ def itemLength(item):
     else:
         return len(item)
 
-def generateWhere(keyword, objectName):
+def generateWhere(keyword, filterClause):
     """ Generate where clause from pysql syntax to filter Oracle object
     Pysql syntax : pattern1 or (pattern2 and pattern3). Pattern are all accepted Oracle like pattern
-    @arg objectName: pysql where clause syntax as a list of words
+    @arg filter: pysql where clause syntax as a list of words
+    @arg keyword: the database object name on which filter apply
     @return: SQL where clause"""
     #TODO: test this and make it bullet proof
     result=[]
     endsWithParenthisis=False
     startsWithParenthisis=True
     lastWordWasOperand=True
-    for word in objectName.split():
+    for word in filterClause.split():
         # Keep and remove start & end parenthisis
         if word.startswith("("):
             startsWithParenthisis=True

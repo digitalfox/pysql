@@ -21,13 +21,17 @@ from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
 from pysqlconf import PysqlConf
 from pysqloraobjects import OraObject
 from pysqlio import PysqlIO
-from pysqlhelpers import getProg, removeComment, which
+from pysqlhelpers import generateWhere, getProg, removeComment, which
 
 # High level pysql graphical functions
-def datamodel(db, userName, withColumns=True):
+def datamodel(db, userName, tableFilter=None, withColumns=True):
     """Extracts the datamodel of the current user as a picture
        The generation of the picture is powered by Graphviz (http://www.graphviz.org)
        through the PyDot API (http://www.dkbza.org/pydot.html)
+       @param db: pysql db connection
+       @param userName: schema to be extracted
+       @param tableFilter: filter pattern (in pysql extended syntax to extract only some tables (None means all)
+       @param withColumns: Indicate whether columns are included or not in datamodel picture
     """
     # Tries to import pydot module
     try:
@@ -57,8 +61,13 @@ def datamodel(db, userName, withColumns=True):
     graph=Dot(prog=prog, overlap="false", splines="true")
 
     # Tables, columns and constraints (temporary and external tables are excluded. So are TOAD tables)
-    tables=db.executeAll(datamodelSql["tablesFromOwner"], [userName])
+    if tableFilter:
+        whereClause=generateWhere("table_name", tableFilter)
+    else:
+        whereClause="1=1"
+    tables=db.executeAll(datamodelSql["tablesFromOwner"] % (userName, whereClause))
     nbTables=len(tables)
+    tableList=", ".join(["'%s'" % table for table in tables]) # Table list formated to be used in SQL query
     stdout.write(CYAN+_("Extracting %d tables...      ") % nbTables +RESET)
     current=0
     for table in tables:
@@ -94,7 +103,8 @@ def datamodel(db, userName, withColumns=True):
 
     stdout("")
     # Links between tables (foreign key -> primary key)
-    links=db.executeAll(datamodelSql["constraintsFromOwner"], [userName])
+    # Only extract links from considered tables
+    links=db.executeAll(datamodelSql["constraintsFromOwner"] % (userName, tableList, tableList))
     nbLinks=len(links)
     stdout(CYAN+_("Extracting %d links...") % nbLinks +RESET)
     current=0

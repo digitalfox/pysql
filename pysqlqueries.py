@@ -301,7 +301,8 @@ sessionStatSql={
 datamodelSql={
     "tablesFromOwner"          :    """SELECT table_name
                                        FROM all_tables tab
-                                       WHERE owner=:1
+                                       WHERE owner='%s'
+                                         AND (%s)
                                          AND table_name NOT LIKE '%%PLAN_TABLE'
                                          AND table_name NOT LIKE 'TOAD%%'
                                          AND temporary='N'
@@ -325,7 +326,9 @@ datamodelSql={
                                        ORDER BY pk_position, column_id""",
    "constraintsFromOwner"     :    """SELECT fk.constraint_name, fk.table_name, pk.table_name
                                        FROM all_constraints fk, all_constraints pk
-                                       WHERE fk.owner=:1
+                                       WHERE fk.owner='%s'
+                                         AND pk.table_name in (%s)
+                                         AND fk.table_name in (%s)
                                          AND fk.owner=pk.owner
                                          AND fk.r_constraint_name = pk.constraint_name
                                          AND fk.constraint_type = 'R'

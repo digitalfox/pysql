@@ -579,8 +579,13 @@ class PysqlShell(cmd.Cmd):
         """Exports a datamodel as a picture"""
         self.__checkConnection()
         arg=arg.split()
+        tables=None
+        #TODO: arg parsing method is bad. Filter is limited to single word due to arg parsing. 
+        # Backend in pysqlgraphics could do more (multiple filter with and/or)
         try:
             user=arg[0]
+            if "." in user:
+                user, tables=user.split(".")
         except IndexError:
             user=self.db.getUsername()
         try:
@@ -594,7 +599,7 @@ class PysqlShell(cmd.Cmd):
                 raise PysqlException(message)
         except IndexError:
             withColumns=True
-        pysqlgraphics.datamodel(self.db, user.upper(), withColumns)
+        pysqlgraphics.datamodel(self.db, user.upper(), tables, withColumns)
 
     def do_dependencies(self, arg):
         """Exports object dependencies as a picture"""
@@ -1045,8 +1050,8 @@ class PysqlShell(cmd.Cmd):
 
     def help_datamodel(self):
         """online help"""
-        self.stdout(CYAN+_("Usage:\n\tdatamodel [<user name>] [<with-columns: yes|no>]")+RESET)
-        self.stdout(_("Extracts the datamodel of a user"))
+        self.stdout(CYAN+_("Usage:\n\tdatamodel [<user name>.[filter on table name]] [<with-columns: yes|no>]")+RESET)
+        self.stdout(_("Extracts the datamodel of a user filtered on selected table pattern"))
         self.stdout(_("The generation of the output is powered by Graphviz (http://www.graphviz.org)"))
         
     def help_dependencies(self):
