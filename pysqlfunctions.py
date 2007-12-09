@@ -422,7 +422,6 @@ def edit(db, objectName, content=""):
     if oraObject.getType() is None:
         return False
 
-    objectType=oraObject.getType()
     # Tries to resolve synonym and describe the target
     if oraObject.getType()=="SYNONYM":
         oraObject=oraObject.getTarget(db)
@@ -431,7 +430,7 @@ def edit(db, objectName, content=""):
     if content=="":
         try:
             content=oraObject.getSQL(db)
-        except AttributeError, e:
+        except AttributeError:
             raise PysqlNotImplemented()
     content=editor(content)
     # Does nothing if data does not change
@@ -442,7 +441,7 @@ def edit(db, objectName, content=""):
     # And update it in database
     try:
         oraObject.setSQL(db, content)
-    except AttributeError, e:
+    except AttributeError:
         # SetSQL failed because it is not (yet) implemented
         raise PysqlNotImplemented()
     return True
@@ -455,10 +454,10 @@ def editor(content=""):
     """
     # Which editor, which temporary directory?
     if os.name=="posix":
-        editor=getenv("EDITOR", "vi")
+        editorProgram=getenv("EDITOR", "vi")
         tempDir="/tmp"
     elif os.name=="nt":
-        editor="edit"
+        editorProgram="edit"
         tempDir=getenv("TEMP", ".")
     else:
         raise PysqlException(_("No editors are supported on this platform. Sorry."))
@@ -471,7 +470,7 @@ def editor(content=""):
         tmp.write(content)
         tmp.close()
         # Lets the user edit it
-        exitStatus=os.system(editor+" "+filePath)
+        exitStatus=os.system(editorProgram+" "+filePath)
         if exitStatus!=0:
             raise PysqlException(_("Editor exited with status %s") % exitStatus)
         # Updates properties with new value
@@ -637,9 +636,8 @@ def searchObject(db, objectType, objectName, objectOwner):
             whereClause="%s like '%s'" % (keyword, addWildCardIfNeeded(objectName))
         else:
             whereClause=generateWhere(keyword, objectName)
-        #TODO: push sql request in history to help users ?
         objects=db.executeAll(sql % (whereClause, objectOwner, keyword))
-    except KeyError, e:
+    except KeyError:
         raise PysqlException(_("SQL entry not defined for searchObjectSql: %s") % objectType)
     # Returns a dict with key=schemaNAme and Value=list of object
     for (owner, name) in objects:

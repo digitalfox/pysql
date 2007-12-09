@@ -742,7 +742,6 @@ class OraView(OraTabular):
         """@return: True if succeeded in editing SQL code behind the view, False otherwise"""
         if sql=="":
             raise PysqlException("SQL code of the view cannont be empty")
-            return False
         if self.getOwner()=="":
             db.execute(viewSql["replaceQueryFromName"] % (self.getName(), sql), fetch=False)
         else:
