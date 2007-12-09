@@ -42,7 +42,7 @@ def count(db, objectName):
             # cannot desc, too much synonym recursion
             raise PysqlException(_("Too much synonym recursion"))
     if oraObject.getType() not in ("TABLE", "VIEW", "MATERIALIZED VIEW"):
-        raise PysqlException(_("Cannot count rows of such object : %s" % oraObject.getType()))
+        raise PysqlException(_("Cannot count rows of such object : %s") % oraObject.getType())
     return oraObject.getRowCount(db)
 
 def compare(schemaA, schemaB):
@@ -153,8 +153,8 @@ def compareTableData(schemaA, schemaB, tableNameA, tableNameB, dbList):
             # Get only column name (0) and column type (1)
             tableStruct[schema]=[[i[0], i[1]] for i in table.getTableColumns(dbList[schema])]
         else:
-            raise PysqlException(_("%s does not seem to be a table in %s" % 
-                                   (tableName, dbList[schema].getConnectString())))
+            raise PysqlException(_("%s does not seem to be a table in %s") % 
+                                   (tableName, dbList[schema].getConnectString()))
 
     if tableStruct["A"]!=tableStruct["B"]:
         raise PysqlException(

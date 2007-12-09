@@ -541,21 +541,21 @@ class PysqlShell(cmd.Cmd):
             # We have to compare the whole schema
             result=pysqlfunctions.compare(schemas[0], schemas[1])
             
-            self.stdout(GREEN+_("**** Tables found in %s but not in %s ****"+RESET) % 
+            self.stdout(GREEN+_("**** Tables found in %s but not in %s ****")+RESET % 
                         (schemaNames[0], schemaNames[1]))
             self.stdout(", ".join(result[0]))
             self.stdout("")
             
-            self.stdout(GREEN+_("**** Tables found in %s but not in %s ****"+RESET) % 
+            self.stdout(GREEN+_("**** Tables found in %s but not in %s ****")+RESET % 
                         (schemaNames[1], schemaNames[0]))
             self.stdout(", ".join(result[1]))
             self.stdout("")
             
-            self.stdout(GREEN+_("**** Tables identical in both schema ****"+RESET))
+            self.stdout(GREEN+_("**** Tables identical in both schema ****")+RESET)
             self.stdout(", ".join([i[0] for i in result[2].items() if not i[1]]))
             self.stdout("")
             
-            self.stdout(GREEN+_("**** Tables not identical in both schema ****"+RESET))
+            self.stdout(GREEN+_("**** Tables not identical in both schema ****")+RESET)
             for tableName, tableDiff in result[2].items():
                 if tableDiff:
                     self.stdout(CYAN+
@@ -1035,7 +1035,7 @@ class PysqlShell(cmd.Cmd):
         self.stdout(_("By default, only structure is compared."))
         self.stdout(_("""To compare table data use the "data" keyword like this:"""))
         self.stdout(
-            _(CYAN+"\t\tcompare data user/password@SID:table user'/password'@SID':table'"+RESET))
+            CYAN+_("\t\tcompare data user/password@SID:table user'/password'@SID':table'")+RESET)
 
     def help_connect(self):
         """online help"""

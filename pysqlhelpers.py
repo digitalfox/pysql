@@ -129,7 +129,7 @@ def generateWhere(keyword, filterClause):
             if startsWithParenthisis or lastWordWasOperand:
                 # Operator at begin of phrase (just after parenthisis)
                 # Or two operators following
-                raise PysqlException(_("Operator %s was not expected at word %s" % (word.upper(), len(result)+1)))
+                raise PysqlException(_("Operator %s was not expected at word %s") % (word.upper(), len(result)+1))
             result.append(word)
             lastWordWasOperand=True
             startsWithParenthisis=False
@@ -145,7 +145,7 @@ def generateWhere(keyword, filterClause):
             result.append("%s %s '%s'" % (keyword, operand, word))
         elif len(word)>0 and not lastWordWasOperand:
             # Terms of clause must be separted by operators
-            raise PysqlException(_("Operator (AND/OR) expected at word %s" % (len(result)+1)))
+            raise PysqlException(_("Operator (AND/OR) expected at word %s") % (len(result)+1))
         if endsWithParenthisis:
             endsWithParenthisis=False
             result.append(")")

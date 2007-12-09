@@ -315,7 +315,7 @@ class PysqlConf:
         try:
             cPickle.dump(self.sqlLibrary, file(self.sqlLibPath, "w"))
         except Exception, e:
-            raise PysqlException(_("Fail to user sql library to %s. Error was:\n\t%s")
+            raise PysqlException(_("Fail to open user sql library to %s. Error was:\n\t%s")
                         % (self.sqlLibPath, e))
 
     def writeHistory(self):
