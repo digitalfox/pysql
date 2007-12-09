@@ -108,7 +108,7 @@ def update(opener, version):
         tmpFile.write(opener.open(PYSQL_DOWNLOAD+filename).read())
         tmpFile.close()
         io(CYAN+_("Done !") + RESET)
-        io.write(_("Opening archive an copying files to pysql directory..."))
+        io.write(_("Opening archive and copying files to pysql directory..."))
         tarball=tarfile.open(join(updatePath, filename), mode="r:gz")
         for tarinfo in tarball:
             tarball.extract(tarinfo, "update")
