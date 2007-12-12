@@ -17,9 +17,7 @@ TODO
 *** Fonctionnalités à implémenter ***
 - implémenter la fonction archive de SQLplus
 - utiliser distutils/setuptools
-- fonction pour explorer v_$sql (top requête buffer get, top cpu etc...)
 - fonction perfstat simplifiée (perfstat snap et perfstat report)
-- gérer des profiles qui contiennent (history, cache, lib, param)
 - rendre la touche utilisée pour la complétion paramétrable
 - faire un mode interactif pour guessinfo afin de choisir l'objet souhaité par l'utilisateur en cas d'homonymie.
 - faire complétion sur les noms des commandes SQL de base
@@ -47,7 +45,6 @@ TODO
 - rajouter une option "auto" pour le graph_program qui laisse à chaque fonction pysqlgraphics le soin de
 	prendre le bon programme
 - fonction csv pour les commandes pysql aussi (desc par exemple)
-- faire une traduction en français (en cours)
 - mieux structurer les commentaires du code pour mettre en évidence les paramètres et les valeurs retournées (en cours)
 - migrer un maximum (100% ?) de requêtes dans pysqlQueries
 - mettre en place des jeux de tests unitaire pour automatiser la non reg (en cours)
