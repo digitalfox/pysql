@@ -1,0 +1,22 @@
+PySQL
+=====
+
+PySQL aims to be a full replacement for sqlplus (and much more).
+It has features such as history, completion, explain plan, session list,
+background queries, datamodel graphical output, object dependencies,
+PL/SQL package function call tree... 
+
+
+Installation from source
+========================
+
+As a simple user : just untar pysql tarball where you want and just run pysql
+...
+As root : untar pysql tarball where you want and run the setup script
+...
+
+
+Installation from package
+========================
+
+Redhat, Debian, Slackware, Windows....
