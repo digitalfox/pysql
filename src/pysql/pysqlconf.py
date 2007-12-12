@@ -107,17 +107,20 @@ class PysqlConf:
         # Searches for config file..in $HOME first, or in pysql dir
         #TODO: will not work on windows...
 
-        if not self.__isReadWrite(self.configPath):
-            self.configPath=os.path.join(sys.path[0],"pysqlrc")
-        self.stdout(CYAN+_("Using config file %s") % self.configPath + RESET)
+        if self.__isReadWrite(self.configPath):
+            self.stdout(CYAN+_("Using config file %s") % self.configPath + RESET)
 
         # Reads config file
         self.configParser=ConfigParser()
         try:
             self.configParser.readfp(open(self.configPath))
         except Exception, e:
-            self.stdout(RED+BOLD+_("Cannot read configuration file pysqlrc in either $HOME or pysql dir."))
-            self.stdout(_("Using default.\n(Reason was: %s)") % e + RESET)
+            # Silently create empty conf and only complain if this fails ?
+            try:
+                file(self.configPath, "w")
+            except Exception, e:
+                self.stdout(RED+BOLD+_("Failed to create personnal configuration file"))
+                self.stdout("%s" % e + RESET)
 
         # Host codec used to display string on screen
         self.codec=None
@@ -278,8 +281,6 @@ class PysqlConf:
 
     def write(self):
         """Writes config to disk"""
-        #TODO: test needed
-        #TODO: should be rewritten (quite ugly no ?)
         if self.changed:
             try:
                 configFile=file(self.configPath, "w")
@@ -287,18 +288,8 @@ class PysqlConf:
                 configFile.close()
                 self.setChanged(False)
                 self.stdout(GREEN+_("(config file saved successfully)")+RESET)
-            except Exception:
-                self.stdout(CYAN+_("Cannot write config to %s. Using $HOME/.pysqlrc instead")
-                             % self.configPath)
-                self.configPath=os.path.expandvars("$HOME/.pysqlrc")
-                try:
-                    configFile=file(self.configPath, "w")
-                    self.configParser.write(configFile)
-                    configFile.close()
-                    self.setChanged(False)
-                    self.stdout(GREEN+_("(config file saved successfully)")+RESET)
-                except Exception, e:
-                    raise PysqlException(_("fail to write file: %s") % e)
+            except Exception, e:
+                raise PysqlException(_("fail to write file: %s") % e)
         else:
             self.stdout(CYAN+_("(no need to save)")+RESET)
 
