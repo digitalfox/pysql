@@ -9,4 +9,4 @@
 export PYTHONPATH=$(dirname $0)/src
 
 # Start it
-$(dirname $0)/src/bin/pysql
+$(dirname $0)/src/bin/pysql $*
