@@ -77,6 +77,25 @@ import traceback
 from os.path import dirname, join
 from optparse import OptionParser
 
+# Test if requisite modules are correctly installed
+# Oracle (mandatory)
+try:
+    import cx_Oracle
+except ImportError:
+    # Untranslatable error message (i18n still not initialized at this step)
+    print "cx_Oracle module cannot be loaded.\nPlease, ensure you correctly install it from:"
+    print "http://cx-oracle.sf.net"
+    print "And that have the according Oracle client installation."
+    print "Get it from the Oracle site : http://www.oracle.Com"
+    sys.exit(1)
+# readline is a separate module for windows
+if os.name=="nt":
+    try:
+        import readline
+    except ImportError:
+        print "pyreadline module cannot be found on your system and is needed on Windows.\nPlease, get it at:"
+        print "http://ipython.scipy.org/moin/PyReadline/Intro"
+
 # Pysql imports:
 from pysqlshell import PysqlShell
 from pysqlconf import PysqlConf
