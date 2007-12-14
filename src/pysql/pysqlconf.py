@@ -79,6 +79,7 @@ class PysqlConf:
         # Load default value for all parameters
         #TODO: rename separator csvsep
         self.default={
+            "case_sensitive"     : "no",
             "completionlistsize" : 100,
             "fetchsize"          : 30,
             "termwidth"          : 120,
@@ -104,8 +105,8 @@ class PysqlConf:
             "graph_viewer"       : "auto"
             }
 
-        # Searches for config file..in $HOME first, or in pysql dir
-        #TODO: will not work on windows...
+        # Searches for config file..in $HOME 
+        #TODO: to be tested on windows..
 
         if self.__isReadWrite(self.configPath):
             self.stdout(CYAN+_("Using config file %s") % self.configPath + RESET)
@@ -115,7 +116,7 @@ class PysqlConf:
         try:
             self.configParser.readfp(open(self.configPath))
         except Exception, e:
-            # Silently create empty conf and only complain if this fails ?
+            # Silently create empty conf and only complain if this fails
             try:
                 file(self.configPath, "w")
             except Exception, e:
@@ -224,7 +225,7 @@ class PysqlConf:
             else:
                 return False
         # Boolean parameter
-        elif key in ("transpose", "shrink", "echo", "graph_linklabel"):
+        elif key in ("transpose", "shrink", "echo", "graph_linklabel", "case_sensitive"):
             if value in ("yes", "no"):
                 return True
             else:

@@ -1223,10 +1223,11 @@ class PysqlShell(cmd.Cmd):
 
     def _help_for_search_method(self, searchObject):
         """generic online help all object search method"""
-        self.stdout(CYAN+_("Usage:\n\t%s <partial %s name>") % (searchObject, searchObject)+RESET)
-        self.stdout(_("Looks for %s with name like the partial name given") % searchObject)
-        self.stdout(_("Wilcard % can be used."))
-        self.stdout(_("If no % is provided, pysql adds a % at the begining and the end"))
+        self.stdout(CYAN+_("Usage:\n\t%s <search pattern on %s name>") % (searchObject, searchObject)+RESET)
+        self.stdout(_("Looks for %s which match the search pattern") % searchObject)
+        self.stdout(_("Wilcard % and boolean operators (and/or) can be used."))
+        self.stdout(_("If a single word and no % is provided, pysql adds a % at the begining and the end"))
+        self.stdout(_("Ex. : %s FOO or (BAR%% and %%TEST%%)") % searchObject)
 
 
     # Helper functions (private so start with __ to never override any superclass methods)
@@ -1332,7 +1333,7 @@ class PysqlShell(cmd.Cmd):
         self.__checkConnection()
         # Looks for schema in object name. Default is all (%)
         objectOwner="%"
-        # First, with a dot
+        # Try to find owner if a dot is provided
         try:
             (objectOwner, objectName)=objectName.split(".")
         except ValueError:
@@ -1341,6 +1342,8 @@ class PysqlShell(cmd.Cmd):
         # If no name if given, searches for all
         if objectName=="":
             objectName="%"
+        if self.conf.get("case_sensitive")=="no":
+            objectName=objectName.upper()
         result=pysqlfunctions.searchObject(self.db, objectType, objectName, objectOwner)
         for owner in result.keys():
             self.stdout(GREEN+("***** %s *****" % owner)+RESET)
