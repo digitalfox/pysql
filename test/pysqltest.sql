@@ -150,7 +150,7 @@ explain select * from all_source;
 -- search object
 index
 table
-table scott %
+table scott.%
 table e
 view
 sequence
