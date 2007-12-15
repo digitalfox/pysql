@@ -1218,7 +1218,8 @@ class PysqlShell(cmd.Cmd):
 
     def help_write(self):
         """online help"""
-        self.stdout(_("Writes configuration to file ($HOME/.pysqlrc or <pysqldir>/.pysqlrc)"))
+        self.stdout(_("Writes configuration to disk"))
+        self.stdout(_("Path is $HOME/.pysql/pysqlrc on Unix, %APPDATA%/pysql/pysqrc on Windows"))
         self.stdout(_("This command takes no argument"))
 
     def _help_for_search_method(self, searchObject):
