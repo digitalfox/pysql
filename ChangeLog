@@ -1,5 +1,208 @@
+2007-12-15  srenard
+
+	* www/doc/class-tree.html, www/doc/help.html,
+	  www/doc/identifier-index.html, www/doc/module-tree.html,
+	  www/doc/pysql-module.html, www/doc/pysql-pysrc.html,
+	  www/doc/pysql.pysqlcolor-module.html,
+	  www/doc/pysql.pysqlcolor-pysrc.html,
+	  www/doc/pysql.pysqlconf-module.html,
+	  www/doc/pysql.pysqlconf-pysrc.html,
+	  www/doc/pysql.pysqlconf.PysqlConf-class.html,
+	  www/doc/pysql.pysqldb-module.html,
+	  www/doc/pysql.pysqldb-pysrc.html,
+	  www/doc/pysql.pysqldb.BgQuery-class.html,
+	  www/doc/pysql.pysqldb.PysqlDb-class.html,
+	  www/doc/pysql.pysqlexception-module.html,
+	  www/doc/pysql.pysqlexception-pysrc.html,
+	  www/doc/pysql.pysqlexception.PysqlActionDenied-class.html,
+	  www/doc/pysql.pysqlexception.PysqlException-class.html,
+	  www/doc/pysql.pysqlexception.PysqlNotImplemented-class.html,
+	  www/doc/pysql.pysqlfunctions-module.html,
+	  www/doc/pysql.pysqlfunctions-pysrc.html,
+	  www/doc/pysql.pysqlgraphics-module.html,
+	  www/doc/pysql.pysqlgraphics-pysrc.html,
+	  www/doc/pysql.pysqlhelpers-module.html,
+	  www/doc/pysql.pysqlhelpers-pysrc.html,
+	  www/doc/pysql.pysqlio-module.html,
+	  www/doc/pysql.pysqlio-pysrc.html,
+	  www/doc/pysql.pysqlio.PysqlIO-class.html,
+	  www/doc/pysql.pysqlmain-module.html,
+	  www/doc/pysql.pysqlmain-pysrc.html,
+	  www/doc/pysql.pysqlnet-module.html,
+	  www/doc/pysql.pysqlnet-pysrc.html,
+	  www/doc/pysql.pysqlnet.PysqlNetClient-class.html,
+	  www/doc/pysql.pysqloraobjects-module.html,
+	  www/doc/pysql.pysqloraobjects-pysrc.html,
+	  www/doc/pysql.pysqloraobjects.OraDBLink-class.html,
+	  www/doc/pysql.pysqloraobjects.OraDatafile-class.html,
+	  www/doc/pysql.pysqloraobjects.OraDirectory-class.html,
+	  www/doc/pysql.pysqloraobjects.OraFunction-class.html,
+	  www/doc/pysql.pysqloraobjects.OraIndex-class.html,
+	  www/doc/pysql.pysqloraobjects.OraMaterializedView-class.html,
+	  www/doc/pysql.pysqloraobjects.OraObject-class.html,
+	  www/doc/pysql.pysqloraobjects.OraPackage-class.html,
+	  www/doc/pysql.pysqloraobjects.OraPackageBody-class.html,
+	  www/doc/pysql.pysqloraobjects.OraProcedure-class.html,
+	  www/doc/pysql.pysqloraobjects.OraSegment-class.html,
+	  www/doc/pysql.pysqloraobjects.OraSequence-class.html,
+	  www/doc/pysql.pysqloraobjects.OraStoredObject-class.html,
+	  www/doc/pysql.pysqloraobjects.OraSynonym-class.html,
+	  www/doc/pysql.pysqloraobjects.OraTable-class.html,
+	  www/doc/pysql.pysqloraobjects.OraTablespace-class.html,
+	  www/doc/pysql.pysqloraobjects.OraTabular-class.html,
+	  www/doc/pysql.pysqloraobjects.OraTrigger-class.html,
+	  www/doc/pysql.pysqloraobjects.OraUser-class.html,
+	  www/doc/pysql.pysqloraobjects.OraView-class.html,
+	  www/doc/pysql.pysqlqueries-module.html,
+	  www/doc/pysql.pysqlqueries-pysrc.html,
+	  www/doc/pysql.pysqlshell-module.html,
+	  www/doc/pysql.pysqlshell-pysrc.html,
+	  www/doc/pysql.pysqlshell.PysqlShell-class.html,
+	  www/doc/pysql.pysqlupdate-module.html,
+	  www/doc/pysql.pysqlupdate-pysrc.html,
+	  www/doc/pysql.pysqlupdate.Version-class.html,
+	  www/doc/setup-module.html, www/doc/setup-pysrc.html,
+	  www/doc/toc-everything.html, www/doc/toc-pysql-module.html,
+	  www/doc/toc-pysql.pysqlcolor-module.html,
+	  www/doc/toc-pysql.pysqlconf-module.html,
+	  www/doc/toc-pysql.pysqldb-module.html,
+	  www/doc/toc-pysql.pysqlexception-module.html,
+	  www/doc/toc-pysql.pysqlfunctions-module.html,
+	  www/doc/toc-pysql.pysqlgraphics-module.html,
+	  www/doc/toc-pysql.pysqlhelpers-module.html,
+	  www/doc/toc-pysql.pysqlio-module.html,
+	  www/doc/toc-pysql.pysqlmain-module.html,
+	  www/doc/toc-pysql.pysqlnet-module.html,
+	  www/doc/toc-pysql.pysqloraobjects-module.html,
+	  www/doc/toc-pysql.pysqlqueries-module.html,
+	  www/doc/toc-pysql.pysqlshell-module.html,
+	  www/doc/toc-pysql.pysqlupdate-module.html,
+	  www/doc/toc-setup-module.html,
+	  www/doc/toc-w32_postinst-module.html, www/doc/toc.html,
+	  www/doc/uml_class_diagram_for_classdoc_12.gif,
+	  www/doc/uml_class_diagram_for_classdoc_16.gif,
+	  www/doc/uml_class_diagram_for_classdoc_18.gif,
+	  www/doc/uml_class_diagram_for_classdoc_22.gif,
+	  www/doc/uml_class_diagram_for_classdoc_3.gif,
+	  www/doc/w32_postinst-module.html,
+	  www/doc/w32_postinst-pysrc.html:
+	* script/doc.sh: Fix doc script to use new source tree
+	* locale/fr/LC_MESSAGES/pysql.mo, po/fr/pysql.po, po/pysql.pot,
+	  script/i18.sh, src/pysql/pysqlmain.py: Update french translation
+	  Fix locale search path
+	  Update string extraction program to new source tree
+	* src/pysql/pysqlshell.py:
+	* src/pysql/pysqlconf.py: Group config and cache files in a
+	  "pysql" subdir.
+	  Under $HOME/.pysql for Unix and %APPDATA%/pysql for windows
+	* ChangeLog-Synthesis, MANIFEST.in, w32_postinst.py:
+	* pysqlrc: No more config file in current dir. Always on
+	  $HOME/.pysqlrc
+	* setup.cfg, setup.py, w32_postinst.py: Add post install script
+	  for Windows desktop shortcut and start menu entry
+	* src/pysql/pysqlmain.py: Wait before exit to let user import
+	  error message
+
+2007-12-14  srenard
+
+	* src/pysql/pysqlmain.py: Test if prerequisite modules (cx_Oracle
+	  and pyreadline for windows) are correctly
+	  installed and else say it in a friendly way to the user instead
+	  of throwing an Import exception
+	  in his face.
+	* .:
+	* ChangeLog-Synthesis:
+	* pysql.sh: Transmit parameters to pysql main program (bugfix)
+	* src/pysql/pysqlconf.py, src/pysql/pysqlshell.py: Update help for
+	  search function with new syntax and examples
+	  Add "case_sensitive" parameter (use set to see it) to choose
+	  between case sensitive or not search. Default is case
+	  insensitive : this is what we want most of the time.
+	* test/pysqltest.sql: update test to new syntax for search
+	  functoun. Space is no more accepted as a separator between owner
+	  and pattern. Only dot.
+
+2007-12-12  srenard
+
+	* MANIFEST.in, pysql.sh, setup.py: Add simple shell wrapper to
+	  help developpers to start pysql from source tree
+	  Update setup.py to new package tree
+	* src/pysql/pysqlconf.py: Configuration file management
+	  simplification
+	* MANIFEST.in, README, pysql, src/__init__.py, src/bin,
+	  src/bin/pysql, src/pysql, src/pysql/__init__.py,
+	  src/pysql/pysqlcolor.py, src/pysql/pysqlconf.py,
+	  src/pysql/pysqldb.py, src/pysql/pysqlexception.py,
+	  src/pysql/pysqlfunctions.py, src/pysql/pysqlgraphics.py,
+	  src/pysql/pysqlhelpers.py, src/pysql/pysqlio.py,
+	  src/pysql/pysqlmain.py, src/pysql/pysqlnet.py,
+	  src/pysql/pysqloraobjects.py, src/pysql/pysqlqueries.py,
+	  src/pysql/pysqlshell.py, src/pysql/pysqlupdate.py,
+	  src/pysqlcolor.py, src/pysqlconf.py, src/pysqldb.py,
+	  src/pysqlexception.py, src/pysqlfunctions.py,
+	  src/pysqlgraphics.py, src/pysqlhelpers.py, src/pysqlio.py,
+	  src/pysqlmain.py, src/pysqlnet.py, src/pysqloraobjects.py,
+	  src/pysqlqueries.py, src/pysqlshell.py, src/pysqlupdate.py:
+	  Source reorg, phase II
+	* TODO, pysql.py, pysqlcolor.py, pysqlconf.py, pysqldb.py,
+	  pysqlexception.py, pysqlfunctions.py, pysqlgraphics.py,
+	  pysqlhelpers.py, pysqlio.py, pysqlnet.py, pysqloraobjects.py,
+	  pysqlqueries.py, pysqlshell.py, pysqltest.sql, pysqlupdate.py,
+	  setup.py, src, src/__init__.py, src/pysqlcolor.py,
+	  src/pysqlconf.py, src/pysqldb.py, src/pysqlexception.py,
+	  src/pysqlfunctions.py, src/pysqlgraphics.py,
+	  src/pysqlhelpers.py, src/pysqlio.py, src/pysqlmain.py,
+	  src/pysqlnet.py, src/pysqloraobjects.py, src/pysqlqueries.py,
+	  src/pysqlshell.py, src/pysqlupdate.py, test, test/pysqltest.sql:
+	  Source tree reorg
+
+2007-12-09  srenard
+
+	* pysqlfunctions.py, pysqloraobjects.py: Minor cleanup
+	* locale/fr/LC_MESSAGES/pysql.mo, po/fr/pysql.po, po/pysql.pot,
+	  pysqlconf.py, pysqlupdate.py: Fix strings typo
+	  Update french translation
+	* pysqlconf.py, pysqlfunctions.py, pysqlhelpers.py, pysqlshell.py:
+	  Fix i18n strings
+
+2007-12-07  srenard
+
+	* pysqlfunctions.py: Fix bug of count function not working with
+	  synonym
+	* pysqlfunctions.py, pysqlgraphics.py, pysqlshell.py: Minor
+	  cleanup and docstring update
+	* pysqlfunctions.py, pysqlgraphics.py, pysqlhelpers.py,
+	  pysqlqueries.py, pysqlshell.py: task 1840644: more boolean
+	  expression to filter : extend filter to datamodel function
+	  1840644
+
+2007-12-05  srenard
+
+	* ., pysqlfunctions.py, pysqlqueries.py: Rename
+	  searchObjectSqlRequest to searchObjectSql to respect naming
+	  convention of sql arrays
+	  Fix compare function to use new searchObjectSql syntax
+	* pysqlqueries.py: Update all serch queries to use new syntax of
+	  extended matching
+	* pysqlfunctions.py: Remove useless query
+	  Don't uppercase search word (break for datafile and other object
+	  with lower case)
+	* pysqlfunctions.py, pysqlhelpers.py, pysqlqueries.py,
+	  pysqlshell.py: Add first working release of extended search
+	  engine will boolean operators
+	  Only working for searching tables for now. Other database
+	  objectts will come soon
+	* ChangeLog-Synthesis: Add a synthesis of Changelog that is user
+	  readable
+	* ChangeLog: Add new changelog (concatenation of old repo and new
+	  one changelog)
+
 2007-12-02  srenard
 
+	* changelog.sh, doc.sh, i18.sh, script, script/changelog.sh,
+	  script/doc.sh, script/i18.sh, script/updateWebSite.sh: Move
+	  scripts to script dir to clean up root. Adapt script to new
+	  location
 	* changelog.sh: Remove automatic commit after changelog generation
 	* ChangeLog, PastChangelog.html, changelog.sh, www/ChangeLog.html:
 	  Forget html ChangeLog
