@@ -117,7 +117,7 @@ def main():
     (options, argv)=parseOptions()
 
     # i18n stuff
-    gettext.install("pysql", join(dirname(sys.argv[0]), "locale"), unicode=1)
+    gettext.install("pysql", join(dirname(sys.argv[0]), "..", "share", "locale"), unicode=1)
 
     # Loads config (first time)
     conf=PysqlConf.getConfig()

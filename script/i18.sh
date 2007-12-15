@@ -5,7 +5,7 @@
 
 cd $(dirname $0)/..
 
-pygettext.py -d pysql -p po *.py
+pygettext.py -d pysql -p po src/pysql/*.py
 
 for lang in $(ls po | grep -v .pot)
 do
