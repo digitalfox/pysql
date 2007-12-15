@@ -1,4 +1,5 @@
 include *py
 include ChangeLog
+include ChangeLog-Synthesis
 include pysql.sh
 recursive-include locale *

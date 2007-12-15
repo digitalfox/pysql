@@ -1,7 +1,8 @@
 V0.11 XXXX/XX/XX
 Reorganize all source tree and switch from custom build to distutils.
 Immediate consequences is the availability of ready to install package
-for Linux (RPM et Slackware tgz for now) and Windows (setup.exe).
+for Linux (RPM et Slackware tgz for now) and Windows 
+(setup.exe with menu entrey and desktop shortcut).
 Pysql is now installed in standard Python site-package and a wrapper is
 put on PATH (default to /usr/bin).
 Change configuration file behaviour : only $HOME/.pysqlrc is now used

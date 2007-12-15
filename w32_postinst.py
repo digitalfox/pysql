@@ -6,17 +6,14 @@
 
 
 """ Post installation script for win32 system
-    
-    This script creat a shortcut for coincoin.py in the desktop and the
-    start menu, and remove them at the uninstallation
-    
     Thanks to the coin coin projet for the inspiration for this postinstall script
-    
 """
 
 from os.path import abspath, join
 from os import mkdir
 import sys
+
+# pylint: disable-msg=E0602
 
 # Description string
 desc="PySQL - advanced Oracle client written in Python"
