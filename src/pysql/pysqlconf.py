@@ -9,6 +9,7 @@ that handles all pysql configuration stuff"""
 
 # Python imports:
 import os
+from os.path import expandvars, join 
 import sys
 import cPickle
 from ConfigParser import ConfigParser
@@ -28,20 +29,30 @@ class PysqlConf:
     def __init__(self):
         """Config instance creation. Read the config file"""
 
+        if os.name=="nt":
+            # Home directory of windows world
+            basePath=join(expandvars("$APPDATA"), "pysql")
+        else:
+            basePath=join(expandvars("$HOME"), ".pysql")
+        
+        # Create conf dir if it does not exist
+        if not self.__isReadWrite(basePath):
+            os.mkdir(basePath)
+ 
         # Config Parser
         self.configParser=None
 
         # Config file path
-        self.configPath=os.path.expandvars("$HOME/.pysqlrc")
+        self.configPath=join(basePath, "pysqlrc")
 
         # Cache file path
-        self.cachePath=os.path.expandvars("$HOME/.pysqlcache")
+        self.cachePath=join(basePath, "pysqlcache")
 
         # History file path
-        self.historyPath=os.path.expandvars("$HOME/.pysqlhistory")
+        self.historyPath=join(basePath, "pysqlhistory")
 
         # User SQL library file path
-        self.sqlLibPath=os.path.expandvars("$HOME/.pysqlsqllibrary")
+        self.sqlLibPath=join(basePath, "pysqlsqllibrary")
 
         # Config changed flag
         self.changed=False
@@ -105,8 +116,7 @@ class PysqlConf:
             "graph_viewer"       : "auto"
             }
 
-        # Searches for config file..in $HOME 
-        #TODO: to be tested on windows..
+        # Searches for config file in $HOME (Unix) or %HOMEPATH% (Windows)
 
         if self.__isReadWrite(self.configPath):
             self.stdout(CYAN+_("Using config file %s") % self.configPath + RESET)
