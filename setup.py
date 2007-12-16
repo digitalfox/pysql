@@ -19,7 +19,7 @@ scripts=["src/bin/pysql"]
 
 # Windows post install script
 if "win" in " ".join(sys.argv[1:]):
-    scripts.append("w32_postinst.py")
+    scripts.append("pysql_w32_postinst.py")
 
 #Go for setup 
 setup(name="pysql",
