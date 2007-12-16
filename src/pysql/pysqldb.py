@@ -23,7 +23,7 @@ from pysqlhelpers import stringDecode
 
 class PysqlDb:
     """ Handles database interface"""
-    MAXIMUM_FETCH_SIZE=100000     # Maximum size of a result set to fetch in one time
+    MAXIMUM_FETCH_SIZE=10000      # Maximum size of a result set to fetch in one time
     FETCHALL_FETCH_SIZE=30        # Size of cursor for fetching all type queries
 
     def __init__(self, connectString):
