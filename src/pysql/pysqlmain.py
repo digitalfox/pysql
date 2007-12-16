@@ -74,7 +74,7 @@ import locale
 import os
 import sys
 import traceback
-from os.path import dirname, join
+from os.path import dirname, join, pardir
 from optparse import OptionParser
 
 # Test if requisite modules are correctly installed
@@ -117,7 +117,14 @@ def main():
     (options, argv)=parseOptions()
 
     # i18n stuff
-    gettext.install("pysql", join(dirname(sys.argv[0]), "..", "share", "locale"), unicode=1)
+    if os.name=="nt":
+        # Windows stuff is never like everybody...
+        i18Path=join(dirname(sys.argv[0]), "share", "locale")
+    else:
+        # Unix std path
+        i18nPath=join(dirname(sys.argv[0]), pardir, "share", "locale")
+    # Load message catalog
+    gettext.install("pysql", i18nPath, unicode=1)
 
     # Loads config (first time)
     conf=PysqlConf.getConfig()

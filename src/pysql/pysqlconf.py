@@ -230,6 +230,8 @@ class PysqlConf:
                 value=int(value)
             except (ValueError, TypeError):
                 return False
+            if value>10000:
+                return False
             if value>1:
                 return True
             else:
