@@ -119,7 +119,7 @@ def main():
     # i18n stuff
     if os.name=="nt":
         # Windows stuff is never like everybody...
-        i18Path=join(dirname(sys.argv[0]), "share", "locale")
+        i18nPath=join(dirname(sys.argv[0]), "share", "locale")
     else:
         # Unix std path
         i18nPath=join(dirname(sys.argv[0]), pardir, "share", "locale")
