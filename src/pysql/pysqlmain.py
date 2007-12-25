@@ -87,7 +87,7 @@ except ImportError:
     print "http://cx-oracle.sf.net"
     print "And that have the according Oracle client installation."
     print "Get it from the Oracle site : http://www.oracle.Com"
-    print "(press any key to exit)"
+    print "(press enter key to exit)"
     sys.stdin.readline()
     sys.exit(1)
 # readline is a separate module for windows
@@ -97,7 +97,7 @@ if os.name=="nt":
     except ImportError:
         print "pyreadline module cannot be found on your system and is needed on Windows.\nPlease, get it at:"
         print "http://ipython.scipy.org/moin/PyReadline/Intro"
-        print "(press any key to exit)"
+        print "(press enter key to exit)"
         sys.stdin.readline()
         sys.exit(1)
 
@@ -161,7 +161,7 @@ def main():
         traceback.print_exc()
         print "\n*********************\n\n"
         print "Please, send the text above to pysql@digitalfox.org",
-        print "(press any key to exit)"
+        print "(press enter key to exit)"
         sys.stdin.readline()
     except PysqlException, e:
         msg=u"*** Pysql error ***\n\t%s" % e
