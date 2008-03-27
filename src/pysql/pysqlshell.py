@@ -1626,6 +1626,7 @@ class PysqlShell(cmd.Cmd):
     do_disc=do_disconnect
     do_du=do_diskusage
     do_ed=do_edit
+    do_exec=do_execute
     do_h=do_history
     do_lib=do_library
     do_start=do_script
