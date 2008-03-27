@@ -173,14 +173,14 @@ tabularSql={
     "commentFromDBAAndName"    :    """select comments from dba_tab_comments
                         where owner=:1
                           and table_name=:2 """,
-    "columnsFromOwnerAndName"    :    """select a.column_name, a.data_type, a.nullable, c.comments
+    "columnsFromOwnerAndName"    :    """select a.column_name, a.data_type||'('||a.data_length||')', a.nullable, c.comments
                     from all_tab_columns a, all_col_comments c
                     where a.owner=:1
                       and a.owner=c.owner
                       and a.table_name=:2
                       and a.table_name=c.table_name
                       and a.column_name=c.column_name""",
-    "columnsFromDBAAndName"    :    """select a.column_name, a.data_type, a.nullable, c.comments
+    "columnsFromDBAAndName"    :    """select a.column_name, a.data_type||'('||a.data_length||')', a.nullable, c.comments
                     from dba_tab_columns a, dba_col_comments c
                     where a.owner=:1
                       and a.owner=c.owner
