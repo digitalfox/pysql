@@ -110,6 +110,27 @@ mviewSql={
                           and mview_name=:2 """
     }
 
+packageSql={
+    "proceduresFromOwnerAndName"    :    """select procedure_name
+                        from all_procedures
+                        where owner=:1
+                          and object_name=:2 """,
+    "proceduresFromSYSAndName"    :    """select procedure_name
+                        from all_procedures
+                        where owner='SYS'
+                          and object_name=:1 """,
+    "sourceFromOwnerAndName" : """ select line, replace(replace(text, chr(10), ' '), chr(13), ' ')
+                        from  all_source
+                        where owner=:1
+                          and name=:2
+                        order by line""",
+    "sourceFromSYSAndName" : """ select line, replace(replace(text, chr(10), ' '), chr(13), ' ')
+                        from  all_source
+                        where owner='SYS'
+                          and name=:1
+                        order by line"""
+    }
+    
 sequenceSql={
     "lastFromOwnerAndName"    :    """select sequence_owner, last_number
                         from all_sequences

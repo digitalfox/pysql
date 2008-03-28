@@ -429,21 +429,89 @@ class OraProcedure(OraStoredObject):
     """Oracle stored procedure"""
     def __init__(self, procedureOwner, procedureName):
         OraObject.__init__(self, procedureOwner, procedureName, "PROCEDURE")
+        
+    def getSource(self, db):
+        """Gets source code
+        @return: array of source line
+        """
+        if self.getOwner()=="":
+            owner=db.getUsername().upper()
+            source=db.executeAll(packageSql["sourceFromOwnerAndName"], [owner, self.getName()])
+        else:
+            try:
+                source=db.executeAll(packageSql["sourceFromSYSAndName"], [self.getName()])
+            except PysqlException:
+                source=db.executeAll(packageSql["sourceFromOwnerAndName"], [owner, self.getName()])
+        if len(source)==0:
+            return (None)
+        else:
+            return source
 
 class OraFunction(OraStoredObject):
     """Oracle stored function"""
     def __init__(self, procedureOwner, procedureName):
         OraObject.__init__(self, procedureOwner, procedureName, "FUNCTION")
 
+    def getSource(self, db):
+        """Gets source code
+        @return: array of source line
+        """
+        if self.getOwner()=="":
+            owner=db.getUsername().upper()
+            source=db.executeAll(packageSql["sourceFromOwnerAndName"], [owner, self.getName()])
+        else:
+            try:
+                source=db.executeAll(packageSql["sourceFromSYSAndName"], [self.getName()])
+            except PysqlException:
+                source=db.executeAll(packageSql["sourceFromOwnerAndName"], [owner, self.getName()])
+        if len(source)==0:
+            return (None)
+        else:
+            return source
+
 class OraPackage(OraStoredObject):
     """Oracle Package"""
-    def __init__(self, procedureOwner, procedureName):
-        OraObject.__init__(self, procedureOwner, procedureName, "PACKAGE")
+    def __init__(self, packageOwner, packageName):
+        OraObject.__init__(self, packageOwner, packageName, "PACKAGE")
+    
+    def getProcedures(self, db):
+        """Gets procedure names
+        @return: array of procedure_name
+        """
+        if self.getOwner()=="":
+            owner=db.getUsername().upper()
+            columns=db.executeAll(packageSql["proceduresFromOwnerAndName"], [owner, self.getName()])
+        else:
+            try:
+                columns=db.executeAll(packageSql["proceduresFromSYSAndName"], [self.getName()])
+            except PysqlException:
+                columns=db.executeAll(packageSql["proceduresFromOwnerAndName"], [owner, self.getName()])
+        if len(columns)==0:
+            return (None)
+        else:
+            return columns
+
+    def getSource(self, db):
+        """Gets source code
+        @return: array of source line
+        """
+        if self.getOwner()=="":
+            owner=db.getUsername().upper()
+            source=db.executeAll(packageSql["sourceFromOwnerAndName"], [owner, self.getName()])
+        else:
+            try:
+                source=db.executeAll(packageSql["sourceFromSYSAndName"], [self.getName()])
+            except PysqlException:
+                source=db.executeAll(packageSql["sourceFromOwnerAndName"], [owner, self.getName()])
+        if len(source)==0:
+            return (None)
+        else:
+            return source
 
 class OraPackageBody(OraStoredObject):
-    """Oracle stored Package body"""
-    def __init__(self, procedureOwner, procedureName):
-        OraObject.__init__(self, procedureOwner, procedureName, "PACKAGE BODY")
+    """Oracle stored package body"""
+    def __init__(self, packageOwner, packageName):
+        OraObject.__init__(self, packageOwner, packageName, "PACKAGE BODY")
 
 
 class OraSequence(OraObject):

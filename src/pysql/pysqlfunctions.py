@@ -1,4 +1,4 @@
-#!/usr/bin/python
+﻿#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 # Sébastien Renard (sebastien.renard@digitalfox.org)
@@ -330,7 +330,8 @@ def desc(db, objectName, completeMethod=None, printComment=True):
         raise PysqlNotImplemented()
 
     elif oraObject.getType()=="FUNCTION":
-        raise PysqlNotImplemented()
+        header=[_("#"), _("Source")]
+        result=oraObject.getSource(db)
 
     elif oraObject.getType()=="INDEX":
         header=[_("Property"), _("Value")]
@@ -357,11 +358,18 @@ def desc(db, objectName, completeMethod=None, printComment=True):
     elif oraObject.getType()=="OPERATOR":
         raise PysqlNotImplemented()
 
-    elif oraObject.getType() in ("PACKAGE", "PACKAGE BODY"):
-        raise PysqlNotImplemented()
+    elif oraObject.getType()=="PACKAGE":
+       #header=[_("Procedure name")]
+       #result=oraObject.getProcedures(db)
+        header=[_("#"), _("Source")]
+        result=oraObject.getSource(db)
 
-    elif oraObject.getType()=="PROCEDURE":
+    elif oraObject.getType()=="PACKAGE BODY":
         raise PysqlNotImplemented()
+    
+    elif oraObject.getType()=="PROCEDURE":
+        header=[_("#"), _("Source")]
+        result=oraObject.getSource(db)
 
     elif oraObject.getType()=="SEQUENCE":
         header=[_("Last"), _("Min"), _("Max"), _("Step")]
@@ -646,3 +654,4 @@ def searchObject(db, objectType, objectName, objectOwner):
         else:
             result[owner]=[name]
     return result
+    
