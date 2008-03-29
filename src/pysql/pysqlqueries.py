@@ -1,4 +1,4 @@
-﻿#!/usr/bin/python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 # Sébastien Renard (sebastien.renard@digitalfox.org)
@@ -13,7 +13,7 @@ searchObjectSql={
                 where  (%s) /*%s*/ order by %s""", "file_name"),
     "directory" :    ("""select owner, directory_name from all_directories
                 where  (%s) and owner like '%s' order by %s""", "directory_name"),
-    "index"     :    ("""select owner, index_name from all_indexes 
+    "index"     :    ("""select owner, index_name from all_indexes
                 where (%s) and owner like '%s' order by %s""", "index_name"),
     "function"  :    ("""select distinct owner, name from all_source
                 where (%s) and owner like '%s' and type='FUNCTION' order by %s""", "name"),
@@ -84,16 +84,16 @@ dbLinkSql={
     }
 
 indexSql={
-    "propertiesFromOwnerAndName" : """ select TABLE_OWNER, TABLE_NAME, INDEX_TYPE, UNIQUENESS,  
-                                              COMPRESSION, LEAF_BLOCKS, DISTINCT_KEYS, 
-                                              AVG_LEAF_BLOCKS_PER_KEY  
-                                              from  all_indexes 
+    "propertiesFromOwnerAndName" : """ select TABLE_OWNER, TABLE_NAME, INDEX_TYPE, UNIQUENESS,
+                                              COMPRESSION, LEAF_BLOCKS, DISTINCT_KEYS,
+                                              AVG_LEAF_BLOCKS_PER_KEY
+                                              from  all_indexes
                                               where owner=:1
                                               and index_name=:2""",
     "indexedColumnsFromOwnerAndName" : """select COLUMN_NAME, COLUMN_POSITION
-                                              from  ALL_IND_COLUMNS 
-                                              where index_owner=:1 
-                                              and index_name=:2 
+                                              from  ALL_IND_COLUMNS
+                                              where index_owner=:1
+                                              and index_name=:2
                                               order by COLUMN_POSITION"""
     }
 
@@ -115,22 +115,13 @@ packageSql={
                         from all_procedures
                         where owner=:1
                           and object_name=:2 """,
-    "proceduresFromSYSAndName"    :    """select procedure_name
-                        from all_procedures
-                        where owner='SYS'
-                          and object_name=:1 """,
     "sourceFromOwnerAndName" : """ select line, replace(replace(text, chr(10), ' '), chr(13), ' ')
                         from  all_source
                         where owner=:1
                           and name=:2
-                        order by line""",
-    "sourceFromSYSAndName" : """ select line, replace(replace(text, chr(10), ' '), chr(13), ' ')
-                        from  all_source
-                        where owner='SYS'
-                          and name=:1
                         order by line"""
     }
-    
+
 sequenceSql={
     "lastFromOwnerAndName"    :    """select sequence_owner, last_number
                         from all_sequences
@@ -170,13 +161,13 @@ tableSql={
                                               from all_ind_columns
                                               where table_owner=:1
                                               and table_name=:2 """,
-    "primaryKeyFromOwnerAndName"    :    """select col.column_name 
+    "primaryKeyFromOwnerAndName"    :    """select col.column_name
                                               from all_constraints cons, all_cons_columns col
-                                              where cons.constraint_type='P' 
+                                              where cons.constraint_type='P'
                                               and cons.owner=:1
                                               and cons.table_name=:2
                                               and cons.owner=col.owner
-                                              and cons.table_name=col.table_name 
+                                              and cons.table_name=col.table_name
                                               and col.constraint_name=cons.constraint_name
                                               order by col.position"""
     }
@@ -208,7 +199,7 @@ tabularSql={
                       and a.table_name=:2
                       and a.table_name=c.table_name
                       and a.column_name=c.column_name""",
-    "numberOfColumnsFromOwnerAndName" :   """select count(*) 
+    "numberOfColumnsFromOwnerAndName" :   """select count(*)
                                             from all_tab_columns
                                             where owner=:1
                                             and table_name=:2"""

@@ -1,4 +1,4 @@
-﻿#!/usr/bin/python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 # Sébastien Renard (sebastien.renard@digitalfox.org)
@@ -205,7 +205,7 @@ class OraTabular(OraObject):
     """Father of tables, partitioned tables, views, materialized views. All objects that
     have rows and lines.
     The name is not very sexy. Anybody has better choice?"""
-    
+
     def __init__(self, objectOwner="", objectName=""):
         """Tabular object creation"""
         OraObject.__init__(self, objectOwner, objectName, "")
@@ -346,7 +346,7 @@ class OraIndex(OraSegment):
         OraObject.__init__(self, indexOwner, indexName, "INDEX")
 
     def getProperties(self, db):
-        """Returns index following properties : 
+        """Returns index following properties :
         Index_type, uniqueness, table_owner, table_name, compression, leaf_blocks, destincts_keys
         avg_lef_blocks_per_leys as a list of (property_name, property_value)"""
         if self.getOwner()=="":
@@ -355,16 +355,16 @@ class OraIndex(OraSegment):
             owner=self.getOwner()
         result=db.executeAll(indexSql["propertiesFromOwnerAndName"], [owner, self.getName()])
         result.insert(0, db.getDescription())
-        
+
         if not result:
             return None
         # Transpose the result
         result=[[result[i][j] for i in range(len(result))] for j in range(len(result[0]))]
-        
+
         # Add indexed columns
         indexedColumns=self.getIndexedColumns(db)
         result.append([_("Indexed Columns"), ", ".join(["%s(%s)" % (i[0], i[1]) for i in indexedColumns])])
-        
+
         return result
 
     def getIndexedColumns(self, db):
@@ -374,7 +374,7 @@ class OraIndex(OraSegment):
         else:
             owner=self.getOwner()
         return db.executeAll(indexSql["indexedColumnsFromOwnerAndName"], [owner, self.getName()])
-        
+
 class OraMaterializedView(OraTabular, OraSegment):
     """Oracle materialized view"""
     def __init__(self, mviewOwner="", mviewName=""):
@@ -429,19 +429,16 @@ class OraProcedure(OraStoredObject):
     """Oracle stored procedure"""
     def __init__(self, procedureOwner, procedureName):
         OraObject.__init__(self, procedureOwner, procedureName, "PROCEDURE")
-        
+
     def getSource(self, db):
         """Gets source code
         @return: array of source line
         """
         if self.getOwner()=="":
             owner=db.getUsername().upper()
-            source=db.executeAll(packageSql["sourceFromOwnerAndName"], [owner, self.getName()])
         else:
-            try:
-                source=db.executeAll(packageSql["sourceFromSYSAndName"], [self.getName()])
-            except PysqlException:
-                source=db.executeAll(packageSql["sourceFromOwnerAndName"], [owner, self.getName()])
+            owner=self.getOwner()
+        source=db.executeAll(packageSql["sourceFromOwnerAndName"], [owner, self.getName()])
         if len(source)==0:
             return (None)
         else:
@@ -458,12 +455,9 @@ class OraFunction(OraStoredObject):
         """
         if self.getOwner()=="":
             owner=db.getUsername().upper()
-            source=db.executeAll(packageSql["sourceFromOwnerAndName"], [owner, self.getName()])
         else:
-            try:
-                source=db.executeAll(packageSql["sourceFromSYSAndName"], [self.getName()])
-            except PysqlException:
-                source=db.executeAll(packageSql["sourceFromOwnerAndName"], [owner, self.getName()])
+            owner=self.getOwner()
+        source=db.executeAll(packageSql["sourceFromOwnerAndName"], [owner, self.getName()])
         if len(source)==0:
             return (None)
         else:
@@ -473,19 +467,16 @@ class OraPackage(OraStoredObject):
     """Oracle Package"""
     def __init__(self, packageOwner, packageName):
         OraObject.__init__(self, packageOwner, packageName, "PACKAGE")
-    
+
     def getProcedures(self, db):
         """Gets procedure names
         @return: array of procedure_name
         """
         if self.getOwner()=="":
             owner=db.getUsername().upper()
-            columns=db.executeAll(packageSql["proceduresFromOwnerAndName"], [owner, self.getName()])
         else:
-            try:
-                columns=db.executeAll(packageSql["proceduresFromSYSAndName"], [self.getName()])
-            except PysqlException:
-                columns=db.executeAll(packageSql["proceduresFromOwnerAndName"], [owner, self.getName()])
+            owner=self.getOwner()
+        columns=db.executeAll(packageSql["proceduresFromOwnerAndName"], [owner, self.getName()])
         if len(columns)==0:
             return (None)
         else:
@@ -497,12 +488,9 @@ class OraPackage(OraStoredObject):
         """
         if self.getOwner()=="":
             owner=db.getUsername().upper()
-            source=db.executeAll(packageSql["sourceFromOwnerAndName"], [owner, self.getName()])
         else:
-            try:
-                source=db.executeAll(packageSql["sourceFromSYSAndName"], [self.getName()])
-            except PysqlException:
-                source=db.executeAll(packageSql["sourceFromOwnerAndName"], [owner, self.getName()])
+            owner=self.getOwner()
+        source=db.executeAll(packageSql["sourceFromOwnerAndName"], [owner, self.getName()])
         if len(source)==0:
             return (None)
         else:
@@ -512,7 +500,6 @@ class OraPackageBody(OraStoredObject):
     """Oracle stored package body"""
     def __init__(self, packageOwner, packageName):
         OraObject.__init__(self, packageOwner, packageName, "PACKAGE BODY")
-
 
 class OraSequence(OraObject):
     """Oracle sequence"""
@@ -630,7 +617,7 @@ class OraTable(OraTabular, OraSegment):
 
         result=db.executeAll(tableSql["indexedColFromOwnerAndName"], [owner, self.getName()])
         return result
-    
+
     def getPrimaryKeys(self, db):
         """Gets table primary key column name
         @return: list of columns used in primary key. Empty list if not PK found"""
@@ -644,7 +631,6 @@ class OraTable(OraTabular, OraSegment):
             return [i[0] for i in result]
         else:
             return None
-
 
 class OraTablespace(OraObject):
     """Tablespace"""
@@ -762,7 +748,6 @@ class OraTrigger(OraObject):
             return ""
         else:
             return result[0][0]
-
 
 class OraUser(OraObject):
     """User"""

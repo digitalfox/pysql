@@ -1,4 +1,4 @@
-﻿#!/usr/bin/python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 # Sébastien Renard (sebastien.renard@digitalfox.org)
@@ -59,7 +59,7 @@ def compare(schemaA, schemaB):
         dbList[schema]=PysqlDb(schema)
         keyword=searchObjectSql["table"][1]
         whereClause="""%s like '%%'""" % keyword
-        sql=searchObjectSql["table"][0] % ( 
+        sql=searchObjectSql["table"][0] % (
                         whereClause, schema.split("/")[0].upper(), keyword)
         result=dbList[schema].executeAll(sql)
         tables[schema]=[i[1] for i in result]
@@ -100,7 +100,7 @@ def compareTables(schemaA, schemaB, tableNameA, tableNameB, dbList=None, data=Fa
         dbList={} # Create new hash to store list of connect object to schema (key is schema)
         dbList["A"]=PysqlDb(schemaA)
         dbList["B"]=PysqlDb(schemaB)
-    
+
     if data:
         return compareTableData(schemaA, schemaB, tableNameA, tableNameB, dbList)
     else:
@@ -115,20 +115,19 @@ def compareTableStructure(schemaA, schemaB, tableNameA, tableNameB, dbList):
     @tableNameB: name of the table in schema B
     @dbList:     hash list of PysqlDb object (keys are A & B).
     """
-    tableDesc={}      # Store the current table desc for each schema (key is schema)    
+    tableDesc={}      # Store the current table desc for each schema (key is schema)
     for schema, tableName in (("A", tableNameA), ("B", tableNameB)):
         #BUG: format is ugly. use/merge with __displayTab algo ??
         tableDesc[schema]=["     ".join([str(i) for i in line])
                             for line in desc(dbList[schema], tableName, None, False)[1]]
         if not tableDesc[schema]:
             raise PysqlException(_("Could not find table %s") % tableName)
-    
+
     if tableDesc["A"]==tableDesc["B"]:
         result=None
     else:
         result=colorDiff(ndiff(tableDesc["A"], tableDesc["B"]))
     return result
-
 
 def compareTableData(schemaA, schemaB, tableNameA, tableNameB, dbList):
     """
@@ -153,13 +152,13 @@ def compareTableData(schemaA, schemaB, tableNameA, tableNameB, dbList):
             # Get only column name (0) and column type (1)
             tableStruct[schema]=[[i[0], i[1]] for i in table.getTableColumns(dbList[schema])]
         else:
-            raise PysqlException(_("%s does not seem to be a table in %s") % 
+            raise PysqlException(_("%s does not seem to be a table in %s") %
                                    (tableName, dbList[schema].getConnectString()))
 
     if tableStruct["A"]!=tableStruct["B"]:
         raise PysqlException(
          _("Unable to compare data of tables that does not have a common structure (columns name and type)"))
-    
+
     if tablePK["A"]==tablePK["B"] and tablePK["A"]: # identical and not None
         order="order by %s" % (", ".join(tablePK["A"]))
     else:
@@ -247,7 +246,7 @@ def desc(db, objectName, completeMethod=None, printComment=True):
 
     # Gets IO handler
     stdout=PysqlIO.getIOHandler()
-    
+
     # Gets the object type and owner
     oraObject=OraObject(objectName=objectName)
     oraObject.guessInfos(db)
@@ -329,7 +328,7 @@ def desc(db, objectName, completeMethod=None, printComment=True):
     elif oraObject.getType()=="EVALUATION CONTEXT":
         raise PysqlNotImplemented()
 
-    elif oraObject.getType()=="FUNCTION":
+    elif oraObject.getType()in("FUNCTION", "PACKAGE", "PROCEDURE"):
         header=[_("#"), _("Source")]
         result=oraObject.getSource(db)
 
@@ -358,18 +357,8 @@ def desc(db, objectName, completeMethod=None, printComment=True):
     elif oraObject.getType()=="OPERATOR":
         raise PysqlNotImplemented()
 
-    elif oraObject.getType()=="PACKAGE":
-       #header=[_("Procedure name")]
-       #result=oraObject.getProcedures(db)
-        header=[_("#"), _("Source")]
-        result=oraObject.getSource(db)
-
     elif oraObject.getType()=="PACKAGE BODY":
         raise PysqlNotImplemented()
-    
-    elif oraObject.getType()=="PROCEDURE":
-        header=[_("#"), _("Source")]
-        result=oraObject.getSource(db)
 
     elif oraObject.getType()=="SEQUENCE":
         header=[_("Last"), _("Min"), _("Max"), _("Step")]
@@ -654,4 +643,3 @@ def searchObject(db, objectType, objectName, objectOwner):
         else:
             result[owner]=[name]
     return result
-    
