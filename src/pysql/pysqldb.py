@@ -11,7 +11,7 @@ and backgound queries (BgQuery)"""
 
 #Python imports:
 import sys
-from cx_Oracle import Connection, connect, Cursor, DatabaseError, InterfaceError, STRING
+from cx_Oracle import Connection, connect, Cursor, DatabaseError, InterfaceError, STRING, SYSDBA, SYSOPER
 from threading import Thread
 from time import sleep
 
@@ -26,7 +26,7 @@ class PysqlDb:
     MAXIMUM_FETCH_SIZE=10000      # Maximum size of a result set to fetch in one time
     FETCHALL_FETCH_SIZE=30        # Size of cursor for fetching all type queries
 
-    def __init__(self, connectString):
+    def __init__(self, connectString, mode=""):
         # Instance attributs
         self.connection=None
         self.cursor=None
@@ -39,7 +39,12 @@ class PysqlDb:
 
         # Connect to Oracle
         try:
-            self.connection=connect(connectString)
+            if mode=="sysoper":
+                self.connection=connect(connectString, mode=SYSOPER)
+            elif mode=="sysdba":
+                self.connection=connect(connectString, mode=SYSDBA)
+            else:
+                self.connection=connect(connectString)
         except (DatabaseError, RuntimeError), e:
             raise PysqlException(_("Cannot connect to Oracle: %s") % stringDecode(e))
 

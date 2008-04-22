@@ -336,14 +336,24 @@ class PysqlShell(cmd.Cmd):
     # Connection stuff
     def do_connect(self, arg):
         """See help_connect() from description"""
-        self.__checkArg(arg, "==1")
+        self.__checkArg(arg, "<=2")
+        arg=arg.split()
         try:
             self.__disconnect()
         except PysqlException, e:
             self.stdout( RED+BOLD+_("Error while closing previous connection:\n\t %s") % e + RESET)
             self.exceptions.append(e)
             self.db=None
-        self.__connect(arg)
+        if len(arg)==1:
+            mode=""
+        elif arg[1].lower()=="sysdba":
+            mode="sysdba"
+        elif arg[1].lower()=="sysoper":
+            mode="sysoper"
+        else:
+            mode=""
+            self.stdout( RED+BOLD+_("Invalid Oracle mode: %s (ignored)") % arg[1] + RESET)
+        self.__connect(arg[0], mode)
 
     def do_disconnect(self, arg):
         """See help_disconnect() from description"""
@@ -1039,7 +1049,7 @@ class PysqlShell(cmd.Cmd):
 
     def help_connect(self):
         """online help"""
-        self.stdout(CYAN+_("Usage:\n\tconn[ect] user[/password][@SID]")+RESET)
+        self.stdout(CYAN+_("Usage:\n\tconn[ect] user[/password][@[host[:port]/]SID] [sysdba|sysoper]")+RESET)
         self.stdout( _("Connects to Oracle and closes previous connection if any"))
 
     def help_count(self):
@@ -1266,7 +1276,7 @@ class PysqlShell(cmd.Cmd):
                 pass
         return [prefix+i for i in completeList if i.startswith(text.upper())]
 
-    def __connect(self, connectString):
+    def __connect(self, connectString, mode=""):
         """Calls the PysqlDb class to connect to Oracle"""
 
         count=connectString.count("@")
@@ -1288,7 +1298,7 @@ class PysqlShell(cmd.Cmd):
             raise PysqlException("Invalid connection string")
 
         connectString=user+"/"+passwd+"@"+sid
-        self.db=PysqlDb(connectString)
+        self.db=PysqlDb(connectString, mode)
         self.__setPrompt()
 
     def __disconnect(self):
