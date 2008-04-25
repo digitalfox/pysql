@@ -212,7 +212,7 @@ class PysqlShell(cmd.Cmd):
                 try:
                     length=readline.get_current_history_length()
                     if length>1:
-                        # Rsemoves partial line from history
+                        # Removes partial line from history
                         readline.remove_history_item(length-1)
                 except AttributeError:
                     # Windows readline does not have those advanced functions... Sad world
@@ -919,8 +919,7 @@ class PysqlShell(cmd.Cmd):
     # Shell execution
     def do_shell(self, arg):
         """See help_shell() for description"""
-
-        #An empty command line enables to open a subshell
+        # An empty command line enables to open a subshell
         if arg=="":
             if os.name=="posix":
                 arg=os.path.expandvars("$SHELL")
@@ -928,11 +927,49 @@ class PysqlShell(cmd.Cmd):
                 arg="cmd"
             else:
                 raise PysqlNotImplemented()
-        #Running command line
+        # Running command line
         exitStatus=os.system(arg)
-        #Display exit status if an error occurred
+        # Display exit status if an error occurred
         if exitStatus!=0:
             self.stdout(CYAN+"Exited with code "+str(exitStatus)+RESET)
+
+    def do_lls(self, arg):
+        """See help_lls() for description"""
+        self.__checkArg(arg, "<=1")
+        if os.name=="posix":
+            cmd="ls "
+        elif os.name=="nt":
+            cmd="dir "
+        else:
+            raise PysqlNotImplemented()
+        # Running command line
+        if len(arg)==0:
+            exitStatus=os.system(cmd)
+        else:
+            exitStatus=os.system(cmd+arg)
+        # Display exit status if an error occurred
+        if exitStatus!=0:
+            self.stdout(CYAN+"Exited with code "+str(exitStatus)+RESET)
+
+    def do_lcd(self, arg):
+        """See help_lcd() for description"""
+        self.__checkArg(arg, "<=1")
+        if arg=="":
+            if os.name=="posix":
+                arg=os.path.expandvars("$HOME")
+            elif os.name=="nt":
+                arg=os.path.expandvars("$HOMEDRIVE")+os.path.expandvars("$HOMEPATH")
+            else:
+                raise PysqlNotImplemented()
+        try:
+            os.chdir(arg)
+        except OSError, e:
+            raise PysqlException(_("No such file or directory"))
+
+    def do_lpwd(self, arg):
+        """See help_lpwd() for description"""
+        self.__checkArg(arg, "==0")
+        print os.getcwd()
 
 
     # Script execution
@@ -1192,6 +1229,21 @@ class PysqlShell(cmd.Cmd):
         self.stdout(CYAN+_("Usage:\n\t! <command line>")+RESET)
         self.stdout(_("Executes a command into the system terminal (depending on your system profile)"))
         self.stdout(_("If no commands are given then a subshell is openned"))
+
+    def help_lcd(self):
+        """online help"""
+        self.stdout(CYAN+_("Usage:\n\tlcd <path>")+RESET)
+        self.stdout(_("Changes working directory"))
+
+    def help_lls(self):
+        """online help"""
+        self.stdout(CYAN+_("Usage:\n\tlls [path/][file]")+RESET)
+        self.stdout(_("Lists directory contents"))
+
+    def help_lpwd(self):
+        """online help"""
+        self.stdout(CYAN+_("Usage:\n\tlpwd")+RESET)
+        self.stdout(_("Prints local directory"))
 
     def help_show(self):
         """online help"""
