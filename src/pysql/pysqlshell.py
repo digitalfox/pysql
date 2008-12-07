@@ -251,6 +251,8 @@ class PysqlShell(cmd.Cmd):
         PysqlOptionParser for the do_foo() method and show the help of the
         parser, instead of standard help (do_foo() docstring or help_foo())
         """
+        if self.aliases.has_key(arg):
+            arg=self.aliases[arg]
         if hasattr(self, "parser_" + arg):
             parserMethod = getattr(self, "parser_" + arg)
             parserMethod().print_help(sys.stderr)
@@ -1692,6 +1694,7 @@ class PysqlShell(cmd.Cmd):
         return True
 
     # Functions aliases
+    #TODO: generate from aliases dict
     do_conn=do_connect
     do_dep=do_dependencies
     do_desc=do_describe
@@ -1710,13 +1713,14 @@ class PysqlShell(cmd.Cmd):
 
     # Help functions aliases
     help_conn=help_connect
-    help_dep=help_dependencies
-    help_desc=help_describe
-    help_disc=help_disconnect
-    help_du=help_diskusage
-    help_ed=help_edit
-    help_h=help_history
-    help_lib=help=help_library
-    help_start=help_script
-    help_q=help_exit
-    help_quit=help_exit
+    aliases={"dep"  : "dependencies",
+             "desc" : "describe",
+             "disc" : "disconnect",
+             "du"   : "diskusage",
+             "ed"   : "edit",
+             "h"    : "history",
+             "lib"  : "library",
+             "start": "script",
+             "q"    : "exit",
+             "quit" : "exit"
+            }
