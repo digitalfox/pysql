@@ -244,6 +244,20 @@ class PysqlShell(cmd.Cmd):
         else:
             self.__executeSQL(arg)
 
+    def do_help(self, arg):
+        """
+        Overload do_help to show help from the command parser if it exists:
+        if there is a parser_foo() method, assume this method returns a
+        PysqlOptionParser for the do_foo() method and show the help of the
+        parser, instead of standard help (do_foo() docstring or help_foo())
+        """
+        if hasattr(self, "parser_" + arg):
+            parserMethod = getattr(self, "parser_" + arg)
+            parserMethod().print_help(sys.stderr)
+        else:
+            print "Usage: ",
+            cmd.Cmd.do_help(self, arg)
+
     def completedefault(self, text, line, begidx, endidx):
         """pysql specific completion with self.completeList"""
         if not self.useCompletion:
