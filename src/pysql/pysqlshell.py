@@ -625,23 +625,27 @@ class PysqlShell(cmd.Cmd):
         user=options.user.upper().encode(self.conf.getCodec(), "replace")
         pysqlgraphics.datamodel(self.db, user, tableFilter=" ".join(args), withColumns=options.columns)
 
+    def parser_dependencies(self):
+        parser=PysqlOptionParser()
+        parser.set_usage("dep[endencies] [options] <object name>")
+        parser.set_description(
+            "Displays object dependencies as a picture"
+            "The generation of the output is powered by Graphviz (http://www.graphviz.org)"
+            )
+        directions=("onto", "from", "both")
+        parser.add_option("-d", "--direction", dest="direction",
+                          default="both", type="choice",
+                          metavar="<direction>", choices=directions,
+                          help="Direction of dependency tracking: %s" % ", ".join(directions))
+        return parser
+
     def do_dependencies(self, arg):
         """Exports object dependencies as a picture"""
         self.__checkConnection()
-        self.__checkArg(arg, ">=1")
-        arg=arg.split()
-        objectname=arg[0]
-        direction=""
-        try:
-            if arg[1] in ("onto", "from", "both"):
-                direction=arg[1]
-            else:
-                message=_("""Unknown value for parameter "" """)
-                message+=_("Type help dependencies to get the correct syntax")
-                raise PysqlException(message)
-        except IndexError:
-            direction="both"
-        pysqlgraphics.dependencies(self.db, objectname, direction)
+        parser = self.parser_dependencies()
+        options, args = parser.parse_args(arg)
+        self.__checkArg(args, "=1")
+        pysqlgraphics.dependencies(self.db, args[0].encode(self.conf.getCodec(), "replace"), options.direction)
 
     def do_diskusage(self, arg):
         """Exports disk usage as a picture"""
@@ -1109,18 +1113,6 @@ class PysqlShell(cmd.Cmd):
         """online help"""
         self.stdout(CYAN+_("Usage:\n\tcount <table/view name>")+RESET)
         self.stdout(_("Counts the number of lines in a table or a view"))
-
-    def help_datamodel(self):
-        """online help"""
-        self.stdout(CYAN+_("Usage:\n\tdatamodel [<user name>.[filter on table name]] [<with-columns: yes|no>]")+RESET)
-        self.stdout(_("Extracts the datamodel of a user filtered on selected table pattern"))
-        self.stdout(_("The generation of the output is powered by Graphviz (http://www.graphviz.org)"))
-        
-    def help_dependencies(self):
-        """online help"""
-        self.stdout(CYAN+_("Usage:\n\tdep[endencies] <object name>")+RESET)
-        self.stdout(_("Displays object dependencies as a picture"))
-        self.stdout(_("The generation of the output is powered by Graphviz (http://www.graphviz.org)"))
 
     def help_directory(self):
         """online help"""
