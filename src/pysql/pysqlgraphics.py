@@ -113,7 +113,7 @@ def datamodel(db, userName, tableFilter=None, withColumns=True):
             graph.add_edge(Edge(src=link[1], dst=link[2], color=linkcolor))
         else:
             graph.add_edge(Edge(src=link[1], dst=link[2], label=link[0], color=linkcolor, \
-                                fontcolor=linkcolor, fontname=fontname, fontsize=fontsize-3))
+                                fontcolor=linkcolor, fontname=fontname, fontsize=str(fontsize-3)))
         current+=1
        #stdout(GREY+" (%4.1f%%) %s" % (100*float(current)/nbLinks, link[1]+" -> "+link[2])+RESET)
 
@@ -171,7 +171,7 @@ def dependencies(db, objectName, direction="both"):
         objectName=objectList[0].getName()
         objectType=objectList[0].getType()
         label=objectOwner+"."+objectName+"\\n("+objectType+")"
-        graph.add_node(Node(objectName, label=label, fontname=fontname, fontsize=fontsize, shape="diamond"))
+        graph.add_node(Node(objectName, label=label, fontname=fontname, fontsize=str(fontsize), shape="diamond"))
         nodeList=[objectName]
         edgeList=[]
         nextObjectList=[]
@@ -213,7 +213,7 @@ def dependencies(db, objectName, direction="both"):
                         label+="\\n("+currentRefObjectType+")"
                         # Adding object to graph
                         graph.add_node(Node(currentRefObjectName, label=label, fontname=fontname, \
-                                                                  fontsize=fontsize, shape=shape))
+                                                                  fontsize=str(fontsize), shape=shape))
                     if not [currentObjectName, currentRefObjectName] in edgeList:
                         if currentDir=="onto":
                             edgeList.append([currentObjectName, currentRefObjectName])
@@ -300,8 +300,8 @@ def diskusage(db, userName, withIndexes=False):
             label=tableName +"\\n("+str(size)+" MB)"
             subGraph.add_node(Node(tableName, label=label, shape="box", style="filled", \
                                    color=bordercolor, fillcolor=tablecolor, \
-                                   fontname="arial", fontcolor=fontcolor, fontsize=fontsize-2, \
-                                   fixedsize="true", nodesep="0.01", height=height, width=width))
+                                   fontname="arial", fontcolor=fontcolor, fontsize=str(fontsize-2), \
+                                   fixedsize="true", nodesep="0.01", height=str(height), width=str(width)))
         if not withIndexes:
             continue
         # Indexes
@@ -332,8 +332,8 @@ def diskusage(db, userName, withIndexes=False):
             #            "; height="+str(height)+"; width="+str(width)
             subGraph.add_node(Node(indexName, label=label, shape="box", style="filled", \
                                    color=bordercolor, fillcolor=indexcolor,  \
-                                   fontname="arial", fontcolor=fontcolor, fontsize=fontsize-2, \
-                                   fixedsize="true", nodesep="0.01", height=height, width=width))
+                                   fontname="arial", fontcolor=fontcolor, fontsize=str(fontsize-2), \
+                                   fixedsize="true", nodesep="0.01", height=str(height), width=str(width)))
             # Invisible edges for placement purpose only (not very usefull in fact)
             #graph.add_edge(Edge(src=indexName, dst=tableName, constraint="false", style="invis"))
 
@@ -407,7 +407,7 @@ def pkgTree(db, packageName):
         if result:
             verbs.append(re.escape(result.group(2)))
             graph.add_node(Node(result.group(2).upper(), shape="box", label=result.group(2).upper(), \
-                                fontsize=fontsize, fontname=fontname, fontcolor=fontcolor))
+                                fontsize=str(fontsize), fontname=fontname, fontcolor=fontcolor))
 
     if not verbs:
         raise PysqlException(_("This package does not have any readable function or procedure"))
