@@ -1534,7 +1534,7 @@ class PysqlShell(cmd.Cmd):
     def __checkArg(self, arg, argTest):
         """Checks if arg respect argTest else raise a PysqlException
         @param arg: argument to check. Blank is the arg separator
-        @type arg: str
+        @type arg: str or list of str
         @param argTest: test with syntaxe like: ">2", "==1", "<=3"
         @type argTest: str
         @return: None
@@ -1542,8 +1542,10 @@ class PysqlShell(cmd.Cmd):
         if match("=\d+", argTest):
             # Bouh, replace the single = by ==
             argTest="="+argTest
+        if isinstance(arg, basestring):
+            arg=arg.split()
         try:
-            if not eval(unicode(len(arg.split())) + argTest):
+            if not eval(unicode(len(arg)) + argTest):
                 raise PysqlException(_("Invalid argument. Use help <command name> for usage"))
         except SyntaxError, e:
             raise PysqlException(_("Invalid syntax for argument checking"))
