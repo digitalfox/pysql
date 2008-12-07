@@ -26,6 +26,7 @@ from pysqlexception import PysqlException, PysqlNotImplemented
 from pysqlconf import PysqlConf
 from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
 from pysqlhelpers import itemLength, removeComment, stringDecode
+from pysqloptionparser import PysqlOptionParser
 
 class PysqlShell(cmd.Cmd):
     """Main class that handle user interaction"""
@@ -585,31 +586,30 @@ class PysqlShell(cmd.Cmd):
         (header, result)=pysqlfunctions.desc(self.db, arg, self.__addToCompleteList)
         self.__displayTab(result, header)
 
+    def parser_datamodel(self):
+        parser=PysqlOptionParser()
+        parser.set_usage("datamodel [options] [filters on table name]]")
+        parser.set_description(
+            "Extracts the datamodel of a user filtered on selected table pattern"
+            "The generation of the output is powered by Graphviz (http://www.graphviz.org)"
+            )
+        parser.add_option("-c", "--columns", dest="columns",
+                          default=False, action="store_true",
+                          help="Also draw table's columns")
+
+        parser.add_option("-u", "--user", dest="user",
+                          default=self.db.getUsername(),
+                          help="User owner of tables (schema)")
+        return parser
+
     def do_datamodel(self, arg):
         """Exports a datamodel as a picture"""
         self.__checkConnection()
-        arg=arg.split()
-        tables=None
-        #TODO: arg parsing method is bad. Filter is limited to single word due to arg parsing. 
-        # Backend in pysqlgraphics could do more (multiple filter with and/or)
-        try:
-            user=arg[0]
-            if "." in user:
-                user, tables=user.split(".")
-        except IndexError:
-            user=self.db.getUsername()
-        try:
-            if arg[1]=="yes":
-                withColumns=True
-            elif arg[1]=="no":
-                withColumns=False
-            else:
-                message=_("""Unknown value for parameter "with-columns" """)
-                message+=_("Type help datamodel to get the correct syntax")
-                raise PysqlException(message)
-        except IndexError:
-            withColumns=True
-        pysqlgraphics.datamodel(self.db, user.upper(), tables, withColumns)
+        parser = self.parser_datamodel()
+        options, args = parser.parse_args(arg)
+        #TODO: simplify this unicode mess !
+        user=options.user.upper().encode(self.conf.getCodec(), "replace")
+        pysqlgraphics.datamodel(self.db, user, tableFilter=" ".join(args), withColumns=options.columns)
 
     def do_dependencies(self, arg):
         """Exports object dependencies as a picture"""
