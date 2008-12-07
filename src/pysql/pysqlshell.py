@@ -250,8 +250,10 @@ class PysqlShell(cmd.Cmd):
         # Keyword detection not very smart... but work for simple case
         lastKeyWord=line[:begidx].split()[-1].lower()
         if   lastKeyWord in ["select", "where", "by",
-                     "sum(", "abs(", "round(", "upper(", "lower("]:
+                     "sum(", "abs(", "round(", "upper(", "lower(", "set"]:
             themes=["columns"]
+        elif lastKeyWord in ["update"]:
+            themes=["table"]
         elif lastKeyWord in ["from", "into"]:
             themes=["table", "view", "synonym"]
         elif lastKeyWord=="index":
