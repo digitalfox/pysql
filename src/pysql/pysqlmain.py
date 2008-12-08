@@ -157,9 +157,10 @@ def main():
             sys.stdin.readline()
     except StandardError, e:
         # Just a hook for a more pleasant error handling
-        print "\n==> Unrecoverable error. Exiting <=="
+        print "\n==> Unrecoverable error during initialisation. Exiting <=="
+        print "------------------8<-------------------------------------"
         traceback.print_exc()
-        print "\n*********************\n\n"
+        print "------------------8<-------------------------------------"
         print "Please, send the text above to pysql@digitalfox.org",
         print "(press enter key to exit)"
         sys.stdin.readline()

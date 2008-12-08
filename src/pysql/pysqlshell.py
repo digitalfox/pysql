@@ -10,6 +10,7 @@
 import cmd
 import sys
 import os
+import traceback
 import readline
 import datetime
 from cx_Oracle import DatabaseError, LOB
@@ -128,6 +129,14 @@ class PysqlShell(cmd.Cmd):
         except DatabaseError, e:
             self.stdout(
                 RED+BOLD+_("DatabaseError handled by shell (bad, report this as a bug !!):\n%s") % e + RESET)
+        except StandardError, e:
+            # Just a hook for a more pleasant error handling
+            print RED+BOLD+"\n==> Unhandled error. Sorry <=="+RESET
+            print "------------------8<-------------------------------------"
+            traceback.print_exc()
+            print "------------------8<-------------------------------------"
+            print RED+BOLD+"Please, send the text above to pysql@digitalfox.org"+RESET
+            print
 
     def precmd(self, line):
         """Hook executed just before any command execution.
