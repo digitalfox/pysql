@@ -160,8 +160,13 @@ class PysqlShell(cmd.Cmd):
             return "script "+line[1:]
 
         firstWord=line.split()[0]
-        # Pysql command are single line
 
+        # Substitute alias with real function name
+        if self.aliases.has_key(firstWord):
+            line=line.replace(firstWord, self.aliases[firstWord], 1)
+            firstWord=self.aliases[firstWord]
+
+        # Pysql command are single line
         if (firstWord in self.cmds or line[0]=="!") and not self.multilineCmd:
             # ; is not needed but we remove it if exists
             if firstWord!="set":
@@ -1706,31 +1711,18 @@ class PysqlShell(cmd.Cmd):
         self.rc=rc
         return True
 
-    # Functions aliases
-    #TODO: generate from aliases dict
-    do_conn=do_connect
-    do_dep=do_dependencies
-    do_desc=do_describe
-    do_disc=do_disconnect
-    do_du=do_diskusage
-    do_ed=do_edit
-    do_exec=do_execute
-    do_h=do_history
-    do_lib=do_library
-    do_start=do_script
-    do_q=do_exit
-    do_quit=do_exit
-
     # Complete functions aliases
     complete_conn=complete_connect
 
-    # Help functions aliases
+    # Functions aliases
     help_conn=help_connect
-    aliases={"dep"  : "dependencies",
+    aliases={"conn" : "connect",
+             "dep"  : "dependencies",
              "desc" : "describe",
              "disc" : "disconnect",
              "du"   : "diskusage",
              "ed"   : "edit",
+             "exec" : "execute",
              "h"    : "history",
              "lib"  : "library",
              "start": "script",
