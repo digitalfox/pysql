@@ -126,9 +126,6 @@ class PysqlShell(cmd.Cmd):
             self.exceptions.append(e)
             if e.oraCode=="ORA-03114": # Not connected to Oracle
                 self.db=None
-        except DatabaseError, e:
-            self.stdout(
-                RED+BOLD+_("DatabaseError handled by shell (bad, report this as a bug !!):\n%s") % e + RESET)
         except StandardError, e:
             # Just a hook for a more pleasant error handling
             print RED+BOLD+"\n==> Unhandled error. Sorry <=="+RESET
