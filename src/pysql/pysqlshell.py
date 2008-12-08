@@ -609,12 +609,16 @@ class PysqlShell(cmd.Cmd):
             "Extracts the datamodel of a user filtered on selected table pattern"
             "The generation of the output is powered by Graphviz (http://www.graphviz.org)"
             )
+        if self.db:
+            defaultUser=self.db.getUsername()
+        else:
+            defaultUser=""
         parser.add_option("-c", "--columns", dest="columns",
                           default=False, action="store_true",
                           help="Also draw table's columns")
 
         parser.add_option("-u", "--user", dest="user",
-                          default=self.db.getUsername(),
+                          default=defaultUser,
                           help="User owner of tables (schema)")
         return parser
 
