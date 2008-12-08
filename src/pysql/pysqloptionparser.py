@@ -11,14 +11,8 @@ Kindly borrowed from Yokadi Option parser (http://github.com/agateau/yokadi/)
 """
 from optparse import OptionParser
 import sys
-from pysqlexception import PysqlException
+from pysqlexception import PysqlException, PysqlOptionParserNormalExitException
 
-
-class PysqlOptionParserNormalExitException(PysqlException):
-    """
-    A dummy exception which makes it possible to have --help exit silently
-    """
-    pass
 
 class PysqlOptionParser(OptionParser):
     def __init__(self):

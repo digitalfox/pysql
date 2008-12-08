@@ -23,7 +23,7 @@ from getpass import getpass
 from pysqldb import PysqlDb, BgQuery
 import pysqlfunctions
 import pysqlgraphics
-from pysqlexception import PysqlException, PysqlNotImplemented
+from pysqlexception import PysqlException, PysqlNotImplemented, PysqlOptionParserNormalExitException
 from pysqlconf import PysqlConf
 from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
 from pysqlhelpers import itemLength, removeComment, stringDecode
@@ -121,6 +121,9 @@ class PysqlShell(cmd.Cmd):
         able to encapsulate it with a try/except bloc"""
         try:
             return cmd.Cmd.onecmd(self, line)
+        except PysqlOptionParserNormalExitException:
+            # Do nothing, we are just catching parser exit function when help is called
+            pass
         except PysqlException, e:
             self.stdout(RED+BOLD+_("*** Pysql error ***\n\t%s") % e + RESET)
             self.exceptions.append(e)

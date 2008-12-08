@@ -57,3 +57,9 @@ class PysqlActionDenied(PysqlException):
     """Indicates user is not granted to perform this action"""
     def __init__(self, message):
         PysqlException.__init__(self, _("Action denied: %s") % message)
+
+class PysqlOptionParserNormalExitException(Exception):
+    """
+    A dummy exception which makes it possible to have --help exit silently
+    """
+    pass
