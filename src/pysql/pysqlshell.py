@@ -620,7 +620,7 @@ class PysqlShell(cmd.Cmd):
         parser=PysqlOptionParser()
         parser.set_usage("datamodel [options] [filters on table name]]")
         parser.set_description(
-            "Extracts the datamodel of a user filtered on selected table pattern"
+            "Extracts the datamodel of a user filtered on selected table pattern. "
             "The generation of the output is powered by Graphviz (http://www.graphviz.org)"
             )
         if self.db:
@@ -649,7 +649,7 @@ class PysqlShell(cmd.Cmd):
         parser=PysqlOptionParser()
         parser.set_usage("dep[endencies] [options] <object name>")
         parser.set_description(
-            "Displays object dependencies as a picture"
+            "Displays object dependencies as a picture. "
             "The generation of the output is powered by Graphviz (http://www.graphviz.org)"
             )
         directions=("onto", "from", "both")
@@ -667,26 +667,29 @@ class PysqlShell(cmd.Cmd):
         self.__checkArg(args, "=1")
         pysqlgraphics.dependencies(self.db, args[0].encode(self.conf.getCodec(), "replace"), options.direction)
 
+    def parser_diskusage(self):
+        parser=PysqlOptionParser()
+        parser.set_usage("diskusage (or du) [options] <schema name>")
+        parser.set_description(
+            "Extracts the physical storage of a user as a picture based on Oracle statistics. "
+            "The generation of the output is powered by Graphviz (http://www.graphviz.org)"
+            )
+        parser.add_option("-i", "--index", dest="index",
+                  default=False, action="store_true",
+                  help="Also draw index segment")
+
+        return parser
+
     def do_diskusage(self, arg):
         """Exports disk usage as a picture"""
         self.__checkConnection()
-        arg=arg.split()
+        parser = self.parser_diskusage()
+        options, args = parser.parse_args(arg)
         try:
-            user=arg[0]
+            user=args[0]
         except IndexError:
             user=self.db.getUsername()
-        try:
-            if arg[1]=="yes":
-                withIndexes=True
-            elif arg[1]=="no":
-                withIndexes=False
-            else:
-                message=_("""Unknown value for parameter "with-indexes" """)
-                message+=_("Type help diskusage to get the correct syntax")
-                raise PysqlException(message)
-        except IndexError:
-            withIndexes=True
-        pysqlgraphics.diskusage(self.db, user.upper(), withIndexes)
+        pysqlgraphics.diskusage(self.db, user.upper(), options.index)
 
     def do_ddl(self, arg):
         """Prints Oracle object DDL"""
@@ -1146,12 +1149,6 @@ class PysqlShell(cmd.Cmd):
     def help_disconnect(self):
         """online help"""
         pass
-
-    def help_diskusage(self):
-        """online help"""
-        self.stdout(CYAN+_("Usage:\n\tdiskusage [<user name>] [<with-indexes: yes|no>]")+RESET)
-        self.stdout(_("Extracts the physical storage of a user as a picture based on Oracle statistics"))
-        self.stdout(_("The generation of the output is powered by Graphviz (http://www.graphviz.org)"))
 
     def help_edit(self):
         """online help"""
