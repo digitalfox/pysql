@@ -657,6 +657,12 @@ class PysqlShell(cmd.Cmd):
                           default="both", type="choice",
                           metavar="<direction>", choices=directions,
                           help="Direction of dependency tracking: %s" % ", ".join(directions))
+        parser.add_option("-r", "--recursion", dest="maxDepth",
+                          default=self.conf.get("graph_depmaxdepth"), type="int",
+                          help="Maximum level of recursion")
+        parser.add_option("-n", "--nodes", dest="maxNodes",
+                          default=self.conf.get("graph_depmaxnodes"), type="int",
+                          help="Maximum number of nodes on graph")
         return parser
 
     def do_dependencies(self, arg):
@@ -665,7 +671,10 @@ class PysqlShell(cmd.Cmd):
         parser = self.parser_dependencies()
         options, args = parser.parse_args(arg)
         self.__checkArg(args, "=1")
-        pysqlgraphics.dependencies(self.db, args[0].encode(self.conf.getCodec(), "replace"), options.direction)
+        pysqlgraphics.dependencies(self.db, args[0].encode(self.conf.getCodec(), "replace"),
+                                   options.direction,
+                                   options.maxDepth,
+                                   options.maxNodes)
 
     def parser_diskusage(self):
         parser=PysqlOptionParser()

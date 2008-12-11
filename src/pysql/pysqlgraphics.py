@@ -124,13 +124,15 @@ def datamodel(db, userName, tableFilter=None, withColumns=True):
     stdout(GREEN+_("Datamodel saved as ")+filename+RESET)
     viewImage(filename)
 
-def dependencies(db, objectName, direction="both"):
+def dependencies(db, objectName, direction, maxDepth, maxNodes):
     """Displays object dependencies as a picture
        The generation of the picture is powered by Graphviz (http://www.graphviz.org)
        through the PyDot API (http://www.dkbza.org/pydot.html)
        @param db: pysql db connection
        @param objectName: name of the oracle object on which dependancies are computed
        @param direction: direction of the dependancy graph. Can be "onto", "from" or "both"
+       @param maxDepth: Override default maxDepth value. If None, use default value
+       @param maxNodes: Override default maxNodes value. If None, use default value
     """
     # Tries to import pydot module
     try:
@@ -145,8 +147,6 @@ def dependencies(db, objectName, direction="both"):
     format=conf.get("graph_format")             # Output format of the picture
     fontname=conf.get("graph_fontname")         # Font used for object names
     fontsize=conf.get("graph_fontsize")         # Font size for object names
-    maxDepth=conf.get("graph_depmaxdepth")      # Maximum nb of iterations
-    maxNodes=conf.get("graph_depmaxnodes")      # Maximum nb of nodes
 
     # Gets IO handler
     stdout=PysqlIO.getIOHandler()
@@ -178,7 +178,6 @@ def dependencies(db, objectName, direction="both"):
 
         while objectList!=[] and depth<=maxDepth and len(nodeList)<=maxNodes:
             depth+=1
-            #stdout("(DEBUG) iteration: "+str(depth))
             for currentObject in objectList:
                 currentObjectOwner=currentObject.getOwner()
                 currentObjectName=currentObject.getName()
