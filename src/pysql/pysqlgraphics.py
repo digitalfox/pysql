@@ -226,8 +226,12 @@ def dependencies(db, objectName, direction, maxDepth, maxNodes):
             objectList=nextObjectList
             nextObjectList=[]
 
-    if len(nodeList)>maxNodes:
-        stdout(RED+"Warning: too many references, references lookup stopped"+RESET)
+        if len(nodeList)>maxNodes:
+            stdout(RED+"Warning: Reach max node, references lookup stopped on direction %s" % currentDir
+                   +RESET)
+        if depth>maxDepth:
+            stdout(RED+"Warning: Reach max recursion limit, references lookup stopped on direction %s" % currentDir
+                   +RESET)
 
     filename="dep_"+objectOwner+"."+objectName+"."+format
     stdout(CYAN+"Generating picture..."+RESET)
