@@ -13,7 +13,6 @@
 import os
 from os import getenv, unlink
 from md5 import md5
-from re import match, sub
 from difflib import ndiff
 
 # Pysql imports:
@@ -22,7 +21,6 @@ from pysqlexception import PysqlException, PysqlNotImplemented, PysqlActionDenie
 from pysqloraobjects import *
 from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
 from pysqlconf import PysqlConf
-from pysqlio import PysqlIO
 from pysqldb import PysqlDb
 from pysqlhelpers import colorDiff, convert, addWildCardIfNeeded, generateWhere
 
@@ -244,9 +242,6 @@ def desc(db, objectName, completeMethod=None, printComment=True):
     conf=PysqlConf.getConfig()
     unit=conf.get("unit") # Unit used to format data
 
-    # Gets IO handler
-    stdout=PysqlIO.getIOHandler()
-
     # Gets the object type and owner
     oraObject=OraObject(objectName=objectName)
     oraObject.guessInfos(db)
@@ -264,14 +259,14 @@ def desc(db, objectName, completeMethod=None, printComment=True):
 
     # Displays some information about the object
     if printComment:
-        stdout(CYAN+_("Name\t: ")+oraObject.getName()+RESET)
-        stdout(CYAN+_("Type\t: ")+oraObject.getType()+RESET)
-        stdout(CYAN+_("Owner\t: ")+oraObject.getOwner()+RESET)
+        print CYAN+_("Name\t: ")+oraObject.getName()
+        print ("Type\t: ")+oraObject.getType()
+        print ("Owner\t: ")+oraObject.getOwner()+RESET
         if oraObject.getType() in ("TABLE", "TABLE PARTITION", "VIEW"):
             try:
-                stdout(CYAN+_("Comment\t: ")+oraObject.getComment(db)+RESET)
+                print CYAN+_("Comment\t: ")+oraObject.getComment(db)+RESET
             except PysqlException:
-                stdout(CYAN+_("Comment\t: <unable to get comment>")+RESET)
+                print CYAN+_("Comment\t: <unable to get comment>")+RESET
 
     # Evaluates object type (among the 24 defined)
     if oraObject.getType() in ("TABLE" , "TABLE PARTITION"):
@@ -314,7 +309,7 @@ def desc(db, objectName, completeMethod=None, printComment=True):
         else:
             used=0
         if printComment:
-            stdout(CYAN+_("Tablespace: ") + oraObject.getTablespace(db).getName()+RESET)
+             print CYAN+_("Tablespace: ") + oraObject.getTablespace(db).getName()+RESET
         result=[[oraObject.getTablespace(db).getName(), round(size, 2), round(free, 2), round(used, 2)]]
 
     elif oraObject.getType()=="DATABASE LINK":

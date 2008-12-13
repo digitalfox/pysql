@@ -10,15 +10,13 @@ that handles all pysql configuration stuff"""
 # Python imports:
 import os
 from os.path import expandvars, join 
-import sys
 import cPickle
 from ConfigParser import ConfigParser
 import readline
 
 # Pysql imports:
 from pysqlexception import PysqlException
-from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
-from pysqlio import PysqlIO
+from pysqlcolor import BOLD, CYAN, GREEN, RED, RESET
 
 class PysqlConf:
     """ Handles configuration stuff"""
@@ -62,9 +60,6 @@ class PysqlConf:
 
         # User defined sql Library
         self.sqlLibrary={}
-
-        # Initialiase IO
-        self.stdout=PysqlIO.getIOHandler()
 
         # Tries to load previous completion List from disk
         try:
@@ -119,7 +114,7 @@ class PysqlConf:
         # Searches for config file in $HOME (Unix) or %HOMEPATH% (Windows)
 
         if self.__isReadWrite(self.configPath):
-            self.stdout(CYAN+_("Using config file %s") % self.configPath + RESET)
+            print CYAN+_("Using config file %s") % self.configPath + RESET
 
         # Reads config file
         self.configParser=ConfigParser()
@@ -130,8 +125,8 @@ class PysqlConf:
             try:
                 file(self.configPath, "w")
             except Exception, e:
-                self.stdout(RED+BOLD+_("Failed to create personnal configuration file"))
-                self.stdout("%s" % e + RESET)
+                print RED+BOLD+_("Failed to create personnal configuration file")
+                print "%s" % e + RESET
 
         # Host codec used to display on and read from string on terminal
         self.codec=None
@@ -204,7 +199,7 @@ class PysqlConf:
         if self.default.has_key(key):
             return self.default[key]
         else:
-            self.stdout("(DEBUG) Key %s has no default value !" % key)
+            print "(DEBUG) Key %s has no default value !" % key
             return None
 
     def verify(self, key, value):
@@ -273,7 +268,7 @@ class PysqlConf:
         elif key in ("graph_bordercolor", "graph_linkcolor", "graph_tablecolor"):
             return True
         else:
-            self.stdout("(DEBUG) Key %s does not exist or does not have a verify routine !" % key)
+            print "(DEBUG) Key %s does not exist or does not have a verify routine !" % key
             return False
 
     def set(self, key, value):
@@ -283,7 +278,7 @@ class PysqlConf:
         if self.configParser is not None:
             if not self.configParser.has_section("PYSQL"):
                 self.configParser.add_section("PYSQL")
-                self.stdout(GREEN+_("(Config file created)")+RESET)
+                print GREEN+_("(Config file created)")+RESET
             if self.verify(key, value):
                 self.configParser.set("PYSQL", key, value)
                 self.setChanged(True)
@@ -300,11 +295,11 @@ class PysqlConf:
                 self.configParser.write(configFile)
                 configFile.close()
                 self.setChanged(False)
-                self.stdout(GREEN+_("(config file saved successfully)")+RESET)
+                print GREEN+_("(config file saved successfully)")+RESET
             except Exception, e:
                 raise PysqlException(_("fail to write file: %s") % e)
         else:
-            self.stdout(CYAN+_("(no need to save)")+RESET)
+            print CYAN+_("(no need to save)")+RESET
 
     def writeCache(self):
         """Writes completion list cache to disk"""

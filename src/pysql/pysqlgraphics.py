@@ -10,6 +10,7 @@
 
 # Python imports:
 import os
+import sys
 import re
 import subprocess
 from math import log, sqrt
@@ -52,9 +53,6 @@ def datamodel(db, userName, tableFilter=None, withColumns=True):
     linkcolor=conf.get("graph_linkcolor")       # Color of links between tables
     linklabel=conf.get("graph_linklabel")       # Display constraints name or not
 
-    # Gets IO handler
-    stdout=PysqlIO.getIOHandler()
-
     # Gets picture generator
     prog=getProg(find_graphviz(), conf.get("graph_program"), "fdp")
 
@@ -68,7 +66,7 @@ def datamodel(db, userName, tableFilter=None, withColumns=True):
     tables=db.executeAll(datamodelSql["tablesFromOwner"] % (userName, whereClause))
     nbTables=len(tables)
     tableList=", ".join(["'%s'" % table[0] for table in tables]) # Table list formated to be used in SQL query
-    stdout.write(CYAN+_("Extracting %d tables...      ") % nbTables +RESET)
+    print CYAN+_("Extracting %d tables...      ") % nbTables +RESET,
     current=0
     for table in tables:
         tableName=table[0]
@@ -98,14 +96,14 @@ def datamodel(db, userName, tableFilter=None, withColumns=True):
                             fillcolor=tablecolor, color=bordercolor))
         current+=1
         #BUG: change this
-        stdout.write("\b\b\b\b\b%4.1f%%" % round(100*float(current)/nbTables, 1))
+        sys.stdout.write("\b\b\b\b\b%4.1f%%" % round(100*float(current)/nbTables, 1))
 
-    stdout("")
+    print
     # Links between tables (foreign key -> primary key)
     # Only extract links from considered tables
     links=db.executeAll(datamodelSql["constraintsFromOwner"] % (userName, tableList, tableList))
     nbLinks=len(links)
-    stdout(CYAN+_("Extracting %d links...") % nbLinks +RESET)
+    print (CYAN+_("Extracting %d links...") % nbLinks +RESET)
     current=0
     for link in links:
         if linklabel=="yes":
@@ -114,13 +112,13 @@ def datamodel(db, userName, tableFilter=None, withColumns=True):
             graph.add_edge(Edge(src=link[1], dst=link[2], label=link[0], color=linkcolor, \
                                 fontcolor=linkcolor, fontname=fontname, fontsize=str(fontsize-3)))
         current+=1
-       #stdout(GREY+" (%4.1f%%) %s" % (100*float(current)/nbLinks, link[1]+" -> "+link[2])+RESET)
+       #sys.stdout.write(GREY+" (%4.1f%%) %s" % (100*float(current)/nbLinks, link[1]+" -> "+link[2])+RESET)
 
     filename=db.getDSN()+"_"+userName+"."+format
-    stdout(CYAN+_("Generating picture...")+RESET)
+    print CYAN+_("Generating picture...")+RESET
     graph.write(filename, format=format)
 
-    stdout(GREEN+_("Datamodel saved as ")+filename+RESET)
+    print GREEN+_("Datamodel saved as ")+filename+RESET
     viewImage(filename)
 
 def dependencies(db, objectName, direction, maxDepth, maxNodes):
@@ -146,9 +144,6 @@ def dependencies(db, objectName, direction, maxDepth, maxNodes):
     format=conf.get("graph_format")             # Output format of the picture
     fontname=conf.get("graph_fontname")         # Font used for object names
     fontsize=conf.get("graph_fontsize")         # Font size for object names
-
-    # Gets IO handler
-    stdout=PysqlIO.getIOHandler()
 
     # Gets picture generator
     prog=getProg(find_graphviz(), conf.get("graph_program"), "dot")
@@ -226,17 +221,15 @@ def dependencies(db, objectName, direction, maxDepth, maxNodes):
             nextObjectList=[]
 
         if len(nodeList)>maxNodes:
-            stdout(RED+"Warning: Reach max node, references lookup stopped on direction %s" % currentDir
-                   +RESET)
+            print RED+"Warning: Reach max node, references lookup stopped on direction %s" % currentDir +RESET
         if depth>maxDepth:
-            stdout(RED+"Warning: Reach max recursion limit, references lookup stopped on direction %s" % currentDir
-                   +RESET)
+            print RED+"Warning: Reach max recursion limit, references lookup stopped on direction %s" % currentDir +RESET
 
     filename="dep_"+objectOwner+"."+objectName+"."+format
-    stdout(CYAN+"Generating picture..."+RESET)
+    print CYAN+"Generating picture..."+RESET
     graph.write(filename, format=format)
 
-    stdout(GREEN+"Dependencies saved as "+filename+RESET)
+    print GREEN+"Dependencies saved as "+filename+RESET
     viewImage(filename)
 
 
@@ -263,9 +256,6 @@ def diskusage(db, userName, withIndexes=False):
     indexcolor=conf.get("graph_indexcolor")     # Color of indexes
     bordercolor=conf.get("graph_bordercolor")   # Color of borders
 
-    # Gets IO handler
-    stdout=PysqlIO.getIOHandler()
-
     # Gets picture generator
     prog=getProg(find_graphviz(), conf.get("graph_program"), "fdp")
 
@@ -280,17 +270,16 @@ def diskusage(db, userName, withIndexes=False):
         # Tables
         tables=db.executeAll(diskusageSql["TablesFromOwnerAndTbs"], [userName, tablespaceName])
         nbTables=len(tables)
-        stdout(CYAN+_("Extracting %3d tables from tablespace %s") % (nbTables, tablespaceName) +RESET)
+        print CYAN+_("Extracting %3d tables from tablespace %s") % (nbTables, tablespaceName) +RESET
         for table in tables:
-            #TODO: handle database encoding instead of just using str()
-            tableName=str(table[0])
+            tableName=table[0]
             if table[1] is None:
-                stdout(BOLD+RED+_("""Warning: table "%s" removed because no statistics have been found""") \
-                           % (tableName) +RESET)
+                print BOLD+RED+_("""Warning: table "%s" removed because no statistics have been found""") \
+                           % (tableName) +RESET
                 continue
             if table[1]==0:
-                stdout(BOLD+RED+_("""Warning: table "%s" removed because it is empty""") \
-                           % (tableName) +RESET)
+                print BOLD+RED+_("""Warning: table "%s" removed because it is empty""") \
+                           % (tableName) +RESET
                 continue
             num_rows=int(table[1])
             avg_row_len=float(table[2])
@@ -309,17 +298,17 @@ def diskusage(db, userName, withIndexes=False):
         # Indexes
         indexes=db.executeAll(diskusageSql["IndexesFromOwnerAndTbs"], [userName, tablespaceName])
         nbIndexes=len(indexes)
-        stdout(CYAN+_("Extracting %3d indexes from tablespace %s") % (nbIndexes, tablespaceName) +RESET)
+        print CYAN+_("Extracting %3d indexes from tablespace %s") % (nbIndexes, tablespaceName) +RESET
         for index in indexes:
             #TODO: handle database encoding instead of just using str()
             indexName=str(index[0])
             if index[1] is None:
-                stdout(BOLD+RED+_("""Warning: index "%s" removed because no statistics have been found.""") \
-                           % (indexName) +RESET)
+                print BOLD+RED+_("""Warning: index "%s" removed because no statistics have been found.""") \
+                           % (indexName) +RESET
                 continue
             if index[1]==0:
-                stdout(BOLD+RED+_("""Warning: index "%s" removed because it is empty""") \
-                           % (indexName) +RESET)
+                print BOLD+RED+_("""Warning: index "%s" removed because it is empty""") \
+                           % (indexName) +RESET
                 continue
             num_rows=int(index[1])
             distinct_keys=int(index[2])
@@ -339,12 +328,12 @@ def diskusage(db, userName, withIndexes=False):
             # Invisible edges for placement purpose only (not very usefull in fact)
             #graph.add_edge(Edge(src=indexName, dst=tableName, constraint="false", style="invis"))
 
-    stdout("")
+    print
     filename="du_"+userName+"."+format
-    stdout(CYAN+_("Generating picture...")+RESET)
+    print CYAN+_("Generating picture...")+RESET
     graph.write(filename, format=format)
 
-    stdout(GREEN+_("Disk usage saved as ")+filename+RESET)
+    print GREEN+_("Disk usage saved as ")+filename+RESET
     viewImage(filename)
 
 def pkgTree(db, packageName):
@@ -364,9 +353,6 @@ def pkgTree(db, packageName):
     fontname=conf.get("graph_fontname")         # Font used for functions names
     fontsize=conf.get("graph_fontsize")         # Font size for functions names
     fontcolor=conf.get("graph_fontcolor")       # Color of functions names
-
-    # Get IO handler
-    stdout=PysqlIO.getIOHandler()
 
     # Gets picture generator
     prog=getProg(find_graphviz(), conf.get("graph_program"), "fdp")
@@ -391,11 +377,11 @@ def pkgTree(db, packageName):
 
     # Gets package body content
     package.setType(u"PACKAGE BODY")
-    stdout(CYAN+_("Extracting package source...")+RESET)
+    print CYAN+_("Extracting package source...")+RESET
     content=package.getSQLAsList(db)
 
     # Removes comments
-    stdout(CYAN+_("Parsing source and building graph...")+RESET)
+    print CYAN+_("Parsing source and building graph...")+RESET
     newContent=[]
     comment=False
     for line in content:
@@ -430,10 +416,10 @@ def pkgTree(db, packageName):
         if result:
             if graph.get_edge(currentVerb.upper(), result.group(1).upper()) is None:
                 graph.add_edge(Edge(src=currentVerb.upper(), dst=result.group(1).upper()))
-    stdout(CYAN+_("Generating picture...")+RESET)
+    print CYAN+_("Generating picture...")+RESET
     filename=package.getName()+"_dep."+format
     graph.write(filename, format=format)
-    stdout(GREEN+_("Package tree saved as ")+filename+RESET)
+    print GREEN+_("Package tree saved as ")+filename+RESET
     viewImage(filename)
 
 def viewImage(imagePath):
