@@ -26,7 +26,7 @@ import pysqlgraphics
 from pysqlexception import PysqlException, PysqlNotImplemented, PysqlOptionParserNormalExitException
 from pysqlconf import PysqlConf
 from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
-from pysqlhelpers import itemLength, removeComment, stringDecode
+from pysqlhelpers import itemLength, removeComment
 from pysqloptionparser import PysqlOptionParser
 
 class PysqlShell(cmd.Cmd):
@@ -1489,18 +1489,6 @@ class PysqlShell(cmd.Cmd):
             # Computes new nbColumn & nbLine
             nbLine=nbColumn
             nbColumn=len(array[0])
-
-        # Decode array
-        #TODO: to use oracle encoding settings
-        for i in xrange(nbLine):
-            # Converts each line from tuple to list
-            array[i]=list(array[i])
-            for j in xrange(nbColumn):
-                if isinstance(array[i][j], (str, unicode)):
-                    array[i][j]=stringDecode(array[i][j], codec)
-                elif array[i][j] is None:
-                    array[i][j]="NULL"
-                #TODO: decode datetime format here
 
         # Computes width max of each column (comprehension list are cool)
         width=[max([itemLength(i[j]) for i in array]) for j in range(nbColumn)]

@@ -10,16 +10,15 @@ and backgound queries (BgQuery)"""
 # pylint: disable-msg=E0611
 
 #Python imports:
-import sys
-from cx_Oracle import Connection, connect, Cursor, DatabaseError, InterfaceError, LOB, STRING, SYSDBA, SYSOPER
+from cx_Oracle import connect, DatabaseError, InterfaceError, LOB, STRING, SYSDBA, SYSOPER
 from threading import Thread
-from time import sleep
+from datetime import datetime, date
 
 # Pysql imports:
 from pysqlexception import PysqlException, PysqlActionDenied, PysqlNotImplemented
 from pysqlconf import PysqlConf
 from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
-from pysqlhelpers import stringDecode
+from pysqlhelpers import warn
 
 class PysqlDb:
     """ Handles database interface"""
@@ -46,7 +45,7 @@ class PysqlDb:
             else:
                 self.connection=connect(connectString)
         except (DatabaseError, RuntimeError), e:
-            raise PysqlException(_("Cannot connect to Oracle: %s") % stringDecode(e))
+            raise PysqlException(_("Cannot connect to Oracle: %s") % e)
 
 
     def commit(self):
@@ -54,14 +53,14 @@ class PysqlDb:
         try:
             self.connection.commit()
         except DatabaseError, e:
-            raise PysqlException(_("Cannot commit: %s") % stringDecode(e))
+            raise PysqlException(_("Cannot commit: %s") % e)
 
     def rollback(self):
         """Rollback pending transaction"""
         try:
             self.connection.rollback()
         except DatabaseError, e:
-            raise PysqlException(_("Cannot rollback: %s") % stringDecode(e))
+            raise PysqlException(_("Cannot rollback: %s") % e)
 
     def executeAll(self, sql, param=[]):
         """Executes the request given in parameter and
@@ -81,7 +80,7 @@ class PysqlDb:
                 self.cursor.execute(None, param)
             return self.decodeData(self.cursor.fetchall())
         except (DatabaseError, InterfaceError), e:
-            raise PysqlException(_("Cannot execute query: %s") % stringDecode(e))
+            raise PysqlException(_("Cannot execute query: %s") % e)
 
     def execute(self, sql, fetch=True, cursorSize=None):
         """Executes the request given in parameter.
@@ -104,7 +103,7 @@ class PysqlDb:
             else:
                 return self.getRowCount()
         except (DatabaseError, InterfaceError), e:
-            raise PysqlException(_("Cannot execute query: %s") % stringDecode(e))
+            raise PysqlException(_("Cannot execute query: %s") % e)
 
     def validate(self, sql):
         """Validates the syntax of the DML query given in parameter.
@@ -128,7 +127,7 @@ class PysqlDb:
             else:
                 raise PysqlException(_("Can only validate DML queries"))
         except (DatabaseError, InterfaceError), e:
-            raise PysqlException(_("Cannot validate query: %s") % stringDecode(e))
+            raise PysqlException(_("Cannot validate query: %s") % e)
 
     def getCursor(self):
         """Returns the cursor of the current query"""
@@ -170,7 +169,7 @@ class PysqlDb:
             else:
                 raise PysqlException(_("No result set. Execute a query before fetching result !"))
         except (DatabaseError, InterfaceError), e:
-            raise PysqlException(_("Error while fetching results: %s") % stringDecode(e))
+            raise PysqlException(_("Error while fetching results: %s") % e)
 
     def getServerOuput(self):
         """Gets the server buffer output filled with dbms_output.put_line
@@ -216,7 +215,7 @@ class PysqlDb:
         try:
             self.connection.close()
         except (DatabaseError, InterfaceError), e:
-            raise PysqlException(_("Cannot close connection: %s") % stringDecode(e))
+            raise PysqlException(_("Cannot close connection: %s") % e)
 
     def encodeSql(self, sql):
         """Encode sql request in the proper encoding.
@@ -234,13 +233,13 @@ class PysqlDb:
             return [self.encodeSql(i) for i in sql]
 
         if isinstance(sql, str):
-            print RED+"==>Warning, string '%s' is already encoded" % sql + RESET
+            warn("string '%s' is already encoded" % sql)
             return sql
         try:
             sql=sql.encode(encoding)
         except UnicodeEncodeError:
             sql=sql.encode(encoding, "replace")
-            print RED+"==> Got unicode error while encoding '%s'" % sql + RESET 
+            warn("Got unicode error while encoding '%s'" % sql) 
         return sql
 
     def decodeData(self, data):
@@ -252,29 +251,35 @@ class PysqlDb:
             encoding=self.connection.nencoding
         else:
             raise PysqlException("Cannot decode data, not connected to Oracle")
+
         if data is None:
-            return None
-        if isinstance(data, (list, tuple)):
+            return u"NULL"
+        elif isinstance(data, (list, tuple)):
             # Recurse to decode each item
             return [self.decodeData(i) for i in data]
-
-        if isinstance(data, (int, float)):
+        elif isinstance(data, (int, float)):
             # Nothing to do
             return data
-
-        if isinstance(data, LOB):
+        elif isinstance(data, datetime):
+            #TODO: use user define format or Oracle settings
+            data=data.strftime("%Y/%m/%d %H:%M:%S")
+        elif isinstance(data, date):
+            #TODO: use user define format or Oracle settings
+            data=data.strftime("%Y/%m/%d")
+        elif isinstance(data, LOB):
             data=data.read(1, data.size())
-
-        if isinstance(data, unicode):
-            print RED+"==>Warning, string '%s' is already Unicode" % data + RESET
+        elif isinstance(data, unicode):
+            warn("Warning, string '%s' is already Unicode" % data)
             return data
+
+        # Decode data
         try:
             data=data.decode(encoding)
         except UnicodeDecodeError:
             data=data.decode(encoding, "replace")
-            print RED+"==> Got unicode error while decoding '%s'" % data + RESET
+            warn("Got unicode error while decoding '%s'" % data)
         except AttributeError:
-            print RED+"==>Cannot decode %s object" % type(data) + RESET
+            warn("Cannot decode %s object" % type(data))
         return data
 
 
@@ -320,7 +325,10 @@ class BgQuery(Thread):
         return self.query
 
     def getError(self):
-        return self.error
+        if self.error is None:
+            return _("No")
+        else:
+            return self.error
 
     def getStartTime(self):
         pass

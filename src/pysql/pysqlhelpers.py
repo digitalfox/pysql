@@ -181,21 +181,6 @@ def removeComment(line, comment=False):
         line=""
     return (line, comment)
 
-def stringDecode(string, codec=None):
-    """Decodes encoded string and returns it. Returns untouched string
-    if it is already decoded
-    @arg string: input string to decode
-    @return: decoded string
-    """
-    if not codec:
-        codec=PysqlConf.getConfig().getCodec()
-    try:
-        string=str(string).decode(codec, "replace")
-    except UnicodeEncodeError:
-        # Already decoded
-        pass
-    return string
-
 def which(progName):
     """Mimics the Unix which command
     @param progName: program name that will be search through PATH
@@ -205,3 +190,9 @@ def which(progName):
         if os.access(fullpath, os.X_OK):
             return fullpath
     return None
+
+def warn(message):
+    """Just print a formated warning message on screen
+    @param message: unicode or str message. Conversion will done with print and default encoding
+    """
+    print "%s==>Warning:%s %s%s" % (RED, BOLD, message, RESET)
