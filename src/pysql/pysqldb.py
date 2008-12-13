@@ -251,8 +251,8 @@ class PysqlDb:
             encoding=self.connection.nencoding
         else:
             raise PysqlException("Cannot decode data, not connected to Oracle")
-        if data is None:
-            return u"NULL"
+        if data is None: # This correspond to the NULL Oracle object
+            return None
         elif isinstance(data, (list, tuple)):
             # Recurse to decode each item
             return [self.decodeData(i) for i in data]

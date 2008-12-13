@@ -12,8 +12,6 @@ import sys
 import os
 import traceback
 import readline
-import datetime
-from cx_Oracle import DatabaseError, LOB
 from re import findall, match, sub
 from os.path import expandvars
 from time import sleep, time
@@ -1469,9 +1467,6 @@ class PysqlShell(cmd.Cmd):
         if colsep=="space":
             colsep=" "
 
-        #TODO: handle encoding to respect Oracle instance settings
-        codec=self.conf.getCodec()
-
         nbLine=len(array)
         if len(array)==0:
             print CYAN+"(no result)"+RESET
@@ -1489,6 +1484,12 @@ class PysqlShell(cmd.Cmd):
             # Computes new nbColumn & nbLine
             nbLine=nbColumn
             nbColumn=len(array[0])
+
+        # Convert None to NULL
+        for i in xrange(nbLine):
+            for j in xrange(nbColumn):
+                if array[i][j] is None:
+                    array[i][j]="NULL"
 
         # Computes width max of each column (comprehension list are cool)
         width=[max([itemLength(i[j]) for i in array]) for j in range(nbColumn)]
