@@ -298,7 +298,8 @@ class BgQuery(Thread):
         self.query=query
         self.exceptions=exceptions
         self.result=None
-        self.error=None
+        self.moreRows=False
+        self.error=_("No")
         Thread.__init__(self)
         self.setDaemon(True)
 
@@ -312,23 +313,9 @@ class BgQuery(Thread):
             self.result=None
             self.moreRows=False
 
-    def getDb(self):
-        """Return the Thread db connection"""
-        return self.db
-
     def getName(self):
         """Return a simple name: the ID of the python thread"""
         return Thread.getName(self).split("-")[1]
-
-    def getQuery(self):
-        """@return: returns the SQL query"""
-        return self.query
-
-    def getError(self):
-        if self.error is None:
-            return _("No")
-        else:
-            return self.error
 
     def getStartTime(self):
         pass

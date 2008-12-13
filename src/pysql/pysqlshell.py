@@ -484,23 +484,23 @@ class PysqlShell(cmd.Cmd):
         arg=arg.split()
         if len(arg)==0:
             # Shows background queries
-            result=[(i.getName(), i.getQuery(), not i.isAlive(), i.getError()) for i in self.bgQueries]
+            result=[(i.getName(), i.query, not i.isAlive(), i.error) for i in self.bgQueries]
             self.__displayTab(result, ["#", "SQL Request", "Finished?", "Error"])
         elif len(arg)==1:
             # Finds the thread
-            query=[i for i in self.bgQueries if i.getName()==arg[0]]
-            if len(query)==1:
-                query=query[0]
+            bgQuery=[i for i in self.bgQueries if i.getName()==arg[0]]
+            if len(bgQuery)==1:
+                bgQuery=bgQuery[0]
                 # Waits for query ending
-                query.join()
+                bgQuery.join()
                 # Gets this query in foreground
-                if query.getQuery().upper().split()[0].startswith("SELECT"):
-                    self.db=query.getDb()
-                    self.__toScreen(query.result, query.moreRows)
+                if bgQuery.query.upper().split()[0].startswith("SELECT"):
+                    self.db=bgQuery.db
+                    self.__toScreen(bgQuery.result, bgQuery.moreRows)
                 else:
                     self.stdout(GREEN+ "Statement executed"+RESET)
                 # Removes bg query from list
-                self.bgQueries.remove(query)
+                self.bgQueries.remove(bgQuery)
             else:
                 raise PysqlException(_("Unknown background query. Use bg without arg to see all queries"))
         else:
