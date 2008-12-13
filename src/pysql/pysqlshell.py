@@ -1474,7 +1474,7 @@ class PysqlShell(cmd.Cmd):
 
         nbLine=len(array)
         if len(array)==0:
-            self.stdout(CYAN+"(no result)"+RESET)
+            print CYAN+"(no result)"+RESET
             return
         nbColumn=len(array[0]) # Yes, we suppose it to be a real array
 
@@ -1511,28 +1511,25 @@ class PysqlShell(cmd.Cmd):
         for line in array:
             if header and coloredLines<2 and not transpose:
                 # Colorizes header only
-                self.stdout.write(GREY+BOLD)
+                sys.stdout.write(GREY+BOLD)
                 coloredLines+=1
             for i in range(nbColumn):
                 if header and i==0 and transpose:
                     # colorize the first column
-                    self.stdout.write(GREY+BOLD)
+                    sys.stdout.write(GREY+BOLD)
                 # Quite stupid to test this for each line...
                 #TODO: Should be done one time before looping on each line
-                if isinstance(line[i], (int, long, float, datetime.datetime)):
-                    self.stdout.write(str(line[i])[:width[i]].rjust(width[i]), encode=False)
-                elif isinstance(line[i], LOB):
-                    self.stdout.write(str(line[i].read(1, width[i])).ljust(width[i]), encode=False)
+                if isinstance(line[i], (int, long, float)):
+                    print str(line[i])[:width[i]].rjust(width[i]),
                 else:
-                    self.stdout.write(line[i].encode(codec, "replace")[:width[i]].ljust(width[i]),
-                                      encode=False)
+                    print line[i][:width[i]].ljust(width[i]),
                 if header and i==0 and transpose:
-                    self.stdout.write(RESET)
-                self.stdout.write(colsep) # Adds colsep
-            self.stdout(RESET)
+                    print RESET,
+                print colsep, # Adds colsep
+            print RESET
         if shrinked:
             # Warns the user
-            self.stdout(CYAN+_("(some columns have been shrinked to fit your terminal size)")+RESET)
+            print CYAN+_("(some columns have been shrinked to fit your terminal size)")+RESET
 
     def __checkConnection(self):
         """Raises an exception is there's no connection defined

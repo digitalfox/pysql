@@ -251,7 +251,6 @@ class PysqlDb:
             encoding=self.connection.nencoding
         else:
             raise PysqlException("Cannot decode data, not connected to Oracle")
-
         if data is None:
             return u"NULL"
         elif isinstance(data, (list, tuple)):
@@ -276,8 +275,8 @@ class PysqlDb:
         try:
             data=data.decode(encoding)
         except UnicodeDecodeError:
-            data=data.decode(encoding, "replace")
-            warn("Got unicode error while decoding '%s'" % data)
+            data=data.decode(encoding, "ignore")
+            warn("Can't decode '%s' with %s codec. Check your NLS_LANG variable" % (data, encoding))
         except AttributeError:
             warn("Cannot decode %s object" % type(data))
         return data
