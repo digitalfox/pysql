@@ -67,12 +67,11 @@ def datamodel(db, userName, tableFilter=None, withColumns=True):
         whereClause="1=1"
     tables=db.executeAll(datamodelSql["tablesFromOwner"] % (userName, whereClause))
     nbTables=len(tables)
-    tableList=", ".join(["'%s'" % table for table in tables]) # Table list formated to be used in SQL query
+    tableList=", ".join(["'%s'" % table[0] for table in tables]) # Table list formated to be used in SQL query
     stdout.write(CYAN+_("Extracting %d tables...      ") % nbTables +RESET)
     current=0
     for table in tables:
-        #TODO: handle database encoding instead of just using str()
-        tableName=str(table[0])
+        tableName=table[0]
         #TODO: use cStringIO to avoid string concatenation perf problem
         content="""<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">"""
         content+="""\n<TR><TD PORT="%s">""" % tableName
@@ -391,7 +390,7 @@ def pkgTree(db, packageName):
         raise PysqlException(_("This is not a package or package not found"))
 
     # Gets package body content
-    package.setType("PACKAGE BODY")
+    package.setType(u"PACKAGE BODY")
     stdout(CYAN+_("Extracting package source...")+RESET)
     content=package.getSQLAsList(db)
 

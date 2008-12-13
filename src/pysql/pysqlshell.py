@@ -142,6 +142,9 @@ class PysqlShell(cmd.Cmd):
         """Hook executed just before any command execution.
         This is used to parse command and dispatch it to Oracle or internal pysql functions"""
 
+        # Decode line from user encoding to unicode
+        line=line.decode(self.conf.getCodec())
+
         if self.conf.get("echo")=="yes":
             # Echo line to stdout
             self.stdout(line)
@@ -437,6 +440,7 @@ class PysqlShell(cmd.Cmd):
                 raise PysqlException(_("Argument should be stricly positive"))
             else:
                 command=readline.get_history_item(position)
+                command=self.precmd(command)
                 self.stdout(command)
                 self.onecmd(command)
         else:
@@ -641,9 +645,9 @@ class PysqlShell(cmd.Cmd):
         self.__checkConnection()
         parser = self.parser_datamodel()
         options, args = parser.parse_args(arg)
-        #TODO: simplify this unicode mess !
-        user=options.user.upper().encode(self.conf.getCodec(), "replace")
-        pysqlgraphics.datamodel(self.db, user, tableFilter=" ".join(args), withColumns=options.columns)
+        pysqlgraphics.datamodel(self.db, options.user.upper(),
+                                tableFilter=" ".join(args),
+                                withColumns=options.columns)
 
     def parser_dependencies(self):
         parser=PysqlOptionParser()
@@ -671,7 +675,7 @@ class PysqlShell(cmd.Cmd):
         parser = self.parser_dependencies()
         options, args = parser.parse_args(arg)
         self.__checkArg(args, "=1")
-        pysqlgraphics.dependencies(self.db, args[0].encode(self.conf.getCodec(), "replace"),
+        pysqlgraphics.dependencies(self.db, args[0],
                                    options.direction,
                                    options.maxDepth,
                                    options.maxNodes)
@@ -1578,7 +1582,6 @@ class PysqlShell(cmd.Cmd):
         @type fileName: str"""
 
         self.__checkConnection()
-
         if len(sql)<2:
             raise PysqlException("SQL command is too short")
 

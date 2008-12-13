@@ -174,7 +174,7 @@ def main():
 def setLocale(conf):
     """Sets the right encoding"""
     try:
-        codec=locale.getdefaultlocale()[1]
+        codec=locale.getpreferredencoding()
     except:
         # default to latin-1
         codec="latin-1"
@@ -188,6 +188,10 @@ def setLocale(conf):
 
     # Stores codec in config
     conf.setCodec(codec)
+
+    # Set default encoding for stdout
+    reload(sys)
+    sys.setdefaultencoding(codec)
 
 def parseOptions():
     """Parses pysql command argument using optparse python module"""

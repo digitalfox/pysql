@@ -133,7 +133,7 @@ class PysqlConf:
                 self.stdout(RED+BOLD+_("Failed to create personnal configuration file"))
                 self.stdout("%s" % e + RESET)
 
-        # Host codec used to display string on screen
+        # Host codec used to display on and read from string on terminal
         self.codec=None
 
     def getConfig(cls):
@@ -343,13 +343,13 @@ class PysqlConf:
         return self.changed
 
     def setCodec(self, codec):
-        """Sets the host codec used to display string on screen
+        """Sets the host codec used to display on and read from string on terminal
         @arg codec: codec name
         @type codec: str"""
         self.codec=codec
 
     def getCodec(self):
-        """@return: host codec used to display string on screen"""
+        """@return: host codec used to display on and from string on terminal"""
         return self.codec
 
     def __which(self, command):

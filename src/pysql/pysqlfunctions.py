@@ -489,7 +489,7 @@ def explain(db, statement):
     """
     # Compute the explain plan
     db.execute("explain plan for %s" % statement)
-    return db.executeAll("""select plan_table_output
+    return db.executeAll(u"""select plan_table_output
                 from table(dbms_xplan.display('PLAN_TABLE',null,'serial'))""")
 
 def lock(db):
@@ -522,7 +522,7 @@ def sessions(db, sort=None):
     @return: huge resultset in tabular format"""
     #TODO: this horrible request shoud go to pysqlQueries!
     try:
-        result=db.executeAll("""Select a.Sid "Id", a.Serial# "Serial", a.SchemaName "Schema",
+        result=db.executeAll(u"""Select a.Sid "Id", a.Serial# "Serial", a.SchemaName "Schema",
             a.OsUser "Osuser", a.Machine "Machine", a.Program "Program",
             b.Block_Gets "Blk Gets", b.Consistent_Gets "Cons Gets",
             b.Physical_Reads "Phy Rds", b.Block_Changes "Blk Chg",

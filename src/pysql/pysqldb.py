@@ -11,7 +11,7 @@ and backgound queries (BgQuery)"""
 
 #Python imports:
 import sys
-from cx_Oracle import Connection, connect, Cursor, DatabaseError, InterfaceError, STRING, SYSDBA, SYSOPER
+from cx_Oracle import Connection, connect, Cursor, DatabaseError, InterfaceError, LOB, STRING, SYSDBA, SYSOPER
 from threading import Thread
 from time import sleep
 
@@ -68,6 +68,8 @@ class PysqlDb:
         returns a list of record (a cursor.fetchall())
         Use a rpivate cursor not to pollute execute on.
         So the getDescription does not work for executeAll"""
+        sql=self.encodeSql(sql)
+        param=self.encodeSql(param)
         try:
             if self.cursor is None:
                 self.cursor=self.connection.cursor()
@@ -77,7 +79,7 @@ class PysqlDb:
             else:
                 self.cursor.prepare(sql)
                 self.cursor.execute(None, param)
-            return self.cursor.fetchall()
+            return self.decodeData(self.cursor.fetchall())
         except (DatabaseError, InterfaceError), e:
             raise PysqlException(_("Cannot execute query: %s") % stringDecode(e))
 
@@ -88,6 +90,7 @@ class PysqlDb:
          For insert/update/delete, return the number of record processed
          @param fetch: for select queries, start fetching (default is true)
          @param cursorSize: if defined, overide the config cursor size"""
+        sql=self.encodeSql(sql)
         try:
             if self.cursor is None:
                 self.cursor=self.connection.cursor()
@@ -107,6 +110,7 @@ class PysqlDb:
         """Validates the syntax of the DML query given in parameter.
         @param sql: SQL query to validate
         @return: None but raise PysqlException if sql cannot be validated"""
+        sql=self.encodeSql(sql)
         try:
             if self.cursor is None:
                 self.cursor=self.connection.cursor()
@@ -162,7 +166,7 @@ class PysqlDb:
                 result=self.cursor.fetchmany(nbLines)
                 if len(result)==nbLines:
                     moreRows=True
-                return (result, moreRows)
+                return (self.decodeData(result), moreRows)
             else:
                 raise PysqlException(_("No result set. Execute a query before fetching result !"))
         except (DatabaseError, InterfaceError), e:
@@ -188,23 +192,23 @@ class PysqlDb:
 
     def getUsername(self):
         """Gets the name of the user connected to the database
-        @return: username (str)"""
-        return self.connection.username
+        @return: username (unicode)"""
+        return unicode(self.connection.username)
 
     def getDSN(self):
         """Gets the database service name
-        @return: databse service name (str)"""
-        return self.connection.dsn
+        @return: databse service name (unicode)"""
+        return unicode(self.connection.dsn)
 
     def getConnectString(self):
         """Gets the connection string used to create this instance
-        @return: connect string (str)"""
+        @return: connect string (unicode)"""
         return self.connectString
 
     def getVersion(self):
         """Gets the version number of the database server
-        @return: db server version (str)"""
-        return self.connection.version
+        @return: db server version (unicode)"""
+        return unicode(self.connection.version)
 
     def close(self):
         """Releases object connection"""
@@ -213,6 +217,66 @@ class PysqlDb:
             self.connection.close()
         except (DatabaseError, InterfaceError), e:
             raise PysqlException(_("Cannot close connection: %s") % stringDecode(e))
+
+    def encodeSql(self, sql):
+        """Encode sql request in the proper encoding.
+        @param sql: sql request in unicode format or list of unicode string
+        @return: sql text encoded
+        """
+        if self.connection:
+            encoding=self.connection.nencoding
+        else:
+            raise PysqlException("Cannot encode data, not connected to Oracle")
+        if sql is None:
+            return None
+        if isinstance(sql, list):
+            # Recurse to encode each item
+            return [self.encodeSql(i) for i in sql]
+
+        if isinstance(sql, str):
+            print RED+"==>Warning, string '%s' is already encoded" % sql + RESET
+            return sql
+        try:
+            sql=sql.encode(encoding)
+        except UnicodeEncodeError:
+            sql=sql.encode(encoding, "replace")
+            print RED+"==> Got unicode error while encoding '%s'" % sql + RESET 
+        return sql
+
+    def decodeData(self, data):
+        """Encode data fetch out database to unicode
+        @param data: str or list or str
+        @return: encoded data"""
+        #TODO: factorise code with encodeSql function
+        if self.connection:
+            encoding=self.connection.nencoding
+        else:
+            raise PysqlException("Cannot decode data, not connected to Oracle")
+        if data is None:
+            return None
+        if isinstance(data, (list, tuple)):
+            # Recurse to decode each item
+            return [self.decodeData(i) for i in data]
+
+        if isinstance(data, (int, float)):
+            # Nothing to do
+            return data
+
+        if isinstance(data, LOB):
+            data=data.read(1, data.size())
+
+        if isinstance(data, unicode):
+            print RED+"==>Warning, string '%s' is already Unicode" % data + RESET
+            return data
+        try:
+            data=data.decode(encoding)
+        except UnicodeDecodeError:
+            data=data.decode(encoding, "replace")
+            print RED+"==> Got unicode error while decoding '%s'" % data + RESET
+        except AttributeError:
+            print RED+"==>Cannot decode %s object" % type(data) + RESET
+        return data
+
 
 class BgQuery(Thread):
     """Background query to Oracle"""
@@ -266,3 +330,4 @@ class BgQuery(Thread):
 
     def getExecutionTime(self):
         pass
+
