@@ -1,392 +1,501 @@
-2007-12-15  srenard
+commit a93ba5f9aa25139f0861f7c918c42a9feeeb9b3b
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 14 19:06:40 2008 +0100
 
-	* www/doc/class-tree.html, www/doc/help.html,
-	  www/doc/identifier-index.html, www/doc/module-tree.html,
-	  www/doc/pysql-module.html, www/doc/pysql-pysrc.html,
-	  www/doc/pysql.pysqlcolor-module.html,
-	  www/doc/pysql.pysqlcolor-pysrc.html,
-	  www/doc/pysql.pysqlconf-module.html,
-	  www/doc/pysql.pysqlconf-pysrc.html,
-	  www/doc/pysql.pysqlconf.PysqlConf-class.html,
-	  www/doc/pysql.pysqldb-module.html,
-	  www/doc/pysql.pysqldb-pysrc.html,
-	  www/doc/pysql.pysqldb.BgQuery-class.html,
-	  www/doc/pysql.pysqldb.PysqlDb-class.html,
-	  www/doc/pysql.pysqlexception-module.html,
-	  www/doc/pysql.pysqlexception-pysrc.html,
-	  www/doc/pysql.pysqlexception.PysqlActionDenied-class.html,
-	  www/doc/pysql.pysqlexception.PysqlException-class.html,
-	  www/doc/pysql.pysqlexception.PysqlNotImplemented-class.html,
-	  www/doc/pysql.pysqlfunctions-module.html,
-	  www/doc/pysql.pysqlfunctions-pysrc.html,
-	  www/doc/pysql.pysqlgraphics-module.html,
-	  www/doc/pysql.pysqlgraphics-pysrc.html,
-	  www/doc/pysql.pysqlhelpers-module.html,
-	  www/doc/pysql.pysqlhelpers-pysrc.html,
-	  www/doc/pysql.pysqlio-module.html,
-	  www/doc/pysql.pysqlio-pysrc.html,
-	  www/doc/pysql.pysqlio.PysqlIO-class.html,
-	  www/doc/pysql.pysqlmain-module.html,
-	  www/doc/pysql.pysqlmain-pysrc.html,
-	  www/doc/pysql.pysqlnet-module.html,
-	  www/doc/pysql.pysqlnet-pysrc.html,
-	  www/doc/pysql.pysqlnet.PysqlNetClient-class.html,
-	  www/doc/pysql.pysqloraobjects-module.html,
-	  www/doc/pysql.pysqloraobjects-pysrc.html,
-	  www/doc/pysql.pysqloraobjects.OraDBLink-class.html,
-	  www/doc/pysql.pysqloraobjects.OraDatafile-class.html,
-	  www/doc/pysql.pysqloraobjects.OraDirectory-class.html,
-	  www/doc/pysql.pysqloraobjects.OraFunction-class.html,
-	  www/doc/pysql.pysqloraobjects.OraIndex-class.html,
-	  www/doc/pysql.pysqloraobjects.OraMaterializedView-class.html,
-	  www/doc/pysql.pysqloraobjects.OraObject-class.html,
-	  www/doc/pysql.pysqloraobjects.OraPackage-class.html,
-	  www/doc/pysql.pysqloraobjects.OraPackageBody-class.html,
-	  www/doc/pysql.pysqloraobjects.OraProcedure-class.html,
-	  www/doc/pysql.pysqloraobjects.OraSegment-class.html,
-	  www/doc/pysql.pysqloraobjects.OraSequence-class.html,
-	  www/doc/pysql.pysqloraobjects.OraStoredObject-class.html,
-	  www/doc/pysql.pysqloraobjects.OraSynonym-class.html,
-	  www/doc/pysql.pysqloraobjects.OraTable-class.html,
-	  www/doc/pysql.pysqloraobjects.OraTablespace-class.html,
-	  www/doc/pysql.pysqloraobjects.OraTabular-class.html,
-	  www/doc/pysql.pysqloraobjects.OraTrigger-class.html,
-	  www/doc/pysql.pysqloraobjects.OraUser-class.html,
-	  www/doc/pysql.pysqloraobjects.OraView-class.html,
-	  www/doc/pysql.pysqlqueries-module.html,
-	  www/doc/pysql.pysqlqueries-pysrc.html,
-	  www/doc/pysql.pysqlshell-module.html,
-	  www/doc/pysql.pysqlshell-pysrc.html,
-	  www/doc/pysql.pysqlshell.PysqlShell-class.html,
-	  www/doc/pysql.pysqlupdate-module.html,
-	  www/doc/pysql.pysqlupdate-pysrc.html,
-	  www/doc/pysql.pysqlupdate.Version-class.html,
-	  www/doc/setup-module.html, www/doc/setup-pysrc.html,
-	  www/doc/toc-everything.html, www/doc/toc-pysql-module.html,
-	  www/doc/toc-pysql.pysqlcolor-module.html,
-	  www/doc/toc-pysql.pysqlconf-module.html,
-	  www/doc/toc-pysql.pysqldb-module.html,
-	  www/doc/toc-pysql.pysqlexception-module.html,
-	  www/doc/toc-pysql.pysqlfunctions-module.html,
-	  www/doc/toc-pysql.pysqlgraphics-module.html,
-	  www/doc/toc-pysql.pysqlhelpers-module.html,
-	  www/doc/toc-pysql.pysqlio-module.html,
-	  www/doc/toc-pysql.pysqlmain-module.html,
-	  www/doc/toc-pysql.pysqlnet-module.html,
-	  www/doc/toc-pysql.pysqloraobjects-module.html,
-	  www/doc/toc-pysql.pysqlqueries-module.html,
-	  www/doc/toc-pysql.pysqlshell-module.html,
-	  www/doc/toc-pysql.pysqlupdate-module.html,
-	  www/doc/toc-setup-module.html,
-	  www/doc/toc-w32_postinst-module.html, www/doc/toc.html,
-	  www/doc/uml_class_diagram_for_classdoc_12.gif,
-	  www/doc/uml_class_diagram_for_classdoc_16.gif,
-	  www/doc/uml_class_diagram_for_classdoc_18.gif,
-	  www/doc/uml_class_diagram_for_classdoc_22.gif,
-	  www/doc/uml_class_diagram_for_classdoc_3.gif,
-	  www/doc/w32_postinst-module.html,
-	  www/doc/w32_postinst-pysrc.html:
-	* script/doc.sh: Fix doc script to use new source tree
-	* locale/fr/LC_MESSAGES/pysql.mo, po/fr/pysql.po, po/pysql.pot,
-	  script/i18.sh, src/pysql/pysqlmain.py: Update french translation
-	  Fix locale search path
-	  Update string extraction program to new source tree
-	* src/pysql/pysqlshell.py:
-	* src/pysql/pysqlconf.py: Group config and cache files in a
-	  "pysql" subdir.
-	  Under $HOME/.pysql for Unix and %APPDATA%/pysql for windows
-	* ChangeLog-Synthesis, MANIFEST.in, w32_postinst.py:
-	* pysqlrc: No more config file in current dir. Always on
-	  $HOME/.pysqlrc
-	* setup.cfg, setup.py, w32_postinst.py: Add post install script
-	  for Windows desktop shortcut and start menu entry
-	* src/pysql/pysqlmain.py: Wait before exit to let user import
-	  error message
+    Update all script stuff used to build release
+    Slightly README file and i18n files
 
-2007-12-14  srenard
+commit caf78332fa4fbd6199444f586ec3150f7059b904
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 14 17:27:17 2008 +0100
 
-	* src/pysql/pysqlmain.py: Test if prerequisite modules (cx_Oracle
-	  and pyreadline for windows) are correctly
-	  installed and else say it in a friendly way to the user instead
-	  of throwing an Import exception
-	  in his face.
-	* .:
-	* ChangeLog-Synthesis:
-	* pysql.sh: Transmit parameters to pysql main program (bugfix)
-	* src/pysql/pysqlconf.py, src/pysql/pysqlshell.py: Update help for
-	  search function with new syntax and examples
-	  Add "case_sensitive" parameter (use set to see it) to choose
-	  between case sensitive or not search. Default is case
-	  insensitive : this is what we want most of the time.
-	* test/pysqltest.sql: update test to new syntax for search
-	  functoun. Space is no more accepted as a separator between owner
-	  and pattern. Only dot.
+    Update test
 
-2007-12-12  srenard
+commit b05936cf3375ac6b53deddcb58d7d33e0226aaea
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 14 15:09:51 2008 +0100
 
-	* MANIFEST.in, pysql.sh, setup.py: Add simple shell wrapper to
-	  help developpers to start pysql from source tree
-	  Update setup.py to new package tree
-	* src/pysql/pysqlconf.py: Configuration file management
-	  simplification
-	* MANIFEST.in, README, pysql, src/__init__.py, src/bin,
-	  src/bin/pysql, src/pysql, src/pysql/__init__.py,
-	  src/pysql/pysqlcolor.py, src/pysql/pysqlconf.py,
-	  src/pysql/pysqldb.py, src/pysql/pysqlexception.py,
-	  src/pysql/pysqlfunctions.py, src/pysql/pysqlgraphics.py,
-	  src/pysql/pysqlhelpers.py, src/pysql/pysqlio.py,
-	  src/pysql/pysqlmain.py, src/pysql/pysqlnet.py,
-	  src/pysql/pysqloraobjects.py, src/pysql/pysqlqueries.py,
-	  src/pysql/pysqlshell.py, src/pysql/pysqlupdate.py,
-	  src/pysqlcolor.py, src/pysqlconf.py, src/pysqldb.py,
-	  src/pysqlexception.py, src/pysqlfunctions.py,
-	  src/pysqlgraphics.py, src/pysqlhelpers.py, src/pysqlio.py,
-	  src/pysqlmain.py, src/pysqlnet.py, src/pysqloraobjects.py,
-	  src/pysqlqueries.py, src/pysqlshell.py, src/pysqlupdate.py:
-	  Source reorg, phase II
-	* TODO, pysql.py, pysqlcolor.py, pysqlconf.py, pysqldb.py,
-	  pysqlexception.py, pysqlfunctions.py, pysqlgraphics.py,
-	  pysqlhelpers.py, pysqlio.py, pysqlnet.py, pysqloraobjects.py,
-	  pysqlqueries.py, pysqlshell.py, pysqltest.sql, pysqlupdate.py,
-	  setup.py, src, src/__init__.py, src/pysqlcolor.py,
-	  src/pysqlconf.py, src/pysqldb.py, src/pysqlexception.py,
-	  src/pysqlfunctions.py, src/pysqlgraphics.py,
-	  src/pysqlhelpers.py, src/pysqlio.py, src/pysqlmain.py,
-	  src/pysqlnet.py, src/pysqloraobjects.py, src/pysqlqueries.py,
-	  src/pysqlshell.py, src/pysqlupdate.py, test, test/pysqltest.sql:
-	  Source tree reorg
+    No more support for count with syntax.
 
-2007-12-09  srenard
+commit a00b8bb8fb0a4743d3f009fefd28ecd9c416dd8b
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 14 11:51:56 2008 +0100
 
-	* pysqlfunctions.py, pysqloraobjects.py: Minor cleanup
-	* locale/fr/LC_MESSAGES/pysql.mo, po/fr/pysql.po, po/pysql.pot,
-	  pysqlconf.py, pysqlupdate.py: Fix strings typo
-	  Update french translation
-	* pysqlconf.py, pysqlfunctions.py, pysqlhelpers.py, pysqlshell.py:
-	  Fix i18n strings
+    Bye bye pysqlIO. Convert all IO with new system.
+    Pysqlnet was not updated and as it cannot work with new system is somewhat useless, it goes to trash. Bye.
 
-2007-12-07  srenard
+commit 54a59400318fa5188490984b82d77b06f9518c3d
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 14 11:51:14 2008 +0100
 
-	* pysqlfunctions.py: Fix bug of count function not working with
-	  synonym
-	* pysqlfunctions.py, pysqlgraphics.py, pysqlshell.py: Minor
-	  cleanup and docstring update
-	* pysqlfunctions.py, pysqlgraphics.py, pysqlhelpers.py,
-	  pysqlqueries.py, pysqlshell.py: task 1840644: more boolean
-	  expression to filter : extend filter to datamodel function
-	  1840644
+    Fix displayTab function with too much large column separator due to print ,
 
-2007-12-05  srenard
+commit 476aa20eff4f52a7d288b66f17c4d0b7fe0320e6
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Dec 13 20:14:56 2008 +0100
 
-	* ., pysqlfunctions.py, pysqlqueries.py: Rename
-	  searchObjectSqlRequest to searchObjectSql to respect naming
-	  convention of sql arrays
-	  Fix compare function to use new searchObjectSql syntax
-	* pysqlqueries.py: Update all serch queries to use new syntax of
-	  extended matching
-	* pysqlfunctions.py: Remove useless query
-	  Don't uppercase search word (break for datafile and other object
-	  with lower case)
-	* pysqlfunctions.py, pysqlhelpers.py, pysqlqueries.py,
-	  pysqlshell.py: Add first working release of extended search
-	  engine will boolean operators
-	  Only working for searching tables for now. Other database
-	  objectts will come soon
-	* ChangeLog-Synthesis: Add a synthesis of Changelog that is user
-	  readable
-	* ChangeLog: Add new changelog (concatenation of old repo and new
-	  one changelog)
+    Keep Oralce NULL object as None and convert it to "NULL" string just before output
 
-2007-12-02  srenard
+commit a4e9db4f75ea5c77f759634a690fa3a72c737dd2
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Dec 13 20:10:58 2008 +0100
 
-	* changelog.sh, doc.sh, i18.sh, script, script/changelog.sh,
-	  script/doc.sh, script/i18.sh, script/updateWebSite.sh: Move
-	  scripts to script dir to clean up root. Adapt script to new
-	  location
-	* changelog.sh: Remove automatic commit after changelog generation
-	* ChangeLog, PastChangelog.html, changelog.sh, www/ChangeLog.html:
-	  Forget html ChangeLog
-	  Update ChangeLog generator to use SourceForge repository and
-	  concatenate old changelog
-	* PastChangeLog, PastChangelog.html: Keep changelog of past svn
-	  repository
-	* doc, doc.sh, www/doc: Move doc/ to website. Update doc generator
-	  script
-	* ChangeLog.html, img, index.html, screenshots.html, www,
-	  www/ChangeLog.html, www/img, www/index.html,
-	  www/screenshots.html: Move web site page on a separate directory
+    Get rid of pysqlIO in pysqlconf, pyslfunctions and pysqlgraphics
 
-2007-11-27  srenard
+commit 9ea3f2ed3228960adbde957fdd3e2d6fc1018884
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Dec 13 19:38:42 2008 +0100
 
-	* ChangeLog, ChangeLog.html, LICENSE, TODO, changelog.sh, doc,
-	  doc.sh, doc/class-tree.html, doc/crarr.png, doc/epydoc.css,
-	  doc/epydoc.js, doc/frames.html, doc/help.html,
-	  doc/identifier-index.html, doc/index.html, doc/indices.html,
-	  doc/module-tree.html, doc/pysql-module.html,
-	  doc/pysql-pysrc.html, doc/pysqlException-module.html,
-	  doc/pysqlException-pysrc.html,
-	  doc/pysqlException.PysqlActionDenied-class.html,
-	  doc/pysqlException.PysqlException-class.html,
-	  doc/pysqlException.PysqlNotImplemented-class.html,
-	  doc/pysqlFunctions-module.html, doc/pysqlFunctions-pysrc.html,
-	  doc/pysqlOraObjects-module.html, doc/pysqlOraObjects-pysrc.html,
-	  doc/pysqlOraObjects.OraDBLink-class.html,
-	  doc/pysqlOraObjects.OraDatafile-class.html,
-	  doc/pysqlOraObjects.OraDirectory-class.html,
-	  doc/pysqlOraObjects.OraIndex-class.html,
-	  doc/pysqlOraObjects.OraMaterializedView-class.html,
-	  doc/pysqlOraObjects.OraObject-class.html,
-	  doc/pysqlOraObjects.OraSegment-class.html,
-	  doc/pysqlOraObjects.OraSequence-class.html,
-	  doc/pysqlOraObjects.OraSynonym-class.html,
-	  doc/pysqlOraObjects.OraTable-class.html,
-	  doc/pysqlOraObjects.OraTablespace-class.html,
-	  doc/pysqlOraObjects.OraTabular-class.html,
-	  doc/pysqlOraObjects.OraUser-class.html,
-	  doc/pysqlOraObjects.OraView-class.html,
-	  doc/pysqlQueries-module.html, doc/pysqlQueries-pysrc.html,
-	  doc/pysqlcolor-module.html, doc/pysqlcolor-pysrc.html,
-	  doc/pysqlconf-module.html, doc/pysqlconf-pysrc.html,
-	  doc/pysqlconf.PysqlConf-class.html, doc/pysqldb-module.html,
-	  doc/pysqldb-pysrc.html, doc/pysqldb.BgQuery-class.html,
-	  doc/pysqldb.PysqlDb-class.html, doc/pysqlexception-module.html,
-	  doc/pysqlexception-pysrc.html,
-	  doc/pysqlexception.PysqlActionDenied-class.html,
-	  doc/pysqlexception.PysqlException-class.html,
-	  doc/pysqlexception.PysqlNotImplemented-class.html,
-	  doc/pysqlfunctions-module.html, doc/pysqlfunctions-pysrc.html,
-	  doc/pysqlgraphics-module.html, doc/pysqlgraphics-pysrc.html,
-	  doc/pysqlhelpers-module.html, doc/pysqlhelpers-pysrc.html,
-	  doc/pysqlio-module.html, doc/pysqlio-pysrc.html,
-	  doc/pysqlio.PysqlIO-class.html, doc/pysqlnet-module.html,
-	  doc/pysqlnet-pysrc.html, doc/pysqlnet.PysqlNetClient-class.html,
-	  doc/pysqloraobjects-module.html, doc/pysqloraobjects-pysrc.html,
-	  doc/pysqloraobjects.OraDBLink-class.html,
-	  doc/pysqloraobjects.OraDatafile-class.html,
-	  doc/pysqloraobjects.OraDirectory-class.html,
-	  doc/pysqloraobjects.OraFunction-class.html,
-	  doc/pysqloraobjects.OraIndex-class.html,
-	  doc/pysqloraobjects.OraMaterializedView-class.html,
-	  doc/pysqloraobjects.OraObject-class.html,
-	  doc/pysqloraobjects.OraPackage-class.html,
-	  doc/pysqloraobjects.OraPackageBody-class.html,
-	  doc/pysqloraobjects.OraProcedure-class.html,
-	  doc/pysqloraobjects.OraSegment-class.html,
-	  doc/pysqloraobjects.OraSequence-class.html,
-	  doc/pysqloraobjects.OraStoredObject-class.html,
-	  doc/pysqloraobjects.OraSynonym-class.html,
-	  doc/pysqloraobjects.OraTable-class.html,
-	  doc/pysqloraobjects.OraTablespace-class.html,
-	  doc/pysqloraobjects.OraTabular-class.html,
-	  doc/pysqloraobjects.OraTrigger-class.html,
-	  doc/pysqloraobjects.OraUser-class.html,
-	  doc/pysqloraobjects.OraView-class.html,
-	  doc/pysqlqueries-module.html, doc/pysqlqueries-pysrc.html,
-	  doc/pysqlshell-module.html, doc/pysqlshell-pysrc.html,
-	  doc/pysqlshell.PysqlShell-class.html,
-	  doc/pysqlupdate-module.html, doc/pysqlupdate-pysrc.html,
-	  doc/pysqlupdate.Version-class.html, doc/toc-everything.html,
-	  doc/toc-pysql-module.html, doc/toc-pysqlException-module.html,
-	  doc/toc-pysqlFunctions-module.html,
-	  doc/toc-pysqlOraObjects-module.html,
-	  doc/toc-pysqlQueries-module.html,
-	  doc/toc-pysqlcolor-module.html, doc/toc-pysqlconf-module.html,
-	  doc/toc-pysqldb-module.html, doc/toc-pysqlexception-module.html,
-	  doc/toc-pysqlfunctions-module.html,
-	  doc/toc-pysqlgraphics-module.html,
-	  doc/toc-pysqlhelpers-module.html, doc/toc-pysqlio-module.html,
-	  doc/toc-pysqlnet-module.html,
-	  doc/toc-pysqloraobjects-module.html,
-	  doc/toc-pysqlqueries-module.html,
-	  doc/toc-pysqlshell-module.html, doc/toc-pysqlupdate-module.html,
-	  doc/toc.html, doc/trees.html,
-	  doc/uml_class_diagram_for_classdoc.gif,
-	  doc/uml_class_diagram_for_classdoc_10.gif,
-	  doc/uml_class_diagram_for_classdoc_11.gif,
-	  doc/uml_class_diagram_for_classdoc_12.gif,
-	  doc/uml_class_diagram_for_classdoc_13.gif,
-	  doc/uml_class_diagram_for_classdoc_14.gif,
-	  doc/uml_class_diagram_for_classdoc_15.gif,
-	  doc/uml_class_diagram_for_classdoc_16.gif,
-	  doc/uml_class_diagram_for_classdoc_17.gif,
-	  doc/uml_class_diagram_for_classdoc_18.gif,
-	  doc/uml_class_diagram_for_classdoc_19.gif,
-	  doc/uml_class_diagram_for_classdoc_2.gif,
-	  doc/uml_class_diagram_for_classdoc_20.gif,
-	  doc/uml_class_diagram_for_classdoc_21.gif,
-	  doc/uml_class_diagram_for_classdoc_22.gif,
-	  doc/uml_class_diagram_for_classdoc_23.gif,
-	  doc/uml_class_diagram_for_classdoc_24.gif,
-	  doc/uml_class_diagram_for_classdoc_25.gif,
-	  doc/uml_class_diagram_for_classdoc_26.gif,
-	  doc/uml_class_diagram_for_classdoc_3.gif,
-	  doc/uml_class_diagram_for_classdoc_4.gif,
-	  doc/uml_class_diagram_for_classdoc_5.gif,
-	  doc/uml_class_diagram_for_classdoc_6.gif,
-	  doc/uml_class_diagram_for_classdoc_7.gif,
-	  doc/uml_class_diagram_for_classdoc_8.gif,
-	  doc/uml_class_diagram_for_classdoc_9.gif, i18.sh, img,
-	  img/desc_1.png, img/desc_2.png, img/search_1.png,
-	  img/simpleSQL_1.png, img/simpleSQL_2.png, index.html, locale,
-	  locale/fr, locale/fr/LC_MESSAGES, po, po/fr, po/fr/pysql.po,
-	  po/pysql.pot, pylintrc, pysql, pysql.py, pysqlcolor.py,
-	  pysqlconf.py, pysqldb.py, pysqlexception.py, pysqlfunctions.py,
-	  pysqlgraphics.py, pysqlhelpers.py, pysqlio.py, pysqlnet.py,
-	  pysqloraobjects.py, pysqlqueries.py, pysqlrc, pysqlshell.py,
-	  pysqltest.sql, pysqlupdate.py, screenshots.html: initial import
-	* .: add std svn structure
+    Get rid of pysqlIO in __displayTab method
+    Ignore caracters that we can't decode to avoid problem encoding replacement caracter (sic)
 
+commit a4ffd5bd59d9a2f8d97a67f112d868b500a69c79
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Dec 13 17:15:49 2008 +0100
+
+    Remove useless accessor from bgQuery
+
+commit 93e4ca9d103983449a497599adb057c5f0b4338f
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Dec 13 17:03:38 2008 +0100
+
+    Remove the stringDecode function
+    Fix background queries error when there's no error ;-)
+    Handle datetime and date formating at pysqldb level instead of shell level
+
+commit c9c4c082fe5089f87c58b1128ca6cb273ee636e9
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Dec 13 14:41:18 2008 +0100
+
+    First step of new Unicode implementation :
+    	- all data typed by user is decoded to Unicode
+    	- all data output to screen are encoded according user locale
+    	- all request send to Oracle are encoded according to NLS_LANG env
+    	- all data read from Oracle are decoded according to NLS_LANG
+    	- every string internal to pysql should be Unicode (not yet complete)
+    Next step is to remove pysqlio module and make more tests
+
+commit e7fc482f19f466cdf9d3125fb03f88ec4c2386fc
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Thu Dec 11 07:49:50 2008 +0100
+
+    Warn if max node is reach for each direction (bugfix)
+    Also warn when recursion limit is reached
+
+commit f2531fd555134e76d9ada2d9952df45a48f40550
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Thu Dec 11 07:49:02 2008 +0100
+
+    Make recursion limit and max node call parameters of dependencies function
+
+commit 30169c830b2762f8b39cde9596310017c994e4a5
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Dec 9 20:11:18 2008 +0100
+
+    Convert diskusage to new parser
+
+commit 4b88252e40c1192a05e9f17da2d71c85f7080091
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Mon Dec 8 19:38:47 2008 +0100
+
+    Use aliases dict to generate function aliases (DRY !)
+
+commit 84c4141d6431388513b7cd52c72033d34b169802
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Mon Dec 8 19:24:16 2008 +0100
+
+    Move PysqlOptionParserNormalExitException to pysqlexception module
+    Trap this exception on main command loop to avoid <command> -h exiting pysql
+
+commit 69b299867e5f11998abc2dacf700d91ff7ce7096
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Mon Dec 8 19:09:12 2008 +0100
+
+    No special case for database errors
+
+commit 8a2a8d2cf6a8400ef4010dcb97edfa6f2f31f9a4
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Mon Dec 8 14:04:17 2008 +0100
+
+    Don't disconnect user when an unhandled error is encountered
+
+commit d915515f5d39fe522314ab555cd96a0572faf3a0
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Mon Dec 8 13:55:59 2008 +0100
+
+    Fix crash on datamodel help when not connected
+
+commit ab5b51d9f8d242b46de9be3f2ad3737f7634d1d7
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 7 23:29:11 2008 +0100
+
+    Use a dict to define aliases
+    Also display help when using alias function
+
+commit 5430c60f1d9251626d39cd41264f37bedd89e64e
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 7 23:22:07 2008 +0100
+
+    Convert dependencies function to new parser
+
+commit 89aa070dfd9f5f45add7bf8bdce161e34e2a379c
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 7 23:04:36 2008 +0100
+
+    Extend __checkArgs to support both str or list of str
+
+commit f81c9f7376aa37eea159e3447e447db33eb45028
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 7 22:37:41 2008 +0100
+
+    Add pysqlparser module
+    Generate help from parser options
+
+commit e9f087b016a136517cfce055423d387d3acc4814
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 7 19:42:42 2008 +0100
+
+    Use new parser for do_datamodel function
+
+commit 5c009f21d95bc585ae15b198339ca442af08624e
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 7 16:38:10 2008 +0100
+
+    Always convert arg to str for pydot (fix crash with pydot > 1.0)
+
+commit 760daba5db4696fafbf47e65035df258ed354e2b
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 7 15:30:18 2008 +0100
+
+    Add .gitignore file
+
+commit 6035d998269fadd4b4f9e32c89f3598276aa40b9
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 7 15:28:46 2008 +0100
+
+    Better completion for table name in update and column name after the set keyword
+
+commit fe53bcbf8e3003e4289197433e93d513c13b69e9
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Sep 5 10:00:40 2008 +0000
+
+    Remove curious file that make svn crash on windows
+
+commit fee598cc3682c6b1f536df5982487ff1ea699695
+Author: SÃ©bastien Delcros <sebastien.delcros@gmail.com>
+Date:   Fri Apr 25 20:48:21 2008 +0000
+
+    Support of local commands 'lls', 'lcd' and 'lpwd'
+
+commit 85d89e11bcbcd66a3d2593d098dc4b784260cef4
+Author: SÃ©bastien Delcros <sebastien.delcros@gmail.com>
+Date:   Tue Apr 22 13:01:22 2008 +0000
+
+    SYSDBA and SYSOPER modes management
+
+commit f0cee50cd359e11bb852cdacfd5351ec57c270d0
+Author: SÃ©bastien Delcros <sebastien.delcros@gmail.com>
+Date:   Mon Mar 31 07:28:30 2008 +0000
+
+    Creation (=pysql.sh for Windows)
+
+commit f70a05217f6c839cf745bd0be97be76faea5b34e
+Author: SÃ©bastien Delcros <sebastien.delcros@gmail.com>
+Date:   Sat Mar 29 09:35:24 2008 +0000
+
+    DESC for Functions, Procedures and Packages : bug correction and code factorization (assuming these three objects are close enough to be described the same way)
+
+commit b89904db64ae9dbbaa13ef45ea587f969d3df3c0
+Author: SÃ©bastien Delcros <sebastien.delcros@gmail.com>
+Date:   Fri Mar 28 12:37:46 2008 +0000
+
+    Implementation of the DESC function for 'Function', 'Pasckage' and 'Procedure' objects.
+
+commit 82a6ba6356127cabfbcbbe1a765fdbe62c9ebb37
+Author: SÃ©bastien Delcros <sebastien.delcros@gmail.com>
+Date:   Thu Mar 27 15:00:44 2008 +0000
+
+    Support of the "exec" alias for execute statements added
+
+commit 997e44ac792a53c681fefa1283ad46465457a2c3
+Author: SÃ©bastien Delcros <sebastien.delcros@gmail.com>
+Date:   Thu Mar 27 14:56:15 2008 +0000
+
+    Desc: data length added for tabular objects
+
+commit 88da6182f22cf49926a5a848ac913e96888efdbd
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Dec 25 10:38:01 2007 +0000
+
+    Fix typo
+
+commit db675aa98927890a85e701c689aa2517d50bbe73
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Mon Dec 17 19:37:01 2007 +0000
+
+    Fix typo in i18n path.
+    Bump release number to 0.12 (next one !)
+
+commit b1e9b7fb8e8a8e6e5ab20edac2ad17e200b18249
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 16 20:43:54 2007 +0000
+
+    change windows post install script name to avoid conflict with other programs
+
+commit 3820de9e4032732b2ced41198634ab708307fd4a
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 16 13:12:05 2007 +0000
+
+    Use specific locale path for Windows (one more exception for windows...)
+
+commit afc5c283620c510f03face4425a89baa22dd907c
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 16 13:11:23 2007 +0000
+
+    Prevent fetchsize to be too important (fix bug Oracle array size exceeded)
+
+commit aaa890b5ebea5056a84b197b8e810d794e5a4b80
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Dec 15 17:09:01 2007 +0000
+
+commit a08d46f50c44d6700ccbd6a8e99223c9afe1f7e1
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Dec 15 17:06:16 2007 +0000
+
+commit 4ca6cb53a95aa8e4e62a0db36c30346d7a09d768
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Dec 15 16:59:43 2007 +0000
+
+    Fix doc script to use new source tree
+
+commit d678402798f966db5213eecc7cac3fe643d17f41
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Dec 15 16:59:03 2007 +0000
+
+    Update french translation
+    Fix locale search path
+    Update string extraction program to new source tree
+
+commit e9c5a6fb788031c3e44a8951fda6cc5a4b2df402
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Dec 15 16:57:08 2007 +0000
+
+commit 03a9b83ba1be794571bd4072bc7f606914074cce
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Dec 15 16:08:24 2007 +0000
+
+    Group config and cache files in a "pysql" subdir.
+    Under $HOME/.pysql for Unix and %APPDATA%/pysql for windows
+
+commit 0ac607f70aca17f899af351bec4a2663c1384385
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Dec 15 14:21:04 2007 +0000
+
+commit 89e63a3586748f967b0205e9561d40b85efec86a
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Dec 15 13:51:07 2007 +0000
+
+    No more config file in current dir. Always on $HOME/.pysqlrc
+
+commit 88301ef83b8b30304b2f88c6b6390e3c879d6f1a
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Dec 15 13:49:59 2007 +0000
+
+    Add post install script for Windows desktop shortcut and start menu entry
+
+commit 85a6e1362545079f5a2d20e58b0ec71139e4acbd
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Dec 15 13:48:25 2007 +0000
+
+    Wait before exit to let user import error message
+
+commit 5248229b03c63dca42c30a0acf069ccb510336da
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Dec 14 22:33:37 2007 +0000
+
+    Test if prerequisite modules (cx_Oracle and pyreadline for windows) are correctly
+    installed and else say it in a friendly way to the user instead of throwing an Import exception
+    in his face.
+
+commit c00abd6a7becb842ec45216f6fc738c60adeaa92
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Dec 14 20:19:58 2007 +0000
+
+commit d52bacb9e64d4f94194d71824590ffb7c816ed1a
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Dec 14 20:11:11 2007 +0000
+
+commit bf8e49eae5253c70cc65b980cf5b4cf4fc205724
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Dec 14 20:10:33 2007 +0000
+
+    Transmit parameters to pysql main program (bugfix)
+
+commit 4f44946224927840e62bdbbdf997db2ba568d03d
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Dec 14 20:09:49 2007 +0000
+
+    Update help for search function with new syntax and examples
+    Add "case_sensitive" parameter (use set to see it) to choose between case sensitive or not search. Default is case insensitive : this is what we want most of the time.
+
+commit f4ecc6472ab5371d101e8d89eb6b40b5bb81ea2e
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Dec 14 20:07:16 2007 +0000
+
+    update test to new syntax for search functoun. Space is no more accepted as a separator between owner and pattern. Only dot.
+
+commit 97b55535c45e16c242b65d8b6e65619e56aca9d7
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Dec 12 22:04:31 2007 +0000
+
+    Add simple shell wrapper to help developpers to start pysql from source tree
+    Update setup.py to new package tree
+
+commit 617a67b6c645e6a39aee6e438effbf9c28193f38
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Dec 12 21:54:59 2007 +0000
+
+    Configuration file management simplification
+
+commit c78ff6561fc4d777c772a59c24e17b9e0a4d7a49
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Dec 12 20:49:30 2007 +0000
+
+    Source reorg, phase II
+
+commit 57cedbb6c008616bcbaa20b215bff3da0797fefb
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Dec 12 20:42:41 2007 +0000
+
+    Source tree reorg
+
+commit 035376f940e297cf1417bdd3055bcebaa01ec826
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 9 19:44:44 2007 +0000
+
+    Minor cleanup
+
+commit 2b1a393046b65d46860dbd87869c8807d8834080
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 9 17:56:46 2007 +0000
+
+    Fix strings typo
+    Update french translation
+
+commit 34f6e18f415680c132ae809895184f72038ed915
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 9 17:01:54 2007 +0000
+
+    Fix i18n strings
+
+commit 8379171cfbc0073c3954f4dd41f1f85271178147
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Dec 7 21:10:56 2007 +0000
+
+    Fix bug of count function not working with synonym
+
+commit b3fb7c198335d8347f0b0aa468051e7177d086dc
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Dec 7 20:53:00 2007 +0000
+
+    Minor cleanup and docstring update
+
+commit a718bdb4bb66837044731af0a9725067554c87bc
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Dec 7 19:37:42 2007 +0000
+
+    task 1840644: more boolean expression to filter : extend filter to datamodel function
+    1840644
+
+commit 576a22d376cd5ef8422beffaba15d31bea2398cd
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Dec 5 17:31:17 2007 +0000
+
+    Rename searchObjectSqlRequest to searchObjectSql to respect naming convention of sql arrays
+    Fix compare function to use new searchObjectSql syntax
+
+commit 1196afba5eb65a23178c86ca94911322f14a6b72
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Dec 5 17:06:23 2007 +0000
+
+    Update all serch queries to use new syntax of extended matching
+
+commit 4ef61c24df69127810d77e03c2f856599254b840
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Dec 5 17:05:16 2007 +0000
+
+    Remove useless query
+    Don't uppercase search word (break for datafile and other object with lower case)
+
+commit 42bc4521b13192293fe994fcbf6d285217ca498a
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Dec 5 14:45:28 2007 +0000
+
+    Add first working release of extended search engine will boolean operators
+    Only working for searching tables for now. Other database objectts will come soon
+
+commit a7024ee0fc03205c0f70c57f2b4eb55bf2055195
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Dec 5 14:35:06 2007 +0000
+
+    Add a synthesis of Changelog that is user readable
+
+commit 1285aa7636508f2f3abfdca839005d98a3811c17
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Dec 5 14:21:20 2007 +0000
+
+    Add new changelog (concatenation of old repo and new one changelog)
+
+commit e358d5a0e616ccb2cb73e138aadb71937bdbfec7
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 2 22:41:07 2007 +0000
+
+    Move scripts to script dir to clean up root. Adapt script to new location
+
+commit f4d3dade238d8cc5ac511c98d9f90f63934f3da3
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 2 22:32:33 2007 +0000
+
+    Remove automatic commit after changelog generation
+
+commit a627250392abc1d226675a1258184d647c138e17
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 2 22:31:15 2007 +0000
+
+    Forget html ChangeLog
+    Update ChangeLog generator to use SourceForge repository and concatenate old changelog
+
+commit ed19274a9b85803d6f5d6001aa36f0ae3b212131
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 2 22:26:01 2007 +0000
+
+    Keep changelog of past svn repository
+
+commit cf27582a5f600b5a082833d21c98d1c730e66118
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 2 22:13:13 2007 +0000
+
+    Move doc/ to website. Update doc generator script
+
+commit f7eea924d6a78cf0992b286d2f084b0336dca218
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 2 22:11:48 2007 +0000
+
+    Move web site page on a separate directory
+
+commit a37259c558d9f9b6cfc4e230d3e0dc5faa687656
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Nov 27 22:43:45 2007 +0000
+
+    initial import
+
+commit 89b23eed47315b8bc9431dc7cd07df1fd042d836
+Author: SÃ©bastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Nov 27 22:40:46 2007 +0000
+
+    add std svn structure
 2007-03-18  fox
 
-	* doc/class-tree.html, doc/help.html, doc/identifier-index.html,
-	  doc/module-tree.html, doc/pysql-module.html,
-	  doc/pysql-pysrc.html, doc/pysqlcolor-module.html,
-	  doc/pysqlcolor-pysrc.html, doc/pysqlconf-module.html,
-	  doc/pysqlconf-pysrc.html, doc/pysqlconf.PysqlConf-class.html,
-	  doc/pysqldb-module.html, doc/pysqldb-pysrc.html,
-	  doc/pysqldb.BgQuery-class.html, doc/pysqldb.PysqlDb-class.html,
-	  doc/pysqlexception-module.html, doc/pysqlexception-pysrc.html,
-	  doc/pysqlexception.PysqlActionDenied-class.html,
-	  doc/pysqlexception.PysqlException-class.html,
-	  doc/pysqlexception.PysqlNotImplemented-class.html,
-	  doc/pysqlfunctions-module.html, doc/pysqlfunctions-pysrc.html,
-	  doc/pysqlgraphics-module.html, doc/pysqlgraphics-pysrc.html,
-	  doc/pysqlhelpers-module.html, doc/pysqlhelpers-pysrc.html,
-	  doc/pysqlio-module.html, doc/pysqlio-pysrc.html,
-	  doc/pysqlio.PysqlIO-class.html, doc/pysqlnet-module.html,
-	  doc/pysqlnet-pysrc.html, doc/pysqlnet.PysqlNetClient-class.html,
-	  doc/pysqloraobjects-module.html, doc/pysqloraobjects-pysrc.html,
-	  doc/pysqloraobjects.OraDBLink-class.html,
-	  doc/pysqloraobjects.OraDatafile-class.html,
-	  doc/pysqloraobjects.OraDirectory-class.html,
-	  doc/pysqloraobjects.OraFunction-class.html,
-	  doc/pysqloraobjects.OraIndex-class.html,
-	  doc/pysqloraobjects.OraMaterializedView-class.html,
-	  doc/pysqloraobjects.OraObject-class.html,
-	  doc/pysqloraobjects.OraPackage-class.html,
-	  doc/pysqloraobjects.OraPackageBody-class.html,
-	  doc/pysqloraobjects.OraProcedure-class.html,
-	  doc/pysqloraobjects.OraSegment-class.html,
-	  doc/pysqloraobjects.OraSequence-class.html,
-	  doc/pysqloraobjects.OraStoredObject-class.html,
-	  doc/pysqloraobjects.OraSynonym-class.html,
-	  doc/pysqloraobjects.OraTable-class.html,
-	  doc/pysqloraobjects.OraTablespace-class.html,
-	  doc/pysqloraobjects.OraTabular-class.html,
-	  doc/pysqloraobjects.OraTrigger-class.html,
-	  doc/pysqloraobjects.OraUser-class.html,
-	  doc/pysqloraobjects.OraView-class.html,
-	  doc/pysqlqueries-module.html, doc/pysqlqueries-pysrc.html,
-	  doc/pysqlshell-module.html, doc/pysqlshell-pysrc.html,
-	  doc/pysqlshell.PysqlShell-class.html,
-	  doc/pysqlupdate-module.html, doc/pysqlupdate-pysrc.html,
-	  doc/pysqlupdate.Version-class.html,
-	  doc/uml_class_diagram_for_classdoc_11.gif,
-	  doc/uml_class_diagram_for_classdoc_12.gif,
-	  doc/uml_class_diagram_for_classdoc_18.gif,
-	  doc/uml_class_diagram_for_classdoc_20.gif,
-	  doc/uml_class_diagram_for_classdoc_22.gif,
-	  doc/uml_class_diagram_for_classdoc_25.gif: doc update
 	* pysqlfunctions.py: working compare data second pass
 
 2007-02-25  fox
@@ -398,56 +507,6 @@
 
 2007-02-12  fox
 
-	* doc/class-tree.html, doc/help.html, doc/identifier-index.html,
-	  doc/module-tree.html, doc/pysql-module.html,
-	  doc/pysql-pysrc.html, doc/pysqlcolor-module.html,
-	  doc/pysqlcolor-pysrc.html, doc/pysqlconf-module.html,
-	  doc/pysqlconf-pysrc.html, doc/pysqlconf.PysqlConf-class.html,
-	  doc/pysqldb-module.html, doc/pysqldb-pysrc.html,
-	  doc/pysqldb.BgQuery-class.html, doc/pysqldb.PysqlDb-class.html,
-	  doc/pysqlexception-module.html, doc/pysqlexception-pysrc.html,
-	  doc/pysqlexception.PysqlActionDenied-class.html,
-	  doc/pysqlexception.PysqlException-class.html,
-	  doc/pysqlexception.PysqlNotImplemented-class.html,
-	  doc/pysqlfunctions-module.html, doc/pysqlfunctions-pysrc.html,
-	  doc/pysqlgraphics-module.html, doc/pysqlgraphics-pysrc.html,
-	  doc/pysqlhelpers-module.html, doc/pysqlhelpers-pysrc.html,
-	  doc/pysqlio-module.html, doc/pysqlio-pysrc.html,
-	  doc/pysqlio.PysqlIO-class.html, doc/pysqlnet-module.html,
-	  doc/pysqlnet-pysrc.html, doc/pysqlnet.PysqlNetClient-class.html,
-	  doc/pysqloraobjects-module.html, doc/pysqloraobjects-pysrc.html,
-	  doc/pysqloraobjects.OraDBLink-class.html,
-	  doc/pysqloraobjects.OraDatafile-class.html,
-	  doc/pysqloraobjects.OraDirectory-class.html,
-	  doc/pysqloraobjects.OraFunction-class.html,
-	  doc/pysqloraobjects.OraIndex-class.html,
-	  doc/pysqloraobjects.OraMaterializedView-class.html,
-	  doc/pysqloraobjects.OraObject-class.html,
-	  doc/pysqloraobjects.OraPackage-class.html,
-	  doc/pysqloraobjects.OraPackageBody-class.html,
-	  doc/pysqloraobjects.OraProcedure-class.html,
-	  doc/pysqloraobjects.OraSegment-class.html,
-	  doc/pysqloraobjects.OraSequence-class.html,
-	  doc/pysqloraobjects.OraStoredObject-class.html,
-	  doc/pysqloraobjects.OraSynonym-class.html,
-	  doc/pysqloraobjects.OraTable-class.html,
-	  doc/pysqloraobjects.OraTablespace-class.html,
-	  doc/pysqloraobjects.OraTabular-class.html,
-	  doc/pysqloraobjects.OraTrigger-class.html,
-	  doc/pysqloraobjects.OraUser-class.html,
-	  doc/pysqloraobjects.OraView-class.html,
-	  doc/pysqlqueries-module.html, doc/pysqlqueries-pysrc.html,
-	  doc/pysqlshell-module.html, doc/pysqlshell-pysrc.html,
-	  doc/pysqlshell.PysqlShell-class.html,
-	  doc/pysqlupdate-module.html, doc/pysqlupdate-pysrc.html,
-	  doc/pysqlupdate.Version-class.html, doc/toc-everything.html,
-	  doc/toc-pysqlfunctions-module.html,
-	  doc/toc-pysqlgraphics-module.html,
-	  doc/toc-pysqlhelpers-module.html, doc/toc.html,
-	  doc/uml_class_diagram_for_classdoc_12.gif,
-	  doc/uml_class_diagram_for_classdoc_16.gif,
-	  doc/uml_class_diagram_for_classdoc_18.gif,
-	  doc/uml_class_diagram_for_classdoc_22.gif: doc update
 	* pysqlfunctions.py, pysqlgraphics.py, pysqlhelpers.py,
 	  pysqlshell.py: Refactoring time... Create pysqlhelper module to
 	  put reused
@@ -459,59 +518,6 @@
 2007-02-04  fox
 
 	* ChangeLog, ChangeLog.html: Changelog update
-	* TODO, doc/class-tree.html, doc/help.html,
-	  doc/identifier-index.html, doc/module-tree.html,
-	  doc/pysql-module.html, doc/pysql-pysrc.html,
-	  doc/pysqlcolor-module.html, doc/pysqlcolor-pysrc.html,
-	  doc/pysqlconf-module.html, doc/pysqlconf-pysrc.html,
-	  doc/pysqlconf.PysqlConf-class.html, doc/pysqldb-module.html,
-	  doc/pysqldb-pysrc.html, doc/pysqldb.BgQuery-class.html,
-	  doc/pysqldb.PysqlDb-class.html, doc/pysqlexception-module.html,
-	  doc/pysqlexception-pysrc.html,
-	  doc/pysqlexception.PysqlActionDenied-class.html,
-	  doc/pysqlexception.PysqlException-class.html,
-	  doc/pysqlexception.PysqlNotImplemented-class.html,
-	  doc/pysqlfunctions-module.html, doc/pysqlfunctions-pysrc.html,
-	  doc/pysqlgraphics-module.html, doc/pysqlgraphics-pysrc.html,
-	  doc/pysqlio-module.html, doc/pysqlio-pysrc.html,
-	  doc/pysqlio.PysqlIO-class.html, doc/pysqlnet-module.html,
-	  doc/pysqlnet-pysrc.html, doc/pysqlnet.PysqlNetClient-class.html,
-	  doc/pysqloraobjects-module.html, doc/pysqloraobjects-pysrc.html,
-	  doc/pysqloraobjects.OraDBLink-class.html,
-	  doc/pysqloraobjects.OraDatafile-class.html,
-	  doc/pysqloraobjects.OraDirectory-class.html,
-	  doc/pysqloraobjects.OraFunction-class.html,
-	  doc/pysqloraobjects.OraIndex-class.html,
-	  doc/pysqloraobjects.OraMaterializedView-class.html,
-	  doc/pysqloraobjects.OraObject-class.html,
-	  doc/pysqloraobjects.OraPackage-class.html,
-	  doc/pysqloraobjects.OraPackageBody-class.html,
-	  doc/pysqloraobjects.OraProcedure-class.html,
-	  doc/pysqloraobjects.OraSegment-class.html,
-	  doc/pysqloraobjects.OraSequence-class.html,
-	  doc/pysqloraobjects.OraStoredObject-class.html,
-	  doc/pysqloraobjects.OraSynonym-class.html,
-	  doc/pysqloraobjects.OraTable-class.html,
-	  doc/pysqloraobjects.OraTablespace-class.html,
-	  doc/pysqloraobjects.OraTabular-class.html,
-	  doc/pysqloraobjects.OraTrigger-class.html,
-	  doc/pysqloraobjects.OraUser-class.html,
-	  doc/pysqloraobjects.OraView-class.html,
-	  doc/pysqlqueries-module.html, doc/pysqlqueries-pysrc.html,
-	  doc/pysqlshell-module.html, doc/pysqlshell-pysrc.html,
-	  doc/pysqlshell.PysqlShell-class.html,
-	  doc/pysqlupdate-module.html, doc/pysqlupdate-pysrc.html,
-	  doc/pysqlupdate.Version-class.html, doc/toc-everything.html,
-	  doc/toc-pysqlfunctions-module.html,
-	  doc/toc-pysqloraobjects-module.html,
-	  doc/toc-pysqlqueries-module.html,
-	  doc/uml_class_diagram_for_classdoc_10.gif,
-	  doc/uml_class_diagram_for_classdoc_11.gif,
-	  doc/uml_class_diagram_for_classdoc_12.gif,
-	  doc/uml_class_diagram_for_classdoc_16.gif,
-	  doc/uml_class_diagram_for_classdoc_18.gif,
-	  doc/uml_class_diagram_for_classdoc_20.gif,
-	  doc/uml_class_diagram_for_classdoc_22.gif: doc update
 	* pysqlfunctions.py, pysqlshell.py: add a table compare function
 	  (merged with schema compare syntax)
 	* pysqlfunctions.py: raise exception if table is not found in a
@@ -529,52 +535,6 @@
 2007-01-21  fox
 
 	* ChangeLog, ChangeLog.html: Changelog update
-	* doc/class-tree.html, doc/help.html, doc/identifier-index.html,
-	  doc/module-tree.html, doc/pysql-module.html,
-	  doc/pysql-pysrc.html, doc/pysqlcolor-module.html,
-	  doc/pysqlcolor-pysrc.html, doc/pysqlconf-module.html,
-	  doc/pysqlconf-pysrc.html, doc/pysqlconf.PysqlConf-class.html,
-	  doc/pysqldb-module.html, doc/pysqldb-pysrc.html,
-	  doc/pysqldb.BgQuery-class.html, doc/pysqldb.PysqlDb-class.html,
-	  doc/pysqlexception-module.html, doc/pysqlexception-pysrc.html,
-	  doc/pysqlexception.PysqlActionDenied-class.html,
-	  doc/pysqlexception.PysqlException-class.html,
-	  doc/pysqlexception.PysqlNotImplemented-class.html,
-	  doc/pysqlfunctions-module.html, doc/pysqlfunctions-pysrc.html,
-	  doc/pysqlgraphics-module.html, doc/pysqlgraphics-pysrc.html,
-	  doc/pysqlio-module.html, doc/pysqlio-pysrc.html,
-	  doc/pysqlio.PysqlIO-class.html, doc/pysqlnet-module.html,
-	  doc/pysqlnet-pysrc.html, doc/pysqlnet.PysqlNetClient-class.html,
-	  doc/pysqloraobjects-module.html, doc/pysqloraobjects-pysrc.html,
-	  doc/pysqloraobjects.OraDBLink-class.html,
-	  doc/pysqloraobjects.OraDatafile-class.html,
-	  doc/pysqloraobjects.OraDirectory-class.html,
-	  doc/pysqloraobjects.OraFunction-class.html,
-	  doc/pysqloraobjects.OraIndex-class.html,
-	  doc/pysqloraobjects.OraMaterializedView-class.html,
-	  doc/pysqloraobjects.OraObject-class.html,
-	  doc/pysqloraobjects.OraPackage-class.html,
-	  doc/pysqloraobjects.OraPackageBody-class.html,
-	  doc/pysqloraobjects.OraProcedure-class.html,
-	  doc/pysqloraobjects.OraSegment-class.html,
-	  doc/pysqloraobjects.OraSequence-class.html,
-	  doc/pysqloraobjects.OraStoredObject-class.html,
-	  doc/pysqloraobjects.OraSynonym-class.html,
-	  doc/pysqloraobjects.OraTable-class.html,
-	  doc/pysqloraobjects.OraTablespace-class.html,
-	  doc/pysqloraobjects.OraTabular-class.html,
-	  doc/pysqloraobjects.OraTrigger-class.html,
-	  doc/pysqloraobjects.OraUser-class.html,
-	  doc/pysqloraobjects.OraView-class.html,
-	  doc/pysqlqueries-module.html, doc/pysqlqueries-pysrc.html,
-	  doc/pysqlshell-module.html, doc/pysqlshell-pysrc.html,
-	  doc/pysqlshell.PysqlShell-class.html,
-	  doc/pysqlupdate-module.html, doc/pysqlupdate-pysrc.html,
-	  doc/pysqlupdate.Version-class.html, doc/toc-everything.html,
-	  doc/toc-pysqlfunctions-module.html,
-	  doc/uml_class_diagram_for_classdoc_12.gif,
-	  doc/uml_class_diagram_for_classdoc_18.gif,
-	  doc/uml_class_diagram_for_classdoc_22.gif: doc update
 	* pysqlfunctions.py, pysqlshell.py: enhance compare function
 	  (separate diff and equal tables)
 	* pysqlqueries.py: bugfix : don't show column twice when same
@@ -589,59 +549,6 @@
 
 2007-01-06  fox
 
-	* doc/class-tree.html, doc/help.html, doc/identifier-index.html,
-	  doc/module-tree.html, doc/pysql-module.html,
-	  doc/pysql-pysrc.html, doc/pysqlcolor-module.html,
-	  doc/pysqlcolor-pysrc.html, doc/pysqlconf-module.html,
-	  doc/pysqlconf-pysrc.html, doc/pysqlconf.PysqlConf-class.html,
-	  doc/pysqldb-module.html, doc/pysqldb-pysrc.html,
-	  doc/pysqldb.BgQuery-class.html, doc/pysqldb.PysqlDb-class.html,
-	  doc/pysqlexception-module.html, doc/pysqlexception-pysrc.html,
-	  doc/pysqlexception.PysqlActionDenied-class.html,
-	  doc/pysqlexception.PysqlException-class.html,
-	  doc/pysqlexception.PysqlNotImplemented-class.html,
-	  doc/pysqlfunctions-module.html, doc/pysqlfunctions-pysrc.html,
-	  doc/pysqlgraphics-module.html, doc/pysqlgraphics-pysrc.html,
-	  doc/pysqlio-module.html, doc/pysqlio-pysrc.html,
-	  doc/pysqlio.PysqlIO-class.html, doc/pysqlnet-module.html,
-	  doc/pysqlnet-pysrc.html, doc/pysqlnet.PysqlNetClient-class.html,
-	  doc/pysqloraobjects-module.html, doc/pysqloraobjects-pysrc.html,
-	  doc/pysqloraobjects.OraDBLink-class.html,
-	  doc/pysqloraobjects.OraDatafile-class.html,
-	  doc/pysqloraobjects.OraDirectory-class.html,
-	  doc/pysqloraobjects.OraFunction-class.html,
-	  doc/pysqloraobjects.OraIndex-class.html,
-	  doc/pysqloraobjects.OraMaterializedView-class.html,
-	  doc/pysqloraobjects.OraObject-class.html,
-	  doc/pysqloraobjects.OraPackage-class.html,
-	  doc/pysqloraobjects.OraPackageBody-class.html,
-	  doc/pysqloraobjects.OraProcedure-class.html,
-	  doc/pysqloraobjects.OraSegment-class.html,
-	  doc/pysqloraobjects.OraSequence-class.html,
-	  doc/pysqloraobjects.OraStoredObject-class.html,
-	  doc/pysqloraobjects.OraSynonym-class.html,
-	  doc/pysqloraobjects.OraTable-class.html,
-	  doc/pysqloraobjects.OraTablespace-class.html,
-	  doc/pysqloraobjects.OraTabular-class.html,
-	  doc/pysqloraobjects.OraTrigger-class.html,
-	  doc/pysqloraobjects.OraUser-class.html,
-	  doc/pysqloraobjects.OraView-class.html,
-	  doc/pysqlqueries-module.html, doc/pysqlqueries-pysrc.html,
-	  doc/pysqlshell-module.html, doc/pysqlshell-pysrc.html,
-	  doc/pysqlshell.PysqlShell-class.html,
-	  doc/pysqlupdate-module.html, doc/pysqlupdate-pysrc.html,
-	  doc/pysqlupdate.Version-class.html, doc/toc-everything.html,
-	  doc/toc-pysqlfunctions-module.html,
-	  doc/toc-pysqlgraphics-module.html,
-	  doc/toc-pysqloraobjects-module.html,
-	  doc/toc-pysqlqueries-module.html,
-	  doc/uml_class_diagram_for_classdoc_11.gif,
-	  doc/uml_class_diagram_for_classdoc_12.gif,
-	  doc/uml_class_diagram_for_classdoc_16.gif,
-	  doc/uml_class_diagram_for_classdoc_18.gif,
-	  doc/uml_class_diagram_for_classdoc_20.gif,
-	  doc/uml_class_diagram_for_classdoc_22.gif,
-	  doc/uml_class_diagram_for_classdoc_26.gif: doc update
 	* ChangeLog, ChangeLog.html: Changelog update
 
 2007-01-02  fox
@@ -675,70 +582,6 @@
 2006-12-13  fox
 
 	* ChangeLog, ChangeLog.html: Changelog update
-	* TODO, doc/class-tree.html, doc/help.html,
-	  doc/identifier-index.html, doc/module-tree.html,
-	  doc/pysql-module.html, doc/pysql-pysrc.html,
-	  doc/pysqlcolor-module.html, doc/pysqlcolor-pysrc.html,
-	  doc/pysqlconf-module.html, doc/pysqlconf-pysrc.html,
-	  doc/pysqlconf.PysqlConf-class.html, doc/pysqldb-module.html,
-	  doc/pysqldb-pysrc.html, doc/pysqldb.BgQuery-class.html,
-	  doc/pysqldb.PysqlDb-class.html, doc/pysqlexception-module.html,
-	  doc/pysqlexception-pysrc.html,
-	  doc/pysqlexception.PysqlActionDenied-class.html,
-	  doc/pysqlexception.PysqlException-class.html,
-	  doc/pysqlexception.PysqlNotImplemented-class.html,
-	  doc/pysqlfunctions-module.html, doc/pysqlfunctions-pysrc.html,
-	  doc/pysqlgraphics-module.html, doc/pysqlgraphics-pysrc.html,
-	  doc/pysqlio-module.html, doc/pysqlio-pysrc.html,
-	  doc/pysqlio.PysqlIO-class.html, doc/pysqlnet-module.html,
-	  doc/pysqlnet-pysrc.html, doc/pysqlnet.PysqlNetClient-class.html,
-	  doc/pysqloraobjects-module.html, doc/pysqloraobjects-pysrc.html,
-	  doc/pysqloraobjects.OraDBLink-class.html,
-	  doc/pysqloraobjects.OraDatafile-class.html,
-	  doc/pysqloraobjects.OraDirectory-class.html,
-	  doc/pysqloraobjects.OraFunction-class.html,
-	  doc/pysqloraobjects.OraIndex-class.html,
-	  doc/pysqloraobjects.OraMaterializedView-class.html,
-	  doc/pysqloraobjects.OraObject-class.html,
-	  doc/pysqloraobjects.OraPackage-class.html,
-	  doc/pysqloraobjects.OraPackageBody-class.html,
-	  doc/pysqloraobjects.OraProcedure-class.html,
-	  doc/pysqloraobjects.OraSegment-class.html,
-	  doc/pysqloraobjects.OraSequence-class.html,
-	  doc/pysqloraobjects.OraStoredObject-class.html,
-	  doc/pysqloraobjects.OraSynonym-class.html,
-	  doc/pysqloraobjects.OraTable-class.html,
-	  doc/pysqloraobjects.OraTablespace-class.html,
-	  doc/pysqloraobjects.OraTabular-class.html,
-	  doc/pysqloraobjects.OraTrigger-class.html,
-	  doc/pysqloraobjects.OraUser-class.html,
-	  doc/pysqloraobjects.OraView-class.html,
-	  doc/pysqlqueries-module.html, doc/pysqlqueries-pysrc.html,
-	  doc/pysqlshell-module.html, doc/pysqlshell-pysrc.html,
-	  doc/pysqlshell.PysqlShell-class.html,
-	  doc/pysqlupdate-module.html, doc/pysqlupdate-pysrc.html,
-	  doc/pysqlupdate.Version-class.html,
-	  doc/uml_class_diagram_for_classdoc_10.gif,
-	  doc/uml_class_diagram_for_classdoc_11.gif,
-	  doc/uml_class_diagram_for_classdoc_12.gif,
-	  doc/uml_class_diagram_for_classdoc_13.gif,
-	  doc/uml_class_diagram_for_classdoc_14.gif,
-	  doc/uml_class_diagram_for_classdoc_15.gif,
-	  doc/uml_class_diagram_for_classdoc_16.gif,
-	  doc/uml_class_diagram_for_classdoc_17.gif,
-	  doc/uml_class_diagram_for_classdoc_18.gif,
-	  doc/uml_class_diagram_for_classdoc_19.gif,
-	  doc/uml_class_diagram_for_classdoc_20.gif,
-	  doc/uml_class_diagram_for_classdoc_21.gif,
-	  doc/uml_class_diagram_for_classdoc_22.gif,
-	  doc/uml_class_diagram_for_classdoc_23.gif,
-	  doc/uml_class_diagram_for_classdoc_24.gif,
-	  doc/uml_class_diagram_for_classdoc_25.gif,
-	  doc/uml_class_diagram_for_classdoc_3.gif,
-	  doc/uml_class_diagram_for_classdoc_6.gif,
-	  doc/uml_class_diagram_for_classdoc_7.gif,
-	  doc/uml_class_diagram_for_classdoc_8.gif,
-	  doc/uml_class_diagram_for_classdoc_9.gif, po/fr/pysql.po,
 	  po/pysql.pot, pysqlshell.py: add analyse keyword (forget it !).
 	  Doc update
 
@@ -761,59 +604,6 @@
 
 2006-12-09  fox
 
-	* doc/class-tree.html, doc/help.html, doc/identifier-index.html,
-	  doc/module-tree.html, doc/pysql-module.html,
-	  doc/pysql-pysrc.html, doc/pysqlcolor-module.html,
-	  doc/pysqlcolor-pysrc.html, doc/pysqlconf-module.html,
-	  doc/pysqlconf-pysrc.html, doc/pysqlconf.PysqlConf-class.html,
-	  doc/pysqldb-module.html, doc/pysqldb-pysrc.html,
-	  doc/pysqldb.BgQuery-class.html, doc/pysqldb.PysqlDb-class.html,
-	  doc/pysqlexception-module.html, doc/pysqlexception-pysrc.html,
-	  doc/pysqlexception.PysqlActionDenied-class.html,
-	  doc/pysqlexception.PysqlException-class.html,
-	  doc/pysqlexception.PysqlNotImplemented-class.html,
-	  doc/pysqlfunctions-module.html, doc/pysqlfunctions-pysrc.html,
-	  doc/pysqlgraphics-module.html, doc/pysqlgraphics-pysrc.html,
-	  doc/pysqlio-module.html, doc/pysqlio-pysrc.html,
-	  doc/pysqlio.PysqlIO-class.html, doc/pysqlnet-module.html,
-	  doc/pysqlnet-pysrc.html, doc/pysqlnet.PysqlNetClient-class.html,
-	  doc/pysqloraobjects-module.html, doc/pysqloraobjects-pysrc.html,
-	  doc/pysqloraobjects.OraDBLink-class.html,
-	  doc/pysqloraobjects.OraDatafile-class.html,
-	  doc/pysqloraobjects.OraDirectory-class.html,
-	  doc/pysqloraobjects.OraFunction-class.html,
-	  doc/pysqloraobjects.OraIndex-class.html,
-	  doc/pysqloraobjects.OraMaterializedView-class.html,
-	  doc/pysqloraobjects.OraObject-class.html,
-	  doc/pysqloraobjects.OraPackage-class.html,
-	  doc/pysqloraobjects.OraPackageBody-class.html,
-	  doc/pysqloraobjects.OraProcedure-class.html,
-	  doc/pysqloraobjects.OraSegment-class.html,
-	  doc/pysqloraobjects.OraSequence-class.html,
-	  doc/pysqloraobjects.OraStoredObject-class.html,
-	  doc/pysqloraobjects.OraSynonym-class.html,
-	  doc/pysqloraobjects.OraTable-class.html,
-	  doc/pysqloraobjects.OraTablespace-class.html,
-	  doc/pysqloraobjects.OraTabular-class.html,
-	  doc/pysqloraobjects.OraTrigger-class.html,
-	  doc/pysqloraobjects.OraUser-class.html,
-	  doc/pysqloraobjects.OraView-class.html,
-	  doc/pysqlqueries-module.html, doc/pysqlqueries-pysrc.html,
-	  doc/pysqlshell-module.html, doc/pysqlshell-pysrc.html,
-	  doc/pysqlshell.PysqlShell-class.html,
-	  doc/pysqlupdate-module.html, doc/pysqlupdate-pysrc.html,
-	  doc/pysqlupdate.Version-class.html, doc/toc-everything.html,
-	  doc/toc-pysqlfunctions-module.html,
-	  doc/toc-pysqlgraphics-module.html,
-	  doc/toc-pysqloraobjects-module.html,
-	  doc/toc-pysqlqueries-module.html,
-	  doc/toc-pysqlupdate-module.html, doc/toc.html,
-	  doc/uml_class_diagram_for_classdoc_12.gif,
-	  doc/uml_class_diagram_for_classdoc_16.gif,
-	  doc/uml_class_diagram_for_classdoc_18.gif,
-	  doc/uml_class_diagram_for_classdoc_22.gif,
-	  doc/uml_class_diagram_for_classdoc_3.gif,
-	  doc/uml_class_diagram_for_classdoc_5.gif, po/fr/pysql.po,
 	  po/pysql.pot, pysqltest.sql, pysqlupdate.py: doc and translation
 	  update
 	* ChangeLog, ChangeLog.html: Changelog update
@@ -892,64 +682,6 @@
 2006-11-30  fox
 
 	* ChangeLog, ChangeLog.html: Changelog update
-	* TODO, doc/class-tree.html, doc/help.html,
-	  doc/identifier-index.html, doc/module-tree.html,
-	  doc/pysql-module.html, doc/pysql-pysrc.html,
-	  doc/pysqlcolor-module.html, doc/pysqlcolor-pysrc.html,
-	  doc/pysqlconf-module.html, doc/pysqlconf-pysrc.html,
-	  doc/pysqlconf.PysqlConf-class.html, doc/pysqldb-module.html,
-	  doc/pysqldb-pysrc.html, doc/pysqldb.BgQuery-class.html,
-	  doc/pysqldb.PysqlDb-class.html, doc/pysqlexception-module.html,
-	  doc/pysqlexception-pysrc.html,
-	  doc/pysqlexception.PysqlActionDenied-class.html,
-	  doc/pysqlexception.PysqlException-class.html,
-	  doc/pysqlexception.PysqlNotImplemented-class.html,
-	  doc/pysqlfunctions-module.html, doc/pysqlfunctions-pysrc.html,
-	  doc/pysqlgraphics-module.html, doc/pysqlgraphics-pysrc.html,
-	  doc/pysqlio-module.html, doc/pysqlio-pysrc.html,
-	  doc/pysqlio.PysqlIO-class.html, doc/pysqlnet-module.html,
-	  doc/pysqlnet-pysrc.html, doc/pysqlnet.PysqlNetClient-class.html,
-	  doc/pysqloraobjects-module.html, doc/pysqloraobjects-pysrc.html,
-	  doc/pysqloraobjects.OraDBLink-class.html,
-	  doc/pysqloraobjects.OraDatafile-class.html,
-	  doc/pysqloraobjects.OraDirectory-class.html,
-	  doc/pysqloraobjects.OraFunction-class.html,
-	  doc/pysqloraobjects.OraIndex-class.html,
-	  doc/pysqloraobjects.OraMaterializedView-class.html,
-	  doc/pysqloraobjects.OraObject-class.html,
-	  doc/pysqloraobjects.OraPackage-class.html,
-	  doc/pysqloraobjects.OraPackageBody-class.html,
-	  doc/pysqloraobjects.OraProcedure-class.html,
-	  doc/pysqloraobjects.OraSegment-class.html,
-	  doc/pysqloraobjects.OraSequence-class.html,
-	  doc/pysqloraobjects.OraStoredObject-class.html,
-	  doc/pysqloraobjects.OraSynonym-class.html,
-	  doc/pysqloraobjects.OraTable-class.html,
-	  doc/pysqloraobjects.OraTablespace-class.html,
-	  doc/pysqloraobjects.OraTabular-class.html,
-	  doc/pysqloraobjects.OraTrigger-class.html,
-	  doc/pysqloraobjects.OraUser-class.html,
-	  doc/pysqloraobjects.OraView-class.html,
-	  doc/pysqlqueries-module.html, doc/pysqlqueries-pysrc.html,
-	  doc/pysqlshell-module.html, doc/pysqlshell-pysrc.html,
-	  doc/pysqlshell.PysqlShell-class.html, doc/toc-everything.html,
-	  doc/toc-pysql-module.html, doc/toc-pysqlfunctions-module.html,
-	  doc/uml_class_diagram_for_classdoc_10.gif,
-	  doc/uml_class_diagram_for_classdoc_11.gif,
-	  doc/uml_class_diagram_for_classdoc_12.gif,
-	  doc/uml_class_diagram_for_classdoc_13.gif,
-	  doc/uml_class_diagram_for_classdoc_14.gif,
-	  doc/uml_class_diagram_for_classdoc_15.gif,
-	  doc/uml_class_diagram_for_classdoc_16.gif,
-	  doc/uml_class_diagram_for_classdoc_2.gif,
-	  doc/uml_class_diagram_for_classdoc_20.gif,
-	  doc/uml_class_diagram_for_classdoc_22.gif,
-	  doc/uml_class_diagram_for_classdoc_25.gif,
-	  doc/uml_class_diagram_for_classdoc_26.gif,
-	  doc/uml_class_diagram_for_classdoc_3.gif,
-	  doc/uml_class_diagram_for_classdoc_4.gif,
-	  doc/uml_class_diagram_for_classdoc_5.gif,
-	  doc/uml_class_diagram_for_classdoc_9.gif, po/fr/pysql.po,
 	  po/pysql.pot, pysqltest.sql: Doc, translation and todo update
 	  Add some more unit test
 
@@ -1000,77 +732,6 @@
 	  Factorise help definition for search function
 	  Add search method for procedure, function and package
 	  Add graphical output for pkgtree method (still basic)
-	* TODO, doc/class-tree.html, doc/help.html,
-	  doc/identifier-index.html, doc/module-tree.html,
-	  doc/pysql-module.html, doc/pysql-pysrc.html,
-	  doc/pysqlcolor-module.html, doc/pysqlcolor-pysrc.html,
-	  doc/pysqlconf-module.html, doc/pysqlconf-pysrc.html,
-	  doc/pysqlconf.PysqlConf-class.html, doc/pysqldb-module.html,
-	  doc/pysqldb-pysrc.html, doc/pysqldb.BgQuery-class.html,
-	  doc/pysqldb.PysqlDb-class.html, doc/pysqlexception-module.html,
-	  doc/pysqlexception-pysrc.html,
-	  doc/pysqlexception.PysqlActionDenied-class.html,
-	  doc/pysqlexception.PysqlException-class.html,
-	  doc/pysqlexception.PysqlNotImplemented-class.html,
-	  doc/pysqlfunctions-module.html, doc/pysqlfunctions-pysrc.html,
-	  doc/pysqlgraphics-module.html, doc/pysqlgraphics-pysrc.html,
-	  doc/pysqlio-module.html, doc/pysqlio-pysrc.html,
-	  doc/pysqlio.PysqlIO-class.html, doc/pysqlnet-module.html,
-	  doc/pysqlnet-pysrc.html, doc/pysqlnet.PysqlNetClient-class.html,
-	  doc/pysqloraobjects-module.html, doc/pysqloraobjects-pysrc.html,
-	  doc/pysqloraobjects.OraDBLink-class.html,
-	  doc/pysqloraobjects.OraDatafile-class.html,
-	  doc/pysqloraobjects.OraDirectory-class.html,
-	  doc/pysqloraobjects.OraFunction-class.html,
-	  doc/pysqloraobjects.OraIndex-class.html,
-	  doc/pysqloraobjects.OraMaterializedView-class.html,
-	  doc/pysqloraobjects.OraObject-class.html,
-	  doc/pysqloraobjects.OraPackage-class.html,
-	  doc/pysqloraobjects.OraPackageBody-class.html,
-	  doc/pysqloraobjects.OraProcedure-class.html,
-	  doc/pysqloraobjects.OraSegment-class.html,
-	  doc/pysqloraobjects.OraSequence-class.html,
-	  doc/pysqloraobjects.OraStoredObject-class.html,
-	  doc/pysqloraobjects.OraSynonym-class.html,
-	  doc/pysqloraobjects.OraTable-class.html,
-	  doc/pysqloraobjects.OraTablespace-class.html,
-	  doc/pysqloraobjects.OraTabular-class.html,
-	  doc/pysqloraobjects.OraTrigger-class.html,
-	  doc/pysqloraobjects.OraUser-class.html,
-	  doc/pysqloraobjects.OraView-class.html,
-	  doc/pysqlqueries-module.html, doc/pysqlqueries-pysrc.html,
-	  doc/pysqlshell-module.html, doc/pysqlshell-pysrc.html,
-	  doc/pysqlshell.PysqlShell-class.html, doc/toc-everything.html,
-	  doc/toc-pysql-module.html, doc/toc-pysqlfunctions-module.html,
-	  doc/toc-pysqlgraphics-module.html, doc/toc-pysqlio-module.html,
-	  doc/toc-pysqlnet-module.html,
-	  doc/toc-pysqloraobjects-module.html,
-	  doc/toc-pysqlqueries-module.html, doc/toc.html,
-	  doc/uml_class_diagram_for_classdoc_10.gif,
-	  doc/uml_class_diagram_for_classdoc_11.gif,
-	  doc/uml_class_diagram_for_classdoc_12.gif,
-	  doc/uml_class_diagram_for_classdoc_13.gif,
-	  doc/uml_class_diagram_for_classdoc_14.gif,
-	  doc/uml_class_diagram_for_classdoc_15.gif,
-	  doc/uml_class_diagram_for_classdoc_16.gif,
-	  doc/uml_class_diagram_for_classdoc_17.gif,
-	  doc/uml_class_diagram_for_classdoc_18.gif,
-	  doc/uml_class_diagram_for_classdoc_19.gif,
-	  doc/uml_class_diagram_for_classdoc_2.gif,
-	  doc/uml_class_diagram_for_classdoc_20.gif,
-	  doc/uml_class_diagram_for_classdoc_21.gif,
-	  doc/uml_class_diagram_for_classdoc_22.gif,
-	  doc/uml_class_diagram_for_classdoc_23.gif,
-	  doc/uml_class_diagram_for_classdoc_24.gif,
-	  doc/uml_class_diagram_for_classdoc_25.gif,
-	  doc/uml_class_diagram_for_classdoc_26.gif,
-	  doc/uml_class_diagram_for_classdoc_3.gif,
-	  doc/uml_class_diagram_for_classdoc_4.gif,
-	  doc/uml_class_diagram_for_classdoc_5.gif,
-	  doc/uml_class_diagram_for_classdoc_6.gif,
-	  doc/uml_class_diagram_for_classdoc_7.gif,
-	  doc/uml_class_diagram_for_classdoc_8.gif,
-	  doc/uml_class_diagram_for_classdoc_9.gif, po/fr/pysql.po,
 	  po/pysql.pot: Translation and doc update
 	* ChangeLog, ChangeLog.html: Changelog update
 	* pysqlnet.py, pysqlshell.py, pysqltest.sql: minor cleanup and
@@ -1170,61 +831,6 @@
 
 	* pysqloraobjects.py: desc bugfix for sys objects
 	* ChangeLog, ChangeLog.html: Changelog update
-	* TODO, doc/class-tree.html, doc/help.html,
-	  doc/identifier-index.html, doc/module-tree.html,
-	  doc/pysql-module.html, doc/pysql-pysrc.html,
-	  doc/pysqlcolor-module.html, doc/pysqlcolor-pysrc.html,
-	  doc/pysqlconf-module.html, doc/pysqlconf-pysrc.html,
-	  doc/pysqlconf.PysqlConf-class.html, doc/pysqldb-module.html,
-	  doc/pysqldb-pysrc.html, doc/pysqldb.BgQuery-class.html,
-	  doc/pysqldb.PysqlDb-class.html, doc/pysqlexception-module.html,
-	  doc/pysqlexception-pysrc.html,
-	  doc/pysqlexception.PysqlActionDenied-class.html,
-	  doc/pysqlexception.PysqlException-class.html,
-	  doc/pysqlexception.PysqlNotImplemented-class.html,
-	  doc/pysqlfunctions-module.html, doc/pysqlfunctions-pysrc.html,
-	  doc/pysqlgraphics-module.html, doc/pysqlgraphics-pysrc.html,
-	  doc/pysqloraobjects-module.html, doc/pysqloraobjects-pysrc.html,
-	  doc/pysqloraobjects.OraDBLink-class.html,
-	  doc/pysqloraobjects.OraDatafile-class.html,
-	  doc/pysqloraobjects.OraDirectory-class.html,
-	  doc/pysqloraobjects.OraIndex-class.html,
-	  doc/pysqloraobjects.OraMaterializedView-class.html,
-	  doc/pysqloraobjects.OraObject-class.html,
-	  doc/pysqloraobjects.OraSegment-class.html,
-	  doc/pysqloraobjects.OraSequence-class.html,
-	  doc/pysqloraobjects.OraSynonym-class.html,
-	  doc/pysqloraobjects.OraTable-class.html,
-	  doc/pysqloraobjects.OraTablespace-class.html,
-	  doc/pysqloraobjects.OraTabular-class.html,
-	  doc/pysqloraobjects.OraUser-class.html,
-	  doc/pysqloraobjects.OraView-class.html,
-	  doc/pysqlqueries-module.html, doc/pysqlqueries-pysrc.html,
-	  doc/pysqlshell-module.html, doc/pysqlshell-pysrc.html,
-	  doc/pysqlshell.PysqlShell-class.html, doc/toc-everything.html,
-	  doc/toc-pysqlexception-module.html,
-	  doc/toc-pysqlfunctions-module.html,
-	  doc/toc-pysqlgraphics-module.html,
-	  doc/toc-pysqloraobjects-module.html,
-	  doc/toc-pysqlqueries-module.html, doc/toc.html,
-	  doc/uml_class_diagram_for_classdoc.gif,
-	  doc/uml_class_diagram_for_classdoc_10.gif,
-	  doc/uml_class_diagram_for_classdoc_11.gif,
-	  doc/uml_class_diagram_for_classdoc_12.gif,
-	  doc/uml_class_diagram_for_classdoc_13.gif,
-	  doc/uml_class_diagram_for_classdoc_14.gif,
-	  doc/uml_class_diagram_for_classdoc_15.gif,
-	  doc/uml_class_diagram_for_classdoc_16.gif,
-	  doc/uml_class_diagram_for_classdoc_17.gif,
-	  doc/uml_class_diagram_for_classdoc_18.gif,
-	  doc/uml_class_diagram_for_classdoc_2.gif,
-	  doc/uml_class_diagram_for_classdoc_3.gif,
-	  doc/uml_class_diagram_for_classdoc_4.gif,
-	  doc/uml_class_diagram_for_classdoc_5.gif,
-	  doc/uml_class_diagram_for_classdoc_6.gif,
-	  doc/uml_class_diagram_for_classdoc_7.gif,
-	  doc/uml_class_diagram_for_classdoc_8.gif,
-	  doc/uml_class_diagram_for_classdoc_9.gif, locale/fr/LC_MESSAGES,
 	  po/fr/pysql.po, po/pysql.pot: Translation and documentation
 	  update
 	* pysql.py, pysqldb.py, pysqlfunctions.py, pysqlgraphics.py,
@@ -1244,46 +850,6 @@
 2006-11-11  fox
 
 	* ChangeLog, ChangeLog.html: Changelog update
-	* doc/class-tree.html, doc/help.html, doc/identifier-index.html,
-	  doc/module-tree.html, doc/pysql-module.html,
-	  doc/pysql-pysrc.html, doc/pysqlException-module.html,
-	  doc/pysqlException-pysrc.html,
-	  doc/pysqlException.PysqlActionDenied-class.html,
-	  doc/pysqlException.PysqlException-class.html,
-	  doc/pysqlException.PysqlNotImplemented-class.html,
-	  doc/pysqlFunctions-module.html, doc/pysqlFunctions-pysrc.html,
-	  doc/pysqlOraObjects-module.html, doc/pysqlOraObjects-pysrc.html,
-	  doc/pysqlOraObjects.OraDBLink-class.html,
-	  doc/pysqlOraObjects.OraDatafile-class.html,
-	  doc/pysqlOraObjects.OraDirectory-class.html,
-	  doc/pysqlOraObjects.OraIndex-class.html,
-	  doc/pysqlOraObjects.OraMaterializedView-class.html,
-	  doc/pysqlOraObjects.OraObject-class.html,
-	  doc/pysqlOraObjects.OraSegment-class.html,
-	  doc/pysqlOraObjects.OraSequence-class.html,
-	  doc/pysqlOraObjects.OraSynonym-class.html,
-	  doc/pysqlOraObjects.OraTable-class.html,
-	  doc/pysqlOraObjects.OraTablespace-class.html,
-	  doc/pysqlOraObjects.OraTabular-class.html,
-	  doc/pysqlOraObjects.OraUser-class.html,
-	  doc/pysqlOraObjects.OraView-class.html,
-	  doc/pysqlQueries-module.html, doc/pysqlQueries-pysrc.html,
-	  doc/pysqlcolor-module.html, doc/pysqlcolor-pysrc.html,
-	  doc/pysqlconf-module.html, doc/pysqlconf-pysrc.html,
-	  doc/pysqlconf.PysqlConf-class.html, doc/pysqldb-module.html,
-	  doc/pysqldb-pysrc.html, doc/pysqldb.BgQuery-class.html,
-	  doc/pysqldb.PysqlDb-class.html, doc/pysqlgraphics-module.html,
-	  doc/pysqlgraphics-pysrc.html, doc/pysqlshell-module.html,
-	  doc/pysqlshell-pysrc.html, doc/pysqlshell.PysqlShell-class.html,
-	  doc/toc-everything.html, doc/toc-pysql-module.html,
-	  doc/toc-pysqlFunctions-module.html,
-	  doc/toc-pysqlconf-module.html, doc/toc-pysqldb-module.html,
-	  doc/toc-pysqlgraphics-module.html,
-	  doc/toc-pysqlshell-module.html, doc/toc.html,
-	  doc/uml_class_diagram_for_classdoc_10.gif,
-	  doc/uml_class_diagram_for_classdoc_15.gif,
-	  doc/uml_class_diagram_for_classdoc_19.gif,
-	  doc/uml_class_diagram_for_classdoc_9.gif, po/fr/pysql.po,
 	  po/pysql.pot, pysql.py, pysqlOraObjects.py, pysqlgraphics.py:
 	  Doc and translation update
 	* pysqlOraObjects.py: desc bugfix when owner if provided in name
@@ -1315,57 +881,6 @@
 	* po/fr/pysql.po, po/pysql.pot: i18n update
 	* pysqlFunctions.py, pysqlconf.py, pysqldb.py, pysqlshell.py: Use
 	  explicit import (avoid *) when possible (code cleanup)
-	* doc/class-tree.html, doc/help.html, doc/identifier-index.html,
-	  doc/module-tree.html, doc/pysql-module.html,
-	  doc/pysql-pysrc.html, doc/pysqlException-module.html,
-	  doc/pysqlException-pysrc.html,
-	  doc/pysqlException.PysqlActionDenied-class.html,
-	  doc/pysqlException.PysqlException-class.html,
-	  doc/pysqlException.PysqlNotImplemented-class.html,
-	  doc/pysqlFunctions-module.html, doc/pysqlFunctions-pysrc.html,
-	  doc/pysqlOraObjects-module.html, doc/pysqlOraObjects-pysrc.html,
-	  doc/pysqlOraObjects.OraDBLink-class.html,
-	  doc/pysqlOraObjects.OraDatafile-class.html,
-	  doc/pysqlOraObjects.OraDirectory-class.html,
-	  doc/pysqlOraObjects.OraIndex-class.html,
-	  doc/pysqlOraObjects.OraMaterializedView-class.html,
-	  doc/pysqlOraObjects.OraObject-class.html,
-	  doc/pysqlOraObjects.OraSegment-class.html,
-	  doc/pysqlOraObjects.OraSequence-class.html,
-	  doc/pysqlOraObjects.OraSynonym-class.html,
-	  doc/pysqlOraObjects.OraTable-class.html,
-	  doc/pysqlOraObjects.OraTablespace-class.html,
-	  doc/pysqlOraObjects.OraTabular-class.html,
-	  doc/pysqlOraObjects.OraUser-class.html,
-	  doc/pysqlOraObjects.OraView-class.html,
-	  doc/pysqlQueries-module.html, doc/pysqlQueries-pysrc.html,
-	  doc/pysqlcolor-module.html, doc/pysqlcolor-pysrc.html,
-	  doc/pysqlconf-module.html, doc/pysqlconf-pysrc.html,
-	  doc/pysqlconf.PysqlConf-class.html, doc/pysqldb-module.html,
-	  doc/pysqldb-pysrc.html, doc/pysqldb.BgQuery-class.html,
-	  doc/pysqldb.PysqlDb-class.html, doc/pysqlshell-module.html,
-	  doc/pysqlshell-pysrc.html, doc/pysqlshell.PysqlShell-class.html,
-	  doc/toc-everything.html, doc/toc-pysqlException-module.html,
-	  doc/toc-pysqlFunctions-module.html, doc/toc-pysqldb-module.html,
-	  doc/uml_class_diagram_for_classdoc.gif,
-	  doc/uml_class_diagram_for_classdoc_10.gif,
-	  doc/uml_class_diagram_for_classdoc_11.gif,
-	  doc/uml_class_diagram_for_classdoc_12.gif,
-	  doc/uml_class_diagram_for_classdoc_13.gif,
-	  doc/uml_class_diagram_for_classdoc_14.gif,
-	  doc/uml_class_diagram_for_classdoc_15.gif,
-	  doc/uml_class_diagram_for_classdoc_16.gif,
-	  doc/uml_class_diagram_for_classdoc_17.gif,
-	  doc/uml_class_diagram_for_classdoc_18.gif,
-	  doc/uml_class_diagram_for_classdoc_19.gif,
-	  doc/uml_class_diagram_for_classdoc_2.gif,
-	  doc/uml_class_diagram_for_classdoc_3.gif,
-	  doc/uml_class_diagram_for_classdoc_4.gif,
-	  doc/uml_class_diagram_for_classdoc_5.gif,
-	  doc/uml_class_diagram_for_classdoc_6.gif,
-	  doc/uml_class_diagram_for_classdoc_7.gif,
-	  doc/uml_class_diagram_for_classdoc_8.gif,
-	  doc/uml_class_diagram_for_classdoc_9.gif, pysqlFunctions.py,
 	  pysqlQueries.py, pysqldb.py: Documentation update and code
 	  cleanup (again)
 	* pysqlException.py, pysqlFunctions.py, pysqlOraObjects.py,
@@ -1423,61 +938,6 @@
 	  for example)
 	* pysqlconf.py: add echo parameter to echo command on prompt
 	  (usefull for script debug)
-	* doc/class-tree.html, doc/crarr.png, doc/epydoc.css,
-	  doc/epydoc.js, doc/frames.html, doc/help.html,
-	  doc/identifier-index.html, doc/index.html, doc/module-tree.html,
-	  doc/pysql-module.html, doc/pysql-pysrc.html,
-	  doc/pysqlException-module.html, doc/pysqlException-pysrc.html,
-	  doc/pysqlException.PysqlException-class.html,
-	  doc/pysqlException.PysqlNotImplemented-class.html,
-	  doc/pysqlFunctions-module.html, doc/pysqlFunctions-pysrc.html,
-	  doc/pysqlOraObjects-module.html, doc/pysqlOraObjects-pysrc.html,
-	  doc/pysqlOraObjects.OraDBLink-class.html,
-	  doc/pysqlOraObjects.OraDatafile-class.html,
-	  doc/pysqlOraObjects.OraDirectory-class.html,
-	  doc/pysqlOraObjects.OraIndex-class.html,
-	  doc/pysqlOraObjects.OraMaterializedView-class.html,
-	  doc/pysqlOraObjects.OraObject-class.html,
-	  doc/pysqlOraObjects.OraSegment-class.html,
-	  doc/pysqlOraObjects.OraSequence-class.html,
-	  doc/pysqlOraObjects.OraSynonym-class.html,
-	  doc/pysqlOraObjects.OraTable-class.html,
-	  doc/pysqlOraObjects.OraTablespace-class.html,
-	  doc/pysqlOraObjects.OraTabular-class.html,
-	  doc/pysqlOraObjects.OraUser-class.html,
-	  doc/pysqlOraObjects.OraView-class.html,
-	  doc/pysqlQueries-module.html, doc/pysqlQueries-pysrc.html,
-	  doc/pysqlcolor-module.html, doc/pysqlcolor-pysrc.html,
-	  doc/pysqlconf-module.html, doc/pysqlconf-pysrc.html,
-	  doc/pysqlconf.PysqlConf-class.html, doc/pysqldb-module.html,
-	  doc/pysqldb-pysrc.html, doc/pysqldb.BgQuery-class.html,
-	  doc/pysqldb.PysqlDb-class.html, doc/pysqlshell-module.html,
-	  doc/pysqlshell-pysrc.html, doc/pysqlshell.PysqlShell-class.html,
-	  doc/toc-everything.html, doc/toc-pysql-module.html,
-	  doc/toc-pysqlException-module.html,
-	  doc/toc-pysqlFunctions-module.html,
-	  doc/toc-pysqlOraObjects-module.html,
-	  doc/toc-pysqlQueries-module.html,
-	  doc/toc-pysqlcolor-module.html, doc/toc-pysqlconf-module.html,
-	  doc/toc-pysqldb-module.html, doc/toc-pysqlshell-module.html,
-	  doc/toc.html, doc/uml_class_diagram_for_classdoc.gif,
-	  doc/uml_class_diagram_for_classdoc_10.gif,
-	  doc/uml_class_diagram_for_classdoc_11.gif,
-	  doc/uml_class_diagram_for_classdoc_12.gif,
-	  doc/uml_class_diagram_for_classdoc_13.gif,
-	  doc/uml_class_diagram_for_classdoc_14.gif,
-	  doc/uml_class_diagram_for_classdoc_15.gif,
-	  doc/uml_class_diagram_for_classdoc_16.gif,
-	  doc/uml_class_diagram_for_classdoc_17.gif,
-	  doc/uml_class_diagram_for_classdoc_18.gif,
-	  doc/uml_class_diagram_for_classdoc_2.gif,
-	  doc/uml_class_diagram_for_classdoc_3.gif,
-	  doc/uml_class_diagram_for_classdoc_4.gif,
-	  doc/uml_class_diagram_for_classdoc_5.gif,
-	  doc/uml_class_diagram_for_classdoc_6.gif,
-	  doc/uml_class_diagram_for_classdoc_7.gif,
-	  doc/uml_class_diagram_for_classdoc_8.gif,
-	  doc/uml_class_diagram_for_classdoc_9.gif: doc update
 
 2006-11-03  fox
 
@@ -1648,55 +1108,6 @@
 
 	* ChangeLog, ChangeLog.html: Changelog update
 	* index.html: add dev guys
-	* doc/help.html, doc/indices.html, doc/pysql-module.html,
-	  doc/pysql-pysrc.html, doc/pysqlException-module.html,
-	  doc/pysqlException-pysrc.html,
-	  doc/pysqlException.PysqlException-class.html,
-	  doc/pysqlFunctions-module.html, doc/pysqlFunctions-pysrc.html,
-	  doc/pysqlOraObjects-module.html, doc/pysqlOraObjects-pysrc.html,
-	  doc/pysqlOraObjects.OraDBLink-class.html,
-	  doc/pysqlOraObjects.OraDatafile-class.html,
-	  doc/pysqlOraObjects.OraDirectory-class.html,
-	  doc/pysqlOraObjects.OraIndex-class.html,
-	  doc/pysqlOraObjects.OraMaterializedView-class.html,
-	  doc/pysqlOraObjects.OraObject-class.html,
-	  doc/pysqlOraObjects.OraSegment-class.html,
-	  doc/pysqlOraObjects.OraSequence-class.html,
-	  doc/pysqlOraObjects.OraSynonym-class.html,
-	  doc/pysqlOraObjects.OraTable-class.html,
-	  doc/pysqlOraObjects.OraTablespace-class.html,
-	  doc/pysqlOraObjects.OraTabular-class.html,
-	  doc/pysqlOraObjects.OraUser-class.html,
-	  doc/pysqlOraObjects.OraView-class.html,
-	  doc/pysqlQueries-module.html, doc/pysqlQueries-pysrc.html,
-	  doc/pysqlcolor-module.html, doc/pysqlcolor-pysrc.html,
-	  doc/pysqlconf-module.html, doc/pysqlconf-pysrc.html,
-	  doc/pysqlconf.PysqlConf-class.html, doc/pysqldb-module.html,
-	  doc/pysqldb-pysrc.html, doc/pysqldb.BgQuery-class.html,
-	  doc/pysqldb.PysqlDb-class.html, doc/pysqlshell-module.html,
-	  doc/pysqlshell-pysrc.html, doc/pysqlshell.PysqlShell-class.html,
-	  doc/toc-everything.html, doc/toc-pysqlFunctions-module.html,
-	  doc/toc-pysqlOraObjects-module.html,
-	  doc/toc-pysqlQueries-module.html,
-	  doc/toc-pysqlcolor-module.html, doc/toc-pysqlconf-module.html,
-	  doc/toc-pysqldb-module.html, doc/toc-pysqlshell-module.html,
-	  doc/toc.html, doc/trees.html,
-	  doc/uml_class_diagram_for_classdoc_10.gif,
-	  doc/uml_class_diagram_for_classdoc_11.gif,
-	  doc/uml_class_diagram_for_classdoc_12.gif,
-	  doc/uml_class_diagram_for_classdoc_13.gif,
-	  doc/uml_class_diagram_for_classdoc_14.gif,
-	  doc/uml_class_diagram_for_classdoc_15.gif,
-	  doc/uml_class_diagram_for_classdoc_16.gif,
-	  doc/uml_class_diagram_for_classdoc_17.gif,
-	  doc/uml_class_diagram_for_classdoc_2.gif,
-	  doc/uml_class_diagram_for_classdoc_3.gif,
-	  doc/uml_class_diagram_for_classdoc_4.gif,
-	  doc/uml_class_diagram_for_classdoc_5.gif,
-	  doc/uml_class_diagram_for_classdoc_6.gif,
-	  doc/uml_class_diagram_for_classdoc_7.gif,
-	  doc/uml_class_diagram_for_classdoc_8.gif,
-	  doc/uml_class_diagram_for_classdoc_9.gif, pysqlOraObjects.py,
 	  pysqldb.py: major doc update and docstring bugfix
 	* ChangeLog, ChangeLog.html: Changelog update
 	* index.html, pysqlOraObjects.py, pysqlconf.py, pysqldb.py,
@@ -1840,18 +1251,6 @@
 	* TODO: update
 	* pysqlconf.py, pysqlshell.py: Start to colorize
 	* pysqlcolor.py: hello new world in color, bye bye black and white
-	* doc/help.html, doc/indices.html, doc/pysql-module.html,
-	  doc/pysql-pysrc.html, doc/pysqlException-module.html,
-	  doc/pysqlException-pysrc.html,
-	  doc/pysqlException.PysqlException-class.html,
-	  doc/pysqlFunctions-module.html, doc/pysqlFunctions-pysrc.html,
-	  doc/pysqlconf-module.html, doc/pysqlconf-pysrc.html,
-	  doc/pysqlconf.PysqlConf-class.html, doc/pysqldb-module.html,
-	  doc/pysqldb-pysrc.html, doc/pysqldb.PysqlDb-class.html,
-	  doc/pysqlshell-module.html, doc/pysqlshell-pysrc.html,
-	  doc/pysqlshell.PysqlShell-class.html, doc/toc-everything.html,
-	  doc/toc-pysqlFunctions-module.html, doc/trees.html,
-	  doc/uml_class_diagram_for_classdoc_2.gif: doc update
 	* ChangeLog, ChangeLog.html: Changelog update
 	* TODO: update
 	* pysqlshell.py: save history at exit
@@ -1907,17 +1306,6 @@
 	  indexed columns
 	  Change header beahviour for __displayTab : header must be given
 	  as a parameter
-	* doc/help.html, doc/indices.html, doc/pysql-module.html,
-	  doc/pysql-pysrc.html, doc/pysqlException-module.html,
-	  doc/pysqlException-pysrc.html,
-	  doc/pysqlException.PysqlException-class.html,
-	  doc/pysqlFunctions-module.html, doc/pysqlFunctions-pysrc.html,
-	  doc/pysqlconf-module.html, doc/pysqlconf-pysrc.html,
-	  doc/pysqlconf.PysqlConf-class.html, doc/pysqldb-module.html,
-	  doc/pysqldb-pysrc.html, doc/pysqldb.PysqlDb-class.html,
-	  doc/pysqlshell-module.html, doc/pysqlshell-pysrc.html,
-	  doc/pysqlshell.PysqlShell-class.html, doc/trees.html,
-	  doc/uml_class_diagram_for_classdoc_2.gif: doc update
 	* ChangeLog, ChangeLog.html: Changelog update
 	* TODO: update
 
@@ -1935,20 +1323,6 @@
 
 2006-08-24  fox
 
-	* doc/pysqlconf-module.html, doc/pysqlconf-pysrc.html,
-	  doc/pysqlconf.PysqlConf-class.html,
-	  doc/toc-pysqlconf-module.html,
-	  doc/uml_class_diagram_for_classdoc.gif,
-	  doc/uml_class_diagram_for_classdoc_2.gif: doc update
-	* doc/help.html, doc/indices.html, doc/pysql-module.html,
-	  doc/pysql-pysrc.html, doc/pysqlException-module.html,
-	  doc/pysqlException-pysrc.html,
-	  doc/pysqlException.PysqlException-class.html,
-	  doc/pysqlFunctions-module.html, doc/pysqlFunctions-pysrc.html,
-	  doc/pysqldb-module.html, doc/pysqldb-pysrc.html,
-	  doc/pysqldb.PysqlDb-class.html, doc/pysqlshell-module.html,
-	  doc/pysqlshell-pysrc.html, doc/pysqlshell.PysqlShell-class.html,
-	  doc/trees.html: update
 	* ChangeLog, ChangeLog.html: Changelog update
 	* pysqlconf.py, pysqlshell.py: Add a separate config module & class
 	  Handle config in file
@@ -1964,15 +1338,6 @@
 
 2006-08-22  fox
 
-	* doc/help.html, doc/indices.html, doc/pysql-module.html,
-	  doc/pysql-pysrc.html, doc/pysqlException-module.html,
-	  doc/pysqlException-pysrc.html,
-	  doc/pysqlException.PysqlException-class.html,
-	  doc/pysqlFunctions-module.html, doc/pysqlFunctions-pysrc.html,
-	  doc/pysqldb-module.html, doc/pysqldb-pysrc.html,
-	  doc/pysqldb.PysqlDb-class.html, doc/pysqlshell-module.html,
-	  doc/pysqlshell-pysrc.html, doc/pysqlshell.PysqlShell-class.html,
-	  doc/toc-everything.html, doc/toc.html, doc/trees.html: doc update
 	* TODO: update
 	* pysql.py: Add global exception trapping
 	* pysqlshell.py: handle properly initial connection failure
@@ -1983,62 +1348,17 @@
 
 2006-08-21  fox
 
-	* doc/help.html, doc/indices.html, doc/pysql-module.html,
-	  doc/pysql-pysrc.html, doc/pysqlException-module.html,
-	  doc/pysqlException-pysrc.html,
-	  doc/pysqlException.PysqlException-class.html,
-	  doc/pysqlFunctions-module.html, doc/pysqlFunctions-pysrc.html,
-	  doc/pysqldb-module.html, doc/pysqldb-pysrc.html,
-	  doc/pysqldb.PysqlDb-class.html, doc/pysqlshell-module.html,
-	  doc/pysqlshell-pysrc.html, doc/pysqlshell.PysqlShell-class.html,
-	  doc/trees.html: update
 	* pysqlshell.py: add commit/rollback
 	  fix desc bug
 	  handle correctly update/delete/insert
 	* pysqldb.py: add rowcount, commit and rollback
 	  execute return resultset for select and rowcount else
 	* doc.sh: shell to generate doc
-	* doc/shell.Shell-class.html: update
-	* doc/pysqlshell-module.html, doc/pysqlshell-pysrc.html,
-	  doc/pysqlshell.PysqlShell-class.html,
-	  doc/toc-pysqlshell-module.html: update
-	* doc/shell-module.html, doc/shell-pysrc.html,
-	  doc/toc-shell-module.html: update
-	* doc/help.html, doc/indices.html, doc/pysql-module.html,
-	  doc/pysql-pysrc.html, doc/pysqlException-module.html,
-	  doc/pysqlException-pysrc.html,
-	  doc/pysqlException.PysqlException-class.html,
-	  doc/pysqlFunctions-module.html, doc/pysqlFunctions-pysrc.html,
-	  doc/pysqldb-module.html, doc/pysqldb-pysrc.html,
-	  doc/pysqldb.PysqlDb-class.html, doc/toc-everything.html,
-	  doc/toc.html, doc/trees.html: update
 	* pysql.py, shell.py: Change shell module & class name
 	* pysqlshell.py: change name
 	* shell.py: adding pysql prefix to class and module name
 	* index.html: add doc link
 	* pysql.py, shell.py: doc update
-	* doc/help.html, doc/indices.html, doc/pysql-module.html,
-	  doc/pysql-pysrc.html, doc/pysqlException-module.html,
-	  doc/pysqlException-pysrc.html,
-	  doc/pysqlException.PysqlException-class.html,
-	  doc/pysqlFunctions-module.html, doc/pysqlFunctions-pysrc.html,
-	  doc/pysqldb-module.html, doc/pysqldb-pysrc.html,
-	  doc/pysqldb.PysqlDb-class.html, doc/shell-module.html,
-	  doc/shell-pysrc.html, doc/shell.Shell-class.html,
-	  doc/trees.html: doc update
-	* doc, doc/epydoc.css, doc/epydoc.js, doc/frames.html,
-	  doc/help.html, doc/index.html, doc/indices.html,
-	  doc/pysql-module.html, doc/pysql-pysrc.html,
-	  doc/pysqlException-module.html, doc/pysqlException-pysrc.html,
-	  doc/pysqlException.PysqlException-class.html,
-	  doc/pysqlFunctions-module.html, doc/pysqlFunctions-pysrc.html,
-	  doc/pysqldb-module.html, doc/pysqldb-pysrc.html,
-	  doc/pysqldb.PysqlDb-class.html, doc/shell-module.html,
-	  doc/shell-pysrc.html, doc/shell.Shell-class.html,
-	  doc/toc-everything.html, doc/toc-pysql-module.html,
-	  doc/toc-pysqlException-module.html,
-	  doc/toc-pysqlFunctions-module.html, doc/toc-pysqldb-module.html,
-	  doc/toc-shell-module.html, doc/toc.html, doc/trees.html: Add doc
 	  (thanks epydoc)
 	* TODO: update
 	* shell.py: add connect/disconnect method
