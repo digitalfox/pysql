@@ -20,3 +20,11 @@ Installation from package
 ========================
 
 Redhat, Debian, Slackware, Windows....
+
+
+Documentation generation
+========================
+
+Use the doc.sh script in script/ dir. You will need Epydoc (http://epydoc.sf.net).
+
+You can also browse documentation online at : http://pysql.sf.net/doc/

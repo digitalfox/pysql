@@ -23,7 +23,7 @@ if "win" in " ".join(sys.argv[1:]):
 
 #Go for setup 
 setup(name="pysql",
-      version="0.12",
+      version="snaphot",
       description="PySQL is an Oracle enhanced client",
       author="Sebastien Renard and Sebastien Delcros",
       author_email="pysql@digitalfox.org",
