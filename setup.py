@@ -6,6 +6,7 @@
 
 from distutils.core import setup
 import sys
+from os.path import dirname, join
 
 # Languages
 langs=["fr"]
@@ -17,13 +18,21 @@ for lang in langs:
 # Scripts
 scripts=["src/bin/pysql"]
 
+# Version
+try:
+    version=file(join(dirname(__file__), "version")).readline().rstrip().rstrip("\n")
+except Exception, e:
+    print "Warning, cannot read version file (%s)" % e
+    print "Defaulting to 'snapshot'"
+    version="snaphot"
+
 # Windows post install script
 if "win" in " ".join(sys.argv[1:]):
     scripts.append("pysql_w32_postinst.py")
 
 #Go for setup 
 setup(name="pysql",
-      version="snaphot",
+      version=version,
       description="PySQL is an Oracle enhanced client",
       author="Sebastien Renard and Sebastien Delcros",
       author_email="pysql@digitalfox.org",
