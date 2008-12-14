@@ -117,7 +117,6 @@ bg 1
 -- rollback(self, arg)
 
 count dual
-count dual where dummy='X'
 
 -- describe
 -- tables (we consider that we are logged as system)
@@ -133,7 +132,7 @@ desc temp
 -- to be done
 
 -- graphical stuff 
-datamodel scott
+datamodel -u scott
 -- test other options of datamodel
 pkgtree xmldom
 
