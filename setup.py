@@ -15,6 +15,10 @@ for lang in langs:
     data_files.append(["share/locale/%s/LC_MESSAGES/" % lang, 
                        ["locale/%s/LC_MESSAGES/pysql.mo" % lang]])
 
+# Additional files
+data_files.append(["share/pysql",
+                   ["version", "README", "ChangeLog", "ChangeLog-Synthesis", "LICENSE"]])
+
 # Scripts
 scripts=["src/bin/pysql"]
 

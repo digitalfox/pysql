@@ -71,7 +71,9 @@ def checkForUpdate(proxy=None, user="", password=""):
 def currentVersion():
     """@return: current pysql version according to 'version' file"""
     try:
-        return file(join(dirname(sys.argv[0]), "version")).readline().strip("\n")
+        #TODO: handle case of dev install (tar xvf)
+        #TODO: handle windows case
+        return file("/usr/share/pysql/version").readline().strip("\n")
     except:
         raise PysqlException(_("Unable to read 'version' file. Do you remove or change it ?"))
 

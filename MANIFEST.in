@@ -1,5 +1,7 @@
 include *py
 include ChangeLog
+include README
+include LICENSE
 include version
 include ChangeLog-Synthesis
 include pysql.sh
