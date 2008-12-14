@@ -104,9 +104,7 @@ if os.name=="nt":
 # Pysql imports:
 from pysqlshell import PysqlShell
 from pysqlconf import PysqlConf
-from pysqlio import PysqlIO
 from pysqlexception import PysqlException
-import pysqlnet
 import pysqlupdate
 
 def main():
@@ -132,28 +130,23 @@ def main():
     # Sets the locale
     setLocale(conf)
 
-    stdout=PysqlIO.getIOHandler()
-    stdout.setCodec(conf.getCodec())
-
     try:
-        if options.server:
-            rc=pysqlnet.pysqlNet(options.port, options.maxClient)
-        elif options.update:
+        if options.update:
             try:
                 pysqlupdate.checkForUpdate(options.proxyHost, options.proxyUser, options.proxyPassword)
             except KeyboardInterrupt:
-                stdout(_("Aborting update"))
+                print _("Aborting update")
         elif options.version:
-            stdout(_("PySQL - %s") % pysqlupdate.currentVersion())
+            print _("PySQL - %s") % pysqlupdate.currentVersion()
         else:
             # Default is to launch pysql in standard mode (local client)
-            shell=PysqlShell(stdout=stdout, argv=argv)
+            shell=PysqlShell(argv=argv)
             shell.loop()
             rc=shell.rc
         # Bye
         if os.name=="nt" and not options.version:
             # Don't exit too fast for windows user, else they don't see error sum up
-            stdout(_("(press any key to exit)"))
+            print _("(press any key to exit)")
             sys.stdin.readline()
     except StandardError, e:
         # Just a hook for a more pleasant error handling
@@ -165,8 +158,7 @@ def main():
         print "(press enter key to exit)"
         sys.stdin.readline()
     except PysqlException, e:
-        msg=u"*** Pysql error ***\n\t%s" % e
-        stdout(msg)
+        print u"*** Pysql error ***\n\t%s" % e
 
     #Bye!
     sys.exit(rc)
@@ -196,18 +188,6 @@ def setLocale(conf):
 def parseOptions():
     """Parses pysql command argument using optparse python module"""
     parser=OptionParser()
-
-    # PysqlServer activation
-    parser.add_option("-s", "--server", dest="server", action="store_true",
-              help="PySQL server mode")
-
-    # Server TCP port
-    parser.add_option("-p", "--port", dest="port", type="int", default=1180,
-              help="PySQL server tcp port (default is 1180)")
-
-    # Server max client
-    parser.add_option("-m", "--maxClient", dest="maxClient", type="int", default=5,
-              help="PySQL server maximum number of concurent clients (default is 5)")
 
     # Version
     parser.add_option("-v", "--version", dest="version", action="store_true",

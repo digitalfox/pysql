@@ -21,7 +21,6 @@ from pysqlexception import PysqlException, PysqlActionDenied
 from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
 from pysqlconf import PysqlConf
 from pysqloraobjects import OraObject
-from pysqlio import PysqlIO
 from pysqlhelpers import generateWhere, getProg, removeComment, which
 
 # High level pysql graphical functions

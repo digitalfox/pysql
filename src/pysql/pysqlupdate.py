@@ -17,7 +17,6 @@ import tarfile
 
 # PySQL imports
 from pysqlexception import PysqlException
-from pysqlio import PysqlIO
 from pysqlcolor import CYAN, RED, RESET
 
 PYSQL_DOWNLOAD="http://www.digitalfox.org/projets/download/"
@@ -27,8 +26,6 @@ PYSQLROOTDIR="pysql"
 def checkForUpdate(proxy=None, user="", password=""):
     """Check if the current PySQL is the latest one"""
     releases=[]     # Release list
-    # Get IO handler
-    io=PysqlIO.getIOHandler()
     
     # Web stuff to get available releases
     if proxy:
@@ -49,27 +46,27 @@ def checkForUpdate(proxy=None, user="", password=""):
         last=releases[-1]
         current=Version(currentVersion())
         
-        io(_("Available releases : %s") % ", ".join([str(i) for i in releases]))
-        io(_("Latest is %s") % last)
-        io(_("Current is %s") % current)
+        print _("Available releases : %s") % ", ".join([str(i) for i in releases])
+        print _("Latest is %s") % last
+        print _("Current is %s") % current
         if current.isSnapshot:
-            io(_("You are in snapshot release - move to last [r]elease or last [s]napshot (r/s) ?"))
-            answer=io.read()
+            print _("You are in snapshot release - move to last [r]elease or last [s]napshot (r/s) ?")
+            answer=sys.stdin.readline().strip("\n")
             if answer in ("r", "release"):
                 update(opener, last)
             else:
                 update(opener, "snapshot")
         elif last>current:
-            io(_("A new release is available (%s). Do you want to update (y/n) ?") % last)
-            answer=io.read()
+            print _("A new release is available (%s). Do you want to update (y/n) ?") % last
+            answer=sys.stdin.readline().strip("\n")
             if answer in ("y", "yes"):
                 update(opener, last)
             else:
-                io(_("Ok, bye"))
+                print _("Ok, bye")
         else:
-            io(_("PySQL is up to date. No need to update"))
+            print _("PySQL is up to date. No need to update")
     except urllib2.URLError, e:
-        io(RED + _("Cannot reach PySQL Website (%s)") % e + RESET)
+        print RED + _("Cannot reach PySQL Website (%s)") % e + RESET
 
 def currentVersion():
     """@return: current pysql version according to 'version' file"""
@@ -85,8 +82,7 @@ def update(opener, version):
     @param version: target version for update
     @type version: string
     @return: True if everything is Ok, else False"""
-    io=PysqlIO.getIOHandler()
-    io(CYAN + _("=>update to version %s<=") % version + RESET)
+    print CYAN + _("=>update to version %s<=") % version + RESET
     
     # Create an update dir in PySQL dist and download tarball into it
     filename="pysql-"+str(version)+".tar.gz"
@@ -100,24 +96,24 @@ def update(opener, version):
         try:
             rmtree(newPath)
         except IOError, e:
-            io(RED + _("Cannot remove previous aborted update. Please remove it by hand (%s)") % e + RESET)
+            print RED + _("Cannot remove previous aborted update. Please remove it by hand (%s)") % e + RESET
             return False
     try:
         tmpFile=file(join(updatePath, filename), "w")
-        io.write(_("Downloading from PySQL Website... "))
+        print _("Downloading from PySQL Website... "),
         tmpFile.write(opener.open(PYSQL_DOWNLOAD+filename).read())
         tmpFile.close()
-        io(CYAN+_("Done !") + RESET)
-        io.write(_("Opening archive and copying files to pysql directory..."))
+        print CYAN+_("Done !") + RESET
+        print _("Opening archive and copying files to pysql directory..."),
         tarball=tarfile.open(join(updatePath, filename), mode="r:gz")
         for tarinfo in tarball:
             tarball.extract(tarinfo, "update")
         tarball.close()
     except urllib2.URLError, e:
-        io(RED+ _("Failed to download file from PySQL WebSite (%s)") % e + RESET)
+        print RED+ _("Failed to download file from PySQL WebSite (%s)") % e + RESET
         return False
     except IOError, e:
-        io(RED+ _("Cannot write archive file to %s (%s)") % (updatePath, e) + RESET)
+        print RED+ _("Cannot write archive file to %s (%s)") % (updatePath, e) + RESET
         return False
     try:
         blacklist=("pysqlrc",) # Files that should not be copied !
@@ -128,23 +124,23 @@ def update(opener, version):
                 try:
                     rmtree(join(pysqlPath, item))
                 except OSError, e:
-                    io(RED+_("Cannot remove %s (%s)") % (item, e) + RESET)
+                    print RED+_("Cannot remove %s (%s)") % (item, e) + RESET
                 copytree(join(newPath, item), join(pysqlPath, item))
             elif isfile(item) and not islink(item):
                 try:
                     unlink(join(pysqlPath, item))
                 except OSError, e:
-                    io(RED+_("Cannot remove %s (%s)") % (item, e) + RESET)
+                    print RED+_("Cannot remove %s (%s)") % (item, e) + RESET
                 copy(join(newPath, item), join(pysqlPath, item))
-        io(CYAN+_("Done !") + RESET)
+        print CYAN+_("Done !") + RESET
         # Some cleanup
-        io.write(_("Cleanup... "))
+        print _("Cleanup... "),
         rmtree(updatePath)
-        io(CYAN+_("Done !") + RESET)
-        io(CYAN+_("Update successul !") + RESET)
+        print CYAN+_("Done !") + RESET
+        print CYAN+_("Update successul !") + RESET
         return True
     except (IOError,OSError) , e:
-        io(RED+ _("Error while copying files (%s)") % e + RESET)
+        print RED+ _("Error while copying files (%s)") % e + RESET
         return False
 
 class Version:
