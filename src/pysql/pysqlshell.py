@@ -1526,7 +1526,7 @@ class PysqlShell(cmd.Cmd):
                     print line[i][:width[i]].ljust(width[i]),
                 if header and i==0 and transpose:
                     print RESET,
-                print colsep, # Adds colsep
+                sys.stdout.write(colsep) # Adds colsep
             print RESET
         if shrinked:
             # Warns the user
