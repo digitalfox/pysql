@@ -520,7 +520,7 @@ class PysqlShell(cmd.Cmd):
     def do_count(self, arg):
         """See help_count() for description"""
         self.__checkConnection()
-        self.__checkArg(arg, ">=1")
+        self.__checkArg(arg, "==1")
         result=pysqlfunctions.count(self.db, arg)
         print result
     
