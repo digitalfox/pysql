@@ -69,7 +69,6 @@ def datamodel(db, userName, tableFilter=None, withColumns=True):
     current=0
     for table in tables:
         tableName=table[0]
-        #TODO: use cStringIO to avoid string concatenation perf problem
         content="""<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">"""
         content+="""\n<TR><TD PORT="%s">""" % tableName
         content+="""<FONT FACE="%s" POINT-SIZE="%f" COLOR="%s">""" % (fontname, fontsize, fontcolor)
@@ -78,9 +77,8 @@ def datamodel(db, userName, tableFilter=None, withColumns=True):
         if withColumns:
             columns=db.executeAll(datamodelSql["columnsFromOwnerAndTable"], [userName, tableName])
             for column in columns:
-                #TODO: handle database encoding instead of just using str()
-                columnName=str(column[0])
-                columnType=str(column[1])
+                columnName=column[0]
+                columnType=column[1]
                 content+="""\n<TR><TD ALIGN="LEFT" PORT="%s_%s">""" % (tableName, columnName)
                 content+="""<FONT FACE="%s" POINT-SIZE="%f" COLOR="%s">""" % \
                          (fontname, fontsize-2, fontcolor)
@@ -94,8 +92,8 @@ def datamodel(db, userName, tableFilter=None, withColumns=True):
         graph.add_node(Node(tableName, shape="none", label=content, style="filled", \
                             fillcolor=tablecolor, color=bordercolor))
         current+=1
-        #BUG: change this
         sys.stdout.write("\b\b\b\b\b%4.1f%%" % round(100*float(current)/nbTables, 1))
+        sys.stdout.flush()
 
     print
     # Links between tables (foreign key -> primary key)
@@ -299,8 +297,7 @@ def diskusage(db, userName, withIndexes=False):
         nbIndexes=len(indexes)
         print CYAN+_("Extracting %3d indexes from tablespace %s") % (nbIndexes, tablespaceName) +RESET
         for index in indexes:
-            #TODO: handle database encoding instead of just using str()
-            indexName=str(index[0])
+            indexName=index[0]
             if index[1] is None:
                 print BOLD+RED+_("""Warning: index "%s" removed because no statistics have been found.""") \
                            % (indexName) +RESET
