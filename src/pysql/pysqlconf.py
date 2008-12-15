@@ -1,11 +1,11 @@
 ﻿#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Sébastien Renard (sebastien.renard@digitalfox.org)
-# Code licensed under GNU GPL V2
-
 """This module defines the PysqlConf class
-that handles all pysql configuration stuff"""
+that handles all pysql configuration stuff
+@author: Sébastien Renard (sebastien.renard@digitalfox.org)
+@license:GNU GPL V3
+"""
 
 # Python imports:
 import os

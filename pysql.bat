@@ -1,5 +1,6 @@
 @REM
 @REM Sébastien Delcros (sebastien.delcros@gmail.com)
+@REM License: GPL v3
 
 @REM Simple Win32 batch wrapper to launch pysql from source package
 @REM This is intended only for developpers or users that don't want to "install" pysql

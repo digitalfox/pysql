@@ -1,10 +1,11 @@
 ﻿#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Sébastien Renard (sebastien.renard@digitalfox.org)
-# Code licensed under GNU GPL V2
-
-"""User interaction with pysql"""
+"""User interaction with pysql
+@author: Sébastien Renard (sebastien.renard@digitalfox.org)
+@author: Sébastien Delcros (Sebastien.Delcros@gmail.com)
+@license:GNU GPL V3
+"""
 
 # Python imports:
 import cmd

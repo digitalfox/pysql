@@ -1,10 +1,11 @@
 ﻿#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Sébastien Delcros (sebastien.delcros@gmail.com)
-# Code licensed under GNU GPL V2
-
-""" This module defines all high level graphical functions of pysql"""
+""" This module defines all high level graphical functions of pysql
+@author: Sébastien Delcros (Sebastien.Delcros@gmail.com)
+@author: Sébastien Renard (sebastien.renard@digitalfox.org)
+@license:GNU GPL V3
+"""
 
 # pylint: disable-msg=E1101
 

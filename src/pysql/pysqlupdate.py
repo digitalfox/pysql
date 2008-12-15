@@ -1,10 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Sébastien Renard (sebastien.renard@digitalfox.org)
-# Code licensed under GNU GPL V2
-
-"""This module check for PySQL updates and help user to update PySQL online"""
+"""This module check for PySQL updates and help user to update PySQL online
+@author: Sébastien Renard (sebastien.renard@digitalfox.org)
+@license:GNU GPL V3
+"""
 
 # Python import
 import urllib2

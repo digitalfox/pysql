@@ -1,13 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Sébastien Renard (sebastien.renard@digitalfox.org)
-# Code licensed under GNU GPL V2
+"""ANSI terminal color code
+@author: Sébastien Renard (sebastien.renard@digitalfox.org)
+@license:GNU GPL V3
+"""
 
 # Python imports:
 import os
 
-"""Ansi color code"""
 if os.name=='posix' and os.getenv("PYDEVDEBUG", "0")=="0":
     BOLD     = '\033[01m'
     RED     = '\033[31m'

@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Sébastien Renard (sebastien.renard@digitalfox.org)
-# Code licensed under GNU GPL V2
+"""This is just a wrapper to pysql package that rely in standard python site-package
+ This wrapper is intended to be placed in user PATH and to be executable
 
-# This is just a wrapper to pysql package that rely in standard python site-package
-# This wrapper is intended to be placed in user PATH and to be executable
+@author: Sébastien Renard (sebastien.renard@digitalfox.org)
+@license:GNU GPL V3
+ """
 
 from pysql import pysqlmain
 pysqlmain.main()

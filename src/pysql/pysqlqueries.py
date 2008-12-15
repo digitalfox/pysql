@@ -1,11 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Sébastien Renard (sebastien.renard@digitalfox.org)
-# Sébastien Delcros (sebastien.delcros@gmail.com)
-# Code licensed under GNU GPL V2
-
-"""SQL queries ordered by theme in dictionary"""
+"""SQL queries ordered by theme in dictionary
+@author: Sébastien Renard (sebastien.renard@digitalfox.org)
+@author: Sébastien Delcros (sebastien.delcros@gmail.com)
+@license:GNU GPL V3
+"""
 
 # pylint: disable-msg=C0103
 searchObjectSql={

@@ -1,5 +1,6 @@
 #!/bin/sh
 # Sebastien Renard - 2007
+# License: GPL v3
 
 # Simple shell wrapper to launch pysql from source package
 # This is intended only for developpers or users that don't want to "install" pysql

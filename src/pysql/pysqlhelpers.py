@@ -1,11 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Sébastien Renard (sebastien.renard@digitalfox.org)
-
-# Code licensed under GNU GPL V2
-
-"""This module defines some common useful functions"""
+"""This module defines some common useful functions
+@author: Sébastien Renard (sebastien.renard@digitalfox.org)
+@license:GNU GPL V3
+"""
 
 # Python imports:
 import os

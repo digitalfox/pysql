@@ -1,9 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Sébastien Renard (sebastien.renard@digitalfox.org)
-# Code licensed under GNU GPL V2
-
 """
 Pysql is an Oracle client for all those who suffer from sqlplus.
 
@@ -66,6 +63,9 @@ Developpement conventions:
 - all lines must be less than 109 characters (ask developpers why)
 - all patches must be sent to sebastien@digitalfox.org
 
+@author: Sébastien Renard (sebastien.renard@digitalfox.org)
+@author: Sébastien Delcros (Sebastien.Delcros@gmail.com)
+@license:GNU GPL V3
 """
 
 # Python imports:
