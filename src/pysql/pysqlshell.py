@@ -609,12 +609,25 @@ class PysqlShell(cmd.Cmd):
                     print "\n".join(tableDiff)
                     print
 
+    def parser_describe(self):
+        parser=PysqlOptionParser()
+        parser.set_usage("desc[ribe] [options] <object name>")
+        parser.set_description("Describes any Oracle object")
+        parser.add_option("-s", "--sort", dest="sort",
+                          default=False, action="store_true",
+                          help="Sort column alphabetically instead of Oracle order")
+        return parser
+
     def do_describe(self, arg):
         """Emulates the sqlplus desc function"""
+        parser = self.parser_describe()
+        options, args = parser.parse_args(arg)
         self.__checkConnection()
-        self.__checkArg(arg, "==1")
+        self.__checkArg(args, "==1")
         # Gives method pointer to desc function to allow it to update completelist
-        (header, result)=pysqlfunctions.desc(self.db, arg, self.__addToCompleteList)
+        (header, result)=pysqlfunctions.desc(self.db, args[0],
+                                             completeMethod=self.__addToCompleteList,
+                                             sort=options.sort)
         self.__displayTab(result, header)
 
     def parser_datamodel(self):
@@ -1145,11 +1158,6 @@ class PysqlShell(cmd.Cmd):
     def help_directory(self):
         """online help"""
         self._help_for_search_method("directory")
-
-    def help_describe(self):
-        """online help"""
-        print CYAN+_("Usage:\n\tdesc[ribe] <object name>")+RESET
-        print _("Describes any Oracle object")
 
     def help_disconnect(self):
         """online help"""

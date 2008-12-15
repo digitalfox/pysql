@@ -228,7 +228,7 @@ def ddl(db, objectName):
     else:
         return oraObject.getDDL(db)
 
-def desc(db, objectName, completeMethod=None, printComment=True):
+def desc(db, objectName, completeMethod=None, printComment=True, sort=False):
     """Describes an object
     @param objectName: object to be described
     @return: header and resultset of definition as a tuple (header, definition)
@@ -271,7 +271,7 @@ def desc(db, objectName, completeMethod=None, printComment=True):
     # Evaluates object type (among the 24 defined)
     if oraObject.getType() in ("TABLE" , "TABLE PARTITION"):
         header=["Name", "Type", "Null?", "Comments", "Indexes"]
-        columns=oraObject.getTableColumns(db)
+        columns=oraObject.getTableColumns(db, sort)
 
         # Gets indexed columns of the table
         indexedColumns=oraObject.getIndexedColumns(db)

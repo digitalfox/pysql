@@ -235,19 +235,27 @@ class OraTabular(OraObject):
         else:
             raise PysqlException("Cannot get the comment on object %s" % self.getName())
 
-    def getTableColumns(self, db):
+    def getTableColumns(self, db, sort=False):
         """Gets table or view columns
+        @param sort: sort column in alphabetic order instead of Oracle order. Default is false
+        @type sort: bool
         @return: array of column_name, columns_type, comments
         """
+        if sort:
+            sortCondition=" order by 1"
+        else:
+            sortCondition=""
+
         if self.getOwner()=="":
             owner=db.getUsername().upper()
-            columns=db.executeAll(tabularSql["columnsFromOwnerAndName"], [owner, self.getName()])
+            columns=db.executeAll(tabularSql["columnsFromOwnerAndName"]+sortCondition,
+                                  [owner, self.getName()])
         else:
             try:
-                columns=db.executeAll(tabularSql["columnsFromDBAAndName"],
+                columns=db.executeAll(tabularSql["columnsFromDBAAndName"]+sortCondition,
                                       [self.getOwner(), self.getName()])
             except PysqlException:
-                columns=db.executeAll(tabularSql["columnsFromOwnerAndName"],
+                columns=db.executeAll(tabularSql["columnsFromOwnerAndName"]+sortCondition,
                                       [self.getOwner(), self.getName()])
         if len(columns)==0:
             return (None, None, None)
