@@ -17,6 +17,7 @@ from re import findall, match, sub
 from os.path import expandvars
 from time import sleep, time
 from getpass import getpass
+import csv
 
 # Pysql imports:
 from pysqldb import PysqlDb, BgQuery
@@ -1670,21 +1671,14 @@ class PysqlShell(cmd.Cmd):
 
     def __toCsv(self, fileName):
         """Write query result to a file"""
-        sep=unicode(self.conf.get("separator"))
         try:
-            #TOOO: to use correct encoding for writing file (use codecs module)
-            csv=file(fileName, "w")
+            fileHandle=file(fileName, "w")
+            csv_writer = csv.writer(fileHandle, dialect="excel")
+            csv_writer.writerow(self.db.getDescription()) # Header
             for line in self.db.getCursor():
-                newline=[]
-                for item in line:
-                    if item is None:
-                        item='"NULL"'
-                    newline.append('"%s"' % item)
-                csv.write(sep.join(newline)+"\n")
+                csv_writer.writerow(line)
         except Exception, e:
-            csv.close()
             raise PysqlException(e)
-        csv.close()
 
     def __fetchNext(self, nbLines=0):
         """ Fetches next result of current cursor"""

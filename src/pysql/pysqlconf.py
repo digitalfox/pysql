@@ -83,7 +83,6 @@ class PysqlConf:
             pass
 
         # Load default value for all parameters
-        #TODO: rename separator csvsep
         self.default={
             "case_sensitive"     : "no",
             "completionlistsize" : 100,
@@ -91,7 +90,6 @@ class PysqlConf:
             "termwidth"          : 120,
             "widthmin"           : 5,
             "transpose"          : "no",
-            "separator"          : ";",
             "colsep"             : "space",
             "shrink"             : "yes",
             "echo"               : "no",
@@ -238,7 +236,7 @@ class PysqlConf:
             else:
                 return False
         # String parameter
-        elif key in ("separator", "colsep", "graph_viewer"):
+        elif key in ("colsep", "graph_viewer"):
             if len(value)>0:
                 return True
             else:
