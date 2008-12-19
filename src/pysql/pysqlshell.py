@@ -798,15 +798,17 @@ class PysqlShell(cmd.Cmd):
             self.__displayTab(result, self.db.getDescription())
             print CYAN+_("***** Current statement *****")+RESET
             result=pysqlfunctions.sessionStat(self.db, sessionId, stat="currentStatement")
-            if result:
-                if result[0][0]:
-                    result=sub("\s+", " ", result[0][0]) # Strip extra spaces
-                    print result
-                    try:
+            if result and result[0][0]:
+                result=sub("\s+", " ", result[0][0]) # Strip extra spaces
+                print result
+                try:
+                    if not result.upper().startswith("ALTER"):
                         self.do_explain(result)
-                    except PysqlException, e:
-                        # Should be a privilege exception. Delay error at this end
-                        print _("Cannot explain plan (%s)") % e
+                except PysqlException, e:
+                    # Should be a privilege exception. Delay error at this end
+                    print _("Cannot explain plan (%s)") % e
+            else:
+                print _("No statement")
             print CYAN+_("***** Open cursors *****")+RESET
             result=pysqlfunctions.sessionStat(self.db, sessionId, stat="openCursors")
             self.__displayTab(result, self.db.getDescription())
