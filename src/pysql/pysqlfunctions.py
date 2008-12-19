@@ -511,12 +511,19 @@ def lock(db):
         raise PysqlActionDenied(_("privilege SELECT_ANY_DICTIONARY is missing"))
     return (header, result)
 
-def sessions(db, sort=None):
+def sessions(db, sort=None, all=False):
     """Returns top session, filter by "sort"
+    @param all: Show all sessions, not only active (top) session
+    @type all: bool
     @param sort: to be defined!
     @return: huge resultset in tabular format"""
     #TODO: this horrible request shoud go to pysqlQueries!
     try:
+        if all:
+            activeFilter=""
+        else:
+            activeFilter="and a.Status!= 'INACTIVE'"
+
         result=db.executeAll(u"""Select a.Sid "Id", a.Serial# "Serial", a.SchemaName "Schema",
             a.OsUser "Osuser", a.Machine "Machine", a.Program "Program",
             b.Block_Gets "Blk Gets", b.Consistent_Gets "Cons Gets",
@@ -531,9 +538,9 @@ def sessions(db, sort=None):
             and a.sql_hash_value = d.hash_value ( + )
             and ( d.child_number = 0 OR d.child_number IS NULL )
             and a.paddr = e.addr ( + )
+            %s
             and a.TYPE!= 'BACKGROUND'
-            and a.Status!= 'INACTIVE'
-            order by a.Sid""")
+            order by a.Sid""" % activeFilter)
     except PysqlException:
         raise PysqlActionDenied(_("privilege SELECT_ANY_DICTIONARY is missing"))
     return result

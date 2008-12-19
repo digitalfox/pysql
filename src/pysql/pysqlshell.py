@@ -764,23 +764,40 @@ class PysqlShell(cmd.Cmd):
                 line=sub("(.*)("+word+")(.*)", r"\1"+RED+r"\2"+RESET+r"\3", line)
             print line
 
+    def parser_session(self):
+        parser=PysqlOptionParser()
+        parser.set_usage("session [options] <session id>")
+        parser.set_description("Display Oracle sessions. "
+                               "If a session id is provided, display detailed session informations, "
+                               "else display all session summary")
+        parser.add_option("-a", "--all", dest="all",
+                          default=False, action="store_true",
+                          help="Display all foreground sessions, both active and inactive")
+        return parser
+
+
     def do_session(self, arg):
-        """See help_session() for description"""
+        """Display Oracle session"""
         self.__checkConnection()
-        if arg=="":
+        parser = self.parser_session()
+        options, args = parser.parse_args(arg)
+        if options.all and args:
+            print CYAN+"Note: the all (-a / --all) option is useless when display one session"+RESET
+        if not args:
             # Lists all session
-            result=pysqlfunctions.sessions(self.db)
+            result=pysqlfunctions.sessions(self.db, all=options.all)
             self.__displayTab(result, self.db.getDescription())
         else:
+            sessionId=args[0]
             # Displays details about one session
             print CYAN+_("***** Input/Output statistics *****")+RESET
-            result=pysqlfunctions.sessionStat(self.db, arg, stat="ios")
+            result=pysqlfunctions.sessionStat(self.db, sessionId, stat="ios")
             self.__displayTab(result, self.db.getDescription())
             print CYAN+_("***** Wait events***** ")+RESET
-            result=pysqlfunctions.sessionStat(self.db, arg, stat="waitEvents")
+            result=pysqlfunctions.sessionStat(self.db, sessionId, stat="waitEvents")
             self.__displayTab(result, self.db.getDescription())
             print CYAN+_("***** Current statement *****")+RESET
-            result=pysqlfunctions.sessionStat(self.db, arg, stat="currentStatement")
+            result=pysqlfunctions.sessionStat(self.db, sessionId, stat="currentStatement")
             if result:
                 if result[0][0]:
                     result=sub("\s+", " ", result[0][0]) # Strip extra spaces
@@ -791,10 +808,10 @@ class PysqlShell(cmd.Cmd):
                         # Should be a privilege exception. Delay error at this end
                         print _("Cannot explain plan (%s)") % e
             print CYAN+_("***** Open cursors *****")+RESET
-            result=pysqlfunctions.sessionStat(self.db, arg, stat="openCursors")
+            result=pysqlfunctions.sessionStat(self.db, sessionId, stat="openCursors")
             self.__displayTab(result, self.db.getDescription())
             print CYAN+_("***** Locks *****")+RESET
-            result=pysqlfunctions.sessionStat(self.db, arg, stat="locks")
+            result=pysqlfunctions.sessionStat(self.db, sessionId, stat="locks")
             self.__displayTab(result, self.db.getDescription())
 
     def do_kill(self, arg):
