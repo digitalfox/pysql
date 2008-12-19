@@ -517,30 +517,13 @@ def sessions(db, sort=None, all=False):
     @type all: bool
     @param sort: to be defined!
     @return: huge resultset in tabular format"""
-    #TODO: this horrible request shoud go to pysqlQueries!
     try:
         if all:
             activeFilter=""
         else:
             activeFilter="and a.Status!= 'INACTIVE'"
 
-        result=db.executeAll(u"""Select a.Sid "Id", a.Serial# "Serial", a.SchemaName "Schema",
-            a.OsUser "Osuser", a.Machine "Machine", a.Program "Program",
-            b.Block_Gets "Blk Gets", b.Consistent_Gets "Cons Gets",
-            b.Physical_Reads "Phy Rds", b.Block_Changes "Blk Chg",
-            b.Consistent_Changes "Cons Chg", c.Value * 10 "CPU(ms)",
-            a.Process "C PID", e.SPid "S PID", d.sql_text "SQL"
-            from v$session a, v$sess_io b, v$sesstat c, v$sql d, v$process e
-            where a.sid = b.sid ( + )
-            and a.sid = c.sid ( + )
-            and ( c.statistic# = 12 OR c.statistic# IS NULL )
-            and a.sql_address = d.address ( + )
-            and a.sql_hash_value = d.hash_value ( + )
-            and ( d.child_number = 0 OR d.child_number IS NULL )
-            and a.paddr = e.addr ( + )
-            %s
-            and a.TYPE!= 'BACKGROUND'
-            order by a.Sid""" % activeFilter)
+        result=db.executeAll(sessionStatSql["all"] % activeFilter)
     except PysqlException:
         raise PysqlActionDenied(_("privilege SELECT_ANY_DICTIONARY is missing"))
     return result
