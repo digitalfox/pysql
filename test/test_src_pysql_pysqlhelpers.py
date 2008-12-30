@@ -78,8 +78,16 @@ class TestRemoveComment(unittest.TestCase):
             self.failUnlessEqual(unCommentedLine.strip(), "")
 
     def test_remove_one_line_comment_with_sql(self):
-        #TODO: implement tests
-        pass
+        for answer, question in (("sql ", "sql -- lala"),
+                                 ("sql ", "sql --lala"),
+                                 ("sql", "sql--lala"),
+                                 ("sql ", "sql --"),
+                                 ("sql", "sql--"),
+                                 ("sql", "sql--------"),
+                                 ("sql", "sql-- lala --")):
+            unCommentedLine, comment=pysqlhelpers.removeComment(question)
+            self.assertFalse(comment)
+            self.failUnlessEqual(unCommentedLine, answer)
 
     def test_remove_multiline_comment(self):
         for anwser, lines in (("sql  sql", ("sql /*", "nice comment", "another comment */", "sql")),

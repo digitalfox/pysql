@@ -167,7 +167,8 @@ def removeComment(line, comment=False):
     #TODO: use compiled regexp
     line=sub("\/\*\*\/", " ", line)         # Remove /**/ pattern
     line=sub("\/\*[^+|].*?\*\/", " ", line) # Remove /* ... */ except /*+ ... */
-    line=sub("--[^+|].*$", "", line)      # Remove -- ... except --+ ...
+    line=sub("--[^+|].*$", "", line)        # Remove -- ... except --+ ...
+    line=sub("--$", "", line)               # Remove -- at the end of line (stupid but allowed)
 
     if line=="--":
         return "", comment
