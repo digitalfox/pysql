@@ -197,7 +197,7 @@ def which(progName):
     @return: full path to program or None if not find in PATH"""
     for directory in os.getenv("PATH").split(os.pathsep):
         fullpath=os.path.join(directory, progName)
-        if os.access(fullpath, os.X_OK):
+        if os.access(fullpath, os.X_OK) and os.path.isfile(fullpath):
             return fullpath
     return None
 

@@ -107,11 +107,9 @@ class TestRemoveComment(unittest.TestCase):
 
 class TestWhich(unittest.TestCase):
     def test_which(self):
-        pass
-
-class TestWarn(unittest.TestCase):
-    def test_warn(self):
-        pass
+        self.failUnlessEqual(pysqlhelpers.which("cp"), "/usr/bin/cp")
+        self.failUnlessEqual(pysqlhelpers.which("gabuzomeuhhh"), None)
+        self.failUnlessEqual(pysqlhelpers.which(""), None)
 
 if __name__ == '__main__':
     unittest.main()
