@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-12-14 18:15+CET\n"
+"POT-Creation-Date: 2008-12-31 00:05+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,43 +15,43 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 
 
-#: src/pysql/pysqlconf.py:117
+#: src/pysql/pysqlconf.py:115
 msgid "Using config file %s"
 msgstr ""
 
-#: src/pysql/pysqlconf.py:128
+#: src/pysql/pysqlconf.py:126
 msgid "Failed to create personnal configuration file"
 msgstr ""
 
-#: src/pysql/pysqlconf.py:281
+#: src/pysql/pysqlconf.py:279
 msgid "(Config file created)"
 msgstr ""
 
-#: src/pysql/pysqlconf.py:298
+#: src/pysql/pysqlconf.py:296
 msgid "(config file saved successfully)"
 msgstr ""
 
-#: src/pysql/pysqlconf.py:300
+#: src/pysql/pysqlconf.py:298
 msgid "fail to write file: %s"
 msgstr ""
 
-#: src/pysql/pysqlconf.py:302
+#: src/pysql/pysqlconf.py:300
 msgid "(no need to save)"
 msgstr ""
 
-#: src/pysql/pysqlconf.py:309
+#: src/pysql/pysqlconf.py:307
 msgid ""
 "Fail to save completion cache to %s. Error was:\n"
 "\t%s"
 msgstr ""
 
-#: src/pysql/pysqlconf.py:317
+#: src/pysql/pysqlconf.py:315
 msgid ""
 "Fail to save user sql library to %s. Error was:\n"
 "\t%s"
 msgstr ""
 
-#: src/pysql/pysqlconf.py:329
+#: src/pysql/pysqlconf.py:327
 msgid ""
 "Fail to save history to %s. Error was:\n"
 "\t%s"
@@ -94,7 +94,7 @@ msgid "Cannot close connection: %s"
 msgstr ""
 
 #: src/pysql/pysqldb.py:301
-msgid "No"
+msgid "None"
 msgstr ""
 
 #: src/pysql/pysqlexception.py:54
@@ -249,105 +249,105 @@ msgstr ""
 msgid "Error while using temporary file (%s)"
 msgstr ""
 
-#: src/pysql/pysqlfunctions.py:511 src/pysql/pysqlfunctions.py:538
-#: src/pysql/pysqlfunctions.py:587 src/pysql/pysqlfunctions.py:615
+#: src/pysql/pysqlfunctions.py:511 src/pysql/pysqlfunctions.py:528
+#: src/pysql/pysqlfunctions.py:577 src/pysql/pysqlfunctions.py:605
 msgid "privilege SELECT_ANY_DICTIONARY is missing"
 msgstr ""
 
-#: src/pysql/pysqlfunctions.py:560
+#: src/pysql/pysqlfunctions.py:550
 msgid "privilege ALTER SYSTEM is missing"
 msgstr ""
 
-#: src/pysql/pysqlfunctions.py:633
+#: src/pysql/pysqlfunctions.py:623
 msgid "SQL entry not defined for searchObjectSql: %s"
 msgstr ""
 
-#: src/pysql/pysqlgraphics.py:40 src/pysql/pysqlgraphics.py:137
-#: src/pysql/pysqlgraphics.py:244 src/pysql/pysqlgraphics.py:345
+#: src/pysql/pysqlgraphics.py:41 src/pysql/pysqlgraphics.py:136
+#: src/pysql/pysqlgraphics.py:243 src/pysql/pysqlgraphics.py:343
 msgid ""
 "Function not available because pydot module is not installed.\n"
 "\t"
 msgstr ""
 
-#: src/pysql/pysqlgraphics.py:41 src/pysql/pysqlgraphics.py:138
-#: src/pysql/pysqlgraphics.py:245 src/pysql/pysqlgraphics.py:346
+#: src/pysql/pysqlgraphics.py:42 src/pysql/pysqlgraphics.py:137
+#: src/pysql/pysqlgraphics.py:244 src/pysql/pysqlgraphics.py:344
 msgid "Go to http://dkbza.org/pydot.html to get it."
 msgstr ""
 
-#: src/pysql/pysqlgraphics.py:68
+#: src/pysql/pysqlgraphics.py:69
 msgid "Extracting %d tables...      "
 msgstr ""
 
-#: src/pysql/pysqlgraphics.py:105
+#: src/pysql/pysqlgraphics.py:104
 msgid "Extracting %d links..."
 msgstr ""
 
-#: src/pysql/pysqlgraphics.py:117 src/pysql/pysqlgraphics.py:332
-#: src/pysql/pysqlgraphics.py:418
+#: src/pysql/pysqlgraphics.py:116 src/pysql/pysqlgraphics.py:330
+#: src/pysql/pysqlgraphics.py:416
 msgid "Generating picture..."
 msgstr ""
 
-#: src/pysql/pysqlgraphics.py:120
+#: src/pysql/pysqlgraphics.py:119
 msgid "Datamodel saved as "
 msgstr ""
 
-#: src/pysql/pysqlgraphics.py:272
+#: src/pysql/pysqlgraphics.py:271
 msgid "Extracting %3d tables from tablespace %s"
 msgstr ""
 
-#: src/pysql/pysqlgraphics.py:276
+#: src/pysql/pysqlgraphics.py:275
 msgid "Warning: table \"%s\" removed because no statistics have been found"
 msgstr ""
 
-#: src/pysql/pysqlgraphics.py:280
+#: src/pysql/pysqlgraphics.py:279
 msgid "Warning: table \"%s\" removed because it is empty"
 msgstr ""
 
-#: src/pysql/pysqlgraphics.py:300
+#: src/pysql/pysqlgraphics.py:299
 msgid "Extracting %3d indexes from tablespace %s"
 msgstr ""
 
-#: src/pysql/pysqlgraphics.py:305
+#: src/pysql/pysqlgraphics.py:303
 msgid "Warning: index \"%s\" removed because no statistics have been found."
 msgstr ""
 
-#: src/pysql/pysqlgraphics.py:309
+#: src/pysql/pysqlgraphics.py:307
 msgid "Warning: index \"%s\" removed because it is empty"
 msgstr ""
 
-#: src/pysql/pysqlgraphics.py:335
+#: src/pysql/pysqlgraphics.py:333
 msgid "Disk usage saved as "
 msgstr ""
 
-#: src/pysql/pysqlgraphics.py:375
+#: src/pysql/pysqlgraphics.py:373
 msgid "This is not a package or package not found"
 msgstr ""
 
-#: src/pysql/pysqlgraphics.py:379
+#: src/pysql/pysqlgraphics.py:377
 msgid "Extracting package source..."
 msgstr ""
 
-#: src/pysql/pysqlgraphics.py:383
+#: src/pysql/pysqlgraphics.py:381
 msgid "Parsing source and building graph..."
 msgstr ""
 
-#: src/pysql/pysqlgraphics.py:400
+#: src/pysql/pysqlgraphics.py:398
 msgid "This package does not have any readable function or procedure"
 msgstr ""
 
-#: src/pysql/pysqlgraphics.py:421
+#: src/pysql/pysqlgraphics.py:419
 msgid "Package tree saved as "
 msgstr ""
 
-#: src/pysql/pysqlgraphics.py:445
+#: src/pysql/pysqlgraphics.py:443
 msgid "Viewer was not found"
 msgstr ""
 
-#: src/pysql/pysqlhelpers.py:80
+#: src/pysql/pysqlhelpers.py:78
 msgid "Unit not handled: %s"
 msgstr ""
 
-#: src/pysql/pysqlhelpers.py:92
+#: src/pysql/pysqlhelpers.py:90
 msgid " is not installed. Get it at http://www.graphviz.org/Download.php"
 msgstr ""
 
@@ -355,8 +355,16 @@ msgstr ""
 msgid "Operator %s was not expected at word %s"
 msgstr ""
 
-#: src/pysql/pysqlhelpers.py:148
+#: src/pysql/pysqlhelpers.py:140
+msgid "The ! is not supported before parenthisis"
+msgstr ""
+
+#: src/pysql/pysqlhelpers.py:150
 msgid "Operator (AND/OR) expected at word %s"
+msgstr ""
+
+#: src/pysql/pysqlhelpers.py:155
+msgid "Unblanced parenthisis (%s)"
 msgstr ""
 
 #: src/pysql/pysqlmain.py:138
@@ -371,676 +379,670 @@ msgstr ""
 msgid "(press any key to exit)"
 msgstr ""
 
-#: src/pysql/pysqloraobjects.py:284
+#: src/pysql/pysqloraobjects.py:292
 msgid "Privilege SELECT_CATALOG is missing"
 msgstr ""
 
-#: src/pysql/pysqloraobjects.py:366
+#: src/pysql/pysqloraobjects.py:374
 msgid "Indexed Columns"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:53
+#: src/pysql/pysqlshell.py:55
 msgid "(not connected) "
 msgstr ""
 
-#: src/pysql/pysqlshell.py:74
+#: src/pysql/pysqlshell.py:76
 msgid ""
 "\n"
 "Connection failed:\n"
 "\t %s"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:79 src/pysql/pysqlshell.py:103
+#: src/pysql/pysqlshell.py:81 src/pysql/pysqlshell.py:105
 msgid "Break !"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:90
+#: src/pysql/pysqlshell.py:92
 msgid ""
 "\n"
 "Welcome to pysql shell\n"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:91
+#: src/pysql/pysqlshell.py:93
 msgid ""
 "Type 'help' for some help.\n"
 "Use Tab for completion\n"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:126
+#: src/pysql/pysqlshell.py:128
 msgid ""
 "*** Pysql error ***\n"
 "\t%s"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:221 src/pysql/pysqlshell.py:1623
+#: src/pysql/pysqlshell.py:223 src/pysql/pysqlshell.py:1652
 msgid "Unknown command or sql order. Type help for help"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:335
+#: src/pysql/pysqlshell.py:337
 msgid "Cannot open tnsnames.ora file (%s)"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:378
+#: src/pysql/pysqlshell.py:380
 msgid ""
 "Error while closing previous connection:\n"
 "\t %s"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:389
+#: src/pysql/pysqlshell.py:391
 msgid "Invalid Oracle mode: %s (ignored)"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:418
+#: src/pysql/pysqlshell.py:420
 msgid "History not available on Windows platform (readline limitation)"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:432
+#: src/pysql/pysqlshell.py:434
 msgid "Argument must be an integer"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:435
+#: src/pysql/pysqlshell.py:437
 msgid "This is the future ! Cannot execute. Sorry"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:437
+#: src/pysql/pysqlshell.py:439
 msgid "Argument should be stricly positive"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:444
+#: src/pysql/pysqlshell.py:446
 msgid "See help history for usage"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:457
+#: src/pysql/pysqlshell.py:459
 msgid "SQL request was loaded in your history. Use up arrow to get it now"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:460 src/pysql/pysqlshell.py:471
+#: src/pysql/pysqlshell.py:462 src/pysql/pysqlshell.py:473
 msgid "Request %s does not exist. Type 'lib' without argument to see all request"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:469
+#: src/pysql/pysqlshell.py:471
 msgid "Request has been removed"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:476
+#: src/pysql/pysqlshell.py:478
 msgid "Request has been saved"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:502
+#: src/pysql/pysqlshell.py:504
 msgid "Unknown background query. Use bg without arg to see all queries"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:504
+#: src/pysql/pysqlshell.py:506
 msgid "See help bg for description"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:511
+#: src/pysql/pysqlshell.py:513
 msgid "Commit completed"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:517
+#: src/pysql/pysqlshell.py:519
 msgid "Rollback completed"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:573
+#: src/pysql/pysqlshell.py:575
 msgid "Cannot compare a table and a schema !"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:583
+#: src/pysql/pysqlshell.py:585
 msgid "Tables are identical"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:588 src/pysql/pysqlshell.py:593
+#: src/pysql/pysqlshell.py:590 src/pysql/pysqlshell.py:595
 msgid "**** Tables found in %s but not in %s ****"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:598
+#: src/pysql/pysqlshell.py:600
 msgid "**** Tables identical in both schema ****"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:602
+#: src/pysql/pysqlshell.py:604
 msgid "**** Tables not identical in both schema ****"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:606
+#: src/pysql/pysqlshell.py:608
 msgid "Table %s differ from schema %s (marked with \"-\")                        and schema %s (marked with \"+\")"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:710 src/pysql/pysqlshell.py:730
+#: src/pysql/pysqlshell.py:725 src/pysql/pysqlshell.py:745
 msgid "(no result)"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:728
+#: src/pysql/pysqlshell.py:743
 msgid "(Update successful)"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:732
+#: src/pysql/pysqlshell.py:747
 msgid "Incorrect arguments. See help edit"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:762
+#: src/pysql/pysqlshell.py:794
 msgid "***** Input/Output statistics *****"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:765
+#: src/pysql/pysqlshell.py:797
 msgid "***** Wait events***** "
 msgstr ""
 
-#: src/pysql/pysqlshell.py:768
+#: src/pysql/pysqlshell.py:800
 msgid "***** Current statement *****"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:778
+#: src/pysql/pysqlshell.py:810
 msgid "Cannot explain plan (%s)"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:779
+#: src/pysql/pysqlshell.py:812
+msgid "No statement"
+msgstr ""
+
+#: src/pysql/pysqlshell.py:813
 msgid "***** Open cursors *****"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:782
+#: src/pysql/pysqlshell.py:816
 msgid "***** Locks *****"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:791
+#: src/pysql/pysqlshell.py:825
 msgid "Kill has been sent to the session"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:830
+#: src/pysql/pysqlshell.py:864
 msgid "***** Input/Output delta for session %s *****"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:832
+#: src/pysql/pysqlshell.py:866
 msgid "***** Wait events delta for session %s ***** "
 msgstr ""
 
-#: src/pysql/pysqlshell.py:838
+#: src/pysql/pysqlshell.py:872
 msgid "Starting trace capture for session %s"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:839
+#: src/pysql/pysqlshell.py:873
 msgid "Type \"trace %s\" again to stop trace on this sesssion"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:845
+#: src/pysql/pysqlshell.py:879
 msgid "Session %s does not exist or you are not allowed to see session details"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:882
+#: src/pysql/pysqlshell.py:916
 msgid "***** Tables *****"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:884
+#: src/pysql/pysqlshell.py:918
 msgid ""
 "\n"
 "**** Indexes *****"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1019
-msgid "No such file or directory"
+#: src/pysql/pysqlshell.py:1053
+msgid "No such directory"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1068
+#: src/pysql/pysqlshell.py:1102
 msgid "exit watch"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1087
+#: src/pysql/pysqlshell.py:1121
 msgid "(Executed in %.1f second(s))"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1112
+#: src/pysql/pysqlshell.py:1146
 msgid "Connected to "
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1115
+#: src/pysql/pysqlshell.py:1149
 msgid "Oracle "
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1117
+#: src/pysql/pysqlshell.py:1151
 msgid "Invalid argument"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1127
+#: src/pysql/pysqlshell.py:1161
 msgid "Usage:"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1128
+#: src/pysql/pysqlshell.py:1162
 msgid ""
 "\tto compare two schema:\n"
 "\t\tcompare user/password@SID user'/password'@SID'"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1129
+#: src/pysql/pysqlshell.py:1163
 msgid ""
 "\tto compare two tables:\n"
 "\t\tcompare user/password@SID:table user'/password'@SID':table'"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1130
+#: src/pysql/pysqlshell.py:1164
 msgid ""
 "\tto compare two tables in current schema:\n"
 "\t\tcompare table table'"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1131
+#: src/pysql/pysqlshell.py:1165
 msgid "By default, only structure is compared."
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1132
+#: src/pysql/pysqlshell.py:1166
 msgid "To compare table data use the \"data\" keyword like this:"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1133
+#: src/pysql/pysqlshell.py:1167
 msgid "\t\tcompare data user/password@SID:table user'/password'@SID':table'"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1137
+#: src/pysql/pysqlshell.py:1171
 msgid ""
 "Usage:\n"
 "\tconn[ect] user[/password][@[host[:port]/]SID] [sysdba|sysoper]"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1138
+#: src/pysql/pysqlshell.py:1172
 msgid "Connects to Oracle and closes previous connection if any"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1142
+#: src/pysql/pysqlshell.py:1176
 msgid ""
 "Usage:\n"
 "\tcount <table/view name>"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1143
+#: src/pysql/pysqlshell.py:1177
 msgid "Counts the number of lines in a table or a view"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1151
-msgid ""
-"Usage:\n"
-"\tdesc[ribe] <object name>"
-msgstr ""
-
-#: src/pysql/pysqlshell.py:1152
-msgid "Describes any Oracle object"
-msgstr ""
-
-#: src/pysql/pysqlshell.py:1160
+#: src/pysql/pysqlshell.py:1189
 msgid ""
 "Usage:\n"
 "\ted[it] <object name>"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1161
+#: src/pysql/pysqlshell.py:1190
 msgid "Edit (view or modify) an object)"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1162
+#: src/pysql/pysqlshell.py:1191
 msgid "If no arg is provided, edits last SQL statement"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1166
+#: src/pysql/pysqlshell.py:1195
 msgid "Well, it seems rather explicit, isn't it?"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1170
+#: src/pysql/pysqlshell.py:1199
 msgid ""
 "Usage:\n"
 "\texplain <sql statement>"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1171
+#: src/pysql/pysqlshell.py:1200
 msgid "Computes and displays explain plan for the statement"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1179
+#: src/pysql/pysqlshell.py:1208
 msgid ""
 "Usage:\n"
 "\tget <key>"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1180
+#: src/pysql/pysqlshell.py:1209
 msgid "Prints the value of the parameter <key>"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1181
+#: src/pysql/pysqlshell.py:1210
 msgid "The special key \302\253 all \302\273 allows to print all parameters"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1185
+#: src/pysql/pysqlshell.py:1214
 msgid ""
 "Usage:\n"
 "\thelp <pysql command>"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1186
+#: src/pysql/pysqlshell.py:1215
 msgid "Brings some help like usage and a short description"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1187
+#: src/pysql/pysqlshell.py:1216
 msgid "about the command and its parameters"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1191
+#: src/pysql/pysqlshell.py:1220
 msgid ""
 "Usage:\n"
 "\th[istory] <n>"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1192
+#: src/pysql/pysqlshell.py:1221
 msgid "Without any argument, prints the last 20 commands"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1193
+#: src/pysql/pysqlshell.py:1222
 msgid "If argument is supplied, executes the nth command"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1201
+#: src/pysql/pysqlshell.py:1230
 msgid ""
 "Usage:\n"
 "\tkill session-id session-serial"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1202
+#: src/pysql/pysqlshell.py:1231
 msgid "Kills the session given in parameter"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1203
+#: src/pysql/pysqlshell.py:1232
 msgid "Uses the 'session' command to find session-id and session-serial (two first columns)"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1207
+#: src/pysql/pysqlshell.py:1236
 msgid ""
 "Usage:\n"
 "\tlast <number of lines>"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1208
+#: src/pysql/pysqlshell.py:1237
 msgid "Fetches all lines of current result set and display only the last lines"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1209 src/pysql/pysqlshell.py:1231
+#: src/pysql/pysqlshell.py:1238 src/pysql/pysqlshell.py:1260
 msgid "Default number of lines default to cursor array size"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1213
+#: src/pysql/pysqlshell.py:1242
 msgid ""
 "Usage:\n"
 "\tlib[rary] <sqlName> <sqlText>"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1214
+#: src/pysql/pysqlshell.py:1243
 msgid "Handles user custom sql library. Allow user to save and recall"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1215
+#: src/pysql/pysqlshell.py:1244
 msgid "sql requests"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1216
+#: src/pysql/pysqlshell.py:1245
 msgid "Sample usage: "
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1217
+#: src/pysql/pysqlshell.py:1246
 msgid "\tTo see all saved request: lib"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1218
+#: src/pysql/pysqlshell.py:1247
 msgid "\tTo save a request as 'employeeNumber': "
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1219
+#: src/pysql/pysqlshell.py:1248
 msgid "\t\tlib employeeNumber select count(*) from employee"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1220
+#: src/pysql/pysqlshell.py:1249
 msgid "\trecall a saved request: lib employeNumber"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1224
+#: src/pysql/pysqlshell.py:1253
 msgid ""
 "Usage:\n"
 "\tlock"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1225
+#: src/pysql/pysqlshell.py:1254
 msgid "Displays the locked objects"
-msgstr ""
-
-#: src/pysql/pysqlshell.py:1229
-msgid ""
-"Usage:\n"
-"\tnext <number of lines>"
-msgstr ""
-
-#: src/pysql/pysqlshell.py:1230
-msgid "Fetches the n next lines of current result set"
-msgstr ""
-
-#: src/pysql/pysqlshell.py:1232
-msgid "Just press enter is equivalent to next without arguments"
-msgstr ""
-
-#: src/pysql/pysqlshell.py:1244
-msgid ""
-"Usage:\n"
-"\t@ <script>"
-msgstr ""
-
-#: src/pysql/pysqlshell.py:1245
-msgid "Executes a PL/SQL script and displays the output on the standard output"
-msgstr ""
-
-#: src/pysql/pysqlshell.py:1249
-msgid ""
-"Usage:\n"
-"\tset <key>=<value>"
-msgstr ""
-
-#: src/pysql/pysqlshell.py:1250
-msgid "Sets <value> to the parameter <key>"
 msgstr ""
 
 #: src/pysql/pysqlshell.py:1258
 msgid ""
 "Usage:\n"
-"\t! <command line>"
+"\tnext <number of lines>"
 msgstr ""
 
 #: src/pysql/pysqlshell.py:1259
+msgid "Fetches the n next lines of current result set"
+msgstr ""
+
+#: src/pysql/pysqlshell.py:1261
+msgid "Just press enter is equivalent to next without arguments"
+msgstr ""
+
+#: src/pysql/pysqlshell.py:1273
+msgid ""
+"Usage:\n"
+"\t@ <script>"
+msgstr ""
+
+#: src/pysql/pysqlshell.py:1274
+msgid "Executes a PL/SQL script and displays the output on the standard output"
+msgstr ""
+
+#: src/pysql/pysqlshell.py:1278
+msgid ""
+"Usage:\n"
+"\tset <key>=<value>"
+msgstr ""
+
+#: src/pysql/pysqlshell.py:1279
+msgid "Sets <value> to the parameter <key>"
+msgstr ""
+
+#: src/pysql/pysqlshell.py:1287
+msgid ""
+"Usage:\n"
+"\t! <command line>"
+msgstr ""
+
+#: src/pysql/pysqlshell.py:1288
 msgid "Executes a command into the system terminal (depending on your system profile)"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1260
+#: src/pysql/pysqlshell.py:1289
 msgid "If no commands are given then a subshell is openned"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1264
+#: src/pysql/pysqlshell.py:1293
 msgid ""
 "Usage:\n"
 "\tlcd <path>"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1265
+#: src/pysql/pysqlshell.py:1294
 msgid "Changes working directory"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1269
+#: src/pysql/pysqlshell.py:1298
 msgid ""
 "Usage:\n"
 "\tlls [path/][file]"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1270
+#: src/pysql/pysqlshell.py:1299
 msgid "Lists directory contents"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1274
+#: src/pysql/pysqlshell.py:1303
 msgid ""
 "Usage:\n"
 "\tlpwd"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1275
+#: src/pysql/pysqlshell.py:1304
 msgid "Prints local directory"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1279
+#: src/pysql/pysqlshell.py:1308
 msgid ""
 "Usage:\n"
 "\tshow instance"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1280
+#: src/pysql/pysqlshell.py:1309
 msgid "Displays the database service name (DSN) of the current connection"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1281
+#: src/pysql/pysqlshell.py:1310
 msgid ""
 "Usage:\n"
 "\tshow version"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1282
+#: src/pysql/pysqlshell.py:1311
 msgid "Displays the database server version"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1283
+#: src/pysql/pysqlshell.py:1312
 msgid ""
 "\n"
 "\tshow parameter[s] <partial parameter name>"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1284
+#: src/pysql/pysqlshell.py:1313
 msgid "Looks for session parameters with name like the partial name given"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1285
+#: src/pysql/pysqlshell.py:1314
 msgid "Wilcard % can be used. "
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1286 src/pysql/pysqlshell.py:1290
+#: src/pysql/pysqlshell.py:1315 src/pysql/pysqlshell.py:1319
 msgid "If none is provided, pysql adds a % at the begining and the end"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1287
+#: src/pysql/pysqlshell.py:1316
 msgid ""
 "\n"
 "\tshow spparameter[s] <partial parameter name>"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1288
+#: src/pysql/pysqlshell.py:1317
 msgid "Looks for server parameters with name like the partial name given."
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1289
+#: src/pysql/pysqlshell.py:1318
 msgid " These parameters are defined in spfile. Wilcard % can be used."
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1306
+#: src/pysql/pysqlshell.py:1335
 msgid ""
 "Usage:\n"
 "\twatch <n> <pysql cmd or sql order>"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1307
+#: src/pysql/pysqlshell.py:1336
 msgid "Repeats the command each n seconds"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1308
+#: src/pysql/pysqlshell.py:1337
 msgid "If n is ommited, repeat each 3 seconds"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1312
+#: src/pysql/pysqlshell.py:1341
 msgid "Writes configuration to disk"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1313
+#: src/pysql/pysqlshell.py:1342
 msgid "Path is $HOME/.pysql/pysqlrc on Unix, %APPDATA%/pysql/pysqrc on Windows"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1314
+#: src/pysql/pysqlshell.py:1343
 msgid "This command takes no argument"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1318
+#: src/pysql/pysqlshell.py:1347
 msgid ""
 "Usage:\n"
 "\t%s <search pattern on %s name>"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1319
+#: src/pysql/pysqlshell.py:1348
 msgid "Looks for %s which match the search pattern"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1320
+#: src/pysql/pysqlshell.py:1349
 msgid "Wilcard % and boolean operators (and/or) can be used."
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1321
+#: src/pysql/pysqlshell.py:1350
 msgid "If a single word and no % is provided, pysql adds a % at the begining and the end"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1322
+#: src/pysql/pysqlshell.py:1351
 msgid "Ex. : %s FOO or (BAR%% and %%TEST%%)"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1369
+#: src/pysql/pysqlshell.py:1398
 msgid "Invalid connection string"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1404
+#: src/pysql/pysqlshell.py:1433
 msgid "Pysql - Not connected"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1525
+#: src/pysql/pysqlshell.py:1554
 msgid "(some columns have been shrinked to fit your terminal size)"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1532
+#: src/pysql/pysqlshell.py:1561
 msgid "Not connected to Oracle (Hello JF)"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1549
+#: src/pysql/pysqlshell.py:1578
 msgid "Invalid argument. Use help <command name> for usage"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1551
+#: src/pysql/pysqlshell.py:1580
 msgid "Invalid syntax for argument checking"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1575
+#: src/pysql/pysqlshell.py:1604
 msgid "Background query launched"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1595
+#: src/pysql/pysqlshell.py:1624
 msgid "Unknown output type !"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1598
+#: src/pysql/pysqlshell.py:1627
 msgid " line(s) inserted"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1601
+#: src/pysql/pysqlshell.py:1630
 msgid " line(s) updated"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1604
+#: src/pysql/pysqlshell.py:1633
 msgid " line(s) deleted"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1617
+#: src/pysql/pysqlshell.py:1646
 msgid "Statement executed"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1639
+#: src/pysql/pysqlshell.py:1668
 msgid "(press enter to see next results)"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1669
+#: src/pysql/pysqlshell.py:1691
 msgid "******* Error sum up *******"
 msgstr ""
 
-#: src/pysql/pysqlshell.py:1673
+#: src/pysql/pysqlshell.py:1695
 msgid ""
 "\n"
 "\n"
@@ -1079,60 +1081,60 @@ msgstr ""
 msgid "Cannot reach PySQL Website (%s)"
 msgstr ""
 
-#: src/pysql/pysqlupdate.py:76
+#: src/pysql/pysqlupdate.py:78
 msgid "Unable to read 'version' file. Do you remove or change it ?"
 msgstr ""
 
-#: src/pysql/pysqlupdate.py:85
+#: src/pysql/pysqlupdate.py:87
 msgid "=>update to version %s<="
 msgstr ""
 
-#: src/pysql/pysqlupdate.py:99
+#: src/pysql/pysqlupdate.py:101
 msgid "Cannot remove previous aborted update. Please remove it by hand (%s)"
 msgstr ""
 
-#: src/pysql/pysqlupdate.py:103
+#: src/pysql/pysqlupdate.py:105
 msgid "Downloading from PySQL Website... "
 msgstr ""
 
-#: src/pysql/pysqlupdate.py:106 src/pysql/pysqlupdate.py:135
-#: src/pysql/pysqlupdate.py:139
+#: src/pysql/pysqlupdate.py:108 src/pysql/pysqlupdate.py:137
+#: src/pysql/pysqlupdate.py:141
 msgid "Done !"
 msgstr ""
 
-#: src/pysql/pysqlupdate.py:107
+#: src/pysql/pysqlupdate.py:109
 msgid "Opening archive and copying files to pysql directory..."
 msgstr ""
 
-#: src/pysql/pysqlupdate.py:113
+#: src/pysql/pysqlupdate.py:115
 msgid "Failed to download file from PySQL WebSite (%s)"
 msgstr ""
 
-#: src/pysql/pysqlupdate.py:116
+#: src/pysql/pysqlupdate.py:118
 msgid "Cannot write archive file to %s (%s)"
 msgstr ""
 
-#: src/pysql/pysqlupdate.py:127 src/pysql/pysqlupdate.py:133
+#: src/pysql/pysqlupdate.py:129 src/pysql/pysqlupdate.py:135
 msgid "Cannot remove %s (%s)"
 msgstr ""
 
-#: src/pysql/pysqlupdate.py:137
+#: src/pysql/pysqlupdate.py:139
 msgid "Cleanup... "
 msgstr ""
 
-#: src/pysql/pysqlupdate.py:140
+#: src/pysql/pysqlupdate.py:142
 msgid "Update successul !"
 msgstr ""
 
-#: src/pysql/pysqlupdate.py:143
+#: src/pysql/pysqlupdate.py:145
 msgid "Error while copying files (%s)"
 msgstr ""
 
-#: src/pysql/pysqlupdate.py:167
+#: src/pysql/pysqlupdate.py:169
 msgid "Bad release scheme (%s)"
 msgstr ""
 
-#: src/pysql/pysqlupdate.py:171
+#: src/pysql/pysqlupdate.py:173
 msgid "Cannot compare with snapshot release"
 msgstr ""
 
