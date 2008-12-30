@@ -16,7 +16,7 @@ langs=["fr"]
 data_files=[]
 for lang in langs:
     data_files.append(["share/locale/%s/LC_MESSAGES/" % lang, 
-                       ["locale/%s/LC_MESSAGES/pysql.mo" % lang]])
+                       ["src/share/locale/%s/LC_MESSAGES/pysql.mo" % lang]])
 
 # Additional files
 data_files.append(["share/pysql",

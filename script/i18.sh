@@ -13,8 +13,5 @@ do
     msgmerge -U po/${lang}/pysql.po po/pysql.pot
 
     # Generate mo files
-    msgfmt.py -o locale/${lang}/LC_MESSAGES/pysql.mo po/${lang}/pysql.po
+    msgfmt.py -o src/share/locale/${lang}/LC_MESSAGES/pysql.mo po/${lang}/pysql.po
 done
-
-# Compile file
-msgfmt -o locale/fr/LC_MESSAGES/pysql.mo po/fr/pysql.po
