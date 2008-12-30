@@ -164,16 +164,20 @@ def removeComment(line, comment=False):
     @type comment: bool
     @return: line modified (str) and a flag (bool) that indicate if we are in a multiline comment"""
     # Remove one line comment (-- or /* */)
-    #TODO: use compiled regexp?
+    #TODO: use compiled regexp
     line=sub("\/\*\*\/", " ", line)         # Remove /**/ pattern
     line=sub("\/\*[^+|].*?\*\/", " ", line) # Remove /* ... */ except /*+ ... */
     line=sub("--[^+|].*$", "", line)      # Remove -- ... except --+ ...
 
+    if line=="--":
+        return "", comment
+
     # Honors multi line SQL comments but do not shoot Oracle hint!
     # /* comment
-    if match(".*/\*[^+|]?.*", line):
+    if match(".*/\*[^+].*", line) or match(".*/\*$", line):
         # Remove commented part
-        line=sub("\/\*.*", "", line)
+        line=sub("/\*[^+|].*", "", line)
+        line=sub("/\*$", "", line) # previous regexp does not match */ at end of line
         # Starting multiline comment
         comment=True
     # comment */ (a /* was give before)

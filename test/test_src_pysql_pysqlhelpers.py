@@ -70,8 +70,32 @@ class TestGenerateWhere(unittest.TestCase):
             self.assertRaises(PysqlException, pysqlhelpers.generateWhere, "table", faultyFilter)
 
 class TestRemoveComment(unittest.TestCase):
-    def test_remove_comment(self):
+    def test_remove_one_line_comment(self):
+        for line in ("--foo", "-- foo", "--foo ", "--foo--", "--foo --", "--", "-- ", "---", "----", "---- foo ",
+                     "/**/", "/* */", "/** */", "/* **/", "/***/", "/* lala */", "/*lala */", "/* lala*/", "/*lala*/"):
+            unCommentedLine, comment=pysqlhelpers.removeComment(line)
+            self.assertFalse(comment)
+            self.failUnlessEqual(unCommentedLine.strip(), "")
+
+    def test_remove_one_line_comment_with_sql(self):
+        #TODO: implement tests
         pass
+
+    def test_remove_multiline_comment(self):
+        for anwser, lines in (("sql  sql", ("sql /*", "nice comment", "another comment */", "sql")),
+                              ("sql  sql sql", ("sql /* begin of comment", "blabla / * ", "*/sql", "sql")),
+                              ("sql  sql", ("sql /*", "lala -- ", "comment */", "sql")),
+                              ("sql", ("/*", "nice comment", "*/", "sql")),
+                              ("sql /*+ smart hint */ sql", ("sql /*+ smart hint */", "sql")),
+                              ("sql   /*+ smart hint */  sql", ("sql /* bla */ /*+ smart hint */ /*", "*/", "sql"))):
+            result=[]
+            comment=False
+            for line in lines:
+                unCommentedLine, comment = pysqlhelpers.removeComment(line, comment)
+                if unCommentedLine:
+                    result.append(unCommentedLine)
+            self.failUnlessEqual(" ".join(result), anwser)
+
 
 class TestWhich(unittest.TestCase):
     def test_which(self):
