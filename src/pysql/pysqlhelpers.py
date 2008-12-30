@@ -8,14 +8,13 @@
 
 # Python imports:
 import os
-from re import match, sub, I as IGNORECASE
+from re import match, sub
 import datetime
 from cx_Oracle import LOB
 
 # Pysql imports:
 from pysqlexception import PysqlException, PysqlActionDenied
 from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
-from pysqlconf import PysqlConf
 
 # Help functions
 def addWildCardIfNeeded(aString, wildcard="%"):
@@ -80,7 +79,7 @@ def convert(value, unit):
 
 def getProg(availables, given, default):
     """Checks if 'given' graphviz program is in the 'availables' list
-    Raises an exception if program is not available or return the prog (default is given is 'auto'
+    Raises an exception if program is not available or return the prog (default if given is 'auto'
     @arg availables: dict of graphviz availables program as return by find_graphivz()
     @arg given: program choose by user
     @arg default: program used if user choose default"""
@@ -111,30 +110,35 @@ def generateWhere(keyword, filterClause):
     @return: SQL where clause"""
     #TODO: test this and make it bullet proof
     result=[]
-    endsWithParenthisis=False
+    endingParenthisis=0
     startsWithParenthisis=True
     lastWordWasOperand=True
+    parenthisisBalance=0
     for word in filterClause.split():
         # Keep and remove start & end parenthisis
-        if word.startswith("("):
+        while word.startswith("("):
+            parenthisisBalance+=1
             startsWithParenthisis=True
             result.append("(")
             word=word[1:]
-        if word.endswith(")"):
-            endsWithParenthisis=True
+        while word.endswith(")"):
+            parenthisisBalance-=1
+            endingParenthisis+=1
             word=word[:-1]
         # Handle boolean operator
-        if match("and|or", word, IGNORECASE):
+        if word.lower() in ("and", "or"):
             if startsWithParenthisis or lastWordWasOperand:
                 # Operator at begin of phrase (just after parenthisis)
                 # Or two operators following
                 raise PysqlException(_("Operator %s was not expected at word %s") % (word.upper(), len(result)+1))
-            result.append(word)
+            result.append(word.lower())
             lastWordWasOperand=True
             startsWithParenthisis=False
         # Construct like clause 
         elif len(word)>0 and lastWordWasOperand:
             if word.startswith("!"):
+                if len(word)>1 and word[1]=="(":
+                    raise PysqlException(_("The ! is not supported before parenthisis"))
                 operand="not like"
                 word=word[1:]
             else:
@@ -145,9 +149,11 @@ def generateWhere(keyword, filterClause):
         elif len(word)>0 and not lastWordWasOperand:
             # Terms of clause must be separted by operators
             raise PysqlException(_("Operator (AND/OR) expected at word %s") % (len(result)+1))
-        if endsWithParenthisis:
-            endsWithParenthisis=False
+        while endingParenthisis>0:
+            endingParenthisis-=1
             result.append(")")
+    if parenthisisBalance!=0:
+        raise PysqlException(_("Unblanced parenthisis (%s)" % parenthisisBalance))
     return " ".join(result)
 
 def removeComment(line, comment=False):
