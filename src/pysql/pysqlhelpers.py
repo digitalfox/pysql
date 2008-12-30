@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-"""This module defines some common useful functions
+"""This module defines some common useful helper functions
 @author: Sébastien Renard (sebastien.renard@digitalfox.org)
 @license:GNU GPL V3
 """
@@ -108,7 +108,6 @@ def generateWhere(keyword, filterClause):
     @arg filter: pysql where clause syntax as a list of words
     @arg keyword: the database object name on which filter apply
     @return: SQL where clause"""
-    #TODO: test this and make it bullet proof
     result=[]
     endingParenthisis=0
     startsWithParenthisis=True
@@ -153,7 +152,7 @@ def generateWhere(keyword, filterClause):
             endingParenthisis-=1
             result.append(")")
     if parenthisisBalance!=0:
-        raise PysqlException(_("Unblanced parenthisis (%s)" % parenthisisBalance))
+        raise PysqlException(_("Unblanced parenthisis (%s)") % parenthisisBalance)
     return " ".join(result)
 
 def removeComment(line, comment=False):
@@ -164,7 +163,6 @@ def removeComment(line, comment=False):
     @type comment: bool
     @return: line modified (str) and a flag (bool) that indicate if we are in a multiline comment"""
     # Remove one line comment (-- or /* */)
-    #TODO: use compiled regexp
     line=sub("\/\*\*\/", " ", line)         # Remove /**/ pattern
     line=sub("\/\*[^+|].*?\*\/", " ", line) # Remove /* ... */ except /*+ ... */
     line=sub("--[^+|].*$", "", line)        # Remove -- ... except --+ ...

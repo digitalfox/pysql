@@ -298,7 +298,7 @@ class BgQuery(Thread):
         self.exceptions=exceptions
         self.result=None
         self.moreRows=False
-        self.error=_("No")
+        self.error=_("None")
         Thread.__init__(self)
         self.setDaemon(True)
 

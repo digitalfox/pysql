@@ -1049,8 +1049,8 @@ class PysqlShell(cmd.Cmd):
                 raise PysqlNotImplemented()
         try:
             os.chdir(arg)
-        except OSError, e:
-            raise PysqlException(_("No such file or directory"))
+        except OSError:
+            raise PysqlException(_("No such directory"))
 
     def do_lpwd(self, arg):
         """See help_lpwd() for description"""
