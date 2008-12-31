@@ -10,7 +10,7 @@
 import urllib2
 import re
 import sys
-from os.path import dirname, isdir, isfile, islink, join
+from os.path import dirname, isdir, isfile, islink, join, pardir
 from os import access, listdir, mkdir, unlink, X_OK
 from shutil import copy, copytree, rmtree
 import tarfile
@@ -71,9 +71,12 @@ def checkForUpdate(proxy=None, user="", password=""):
 def currentVersion():
     """@return: current pysql version according to 'version' file"""
     try:
-        #TODO: handle case of dev install (tar xvf)
         #TODO: handle windows case
-        return file("/usr/share/pysql/version").readline().strip("\n")
+        if join("src", "pysql") in __file__:
+            version=join(dirname(__file__), pardir, pardir, "version")
+        else:
+            version="/usr/share/pysql/version"
+        return file(version).readline().strip("\n")
     except:
         raise PysqlException(_("Unable to read 'version' file. Do you remove or change it ?"))
 
