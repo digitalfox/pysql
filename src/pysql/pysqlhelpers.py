@@ -8,6 +8,8 @@
 
 # Python imports:
 import os
+import sys
+import traceback
 from re import match, sub
 import datetime
 from cx_Oracle import LOB
@@ -15,6 +17,7 @@ from cx_Oracle import LOB
 # Pysql imports:
 from pysqlexception import PysqlException, PysqlActionDenied
 from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
+import pysqlupdate
 
 # Help functions
 def addWildCardIfNeeded(aString, wildcard="%"):
@@ -204,3 +207,25 @@ def warn(message):
     @param message: unicode or str message. Conversion will done with print and default encoding
     """
     print "%s==>Warning:%s %s%s" % (RED, BOLD, message, RESET)
+
+def printStackTrace():
+    """Print stack trace with debug information"""
+     # Just a hook for a more pleasant error handling
+    print "------------------8<-------------------------------------"
+    traceback.print_exc()
+    print "------------------8<-------------------------------------"
+    try:
+        pysqlVersion=pysqlupdate.currentVersion()
+    except PysqlException:
+        pysqlVersion="unknown"
+    try:
+        import cx_Oracle
+        cxVersion=cx_Oracle.version
+    except Exception:
+        cxVersion="unknown"
+    print "Pysql release: %s" % pysqlVersion
+    print "cx Oracle release: %s" % cxVersion
+    print "Python release: %s" % sys.version.replace("\n", " ")
+    print
+    print RED+BOLD+"Please, send the text above to pysql@digitalfox.org"+RESET
+    print

@@ -26,7 +26,7 @@ import pysqlgraphics
 from pysqlexception import PysqlException, PysqlNotImplemented, PysqlOptionParserNormalExitException
 from pysqlconf import PysqlConf
 from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
-from pysqlhelpers import itemLength, removeComment
+from pysqlhelpers import itemLength, removeComment, printStackTrace
 from pysqloptionparser import PysqlOptionParser
 
 class PysqlShell(cmd.Cmd):
@@ -132,11 +132,7 @@ class PysqlShell(cmd.Cmd):
         except StandardError, e:
             # Just a hook for a more pleasant error handling
             print RED+BOLD+"\n==> Unhandled error. Sorry <=="+RESET
-            print "------------------8<-------------------------------------"
-            traceback.print_exc()
-            print "------------------8<-------------------------------------"
-            print RED+BOLD+"Please, send the text above to pysql@digitalfox.org"+RESET
-            print
+            printStackTrace()
 
     def precmd(self, line):
         """Hook executed just before any command execution.

@@ -73,7 +73,6 @@ import gettext
 import locale
 import os
 import sys
-import traceback
 from os.path import dirname, join, pardir
 from optparse import OptionParser
 
@@ -106,6 +105,7 @@ from pysqlshell import PysqlShell
 from pysqlconf import PysqlConf
 from pysqlexception import PysqlException
 import pysqlupdate
+from pysqlhelpers import printStackTrace
 
 def main():
     """Pysql main function"""
@@ -151,10 +151,7 @@ def main():
     except StandardError, e:
         # Just a hook for a more pleasant error handling
         print "\n==> Unrecoverable error during initialisation. Exiting <=="
-        print "------------------8<-------------------------------------"
-        traceback.print_exc()
-        print "------------------8<-------------------------------------"
-        print "Please, send the text above to pysql@digitalfox.org",
+        printStackTrace()
         print "(press enter key to exit)"
         sys.stdin.readline()
     except PysqlException, e:
