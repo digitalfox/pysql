@@ -30,11 +30,11 @@ class PysqlDb:
         self.connection=None
         self.cursor=None
 
-        # Keep connection string to allow future connection
-        self.connectString=connectString
-        
         # Read Conf
         self.conf=PysqlConf.getConfig()
+
+        # Keep connection string to allow future connection
+        self.connectString=connectString.encode(self.conf.getCodec(), "ignore")
 
         # Connect to Oracle
         try:
