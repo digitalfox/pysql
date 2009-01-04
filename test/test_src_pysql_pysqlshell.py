@@ -25,12 +25,13 @@ class TestConnectedShellCommands(unittest.TestCase):
     def setUp(self):
         if not CONNECT_STRING:
             self.fail("You must provide a connection string for connected tests")
+        # Capture stdout - This must be done before shell init
+        self.capturedStdout=testhelpers.CapturedStdout()
         self.shell=pysqlshell.PysqlShell(argv=[CONNECT_STRING,])
         self.shell.preloop() # Needed to populate command list (self.cmds)
         if not self.shell.db: 
             self.fail("No Oracle connection")
-        # Capture stdout
-        self.capturedStdout=testhelpers.CapturedStdout()
+        self.capturedStdout.reset() # Remove shell init banner
 
     def tearDown(self):
         """Restore stdout"""
