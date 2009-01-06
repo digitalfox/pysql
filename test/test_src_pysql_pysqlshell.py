@@ -23,7 +23,7 @@ CONNECT_STRING=""
 class TestShellCommands(unittest.TestCase):
     """Mother class of all shell tests.
     This class only defines common shell test method"""
-    def setUpShell(self):
+    def setUp(self):
         # Capture stdout - This must be done before shell init
         self.capturedStdout=testhelpers.CapturedStdout()
         self.shell=pysqlshell.PysqlShell(argv=[CONNECT_STRING,])
@@ -35,19 +35,20 @@ class TestShellCommands(unittest.TestCase):
         stop=self.shell.onecmd(line)
         stop=self.shell.postcmd(stop, line)
 
+    def tearDown(self):
+        """Restore stdout"""
+        self.capturedStdout.restoreStdout()
+
+
 class TestConnectedShellCommands(TestShellCommands):
-    """All that test need an Oracle connection"""
+    """Test commands that need an Oracle connection"""
     def setUp(self):
-        self.setUpShell()
+        TestShellCommands.setUp(self) # Father constructor
         if not CONNECT_STRING:
             self.fail("You must provide a connection string for connected tests")
         if not self.shell.db: 
             self.fail("No Oracle connection")
         self.capturedStdout.reset() # Remove shell init banner
-
-    def tearDown(self):
-        """Restore stdout"""
-        self.capturedStdout.restoreStdout()
 
     def test_do_bg(self):
         self.exeCmd("bg\n")
@@ -68,12 +69,16 @@ class TestConnectedShellCommands(TestShellCommands):
 
 
 class TestNotConnectedShellCommands(TestShellCommands):
-    def setUp(self):
-        self.setUpShell()
-
+    """Tests for all commands that do not need an Oracle connection"""
     def test_do_showCompletion(self):
         self.exeCmd("showCompletion")
         self.failIf(self.capturedStdout.gotPsyqlException())
+
+
+class TestCompleters(unittest.TestCase):
+    """Tests for command completers"""
+    pass
+
 
 if __name__ == '__main__':
     if len(sys.argv)>1:
