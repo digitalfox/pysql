@@ -367,7 +367,7 @@ class PysqlShell(cmd.Cmd):
     # Connection stuff
     def do_connect(self, arg):
         """See help_connect() from description"""
-        self.__checkArg(arg, "<=2")
+        self.__checkArg(arg, ">=1")
         arg=arg.split()
         try:
             self.__disconnect()
