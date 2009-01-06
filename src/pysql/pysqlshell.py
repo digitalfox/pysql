@@ -11,7 +11,6 @@
 import cmd
 import sys
 import os
-import traceback
 import readline
 from re import findall, match, sub
 from os.path import expandvars

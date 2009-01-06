@@ -11,17 +11,8 @@
 -- Use echo mode to display statement (make debug easier)
 set echo=yes
 
--- This is a test single line comment with double dash
-
-/* This is a test single line comment with slash & star */
-
-/* This is 
-a multiline
-comment
-with slash
-&
-star
-*/
+-- Only SQL statement should be tested here
+-- Pysql commands are tested with standard Python Unittest
 
 -- Simple SQL statements
 drop table toto_table;
