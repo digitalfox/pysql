@@ -64,6 +64,10 @@ class CapturedStdout:
                 return True
         return False
 
+    def echoStdout(self):
+        """Echo the current buffer on terminal stdout. Usefull for test debuging"""
+        self.backupStdout.writelines(["%s\n" % line for line in self.readlines(reset=False)])
+
     def restoreStdout(self):
         sys.stdout=self.backupStdout
         self.tmpFile.close()
