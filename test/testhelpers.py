@@ -54,10 +54,11 @@ class CapturedStdout:
         """Reset stdout buffer"""
         self.tmpFile.truncate(0)
 
-    def gotPsyqlException(self):
+    def gotPsyqlException(self, reset=True):
         """Look if captured output has a PysqlException
+        @param reset: reset buffer for next usage (default is True)
         @return: True is got exception, else False"""
-        lines=self.readlines()
+        lines=self.readlines(reset)
         for line in lines:
             if "Pysql error" in line:
                 return True
