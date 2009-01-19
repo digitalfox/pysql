@@ -31,6 +31,8 @@ searchObjectSql={
                 where (%s) /*%s*/ order by %s""", "tablespace_name"),
     "trigger"   :    (u"""select owner, trigger_name from all_triggers
                 where (%s) and owner like '%s' order by %s""", "trigger_name"),
+    "user":    (u"""select 'Users', username from all_users
+                where (%s) /*%s*/ order by %s""", "username"),
     "view"      :    (u"""select owner, view_name from all_views
                 where (%s) and owner like '%s' order by %s""", "view_name")
     }

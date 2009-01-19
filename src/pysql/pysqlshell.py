@@ -1,4 +1,4 @@
-﻿#!/usr/bin/python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 """User interaction with pysql
@@ -269,7 +269,6 @@ class PysqlShell(cmd.Cmd):
             parserMethod = getattr(self, "parser_" + arg)
             parserMethod().print_help(sys.stderr)
         else:
-            print "Usage: ",
             cmd.Cmd.do_help(self, arg)
 
     def completedefault(self, text, line, begidx, endidx):
@@ -520,7 +519,7 @@ class PysqlShell(cmd.Cmd):
         self.__checkArg(arg, "==1")
         result=pysqlfunctions.count(self.db, arg)
         print result
-    
+
     def do_compare(self, arg):
         """See help_compare() for description"""
         self.__checkArg(arg, ">=2")
@@ -528,9 +527,9 @@ class PysqlShell(cmd.Cmd):
         tableNames=[]
         schemas=[]     # Complete connect string to schema
         withData=False # Compare only structure (false) or data ?
-        
+
         arg=arg.split()
-        
+
         if arg[0]=="data":
             withData=True
             arg.pop(0)
@@ -558,7 +557,7 @@ class PysqlShell(cmd.Cmd):
             self.__checkConnection()
             schemas=["A", "B"]
             # We create two new connexion to avoid cursor clash
-            dbList={ schemas[0] : PysqlDb(self.db.getConnectString()), 
+            dbList={ schemas[0] : PysqlDb(self.db.getConnectString()),
                      schemas[1] : PysqlDb(self.db.getConnectString()) }
         else:
             # Connection will be created later by compareTables(...)
@@ -568,7 +567,7 @@ class PysqlShell(cmd.Cmd):
             # We are just comparing two tables
             if len(tableNames)!=2:
                 raise PysqlException(_("Cannot compare a table and a schema !"))
-            result=pysqlfunctions.compareTables(schemas[0], schemas[1], 
+            result=pysqlfunctions.compareTables(schemas[0], schemas[1],
                                                 tableNames[0], tableNames[1],
                                                 dbList, data=withData)
             if result:
@@ -581,21 +580,21 @@ class PysqlShell(cmd.Cmd):
         else:
             # We have to compare the whole schema
             result=pysqlfunctions.compare(schemas[0], schemas[1])
-            
+
             print GREEN+_("**** Tables found in %s but not in %s ****")+RESET \
                     % (schemaNames[0], schemaNames[1])
             print ", ".join(result[0])
             print
-            
+
             print GREEN+_("**** Tables found in %s but not in %s ****")+RESET \
                     % (schemaNames[1], schemaNames[0])
             print ", ".join(result[1])
             print
-            
+
             print GREEN+_("**** Tables identical in both schema ****")+RESET
             print ", ".join([i[0] for i in result[2].items() if not i[1]])
             print
-            
+
             print GREEN+_("**** Tables not identical in both schema ****")+RESET
             for tableName, tableDiff in result[2].items():
                 if tableDiff:
@@ -933,6 +932,10 @@ class PysqlShell(cmd.Cmd):
         """See help_tablespace() for description"""
         self.__searchObjet("tablespace", arg)
 
+    def do_user(self, arg):
+        """See help_user() for description"""
+        self.__searchObjet("user", arg)
+
     # Cursor manipulation
     def do_last(self, arg):
         """See help_next() for description"""
@@ -1177,7 +1180,9 @@ class PysqlShell(cmd.Cmd):
 
     def help_disconnect(self):
         """online help"""
-        pass
+        print CYAN+_("Usage:\n\tdisc[connect]")+RESET
+        print _("Closes current connection if any")
+
 
     def help_edit(self):
         """online help"""
@@ -1719,7 +1724,6 @@ class PysqlShell(cmd.Cmd):
     complete_conn=complete_connect
 
     # Functions aliases
-    help_conn=help_connect
     aliases={"conn" : "connect",
              "dep"  : "dependencies",
              "desc" : "describe",
