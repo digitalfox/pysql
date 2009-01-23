@@ -365,7 +365,7 @@ class PysqlShell(cmd.Cmd):
     # Command line definitions
     # Connection stuff
     def do_connect(self, arg):
-        """See help_connect() from description"""
+        """Connect to instance"""
         self.__checkArg(arg, ">=1")
         arg=arg.split()
         try:
@@ -386,7 +386,7 @@ class PysqlShell(cmd.Cmd):
         self.__connect(arg[0], mode)
 
     def do_disconnect(self, arg):
-        """See help_disconnect() from description"""
+        """Disconnect from instance"""
         try:
             self.__disconnect()
         except PysqlException, e:
@@ -403,7 +403,7 @@ class PysqlShell(cmd.Cmd):
             print
 
     def do_history(self, arg):
-        """See help_history for help"""
+        """Display shell history"""
         self.__checkArg(arg, "<=1")
         #TODO: move depth to pysqlConfig
         #BUG: if history is short stupid things are printed !
@@ -440,7 +440,7 @@ class PysqlShell(cmd.Cmd):
             raise PysqlException(_("See help history for usage"))
 
     def do_library(self, arg):
-        """See help_library for help"""
+        """Manage user sql request library"""
         nArgs=len(arg.split())
         if nArgs==0:
             # Shows all sql library
@@ -473,7 +473,7 @@ class PysqlShell(cmd.Cmd):
 
     # background queries
     def do_bg(self, arg):
-        """See help_bg for description"""
+        """Manage background queries"""
         arg=arg.split()
         if len(arg)==0:
             # Shows background queries
@@ -514,14 +514,14 @@ class PysqlShell(cmd.Cmd):
 
     # High level functions
     def do_count(self, arg):
-        """See help_count() for description"""
+        """Count segment lines"""
         self.__checkConnection()
         self.__checkArg(arg, "==1")
         result=pysqlfunctions.count(self.db, arg)
         print result
 
     def do_compare(self, arg):
-        """See help_compare() for description"""
+        """Compare schema or object structure and data"""
         self.__checkArg(arg, ">=2")
         schemaNames=[] # Password striped connection string to schema
         tableNames=[]
@@ -748,7 +748,7 @@ class PysqlShell(cmd.Cmd):
         self.__executeSQL(line)
 
     def do_explain(self, arg):
-        """ See help_explain() for description"""
+        """Explain SQL exec plan"""
         self.__checkConnection()
         self.__checkArg(arg, ">1")
         importantWords=["TABLE ACCESS FULL", "FULL SCAN"]
@@ -812,14 +812,14 @@ class PysqlShell(cmd.Cmd):
             self.__displayTab(result, self.db.getDescription())
 
     def do_kill(self, arg):
-        """See help_kill() for description"""
+        """Kill sessions"""
         self.__checkConnection()
         self.__checkArg(arg, "==2")
         pysqlfunctions.killSession(self.db, arg.replace(" ", ","))
         print GREEN+_("Kill has been sent to the session")+RESET
 
     def do_lock(self, arg):
-        """ See help_lock() for description"""
+        """Display instance lock"""
         self.__checkConnection()
         self.__checkArg(arg, "==0")
         (header, result)=pysqlfunctions.lock(self.db)
@@ -827,7 +827,7 @@ class PysqlShell(cmd.Cmd):
         self.__displayTab(result, header)
 
     def do_trace(self, sid):
-        """See help_trace() for description"""
+        """Trace a session"""
         self.__checkConnection()
         self.__checkArg(sid, "==1")
         try:
@@ -874,7 +874,7 @@ class PysqlShell(cmd.Cmd):
             raise PysqlException(msg)
 
     def do_pkgtree(self, arg):
-        """See help_pkgtree() for description"""
+        """Display PL/SQL package call tree"""
         self.__checkConnection()
         self.__checkArg(arg, "==1")
         #raise PysqlNotImplemented()
@@ -882,63 +882,63 @@ class PysqlShell(cmd.Cmd):
 
     # Oracle object searching (in alphabectic order)
     def do_datafile(self, arg):
-        """See help_tablespace() for description"""
+        """Display datafile"""
         self.__searchObjet("datafile", arg)
 
     def do_directory(self, arg):
-        """See help_directory() for description"""
+        """Display directories"""
         self.__searchObjet("directory", arg)
 
     def do_function(self, arg):
-        """See help_function for description"""
+        """Display functions"""
         self.__searchObjet("function", arg)
 
     def do_index(self, arg):
-        """Sell help_index() for description"""
+        """Display indexes"""
         self.__searchObjet("index", arg)
 
     def do_package(self, arg):
-        """See help_package for description"""
+        """Display PL/SQL packages"""
         self.__searchObjet("package", arg)
 
     def do_procedure(self, arg):
-        """See help_procedure for description"""
+        """Display PL/SQL procedures"""
         self.__searchObjet("procedure", arg)
 
     def do_segment(self, arg):
-        """See help_segment() for description"""
+        """Display segments (tables, index)"""
         print CYAN+_("***** Tables *****")+RESET
         self.__searchObjet("table", arg)
         print CYAN+_("\n**** Indexes *****")+RESET
         self.__searchObjet("index", arg)
 
     def do_sequence(self, arg):
-        """See help_sequence() for description"""
+        """Display sequences"""
         self.__searchObjet("sequence", arg)
 
     def do_table(self, arg):
-        """See help_table() for description"""
+        """Display tables"""
         self.__searchObjet("table", arg)
 
     def do_trigger(self, arg):
-        """See help_trigger() for description"""
+        """Display triggers"""
         self.__searchObjet("trigger", arg)
 
     def do_view(self, arg):
-        """See help_view() for description"""
+        """Display view"""
         self.__searchObjet("view", arg)
 
     def do_tablespace(self, arg):
-        """See help_tablespace() for description"""
+        """Display tablespaces"""
         self.__searchObjet("tablespace", arg)
 
     def do_user(self, arg):
-        """See help_user() for description"""
+        """Display users (aka schema)"""
         self.__searchObjet("user", arg)
 
     # Cursor manipulation
     def do_last(self, arg):
-        """See help_next() for description"""
+        """Display last lines of query set"""
         self.__checkConnection()
         self.__checkArg(arg, "<=1")
         try:
@@ -962,7 +962,7 @@ class PysqlShell(cmd.Cmd):
         self.__displayTab(result, self.db.getDescription())
 
     def do_next(self, arg):
-        """See help_next() for description"""
+        """Display next lines of query set"""
         self.__checkConnection()
         self.__checkArg(arg, "<=1")
         try:
@@ -973,7 +973,7 @@ class PysqlShell(cmd.Cmd):
 
     # Parameters handling
     def do_get(self, arg):
-        """See help_get() for description"""
+        """Get pysql parameter"""
         if arg in ("all", ""):
             result=self.conf.getAll()
             # Converts all to str to avoid strange alignement
@@ -986,7 +986,7 @@ class PysqlShell(cmd.Cmd):
             print self.conf.get(arg)
 
     def do_set(self, arg):
-        """See help_set() for description"""
+        """Set a pysql parameter"""
         if arg=="":
             self.do_get("all")
         else:
@@ -997,12 +997,12 @@ class PysqlShell(cmd.Cmd):
                 self.help_set()
 
     def do_write(self, arg):
-        """See help_write() for description"""
+        """Write configuration to disj"""
         self.conf.write()
 
     # Shell execution
     def do_shell(self, arg):
-        """See help_shell() for description"""
+        """Execute a shell command or open a shell"""
         # An empty command line enables to open a subshell
         if arg=="":
             if os.name=="posix":
@@ -1018,7 +1018,7 @@ class PysqlShell(cmd.Cmd):
             print CYAN+"Exited with code "+str(exitStatus)+RESET
 
     def do_lls(self, arg):
-        """See help_lls() for description"""
+        """A simple local ls"""
         self.__checkArg(arg, "<=1")
         if os.name=="posix":
             cmd="ls "
@@ -1036,7 +1036,7 @@ class PysqlShell(cmd.Cmd):
             print CYAN+"Exited with code "+str(exitStatus)+RESET
 
     def do_lcd(self, arg):
-        """See help_lcd() for description"""
+        """Change local directory"""
         self.__checkArg(arg, "<=1")
         if arg=="":
             if os.name=="posix":
@@ -1051,14 +1051,14 @@ class PysqlShell(cmd.Cmd):
             raise PysqlException(_("No such directory"))
 
     def do_lpwd(self, arg):
-        """See help_lpwd() for description"""
+        """Display current work directory"""
         self.__checkArg(arg, "==0")
         print os.getcwd()
 
 
     # Script execution
     def do_script(self, arg):
-        """See help_script for description"""
+        """Execute an external sql file, similar to sql*plus @"""
         self.__checkConnection()
         self.__checkArg(arg, "==1")
         try:
@@ -1078,7 +1078,7 @@ class PysqlShell(cmd.Cmd):
 
     # Command repeating
     def do_watch(self, arg):
-        """See help_watch() for description"""
+        """Repeat a command"""
         self.__checkConnection()
         self.__checkArg(arg, ">=1")
         # Checks if interval is given
@@ -1173,6 +1173,10 @@ class PysqlShell(cmd.Cmd):
         """online help"""
         print CYAN+_("Usage:\n\tcount <table/view name>")+RESET
         print _("Counts the number of lines in a table or a view")
+
+    def help_datafile(self):
+        """online help"""
+        self._help_for_search_method("datafile")
 
     def help_directory(self):
         """online help"""
@@ -1303,6 +1307,10 @@ class PysqlShell(cmd.Cmd):
         print CYAN+_("Usage:\n\tlpwd")+RESET
         print _("Prints local directory")
 
+    def help_segment(self):
+        """online help"""
+        self._help_for_search_method("segment")
+
     def help_show(self):
         """online help"""
         print CYAN+_("Usage:\n\tshow instance")+RESET
@@ -1322,9 +1330,17 @@ class PysqlShell(cmd.Cmd):
         """online help"""
         self._help_for_search_method("table")
 
+    def help_tablespace(self):
+        """online help"""
+        self._help_for_search_method("tablespace")
+
     def help_trigger(self):
         """online help"""
         self._help_for_search_method("trigger")
+
+    def help_user(self):
+        """online help"""
+        self._help_for_search_method("user")
 
     def help_view(self):
         """online help"""
