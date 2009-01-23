@@ -113,10 +113,7 @@ def datamodel(db, userName, tableFilter=None, withColumns=True):
        #sys.stdout.write(GREY+" (%4.1f%%) %s" % (100*float(current)/nbLinks, link[1]+" -> "+link[2])+RESET)
 
     filename=db.getDSN()+"_"+userName+"."+format
-    print CYAN+_("Generating picture...")+RESET
-    graph.write(filename, format=format)
-
-    print GREEN+_("Datamodel saved as ")+filename+RESET
+    generateImage(graph, filename, format)
     viewImage(filename)
 
 def dependencies(db, objectName, direction, maxDepth, maxNodes):
@@ -224,10 +221,7 @@ def dependencies(db, objectName, direction, maxDepth, maxNodes):
             print RED+"Warning: Reach max recursion limit, references lookup stopped on direction %s" % currentDir +RESET
 
     filename="dep_"+objectOwner+"."+objectName+"."+format
-    print CYAN+"Generating picture..."+RESET
-    graph.write(filename, format=format)
-
-    print GREEN+"Dependencies saved as "+filename+RESET
+    generateImage(graph, filename, format)
     viewImage(filename)
 
 
@@ -327,10 +321,7 @@ def diskusage(db, userName, withIndexes=False):
 
     print
     filename="du_"+userName+"."+format
-    print CYAN+_("Generating picture...")+RESET
-    graph.write(filename, format=format)
-
-    print GREEN+_("Disk usage saved as ")+filename+RESET
+    generateImage(graph, filename, format)
     viewImage(filename)
 
 def pkgTree(db, packageName):
@@ -413,10 +404,9 @@ def pkgTree(db, packageName):
         if result:
             if graph.get_edge(currentVerb.upper(), result.group(1).upper()) is None:
                 graph.add_edge(Edge(src=currentVerb.upper(), dst=result.group(1).upper()))
-    print CYAN+_("Generating picture...")+RESET
+
     filename=package.getName()+"_dep."+format
-    graph.write(filename, format=format)
-    print GREEN+_("Package tree saved as ")+filename+RESET
+    generateImage(graph, filename, format)
     viewImage(filename)
 
 def viewImage(imagePath):
@@ -441,3 +431,16 @@ def viewImage(imagePath):
         subprocess.Popen([viewer, imagePath], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     else:
         raise PysqlException(_("Viewer was not found"))
+
+def generateImage(graph, filename, format):
+    """Generate graphviz image from graph
+    @param graph: pydot graph object
+    @param filename: image filename (str)
+    @param format: image format (str)
+    """
+    print CYAN+_("Generating picture...")+RESET
+    try:
+        graph.write(filename, format=format)
+    except pydot.InvocationException, e:
+        raise PysqlException("Graphviz failed to generate image:\n%s" % e)
+    print GREEN+_("Image saved as ")+filename+RESET
