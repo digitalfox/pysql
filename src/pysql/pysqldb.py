@@ -261,10 +261,12 @@ class PysqlDb:
             return data
         elif isinstance(data, datetime):
             #TODO: use user define format or Oracle settings
-            data=data.strftime("%Y/%m/%d %H:%M:%S")
+            # Don't use strftime because it does not support year < 1900
+            data=unicode(data)
         elif isinstance(data, date):
             #TODO: use user define format or Oracle settings
-            data=data.strftime("%Y/%m/%d")
+            # Don't use strftime because it does not support year < 1900
+            data=unicode(data)
         elif isinstance(data, LOB):
             data=data.read(1, data.size())
         elif isinstance(data, unicode):
