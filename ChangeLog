@@ -1,3 +1,251 @@
+commit 512edee53442cbc40493f748b369b6906417703f
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Mon Jan 26 14:23:04 2009 +0100
+
+    I18n some strings, update french translation and remove
+    the private joke about JF and "not connected to Oracle" error message
+
+commit b6da4eedf42607b14e73af285f9cf2087b7157cc
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Mon Jan 26 12:35:22 2009 +0100
+
+    Add completion on command aliases
+
+commit 5c799ff93ab6241fa68db9929c9a72e97ad0f22b
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Jan 25 23:05:30 2009 +0100
+
+    Don't rely on datetime.strftime because it does not support year
+    before 1900.
+
+commit 72da63906dc39af078d9ceac1e13093fd60dead0
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Jan 23 18:19:23 2009 +0100
+
+    Add missing online help and add some comments
+
+commit bedbc56302d0404a2c08c2ba270c0ac0d2ffc617
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Jan 23 14:08:53 2009 +0100
+
+    Catch graphviz errors to display nice message
+    Factorize graphiz call code a little
+
+commit 32c5b2899e1bffd0844cde800c4f4450409ed256
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Mon Jan 19 21:04:59 2009 +0100
+
+    Add user function to list schemas and doc cleanup (patch by S. Delcros)
+
+commit f774ab91e53c52861fe33d63f703b6814daaa44f
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Thu Jan 8 08:21:47 2009 +0100
+
+    Add unittest for do_disconnect and do_history
+
+commit 0d0c20fa0d6f0642a82424b18997f5685d808f78
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Thu Jan 8 08:20:31 2009 +0100
+
+    Add a debug function that dump current captured stdout on
+    real terminal stdout. Usefull for test debuging
+
+commit 83d0c1f44c802508836a9dff91c0df61c05b0cce
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Thu Jan 8 07:47:11 2009 +0100
+
+    Add ORA code catcher function
+    Add tests for do_connect
+
+commit 0b2aaf1018d6a5cdc472c0f7bc0e64a41e4f3724
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Thu Jan 8 07:45:59 2009 +0100
+
+    Add option to exception catcher to avoid cleaning the buffer
+
+commit e82d6acb21e9523097f462f180eebae7e79c168e
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Jan 6 13:57:15 2009 +0100
+
+    Fix wrong argument checking for connect command
+
+commit 4508834dda6da2f7529dc1cae9961546470aecc3
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Jan 6 13:52:59 2009 +0100
+
+    Move setUp() and TearDown() method on mother class
+    Add (empty) test case for completers commands
+
+commit 9e0a8857ecb8d53638ae9e1a3bb697b3d960d467
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Jan 6 13:45:17 2009 +0100
+
+    Split shell tests in two TestCase: connected and not connected test
+    Create a mother class for shell unit test to factorise shell init
+    code.
+    Remove from .sql test file commands that are now tested in unit tests.
+
+commit 91611423821a1a8c53da369aafe5c861e0217edb
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Jan 4 22:29:18 2009 +0100
+
+    Capture output before shell creation
+    because cmd.py __init__ copy sys.stdout
+
+commit 19f76ff7593b17d4d4f635249f370c11cb5bf25a
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Jan 4 19:22:55 2009 +0100
+
+    Define a structure to be able to test pysql shell
+    Add unit test for bg commands as a proof of concept
+
+commit a237eebb380ec81d190c7c162a9e8a7e7582ddef
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Jan 4 19:21:50 2009 +0100
+
+    Take care of user locale
+    Disable colors during test to ease string comparison
+    Add an stdout capture mechanism to be able to test pysql shell
+
+commit 3b28d5f26e9fa9d0e205e07984e88b02e73fb9ee
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Jan 2 18:12:28 2009 +0100
+
+    Factorise stacktrace dumping code in helper module
+    Display some debug info when dumping stacktrace : pysql release, cx Oracle release
+    and python release.
+
+commit 60d3da25b15b351924739d7cfd0546d4a258905a
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Jan 2 17:29:22 2009 +0100
+
+    Send dist dir by default
+
+commit f4716b7643e06afb109a62c24b090414dba0579c
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Jan 2 16:54:56 2009 +0100
+
+    cx_Oracle v > 5.0 does not like unicode connection string.
+    So encode it with default user encoding
+
+commit c51e546fb6ba7ef399e914a27143c8964c19d019
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Dec 31 16:58:42 2008 +0100
+
+    Fix version displaying under Unix for standard and devel install
+
+commit 7816d935c28bed483944bb201d71d44347a1de5c
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Dec 31 00:05:04 2008 +0100
+
+    Update po catalog and french translation
+
+commit a9567d5045de5a5a962c5d0539ef8e7d7222c321
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Dec 31 00:02:57 2008 +0100
+
+    Move locale dir to src/share dir. This allow translation testing even
+    if pysql is not installed (just untar)
+
+commit 589a552aab98fcdbb7186ce04ffaf9ab7eaea82f
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Dec 30 23:33:34 2008 +0100
+
+    Small cleanup
+
+commit b11c25a1aa6225184cf12c3a6c7040748238ae0d
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Dec 30 23:00:40 2008 +0100
+
+    Unit test for which function and corner case fix
+
+commit e06a7ce0b7b4c7faff868bdc6ffa9cd476584b86
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Dec 30 22:50:54 2008 +0100
+
+    One more unit test for removeComment... and one more bug killed
+
+commit 7253fbc922c5bd52f69bef5ba1fc480c3a0dc7f3
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Dec 30 20:07:43 2008 +0100
+
+    Fix many bugs in removeComment function and adds unit tests
+
+commit 4f1f7a470c171c1d930bbc699b37104129e4dff7
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Dec 30 15:14:31 2008 +0100
+
+    Add some basic but usefull unit test. Starting with pysqlhelpers module
+
+commit b5f64bd01427a5149af4713848f3e2101dbbb964
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Dec 30 15:10:21 2008 +0100
+
+    Fix parsing bugs in generatewhere function thanks to new unit test suite
+
+commit a0297421f924d015c04ec453773634035dc6534b
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Dec 19 18:58:23 2008 +0100
+
+    Use csv module to generate csv extraction
+
+commit e4fa00fade088d368bca6ed215a2c09617ecb9a3
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Dec 19 18:30:54 2008 +0100
+
+    Move session list query to pysqlqueries module
+
+commit 30f82b5f09e43c6f057d2f1fc90ddb2beaaa73fd
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Dec 19 18:25:06 2008 +0100
+
+    Don't try to explain plan of alter statement type when displaying session details
+
+commit 760aab13d1c4ce8065f0744876aa8a0de43e00f3
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Dec 19 18:16:18 2008 +0100
+
+    Add -a / -all switch to do_session in order to display both active and inactive sessions
+
+commit f1024177ea98877857fd7413dbcbcc0468e4fdff
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Mon Dec 15 19:10:57 2008 +0100
+
+    Change license from GPL v2 to GPL v3. This was done with the commitment of
+    all Pysql contributors: Sébastien Delcros and Sébastien Renard
+
+commit e3018fcee8d29eba3f317adc3ced764fbece9989
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Mon Dec 15 09:56:29 2008 +0100
+
+    Optionnaly sort column in desc (feature request #1976871)
+
+commit ee21b25f1197f34c1631afe8c0767706d8c99ef8
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 14 23:45:33 2008 +0100
+
+    Remove useless cast to str as now data is decoded at pysqldb level
+    Force stdout flush when counting table to report progression to user properly
+
+commit 7503933c2e86aaa68ca8ab56e7b8c1c74cf20af4
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 14 23:18:18 2008 +0100
+
+    Add version, README, ChangeLog, ChangeLog-Synthesis and LICENSE files to install
+    Fix pysql -v for install release.
+
+commit 7a5b318cc8a68fa066902525edb7ad7293147d87
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 14 22:54:56 2008 +0100
+
+    New changelog generation script working with git
+
+commit 030c7fb3ac388718451accc75eed2d192672a0f3
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 14 22:54:10 2008 +0100
+
+    version file strick back. And now used from setup.py to generate package
+
 commit a93ba5f9aa25139f0861f7c918c42a9feeeb9b3b
 Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
 Date:   Sun Dec 14 19:06:40 2008 +0100

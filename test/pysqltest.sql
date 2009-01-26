@@ -85,13 +85,6 @@ end;
 
 -- functions test
 
--- connect(self, arg)
--- disconnect(self, arg)
-
-showCompletion
-
-history
-history 1
 
 library
 library dual select * from dual;
@@ -99,13 +92,6 @@ library
 library dual
 library dual remove
 
-bg
-select * from dual&
-bg 
-bg 1
-
--- commit(self, arg)
--- rollback(self, arg)
 
 count dual
 

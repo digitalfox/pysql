@@ -1,3 +1,13 @@
+V.12 2009/01/26
+Switch to git and slighly reorganise source tree. Kill useless and dead
+modules (pysqlio and pysqlnet). Switch from GPLv2 to GPLv3.
+Full switch to Unicode inside Pysql. Honor Oracle client encoding (NLS_LANG)
+for database in/out and terminal encoding for user in/out.
+Add some unit test and fix all comments handling
+New function parser that allow more complex and usefull command switch.
+Graphical functions (datamodel, diskusage...) get new options as well as
+desc (sort column) and session (display all sessions).
+
 V0.11 2007/12/15
 Reorganize all source tree and switch from custom build to distutils.
 Immediate consequences is the availability of ready to install package
