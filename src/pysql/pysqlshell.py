@@ -499,7 +499,7 @@ class PysqlShell(cmd.Cmd):
                     self.db=bgQuery.db
                     self.__toScreen(bgQuery.result, bgQuery.moreRows)
                 else:
-                    print GREEN+ "Statement executed"+RESET
+                    print GREEN+ _("Statement executed")+RESET
                 # Removes bg query from list
                 self.bgQueries.remove(bgQuery)
             else:
@@ -1582,7 +1582,7 @@ class PysqlShell(cmd.Cmd):
         The test is light (db object defined), no real connection test
         is done."""
         if self.db is None:
-            raise PysqlException(_("Not connected to Oracle (Hello JF)"))
+            raise PysqlException(_("Not connected to Oracle"))
 
     def __checkArg(self, arg, argTest):
         """Checks if arg respect argTest else raise a PysqlException
