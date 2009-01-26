@@ -271,6 +271,14 @@ class PysqlShell(cmd.Cmd):
         else:
             cmd.Cmd.do_help(self, arg)
 
+    def completenames(self, text, *ignored):
+        """Complete commands names. Same as Cmd.cmd one but with support
+        for command aliases"""
+        dotext = 'do_'+text
+        names = [a[3:] for a in self.get_names() if a.startswith(dotext)]
+        names.extend([a for a in self.aliases.keys() if a.startswith(text)])
+        return names
+
     def completedefault(self, text, line, begidx, endidx):
         """pysql specific completion with self.completeList"""
         if not self.useCompletion:
