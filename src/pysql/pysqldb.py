@@ -39,11 +39,11 @@ class PysqlDb:
         # Connect to Oracle
         try:
             if mode=="sysoper":
-                self.connection=connect(connectString, mode=SYSOPER)
+                self.connection=connect(self.connectString, mode=SYSOPER)
             elif mode=="sysdba":
-                self.connection=connect(connectString, mode=SYSDBA)
+                self.connection=connect(self.connectString, mode=SYSDBA)
             else:
-                self.connection=connect(connectString)
+                self.connection=connect(self.connectString)
         except (DatabaseError, RuntimeError), e:
             raise PysqlException(_("Cannot connect to Oracle: %s") % e)
 
