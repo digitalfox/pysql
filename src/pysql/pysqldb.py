@@ -225,7 +225,7 @@ class PysqlDb:
         if self.connection:
             encoding=self.connection.nencoding
         else:
-            raise PysqlException("Cannot encode data, not connected to Oracle")
+            raise PysqlException(_("Cannot encode data, not connected to Oracle"))
         if sql is None:
             return None
         if isinstance(sql, list):
@@ -233,13 +233,13 @@ class PysqlDb:
             return [self.encodeSql(i) for i in sql]
 
         if isinstance(sql, str):
-            warn("string '%s' is already encoded" % sql)
+            warn(_("string '%s' is already encoded") % sql)
             return sql
         try:
             sql=sql.encode(encoding)
         except UnicodeEncodeError:
             sql=sql.encode(encoding, "replace")
-            warn("Got unicode error while encoding '%s'" % sql) 
+            warn(_("Got unicode error while encoding '%s'") % sql)
         return sql
 
     def decodeData(self, data):
@@ -270,7 +270,7 @@ class PysqlDb:
         elif isinstance(data, LOB):
             data=data.read(1, data.size())
         elif isinstance(data, unicode):
-            warn("Warning, string '%s' is already Unicode" % data)
+            warn(_("Warning, string '%s' is already Unicode") % data)
             return data
 
         # Decode data
@@ -278,9 +278,9 @@ class PysqlDb:
             data=data.decode(encoding)
         except UnicodeDecodeError:
             data=data.decode(encoding, "ignore")
-            warn("Can't decode '%s' with %s codec. Check your NLS_LANG variable" % (data, encoding))
+            warn(_("Can't decode '%s' with %s codec. Check your NLS_LANG variable") % (data, encoding))
         except AttributeError:
-            warn("Cannot decode %s object" % type(data))
+            warn(_("Cannot decode %s object") % type(data))
         return data
 
 
