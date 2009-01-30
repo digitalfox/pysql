@@ -493,7 +493,7 @@ def lock(db):
     """
     header=["username", "osuser", "mode", "object"]
     try:
-        result=db.executeAll("""SELECT
+        result=db.executeAll(u"""SELECT
             oracle_username,
             os_user_name,
             decode(locked_mode,
@@ -545,7 +545,7 @@ def killSession(db, session):
     @return: None but raises an exception if session does not exist
     """
     try:
-        db.execute("""alter system kill session '%s'""" % session)
+        db.execute(u"""alter system kill session '%s'""" % session)
     except PysqlException:
         raise PysqlActionDenied(_("privilege ALTER SYSTEM is missing"))
 
