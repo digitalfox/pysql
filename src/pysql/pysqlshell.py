@@ -51,6 +51,7 @@ class PysqlShell(cmd.Cmd):
         self.showBanner=True        # Indicate if intro banner should be displayed
         self.trace={}               # Store session trace statistics between two call to trace command
         self.rc=0                   # Shell exit code
+        self.oldTermName=""         # Old terminal name
         self.notConnectedPrompt=RED+_("(not connected) ")+RESET
 
         # Reads conf
@@ -63,6 +64,9 @@ class PysqlShell(cmd.Cmd):
 
         # Calls father constructor
         cmd.Cmd.__init__(self, "tab", stdin, stdout)
+
+        # Keep old term name
+        self.oldTermName=self.__getTitle()
 
         # If connectString was given as argument, connects to Oracle
         try:
@@ -104,6 +108,11 @@ class PysqlShell(cmd.Cmd):
             print RED+BOLD+_("Break !")+RESET
             self.showBanner=False
             self.loop()
+
+    def postloop(self):
+        """End of command loop"""
+        # Restore original terminal title
+        self.__setTitle(self.oldTermName)
 
     def emptyline(self):
         """Fetches next result if a request is running
@@ -1466,11 +1475,28 @@ class PysqlShell(cmd.Cmd):
         """Sets the window title
         @param title: window title
         @type title: str"""
+        #TODO: move this to helpers
         if os.name=='posix' and os.getenv("PYDEVDEBUG", "0")=="0":
             title="\033]0;%s\007" % title
             sys.stdout.write(title.encode(self.conf.getCodec(), "replace"))
         elif os.name=="nt":
             os.system("title %s" % title.encode(self.conf.getCodec(), "replace"))
+
+    def __getTitle(self):
+        """Gets the window title
+        @return: str"""
+        #TODO: move this to helpers
+        if os.name=="posix":
+            title=os.popen("xprop -id $WINDOWID WM_NAME").readline().strip()
+            if "WM_NAMEAborted" in title:
+                title="" # No title
+            elif "=" in title:
+                title=title.split("=")[1].lstrip(' ').strip('"')
+        elif os.name=="nt":
+            title="" #TODO: find how to get title on windows cmd
+        else:
+            title=""
+        return title
 
     def __searchObjet(self, objectType, objectName):
         """Searches Oracle object"""
@@ -1498,7 +1524,7 @@ class PysqlShell(cmd.Cmd):
         """Displays on column the list of strings"""
         # If terminal width is not set, use a default of 120 (should read real term width !)
         termWidth=self.conf.get("termWidth")
-        #BUG:columnize does not support unicode.
+        #BUG: columnize does not support unicode.
         listOfString=[i.encode(self.conf.getCodec(), "replace") for i in listOfString]
         self.columnize(listOfString, displaywidth=termWidth)
 
@@ -1592,6 +1618,7 @@ class PysqlShell(cmd.Cmd):
         @type argTest: str
         @return: None
         """
+        #TODO: move this to helpers
         if match("=\d+", argTest):
             # Bouh, replace the single = by ==
             argTest="="+argTest
@@ -1717,6 +1744,7 @@ class PysqlShell(cmd.Cmd):
             self.__displayTab(errors, ("Date", "Error message", "Oracle error Code"))
 
         print CYAN+_("\n\nBye !\n")+RESET
+
         rc=0
         # Flushes completion cache to disk
         try:
@@ -1741,6 +1769,7 @@ class PysqlShell(cmd.Cmd):
         except PysqlException, e:
             print e
             rc=1
+
         self.rc=rc
         return True
 
