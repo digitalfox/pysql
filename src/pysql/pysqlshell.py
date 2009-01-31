@@ -811,7 +811,8 @@ class PysqlShell(cmd.Cmd):
             print CYAN+_("***** Current statement *****")+RESET
             result=pysqlfunctions.sessionStat(self.db, sessionId, stat="currentStatement")
             if result and result[0][0]:
-                result=sub("\s+", " ", result[0][0]) # Strip extra spaces
+                result="".join([i[0] for i in result]) # Merge all in one string
+                result=sub("\s+", " ", result) # Strip extra spaces
                 print result
                 try:
                     if not result.upper().startswith("ALTER"):

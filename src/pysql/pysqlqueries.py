@@ -321,11 +321,11 @@ sessionStatSql={
                                     where a.sid = :1 and a.audsid = b.audsid))""",
     "openCursors"    :        u"""select SQL_Text "SQL", Address||':'||Hash_Value " Address"
                         from v$open_cursor where sid = :1""",
-    "currentStatement":     u"""Select  b.sql_text "SQL" from v$session a, v$sql b
+    "currentStatement":     u"""Select  b.sql_text "SQL" from v$session a, v$sqltext b
                                 where a.sql_address = b.address ( + )
                                 and a.sql_hash_value = b.hash_value ( + )
-                                and ( b.child_number = 0 OR b.child_number IS NULL )
-                                and a.Sid=:1"""
+                                and a.Sid=:1
+                                order by b.piece"""
 }
 
 # Queries used in pysqlgraphics
