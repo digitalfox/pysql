@@ -25,7 +25,7 @@ import pysqlgraphics
 from pysqlexception import PysqlException, PysqlNotImplemented, PysqlOptionParserNormalExitException
 from pysqlconf import PysqlConf
 from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
-from pysqlhelpers import itemLength, removeComment, printStackTrace
+from pysqlhelpers import itemLength, removeComment, printStackTrace, setTitle, getTitle
 from pysqloptionparser import PysqlOptionParser
 
 class PysqlShell(cmd.Cmd):
@@ -66,7 +66,7 @@ class PysqlShell(cmd.Cmd):
         cmd.Cmd.__init__(self, "tab", stdin, stdout)
 
         # Keep old term name
-        self.oldTermName=self.__getTitle()
+        self.oldTermName=getTitle()
 
         # If connectString was given as argument, connects to Oracle
         try:
@@ -112,7 +112,7 @@ class PysqlShell(cmd.Cmd):
     def postloop(self):
         """End of command loop"""
         # Restore original terminal title
-        self.__setTitle(self.oldTermName)
+        setTitle(self.oldTermName, self.conf.getCodec())
 
     def emptyline(self):
         """Fetches next result if a request is running
@@ -1457,46 +1457,20 @@ class PysqlShell(cmd.Cmd):
         @type blank: bool
         @type finishedQuery: bool"""
         #TODO: do not update title for every line
+        codec=self.conf.getCodec()
         if blank:
             prompt=""
         else:
             if self.db is None:
                 prompt=self.notConnectedPrompt
                 # Update the title (without color else it is a huge mess)
-                self.__setTitle(_("Pysql - Not connected"))
+                setTitle(_("Pysql - Not connected"), codec)
             else:
                 prompt=self.db.getUsername()+"@"+self.db.getDSN()+" "
                 if finishedQuery:
                     prompt+="* "
-                self.__setTitle("Pysql - " + prompt)
-        self.prompt=prompt.encode(self.conf.getCodec(), "replace")
-
-    def __setTitle(self, title):
-        """Sets the window title
-        @param title: window title
-        @type title: str"""
-        #TODO: move this to helpers
-        if os.name=='posix' and os.getenv("PYDEVDEBUG", "0")=="0":
-            title="\033]0;%s\007" % title
-            sys.stdout.write(title.encode(self.conf.getCodec(), "replace"))
-        elif os.name=="nt":
-            os.system("title %s" % title.encode(self.conf.getCodec(), "replace"))
-
-    def __getTitle(self):
-        """Gets the window title
-        @return: str"""
-        #TODO: move this to helpers
-        if os.name=="posix":
-            title=os.popen("xprop -id $WINDOWID WM_NAME").readline().strip()
-            if "WM_NAMEAborted" in title:
-                title="" # No title
-            elif "=" in title:
-                title=title.split("=")[1].lstrip(' ').strip('"')
-        elif os.name=="nt":
-            title="" #TODO: find how to get title on windows cmd
-        else:
-            title=""
-        return title
+                setTitle("Pysql - %s" % prompt, codec)
+        self.prompt=prompt.encode(codec, "replace")
 
     def __searchObjet(self, objectType, objectName):
         """Searches Oracle object"""

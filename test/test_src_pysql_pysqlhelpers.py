@@ -6,12 +6,16 @@
 @license:GNU GPL V3
 """
 
+# Python imports
 import unittest
+import locale
+from tempfile import TemporaryFile
+import sys
 
 # Common test pysql tools
 import testhelpers
 testhelpers.setup()
-
+ 
 # Pysql imports
 import pysqlhelpers
 from pysqlexception import PysqlException
@@ -69,6 +73,7 @@ class TestGenerateWhere(unittest.TestCase):
                              "lala orr loulou", "lala aand loulou", "lala andor loulou", "lala andd loulou"):
             self.assertRaises(PysqlException, pysqlhelpers.generateWhere, "table", faultyFilter)
 
+
 class TestRemoveComment(unittest.TestCase):
     def test_remove_one_line_comment(self):
         for line in ("--foo", "-- foo", "--foo ", "--foo--", "--foo --", "--", "-- ", "---", "----", "---- foo ",
@@ -110,6 +115,32 @@ class TestWhich(unittest.TestCase):
         self.failUnlessEqual(pysqlhelpers.which("cp"), "/usr/bin/cp")
         self.failUnlessEqual(pysqlhelpers.which("gabuzomeuhhh"), None)
         self.failUnlessEqual(pysqlhelpers.which(""), None)
+
+class TestWarn(unittest.TestCase):
+    def test_warn(self):
+        for message in ("", "blabla", "ééà€", u"blabal"):
+            #TODO: handle unicode case
+            stdout=sys.stdout
+            sys.stdout=TemporaryFile()
+            pysqlhelpers.warn(message)
+            sys.stdout=stdout # restore stdout
+
+class TestPrintStackTrace(unittest.TestCase):
+    def test_print_stack_trace(self):
+        pass # TODO: implement your test here
+
+class TestSetTitle(unittest.TestCase):
+    def test_set_title(self):
+        codec=locale.getpreferredencoding()
+        for title in ("", "blabla", u"éééé", u"ééàà€€", "éééààà€€€"):
+            pysqlhelpers.setTitle(title, codec)
+
+class TestGetTitle(unittest.TestCase):
+    def test_get_title(self):
+        codec=locale.getpreferredencoding()
+        for title in ("", "blabla", u"éééé", u"ééàà€€", "éééààà€€€"):
+            pysqlhelpers.setTitle(title, codec)
+            self.failIfEqual(title, pysqlhelpers.getTitle())
 
 if __name__ == '__main__':
     unittest.main()

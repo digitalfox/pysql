@@ -229,3 +229,29 @@ def printStackTrace():
     print
     print RED+BOLD+"Please, send the text above to pysql@digitalfox.org"+RESET
     print
+
+def setTitle(title, codec):
+    """Sets the window title
+    @param title: window title
+    @type title: unicode string
+    @param codec: codec used to encode string"""
+    if os.name=='posix' and os.getenv("PYDEVDEBUG", "0")=="0":
+        title="\033]0;%s\007" % title
+        sys.stdout.write(title.encode(codec, "replace"))
+    elif os.name=="nt":
+        os.system("title %s" % title.encode(codec, "replace"))
+
+def getTitle():
+    """Gets the window title
+    @return: str"""
+    if os.name=="posix":
+        title=os.popen("xprop -id $WINDOWID WM_NAME").readline().strip()
+        if "WM_NAMEAborted" in title:
+            title="" # No title
+        elif "=" in title:
+            title=title.split("=")[1].lstrip(' ').strip('"')
+    elif os.name=="nt":
+        title="" #TODO: find how to get title on windows cmd
+    else:
+        title=""
+    return title
