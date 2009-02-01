@@ -137,6 +137,8 @@ class PysqlShell(cmd.Cmd):
             self.exceptions.append(e)
             if e.oraCode=="ORA-03114": # Not connected to Oracle
                 self.db=None
+        except KeyboardInterrupt:
+            print RED+BOLD+_("Break !")+RESET
         except StandardError, e:
             # Just a hook for a more pleasant error handling
             print RED+BOLD+"\n==> Unhandled error. Sorry <=="+RESET
