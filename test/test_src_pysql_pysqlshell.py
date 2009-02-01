@@ -146,6 +146,31 @@ class TestConnectedShellCommands(TestShellCommands):
         self.assertEqual(self.capturedStdout.readlines()[0], "0")
         self._drop_test_table()
 
+    def test_do_count(self):
+        self.exeCmd("count user_tables")
+        count=self.capturedStdout.readlines()[0]
+        self.exeCmd("select count(*) from user_tables;")
+        count2=self.capturedStdout.readlines()[2].strip()
+        self.failUnlessEqual(count, count2)
+
+    def test_do_compare(self):
+        #TODO: to be done
+        pass
+
+    def test_do_describe(self):
+        for line in ("desc dual", "desc sys.dual", "desc user_tables", "desc system", "desc sys",
+                     "REPCAT$_DDL_INDEX", "desc -s dual", "desc sys.dbms_output", "desc sys.DATABASE_NAME"):
+            self.exeCmd(line)
+            self.failIf(self.capturedStdout.gotPsyqlException())
+
+        self.exeCmd("desc azerlkjljkflsjdflksjdfklj")
+        self.failUnlessEqual(self.capturedStdout.readlines()[0], "(no result)")
+
+        self.exeCmd("desc")
+        self.failUnless(self.capturedStdout.gotPsyqlException())
+
+        #TODO: add more test on describe
+
 class TestNotConnectedShellCommands(TestShellCommands):
     """Tests for all commands that do not need an Oracle connection"""
     def test_do_showCompletion(self):
