@@ -251,7 +251,9 @@ def getTitle():
         elif "=" in title:
             title=title.split("=")[1].lstrip(' ').strip('"')
     elif os.name=="nt":
-        title="" #TODO: find how to get title on windows cmd
+        # Term title need pywin32 on windows... Too much deps for simple need
+        # Using default name instead
+        title=os.environ["ComSpec"]
     else:
         title=""
     return title
