@@ -74,6 +74,17 @@ class TestConnectedShellCommands(TestShellCommands):
             self.fail("No Oracle connection")
         self.capturedStdout.reset() # Remove shell init banner
 
+    def _create_test_table(self):
+        # Create test table
+        self.exeCmd("drop table gabuzomeu;")
+        self.capturedStdout.reset()
+        self.exeCmd("create table gabuzomeu (id int);")
+        self.failIf(self.capturedStdout.gotPsyqlException(), "Failed to create table")
+
+    def _drop_test_table(self):
+        self.exeCmd("drop table gabuzomeu;")
+        self.failIf(self.capturedStdout.gotPsyqlException(), "Failed to drop table")
+
     def test_do_bg(self):
         self.exeCmd("bg\n")
         self.assertEqual(self.capturedStdout.readlines(), ["(no result)"])
@@ -113,6 +124,27 @@ class TestConnectedShellCommands(TestShellCommands):
         self.exeCmd("connect %s" % CONNECT_STRING)
         self.failIf(self.capturedStdout.gotPsyqlException())
 
+    def test_do_commit(self):
+        self._create_test_table()
+        self.exeCmd("insert into gabuzomeu (id) values (1);")
+        self.failIf(self.capturedStdout.gotPsyqlException(), "Failed to insert line")
+        self.exeCmd("commit")
+        self.failIf(self.capturedStdout.gotPsyqlException(), "Failed to commit line")
+        self.exeCmd("disconnect")
+        self.exeCmd("connect %s" % CONNECT_STRING)
+        self.exeCmd("count gabuzomeu")
+        self.assertEqual(self.capturedStdout.readlines()[0], "1")
+        self._drop_test_table()
+
+    def test_do_rollback(self):
+        self._create_test_table()
+        self.exeCmd("insert into gabuzomeu (id) values (1);")
+        self.failIf(self.capturedStdout.gotPsyqlException(), "Failed to insert line")
+        self.exeCmd("rollback")
+        self.failIf(self.capturedStdout.gotPsyqlException(), "Failed to rollback line")
+        self.exeCmd("count gabuzomeu")
+        self.assertEqual(self.capturedStdout.readlines()[0], "0")
+        self._drop_test_table()
 
 class TestNotConnectedShellCommands(TestShellCommands):
     """Tests for all commands that do not need an Oracle connection"""
