@@ -112,15 +112,21 @@ class TestNotConnectedShellCommands(TestShellCommands):
         try:
             import readline
             # This will match the next command position
-            position=readline.get_current_history_length()
+            position=int(readline.get_current_history_length())
         except Exception, e:
-            position=""
             if os.name=="posix":
                 self.fail("Cannot use readline: %s" % e)
+            else:
+                print "Skipping readline history tests on non Unix platform"
+                return True
 
-        for cmd in ("history", "history %s" % position):
-            self.exeCmd(cmd)
-            self.failIf(self.capturedStdout.gotPsyqlException())
+        self.exeCmd("history")
+        self.failIf(self.capturedStdout.gotPsyqlException())
+
+        readline.replace_history_item(position-1, "select sysdate from dual")
+        self.exeCmd("history")
+        self.failIf(self.capturedStdout.gotPsyqlException())
+
 
         for cmd in ("history a", "history -1", "history 10.5", "history 10,5", "history 2 4"):
             self.exeCmd(cmd)
@@ -136,6 +142,7 @@ if __name__ == '__main__':
     if len(sys.argv)>1:
         CONNECT_STRING=sys.argv.pop()
     else:
-        CONNECT_STRING=""
+        print "You must provide connect string as argument"
+        sys.exit(1)
 
     unittest.main()
