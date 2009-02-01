@@ -21,6 +21,18 @@ from pysqlexception import PysqlException
 global CONNECT_STRING
 CONNECT_STRING=""
 
+try:
+    import readline
+    READLINE=True
+except Exception, e:
+    if os.name=="posix":
+        print "Cannot use readline: %s" % e
+        READLINE=False
+    else:
+        print "Skipping readline tests on non Unix platform"
+        READLINE=False
+
+
 class TestShellCommands(unittest.TestCase):
     """Mother class of all shell tests.
     This class only defines common shell test method"""
@@ -109,29 +121,35 @@ class TestNotConnectedShellCommands(TestShellCommands):
         self.failIf(self.capturedStdout.gotPsyqlException())
 
     def test_do_history(self):
-        try:
-            import readline
-            # This will match the next command position
+        self.exeCmd("history")
+        self.failIf(self.capturedStdout.gotPsyqlException())
+
+        if READLINE:
+            # This will match the "help" command position
             position=int(readline.get_current_history_length())
-        except Exception, e:
-            if os.name=="posix":
-                self.fail("Cannot use readline: %s" % e)
-            else:
-                print "Skipping readline history tests on non Unix platform"
-                return True
-
-        self.exeCmd("history")
-        self.failIf(self.capturedStdout.gotPsyqlException())
-
-        readline.replace_history_item(position-1, "select sysdate from dual")
-        self.exeCmd("history")
-        self.failIf(self.capturedStdout.gotPsyqlException())
-
+            readline.replace_history_item(position-1, "help")
+            self.exeCmd("history")
+            self.failIf(self.capturedStdout.gotPsyqlException())
 
         for cmd in ("history a", "history -1", "history 10.5", "history 10,5", "history 2 4"):
             self.exeCmd(cmd)
             self.failUnless(self.capturedStdout.gotPsyqlException())
 
+    def test_do_library(self):
+        for line in ("lib", "library", "lib gabuzomeu poupou", "lib gabuzomeu poupoupoupou", "lib gabuzomeu remove"):
+            self.exeCmd(line)
+            self.failIf(self.capturedStdout.gotPsyqlException())
+
+        self.exeCmd("lib gabuzomeu remove")
+        self.failUnless(self.capturedStdout.gotPsyqlException())
+
+        if READLINE:
+            self.exeCmd("lib gabuzomeu poupou")
+            self.exeCmd("lib gabuzomeu")
+            position=int(readline.get_current_history_length())
+            self.assertEqual(readline.get_history_item(position), "poupou")
+            self.exeCmd("lib gabuzomeu remove")
+            self.failIf(self.capturedStdout.gotPsyqlException())
 
 class TestCompleters(unittest.TestCase):
     """Tests for command completers"""
