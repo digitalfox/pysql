@@ -381,6 +381,10 @@ class PysqlShell(cmd.Cmd):
             return
         return self.__getCompletionItems(text, ["parameters"])
 
+    def complete_library(self, text, line, begidx, endidx):
+        """Completion for library command"""
+        return [k for k  in self.conf.sqlLibrary.keys() if k.startswith(text)]
+
     # Command line definitions
     # Connection stuff
     def do_connect(self, arg):
@@ -1271,6 +1275,7 @@ class PysqlShell(cmd.Cmd):
         print _("\tTo save a request as 'employeeNumber': ")
         print _("\t\tlib employeeNumber select count(*) from employee")
         print _("\trecall a saved request: lib employeNumber")
+        print _("\tTo remove the foo request: lib foo remove")
 
     def help_lock(self):
         """online help"""
@@ -1752,6 +1757,7 @@ class PysqlShell(cmd.Cmd):
 
     # Complete functions aliases
     complete_conn=complete_connect
+    complete_lib=complete_library
 
     # Functions aliases
     aliases={"conn" : "connect",
