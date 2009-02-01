@@ -260,8 +260,8 @@ def desc(db, objectName, completeMethod=None, printComment=True, sort=False):
     # Displays some information about the object
     if printComment:
         print CYAN+_("Name\t: ")+oraObject.getName()
-        print ("Type\t: ")+oraObject.getType()
-        print ("Owner\t: ")+oraObject.getOwner()+RESET
+        print _("Type\t: ")+oraObject.getType()
+        print _("Owner\t: ")+oraObject.getOwner()+RESET
         if oraObject.getType() in ("TABLE", "TABLE PARTITION", "VIEW"):
             try:
                 print CYAN+_("Comment\t: ")+oraObject.getComment(db)+RESET
@@ -270,7 +270,7 @@ def desc(db, objectName, completeMethod=None, printComment=True, sort=False):
 
     # Evaluates object type (among the 24 defined)
     if oraObject.getType() in ("TABLE" , "TABLE PARTITION"):
-        header=["Name", "Type", "Null?", "Comments", "Indexes"]
+        header=[_("Name"), _("Type"), _("Null?"), _("Comments"), _("Indexes")]
         columns=oraObject.getTableColumns(db, sort)
 
         # Gets indexed columns of the table
@@ -288,7 +288,7 @@ def desc(db, objectName, completeMethod=None, printComment=True, sort=False):
             completeMethod([i[0] for i in result], "columns")
 
     elif oraObject.getType() in ("VIEW", "MATERIALIZED VIEW"):
-        header=["Name", "Type", "Null?", "Comments"]
+        header=[_("Name"), _("Type"), _("Null?"), _("Comments")]
         result=oraObject.getTableColumns(db)
         # Adds to complete list
         if completeMethod is not None:
