@@ -65,6 +65,8 @@ def datamodel(db, userName, tableFilter=None, withColumns=True):
         whereClause="1=1"
     tables=db.executeAll(datamodelSql["tablesFromOwner"] % (userName, whereClause))
     nbTables=len(tables)
+    if nbTables==0:
+        raise PysqlException(_("No table found. Your filter clause is too restrictive or the schema is empty"))
     tableList=", ".join(["'%s'" % table[0] for table in tables]) # Table list formated to be used in SQL query
     print CYAN+_("Extracting %d tables...      ") % nbTables +RESET,
     current=0
