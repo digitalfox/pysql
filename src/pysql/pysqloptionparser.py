@@ -55,5 +55,5 @@ class PysqlOptionParser(OptionParser):
             raise PysqlException(msg)
 
     def error(self, msg):
-        self.print_usage(sys.stderr)
+        self.print_usage()
         raise PysqlException(msg)
