@@ -168,7 +168,24 @@ class TestConnectedShellCommands(TestShellCommands):
         self.exeCmd("desc")
         self.failUnless(self.capturedStdout.gotPsyqlException())
 
-        #TODO: add more test on describe
+        #TODO: add more test on describe like resolution order
+
+    def _test_do_datamodel(self):
+        for option in ("", "-u system", "-c", "-u system -c", "-u system REPCAT% or DEF%"):
+            self.exeCmd("datamodel %s" % option)
+            self.failIf(self.capturedStdout.gotPsyqlException())
+
+        self.exeCmd("datamodel lakzejlakzejlakejalk")
+        self.failUnless(self.capturedStdout.gotPsyqlException())
+
+    def test_do_dependencies(self):
+        for option in (""):
+            self.exeCmd("dep %s" % option)
+            self.failIf(self.capturedStdout.gotPsyqlException())
+
+        for option in ("", "-r n dual", "-n n dual", "-r -1 dual", "-n -1 dual"):
+            self.exeCmd("dep %s" % option)
+            self.failUnless(self.capturedStdout.gotPsyqlException())
 
 class TestNotConnectedShellCommands(TestShellCommands):
     """Tests for all commands that do not need an Oracle connection"""
