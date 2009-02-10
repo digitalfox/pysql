@@ -18,7 +18,6 @@ testhelpers.setup()
 import pysqlshell
 from pysqlexception import PysqlException
 
-global CONNECT_STRING
 CONNECT_STRING=""
 
 try:
