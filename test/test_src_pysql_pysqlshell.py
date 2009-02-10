@@ -179,7 +179,7 @@ class TestConnectedShellCommands(TestShellCommands):
         self.failUnless(self.capturedStdout.gotPsyqlException())
 
     def test_do_dependencies(self):
-        for option in (""):
+        for option in ("-r 0 -n 0 -d onto dual", "-r 0 -n 0 -d from dual", "-r 0 -n 0 -d both dual", "-r 0 -n 0 dual"):
             self.exeCmd("dep %s" % option)
             self.failIf(self.capturedStdout.gotPsyqlException())
 
