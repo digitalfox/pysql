@@ -25,7 +25,7 @@ import pysqlgraphics
 from pysqlexception import PysqlException, PysqlNotImplemented, PysqlOptionParserNormalExitException
 from pysqlconf import PysqlConf
 from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
-from pysqlhelpers import itemLength, removeComment, printStackTrace, setTitle, getTitle
+from pysqlhelpers import itemLength, removeComment, printStackTrace, setTitle, getTitle, getTermWidth
 from pysqloptionparser import PysqlOptionParser
 
 class PysqlShell(cmd.Cmd):
@@ -1506,13 +1506,17 @@ class PysqlShell(cmd.Cmd):
         """Displays on column the list of strings"""
         # If terminal width is not set, use a default of 120 (should read real term width !)
         termWidth=self.conf.get("termWidth")
+        if termWidth=="auto":
+            termWidth=getTermWidth()
         #BUG: columnize does not support unicode.
         listOfString=[i.encode(self.conf.getCodec(), "replace") for i in listOfString]
         self.columnize(listOfString, displaywidth=termWidth)
 
     def __displayTab(self, array, header=None):
         """Displays in tabular the array using correct width for each column"""
-        termWidth=int(self.conf.get("termWidth")) # Terminal maximum width
+        termWidth=self.conf.get("termWidth") # Terminal maximum width
+        if termWidth=="auto":
+            termWidth=getTermWidth()
         widthMin=int(self.conf.get("widthMin"))   # Minimum size of the column
         transpose=(self.conf.get("transpose")=="yes")
         shrink=(self.conf.get("shrink")=="yes")

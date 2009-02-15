@@ -87,7 +87,7 @@ class PysqlConf:
             "case_sensitive"     : "no",
             "completionlistsize" : 100,
             "fetchsize"          : 30,
-            "termwidth"          : 120,
+            "termwidth"          : "auto",
             "widthmin"           : 5,
             "transpose"          : "no",
             "colsep"             : "space",
@@ -211,14 +211,15 @@ class PysqlConf:
             value=os.path.expandvars(value)
 
         # Integer parameter
-        if ( key in ("termwidth",
+        if key=="termwidth" and value=="auto":
+            return True
+        elif key in ("termwidth",
                      "fetchsize",
                      "widthmin",
                      "completionlistsize",
                      "graph_fontsize",
                      "graph_depmaxdepth",
-                     "graph_depmaxnodes")
-             ):
+                     "graph_depmaxnodes"):
             try:
                 value=int(value)
             except (ValueError, TypeError):
