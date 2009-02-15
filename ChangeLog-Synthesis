@@ -1,4 +1,9 @@
-V.12 2009/01/26
+V0.13 2009/02/15
+Sql text is no more truncated is session summary. Restore terminal name
+at exit. Better support of AIX 5.3 and cx_Oracle 5.
+Lots of minor bugfixes. More unit tests. Add missing translations.
+
+V0.12 2009/01/26
 Switch to git and slighly reorganise source tree. Kill useless and dead
 modules (pysqlio and pysqlnet). Switch from GPLv2 to GPLv3.
 Full switch to Unicode inside Pysql. Honor Oracle client encoding (NLS_LANG)

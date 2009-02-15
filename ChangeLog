@@ -1,3 +1,140 @@
+commit 987255b3a20c6c695ca487e659308f050d44939d
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Feb 15 17:37:13 2009 +0100
+
+    Fix broken messages in compare function that make it crash
+
+commit b7865c890fe564f12522d88a25e2f615d46b573e
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Feb 10 21:51:56 2009 +0100
+
+    Add more unit test for do_dependencies
+
+commit ec2226f7ecabc7d6524369806f49b9f6c4203192
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Feb 10 21:50:45 2009 +0100
+
+    Don't output help on stderr
+
+commit 287f3b6d93dbb4a60e4dfe3a7efa6b16610b4600
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Feb 10 19:59:44 2009 +0100
+
+    Display a nice message if no tables found
+
+commit e47f17b6cb858e70658e7ad7b0ae2bb76f56167f
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Feb 10 19:59:24 2009 +0100
+
+    Add unit test for do_dependencies and do_datamodel
+
+commit 61af6f478b157912f2e7449da90b50139560b8ed
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Feb 10 19:58:30 2009 +0100
+
+    No need for global variable for CONNECT_STRING
+
+commit d9059aa893ffd4ee32b69c347758afaa80e8da82
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Feb 1 22:53:28 2009 +0100
+
+    Add unittest for count and describe function
+
+commit 177fd5fc0b9e82778eca458add33e1e455d450df
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Feb 1 22:42:42 2009 +0100
+
+    Add missing translation on desc function
+
+commit 6474aff310f2b7f78b193f302bfdf253a43a336f
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Feb 1 20:34:24 2009 +0100
+
+    Add unittest for commit and rollback functions
+
+commit a7e0e7b8cd28e65df6a9bf170d06f046264333ff
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Feb 1 20:14:39 2009 +0100
+
+    Factorise readline loading code
+    Add unittest for library command
+
+commit 453bb8cd2937ace08f45c01cfefbed6e44fb2351
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Feb 1 20:01:30 2009 +0100
+
+    Add completion for library command
+
+commit 3455950e277060b4fa17cfb9f6fddddc0c9b5445
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Feb 1 19:49:43 2009 +0100
+
+    Fix history test. Make connect string required for all tests
+
+commit 750fa2dcd004c9e472c4a54095ecafa8dc8cc6d2
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Feb 1 12:41:42 2009 +0100
+
+    Restore standard terminal name on windows at exit
+
+commit 11112626006af092b7be61da54fea6047826ecf8
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Feb 1 12:38:31 2009 +0100
+
+    Catch Keyboard interrupt at command level. Needed since
+    standardError are also catched here now.
+
+commit 46a8b2f69dadac6fac2ff8432518c6e14705f4bf
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Jan 31 18:44:50 2009 +0100
+
+    Use $sqltext instead of v$sql to get current statement in
+    session function in order to have full untruncated statement
+
+commit c41ca3ada58c945d39431263c6f27a9938c8340f
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Jan 31 17:31:12 2009 +0100
+
+    Update message catalog and french translation
+
+commit e1a73f93c41e572bbe5adb59622217cbc35ad58e
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Jan 31 17:26:02 2009 +0100
+
+    Move set/get Title in pysqlhelpers. Add some unit test
+
+commit e18e64d51ebef2a6fb8d19799c67b2c54c58312b
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Jan 31 14:24:47 2009 +0100
+
+    Restore terminal name at exit
+
+commit 6395fc758b2a6f41cd1fc094d6fba374e8d365cf
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Jan 30 12:36:49 2009 +0100
+
+    Fix missing unicode tag on some queries. (solve unicode warning on lock
+    command).
+
+commit 0ff59bb076bdfdbe7d42b0a286c29b2d7c7a3e24
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Thu Jan 29 14:12:19 2009 +0100
+
+    Add missing i18n
+
+commit 185f0bf6b909352fd1c8fb4dd26095ccc6ee76ec
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Thu Jan 29 13:00:02 2009 +0100
+
+    Really fix unicode connect string issue with cx_Oracle 5
+
+commit 357571550580adbdff61e2471b2965643ead1ec5
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Mon Jan 26 22:07:43 2009 +0100
+
+    Update changelog. Remove sql test that are now cover with unit test.
+    Release pysql 0.12 ! Houra.
+
 commit 512edee53442cbc40493f748b369b6906417703f
 Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
 Date:   Mon Jan 26 14:23:04 2009 +0100
