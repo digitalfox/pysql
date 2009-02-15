@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pysql\n"
-"POT-Creation-Date: 2009-02-01 22:38+CET\n"
-"PO-Revision-Date: 2009-02-01 22:41+0100\n"
+"POT-Creation-Date: 2009-02-15 17:40+CET\n"
+"PO-Revision-Date: 2009-02-15 17:43+0100\n"
 "Last-Translator: Sébastien Renard <Sebastien.Renard@digitalfox.org>\n"
 "Language-Team: Français <kde-francophone@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -326,8 +326,8 @@ msgstr "Il vous manque le privilège ALTER SYSTEM"
 msgid "SQL entry not defined for searchObjectSql: %s"
 msgstr "Aucune entrée SQL définie dans le tableau searchObjectSql : %s"
 
-#: src/pysql/pysqlgraphics.py:41 src/pysql/pysqlgraphics.py:133
-#: src/pysql/pysqlgraphics.py:237 src/pysql/pysqlgraphics.py:334
+#: src/pysql/pysqlgraphics.py:41 src/pysql/pysqlgraphics.py:135
+#: src/pysql/pysqlgraphics.py:239 src/pysql/pysqlgraphics.py:336
 msgid ""
 "Function not available because pydot module is not installed.\n"
 "\t"
@@ -335,76 +335,80 @@ msgstr ""
 "Fonction non disponible car le module pydot n'est pas installé.\n"
 "\t"
 
-#: src/pysql/pysqlgraphics.py:42 src/pysql/pysqlgraphics.py:134
-#: src/pysql/pysqlgraphics.py:238 src/pysql/pysqlgraphics.py:335
+#: src/pysql/pysqlgraphics.py:42 src/pysql/pysqlgraphics.py:136
+#: src/pysql/pysqlgraphics.py:240 src/pysql/pysqlgraphics.py:337
 msgid "Go to http://dkbza.org/pydot.html to get it."
 msgstr "Allez sur le site  http://dkbza.org/pydot.html pour l'obtenir."
 
 #: src/pysql/pysqlgraphics.py:69
+msgid "No table found. Your filter clause is too restrictive or the schema is empty"
+msgstr "Aucune table trouvée. La clause de filtrage est trop restrictive ou alors le schéma est vide"
+
+#: src/pysql/pysqlgraphics.py:71
 msgid "Extracting %d tables...      "
 msgstr "Extraction de %d tables...      "
 
-#: src/pysql/pysqlgraphics.py:104
+#: src/pysql/pysqlgraphics.py:106
 msgid "Extracting %d links..."
 msgstr "Extraction de %d liens..."
 
-#: src/pysql/pysqlgraphics.py:265
+#: src/pysql/pysqlgraphics.py:267
 msgid "Extracting %3d tables from tablespace %s"
 msgstr "Extraction de %3d tables du tablespace %s"
 
-#: src/pysql/pysqlgraphics.py:269
+#: src/pysql/pysqlgraphics.py:271
 msgid "Warning: table \"%s\" removed because no statistics have been found"
 msgstr ""
 "Avertissement : la table « %s » a été retirée de la liste car elle ne possède "
 "pas de statistique"
 
-#: src/pysql/pysqlgraphics.py:273
+#: src/pysql/pysqlgraphics.py:275
 msgid "Warning: table \"%s\" removed because it is empty"
 msgstr ""
 "Avertissement : la table « %s » a été retirée de la liste car elle ne possède "
 "pas d'enregistrement"
 
-#: src/pysql/pysqlgraphics.py:293
+#: src/pysql/pysqlgraphics.py:295
 msgid "Extracting %3d indexes from tablespace %s"
 msgstr "Extraction de %3d indexes du tablespace %s"
 
-#: src/pysql/pysqlgraphics.py:297
+#: src/pysql/pysqlgraphics.py:299
 msgid "Warning: index \"%s\" removed because no statistics have been found."
 msgstr ""
 "Avertissement : l'index « %s » a été retiré de la liste car il ne possède pas "
 "de statistique."
 
-#: src/pysql/pysqlgraphics.py:301
+#: src/pysql/pysqlgraphics.py:303
 msgid "Warning: index \"%s\" removed because it is empty"
 msgstr ""
 "Avertissement : l'index « %s » a été retiré de la liste car il ne possède pas "
 "de données"
 
-#: src/pysql/pysqlgraphics.py:364
+#: src/pysql/pysqlgraphics.py:366
 msgid "This is not a package or package not found"
 msgstr "Ceci n'est pas un paquet (package) ou alors le paquet n'a pas été trouvé"
 
-#: src/pysql/pysqlgraphics.py:368
+#: src/pysql/pysqlgraphics.py:370
 msgid "Extracting package source..."
 msgstr "Extraction de sources du paquet..."
 
-#: src/pysql/pysqlgraphics.py:372
+#: src/pysql/pysqlgraphics.py:374
 msgid "Parsing source and building graph..."
 msgstr "Analyse de la source et construction du graphe..."
 
-#: src/pysql/pysqlgraphics.py:389
+#: src/pysql/pysqlgraphics.py:391
 msgid "This package does not have any readable function or procedure"
 msgstr "Ce paquet ne contient aucune fonction ou procédure exploitable"
 
-#: src/pysql/pysqlgraphics.py:433
+#: src/pysql/pysqlgraphics.py:435
 msgid "Viewer was not found"
 msgstr "Afficheur non trouvé"
 
-#: src/pysql/pysqlgraphics.py:441
+#: src/pysql/pysqlgraphics.py:443
 msgid "Generating picture..."
 msgstr "Génération de l'image..."
 
-#: src/pysql/pysqlgraphics.py:446
+#: src/pysql/pysqlgraphics.py:448
 msgid "Image saved as "
 msgstr "Image enregistrée sous "
 
@@ -601,13 +605,13 @@ msgstr "**** Tables identiques aux deux schémas ****"
 msgid "**** Tables not identical in both schema ****"
 msgstr "**** Tables différentes dans les deux schémas ****"
 
-#: src/pysql/pysqlshell.py:625
-msgid ""
-"Table %s differ from schema %s (marked with \"-\")                        "
-"and schema %s (marked with \"+\")"
-msgstr ""
-"Différences entre la table %s du schéma %s (préfixe \"-"
-"\")                        et celle du schéma %s (préfixe \"+\")"
+#: src/pysql/pysqlshell.py:624
+msgid "Table %s differ from schema %s"
+msgstr "Différences entre la table %s du schéma %s"
+
+#: src/pysql/pysqlshell.py:626
+msgid "(marked with \"-\") and schema %s (marked with \"+\")"
+msgstr "(préfixe \"-\") et celle du schéma %s (préfixe \"+\")"
 
 #: src/pysql/pysqlshell.py:742 src/pysql/pysqlshell.py:762
 msgid "(no result)"

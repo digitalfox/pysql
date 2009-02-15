@@ -604,13 +604,13 @@ class PysqlShell(cmd.Cmd):
             # We have to compare the whole schema
             result=pysqlfunctions.compare(schemas[0], schemas[1])
 
-            print GREEN+_("**** Tables found in %s but not in %s ****")+RESET \
-                    % (schemaNames[0], schemaNames[1])
+            print GREEN+_("**** Tables found in %s but not in %s ****") \
+                        % (schemaNames[0], schemaNames[1])+RESET
             print ", ".join(result[0])
             print
 
-            print GREEN+_("**** Tables found in %s but not in %s ****")+RESET \
-                    % (schemaNames[1], schemaNames[0])
+            print GREEN+_("**** Tables found in %s but not in %s ****") \
+                        % (schemaNames[1], schemaNames[0])+RESET
             print ", ".join(result[1])
             print
 
@@ -621,10 +621,10 @@ class PysqlShell(cmd.Cmd):
             print GREEN+_("**** Tables not identical in both schema ****")+RESET
             for tableName, tableDiff in result[2].items():
                 if tableDiff:
-                    print CYAN+ \
-                        _("""Table %s differ from schema %s (marked with "-")\
-                        and schema %s (marked with "+")""") \
-                        % (tableName, schemaNames[0], schemaNames[1])+RESET
+                    print CYAN+_("""Table %s differ from schema %s""")  \
+                            % (tableName, schemaNames[0]),
+                    print _("""(marked with "-") and schema %s (marked with "+")""") \
+                            % schemaNames[1] +RESET
                     print "\n".join(tableDiff)
                     print
 
