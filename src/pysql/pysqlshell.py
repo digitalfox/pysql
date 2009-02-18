@@ -1580,7 +1580,7 @@ class PysqlShell(cmd.Cmd):
                 if isinstance(line[i], (int, long, float)):
                     print str(line[i])[:width[i]].rjust(width[i]),
                 else:
-                    print line[i][:width[i]].ljust(width[i]),
+                    print line[i][:width[i]].ljust(width[i]).replace('\r', ' '),
                 if header and i==0 and transpose:
                     print RESET,
                 sys.stdout.write(colsep) # Adds colsep
