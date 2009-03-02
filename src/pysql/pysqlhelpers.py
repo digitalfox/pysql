@@ -245,17 +245,27 @@ def getTitle():
     """Gets the window title
     @return: str"""
     if os.name=="posix":
-        title=os.popen("xprop -id $WINDOWID WM_NAME").readline().strip()
-        if "WM_NAMEAborted" in title:
-            title="" # No title
-        elif "=" in title:
-            title=title.split("=")[1].lstrip(' ').strip('"')
+        # Getting terminal title is.. a mess
+        # An escape code (echo  -e '\e[21t') can get it
+        # but is often disabled for safety reason...
+        # Default to basic title
+        title="%s@%s" % (os.environ.get("USER", "user"), os.environ.get("HOSTNAME", "host"))
+        if os.environ.has_key("DISPLAY"):
+            # Use X windows to get title
+            xtitle=os.popen("xprop -id $WINDOWID WM_NAME 2>/dev/null").readline().strip()
+            if not ("WM_NAMEAborted" in title or "WM_NAMEAbandon" in title):
+                try:
+                    title=xtitle.split("=")[1].lstrip(' ').strip('"')
+                except IndexError:
+                    # DISPLAY is not correctly set
+                    pass
     elif os.name=="nt":
         # Term title need pywin32 on windows... Too much deps for simple need
         # Using default name instead
         title=os.environ["ComSpec"]
     else:
-        title=""
+        # Unknown OS
+        title="terminal"
     return title
 
 COLUMNS_RE=compile(".*columns (\d+).*")
