@@ -10,7 +10,7 @@
 import os
 import sys
 import traceback
-from re import match, sub, compile
+from re import match, sub
 import datetime
 from cx_Oracle import LOB
 
@@ -268,14 +268,13 @@ def getTitle():
         title="terminal"
     return title
 
-COLUMNS_RE=compile(".*columns (\d+).*")
 def getTermWidth():
     """Gets the terminal width. Works only on Unix system.
     @return: terminal width or "120" is system not supported"""
     if os.name=="posix":
-        result=COLUMNS_RE.match(os.popen("stty -a").readline().strip())
+        result=os.popen("tput cols").readline().strip()
         if result:
-            return int(result.group(1))
+            return int(result)
     else:
         # Unsupported system, use default 120
         return 120
