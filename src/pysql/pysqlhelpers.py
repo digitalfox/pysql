@@ -249,10 +249,10 @@ def getTitle():
         # An escape code (echo  -e '\e[21t') can get it
         # but is often disabled for safety reason...
         # Default to basic title
-        title="%s@%s" % (os.environ.get("USER", "user"), os.environ.get("HOSTNAME", "host"))
+        title="%s@%s" % (os.environ.get("USER", "user"), os.popen("hostname").readline().strip())
         if os.environ.has_key("DISPLAY"):
             # Use X windows to get title
-            xtitle=os.popen("xprop -id $WINDOWID WM_NAME 2>/dev/null").readline().strip()
+            xtitle=os.popen("xprop -id $WINDOWID WM_NAME").readline().strip()
             if not ("WM_NAMEAborted" in title or "WM_NAMEAbandon" in title):
                 try:
                     title=xtitle.split("=")[1].lstrip(' ').strip('"')
