@@ -21,6 +21,10 @@ searchObjectSql={
                 where (%s) and owner like '%s' and type='PACKAGE' order by %s""", "name"),
     "procedure" :    (u"""select distinct owner, name from all_source
                 where (%s) and owner like '%s' and type='PROCEDURE' order by %s""", "name"),
+    "role":          (u"""select 'Roles', role from dba_roles
+                where (%s) /*%s*/ order by %s""", "role"),
+    "profile":       (u"""select distinct 'Profiles', profile from dba_profiles
+                where (%s) /*%s*/ order by %s""", "profile"),
     "sequence"  :    (u"""select sequence_owner, sequence_name from all_sequences
                 where (%s) and sequence_owner like '%s' order by %s""", "sequence_name"),
     "synonym"   :    (u"""select owner, synonym_name from all_synonyms
@@ -31,7 +35,7 @@ searchObjectSql={
                 where (%s) /*%s*/ order by %s""", "tablespace_name"),
     "trigger"   :    (u"""select owner, trigger_name from all_triggers
                 where (%s) and owner like '%s' order by %s""", "trigger_name"),
-    "user":    (u"""select 'Users', username from all_users
+    "user":          (u"""select 'Users', username from all_users
                 where (%s) /*%s*/ order by %s""", "username"),
     "view"      :    (u"""select owner, view_name from all_views
                 where (%s) and owner like '%s' order by %s""", "view_name")

@@ -960,6 +960,14 @@ class PysqlShell(cmd.Cmd):
         """Display users (aka schema)"""
         self.__searchObjet("user", arg)
 
+    def do_profile(self, arg):
+        """Display profiles"""
+        self.__searchObjet("profile", arg)
+
+    def do_role(self, arg):
+        """Display roles"""
+        self.__searchObjet("role", arg)
+
     # Cursor manipulation
     def do_last(self, arg):
         """Display last lines of query set"""
