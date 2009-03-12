@@ -511,19 +511,29 @@ def lock(db):
         raise PysqlActionDenied(_("privilege SELECT_ANY_DICTIONARY is missing"))
     return (header, result)
 
-def sessions(db, sort=None, all=False):
+def sessions(db, all=False, search=None):
     """Returns top session, filter by "sort"
     @param all: Show all sessions, not only active (top) session
     @type all: bool
-    @param sort: to be defined!
+    @param search: search session program, name, ouser... that looks like the str given
     @return: huge resultset in tabular format"""
-    try:
-        if all:
-            activeFilter=""
-        else:
-            activeFilter="and a.Status!= 'INACTIVE'"
 
-        result=db.executeAll(sessionStatSql["all"] % activeFilter)
+    sessionFilter=[]
+    if not all:
+        sessionFilter.append("a.Status!= 'INACTIVE'")
+    if search:
+        for searchTerm in search:
+            searchFilter=[]
+            for term in ("a.SchemaName", "a.Osuser", "a.Machine", "a.Program", "d.sql_text"):
+                searchFilter.append("%s like '%%%s%%'" % (term, searchTerm))
+            sessionFilter.append("(%s)" % " or ".join(searchFilter))
+
+    if sessionFilter:
+        whereClause="and %s" % " and ".join(sessionFilter)
+    else:
+        whereClause=""
+    try:
+        result=db.executeAll(sessionStatSql["all"] % whereClause)
     except PysqlException:
         raise PysqlActionDenied(_("privilege SELECT_ANY_DICTIONARY is missing"))
     return result

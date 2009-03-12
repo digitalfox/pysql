@@ -791,6 +791,9 @@ class PysqlShell(cmd.Cmd):
         parser.add_option("-a", "--all", dest="all",
                           default=False, action="store_true",
                           help="Display all foreground sessions, both active and inactive")
+        parser.add_option("-s", "--search", dest="search",
+                          action="append",
+                          help="Filter session display with given search term. Multiple search can be given to make 'and' search")
         return parser
 
 
@@ -803,7 +806,7 @@ class PysqlShell(cmd.Cmd):
             print CYAN+"Note: the all (-a / --all) option is useless when display one session"+RESET
         if not args:
             # Lists all session
-            result=pysqlfunctions.sessions(self.db, all=options.all)
+            result=pysqlfunctions.sessions(self.db, all=options.all, search=options.search)
             self.__displayTab(result, self.db.getDescription())
         else:
             sessionId=args[0]
