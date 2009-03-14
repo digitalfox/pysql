@@ -175,7 +175,11 @@ tableSql={
                                               and cons.owner=col.owner
                                               and cons.table_name=col.table_name
                                               and col.constraint_name=cons.constraint_name
-                                              order by col.position"""
+                                              order by col.position""",
+    "numRowsAndAnalyzedDateFromOwnerAndName" :   u"""select num_rows, last_analyzed from all_tables
+                                                        where owner=:1
+                                                        and table_name=:2"""
+
     }
 
 tablespaceSql={

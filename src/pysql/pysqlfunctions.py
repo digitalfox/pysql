@@ -262,6 +262,12 @@ def desc(db, objectName, completeMethod=None, printComment=True, sort=False):
         print CYAN+_("Name\t: ")+oraObject.getName()
         print _("Type\t: ")+oraObject.getType()
         print _("Owner\t: ")+oraObject.getOwner()+RESET
+        if oraObject.getType() in ("TABLE", "TABLE PARTITION"):
+            numRows=oraObject.getNumRowsFromStat(db)
+            if numRows:
+                print CYAN+_("Rows\t\t: %s (%s)" % (numRows[0], numRows[1]))+RESET
+            else:
+                print CYAN+_("Rows\t\t: <no stats for this table>")+RESET
         if oraObject.getType() in ("TABLE", "TABLE PARTITION", "VIEW"):
             try:
                 print CYAN+_("Comment\t: ")+oraObject.getComment(db)+RESET

@@ -640,6 +640,20 @@ class OraTable(OraTabular, OraSegment):
         else:
             return None
 
+    def getNumRowsFromStat(self, db):
+        """Gets the number of rows from stats and last analyzed date
+        @return: (int, datetime)"""
+        if self.getOwner()=="":
+            owner=db.getUsername().upper()
+        else:
+            owner=self.getOwner()
+
+        result=db.executeAll(tableSql["numRowsAndAnalyzedDateFromOwnerAndName"], [owner, self.getName()])
+        if result and result[0][0]:
+            return result[0]
+        else:
+            return None
+
 class OraTablespace(OraObject):
     """Tablespace"""
 
