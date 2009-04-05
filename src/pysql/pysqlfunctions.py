@@ -554,16 +554,21 @@ def sessionStat(db, sid, stat=None):
     else:
         return db.executeAll(sessionStatSql[stat], [sid])
 
-def killSession(db, session):
+def killSession(db, session, immediate=False):
     """Kills the given sessions
     @param session: 'session-id,session-serial'
     @type session: str
+    @param immediate: sends the immediate option to kill
+    @type immediate: bool
     @return: None but raises an exception if session does not exist
     """
+    sql=u"""alter system kill session '%s'""" % session
+    if immediate:
+        sql+=u" immediate"
     try:
-        db.execute(u"""alter system kill session '%s'""" % session)
+        db.execute(sql)
     except PysqlException:
-        raise PysqlActionDenied(_("privilege ALTER SYSTEM is missing"))
+        raise PysqlActionDenied(_("privilege ALTER SYSTEM is missing or session does not exist"))
 
 def showParameter(db, param=""):
     """Shows the session parameters matching the pattern 'param'

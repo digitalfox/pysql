@@ -838,11 +838,23 @@ class PysqlShell(cmd.Cmd):
             result=pysqlfunctions.sessionStat(self.db, sessionId, stat="locks")
             self.__displayTab(result, self.db.getDescription())
 
+    def parser_kill(self):
+        parser=PysqlOptionParser()
+        parser.set_usage("kill [options] <session-id> <session-serial>")
+        parser.set_description("Kills the session given in parameter"
+                               "Uses the 'session' command to find session-id and session-serial (two first columns)")
+        parser.add_option("-i", "--immediate", dest="immediate",
+                          default=False, action="store_true",
+                          help="Kill immediatly the current session")
+        return parser
+
     def do_kill(self, arg):
         """Kill sessions"""
         self.__checkConnection()
-        self.__checkArg(arg, "==2")
-        pysqlfunctions.killSession(self.db, arg.replace(" ", ","))
+        parser = self.parser_kill()
+        options, args = parser.parse_args(arg)
+        self.__checkArg(args, "==2")
+        pysqlfunctions.killSession(self.db, ",".join(args), immediate=options.immediate)
         print GREEN+_("Kill has been sent to the session")+RESET
 
     def do_lock(self, arg):
@@ -1263,12 +1275,6 @@ class PysqlShell(cmd.Cmd):
     def help_index(self):
         """online help"""
         self._help_for_search_method("index")
-
-    def help_kill(self):
-        """online help"""
-        print CYAN+_("Usage:\n\tkill session-id session-serial")+RESET
-        print _("Kills the session given in parameter")
-        print _("Uses the 'session' command to find session-id and session-serial (two first columns)")
 
     def help_last(self):
         """online help"""
