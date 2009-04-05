@@ -265,7 +265,7 @@ def desc(db, objectName, completeMethod=None, printComment=True, sort=False):
         if oraObject.getType() in ("TABLE", "TABLE PARTITION"):
             numRows=oraObject.getNumRowsFromStat(db)
             if numRows:
-                print CYAN+_("Rows\t\t: %s (%s)" % (numRows[0], numRows[1]))+RESET
+                print CYAN+_("Rows\t\t: %s (%s)") % (numRows[0], numRows[1])+RESET
             else:
                 print CYAN+_("Rows\t\t: <no stats for this table>")+RESET
         if oraObject.getType() in ("TABLE", "TABLE PARTITION", "VIEW"):
