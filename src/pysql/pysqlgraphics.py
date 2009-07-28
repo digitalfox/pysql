@@ -258,7 +258,7 @@ def diskusage(db, userName, withIndexes=False):
     # Tablespaces
     tablespaces=db.executeAll(diskusageSql["TablespacesFromOwner"], [userName])
     for tablespace in tablespaces:
-        tablespaceName=str(tablespace[0])
+        tablespaceName=unicode(tablespace[0])
         subGraph=Subgraph("cluster_"+tablespaceName, label=tablespaceName, bgcolor="palegreen")
         graph.add_subgraph(subGraph)
         # Tables
