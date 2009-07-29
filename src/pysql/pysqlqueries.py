@@ -52,10 +52,10 @@ guessInfoSql={
                         where object_name=:1
                         and owner='SYS'""",
     "otherTypeFromName"    :    u"""select 'USER' from all_users
-                        where upper(username)=upper(:1)
+                        where username=:1
                        union
                        select 'TABLESPACE' from dba_tablespaces
-                        where upper(tablespace_name)=upper(:1)
+                        where tablespace_name=:1
                        union
                        select 'DATA FILE' from dba_data_files
                         where file_name=:1"""
