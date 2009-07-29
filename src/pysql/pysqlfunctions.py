@@ -19,7 +19,7 @@ from difflib import ndiff
 from pysqlqueries import *
 from pysqlexception import PysqlException, PysqlNotImplemented, PysqlActionDenied
 from pysqloraobjects import *
-from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
+from pysqlcolor import *
 from pysqlconf import PysqlConf
 from pysqldb import PysqlDb
 from pysqlhelpers import colorDiff, convert, addWildCardIfNeeded, generateWhere
@@ -259,20 +259,32 @@ def desc(db, objectName, completeMethod=None, printComment=True, sort=False):
 
     # Displays some information about the object
     if printComment:
-        print CYAN+_("Name\t: ")+oraObject.getName()
-        print _("Type\t: ")+oraObject.getType()
-        print _("Owner\t: ")+oraObject.getOwner()+RESET
-        if oraObject.getType() in ("TABLE", "TABLE PARTITION"):
-            numRows=oraObject.getNumRowsFromStat(db)
-            if numRows:
-                print CYAN+_("Rows\t\t: %s (%s)") % (numRows[0], numRows[1])+RESET
-            else:
-                print CYAN+_("Rows\t\t: <no stats for this table>")+RESET
-        if oraObject.getType() in ("TABLE", "TABLE PARTITION", "VIEW"):
+        print CYAN+_("Name\t: ")+oraObject.getName()+RESET
+        print CYAN+_("Type\t: ")+oraObject.getType()+RESET
+        print CYAN+_("Owner\t: ")+oraObject.getOwner()+RESET
+        if oraObject.getStatus() in ("INVALID", "OFFLINE"):
+            print CYAN+("Status\t\t: ")+BOLD+RED+oraObject.getStatus()+RESET
+        else:
+            print CYAN+("Status\t\t: ")+oraObject.getStatus()+RESET
+        if oraObject.getType() in ("TABLE", "TABLE PARTITION", "VIEW", "MATERIALIZED VIEW"):
             try:
                 print CYAN+_("Comment\t: ")+oraObject.getComment(db)+RESET
             except PysqlException:
                 print CYAN+_("Comment\t: <unable to get comment>")+RESET
+        if oraObject.getType() not in ("DATA FILE", "TABLESPACE", "USER"):
+            try:
+                print CYAN+_("Created on\t: ")+oraObject.getCreated(db)+RESET
+            except PysqlException:
+                print CYAN+_("Created on\t: <unable to get date of creation>")+RESET
+            try:
+                print CYAN+_("Last DDL on\t: ")+oraObject.getLastDDL(db)+RESET
+            except PysqlException:
+                print CYAN+_("Last DDL on\t: <unable to get date of last DDL modification>")+RESET
+
+    # Displays some statistics about the object
+    if oraObject.getType() in ("TABLE", "TABLE PARTITION"):
+        print ORANGE+_("Last analyzed on: ")+str(oraObject.getLastAnalyzed(db))+RESET
+        print ORANGE+_("Est. nb rows\t: ")+str(oraObject.getNumRows(db))+RESET
 
     # Evaluates object type (among the 24 defined)
     if oraObject.getType() in ("TABLE" , "TABLE PARTITION"):

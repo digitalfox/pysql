@@ -15,14 +15,15 @@ from pysqlexception import PysqlException, PysqlNotImplemented, PysqlActionDenie
 
 class OraObject:
     """Father of all pysql Oracle objects"""
-    def __init__(self, objectOwner="", objectName="", objectType=""):
+    def __init__(self, objectOwner="", objectName="", objectType="", objectStatus=""):
         """Object creation"""
         self.setOwner(objectOwner) # Set owner first because setName may override !
         self.setName(objectName)
         self.setType(objectType)
+        self.setStatus(objectStatus)
 
     def __str__(self):
-        """String representation (mostly used for debug purpose"""
+        """String representation (mostly used for debug purpose)"""
         return self.getOwner()+"."+self.getName()+" ("+self.getType()+")"
 
     def getCopy(self):
@@ -45,6 +46,10 @@ class OraObject:
     def getOwner(self):
         """@return: object owner (str)"""
         return self.objectOwner
+
+    def getStatus(self):
+        """@return: object status (str)"""
+        return self.objectStatus
 
     def setName(self, objectName):
         """ Sets name (and owner if name is given like "user.object")"""
@@ -110,8 +115,13 @@ class OraObject:
         This is not fully compliant with Oracle."""
         self.objectOwner=objectOwner.upper()
 
+    def setStatus(self, objectStatus):
+        """Sets the object status. Name is uppercased.
+        This is not fully compliant with Oracle."""
+        self.objectStatus=objectStatus
+
     def guessInfos(self, db, interactive=False):
-        """Guesses and sets object type and owner
+        """Guesses and sets object type, owner and status
         @param db: Connection to Oracle
         @type db: PysqlDb instance
         @param interactive: should we prompt user if multiple results are found? (default is False)
@@ -132,6 +142,8 @@ class OraObject:
                         self.setOwner(currentUsername)
                         self.setName(name)
                         self.setType(type[0])
+                        status=db.executeAll(guessInfoSql["objectStatusFromName"], [name])
+                        self.setStatus(status[0][0])
                         return True
                 owner=u"PUBLIC"
 
@@ -143,6 +155,8 @@ class OraObject:
                     self.setOwner(owner)
                     self.setName(name)
                     self.setType(type[0])
+                    status=db.executeAll(guessInfoSql["objectStatusFromName"], [name])
+                    self.setStatus(status[0][0])
                     return True
 
             owner=u"SYS"
@@ -157,6 +171,8 @@ class OraObject:
                     self.setOwner(owner)
                     self.setName(name)
                     self.setType(type[0])
+                    status=db.executeAll(guessInfoSql["objectStatusFromName"], [name])
+                    self.setStatus(status[0][0])
                     return True
 
         # Tries user, tablespace and so on
@@ -172,6 +188,13 @@ class OraObject:
                     self.setOwner(owner)
                     self.setName(name)
                     self.setType(type[0])
+                    if self.getType()=="DATA FILE":
+                        status=db.executeAll(guessInfoSql["dbfStatusFromName"], [name])
+                    elif self.getType()=="TABLESPACE":
+                        status=db.executeAll(guessInfoSql["tbsStatusFromName"], [name])
+                    elif self.getType()=="USER":
+                        status=db.executeAll(guessInfoSql["userStatusFromName"], [name])
+                    self.setStatus(status[0][0])
                     return True
 
         if interactive:
@@ -179,6 +202,42 @@ class OraObject:
         else:
             #Giving up.
             return False
+
+    def getCreated(self, db):
+        """@return: date of creation of the object"""
+        if self.getOwner()=="":
+            owner=db.getUsername().upper()
+            result=db.executeAll(tabularSql["createdFromOwnerAndName"], [owner, self.getName()])
+        else:
+            try:
+                result=db.executeAll(tabularSql["createdFromDBAAndName"],
+                                     [self.getOwner(), self.getName()])
+            except PysqlException:
+                result=db.executeAll(tabularSql["createdFromOwnerAndName"],
+                                     [self.getOwner(), self.getName()])
+        if len(result)==1:
+            #TODO: use database encoding instead of just using str()
+            return str(result[0][0])
+        else:
+            raise PysqlException("Cannot get the date of creation on object %s" % self.getName())
+
+    def getLastDDL(self, db):
+        """@return: date of last DDL modification of the object"""
+        if self.getOwner()=="":
+            owner=db.getUsername().upper()
+            result=db.executeAll(tabularSql["lastDDLFromOwnerAndName"], [owner, self.getName()])
+        else:
+            try:
+                result=db.executeAll(tabularSql["lastDDLFromDBAAndName"],
+                                     [self.getOwner(), self.getName()])
+            except PysqlException:
+                result=db.executeAll(tabularSql["lastDDLFromOwnerAndName"],
+                                     [self.getOwner(), self.getName()])
+        if len(result)==1:
+            #TODO: use database encoding instead of just using str()
+            return str(result[0][0])
+        else:
+            raise PysqlException("Cannot get the date of last DDL modification on object %s" % self.getName())
 
     def getDDL(self, db):
         """@return: SQL needed to create this object as a str"""
@@ -204,7 +263,7 @@ class OraSegment(OraObject):
 class OraTabular(OraObject):
     """Father of tables, partitioned tables, views, materialized views. All objects that
     have rows and lines.
-    The name is not very sexy. Anybody has better choice?"""
+    The name is not very sexy. Anybody has a better choice?"""
 
     def __init__(self, objectOwner="", objectName=""):
         """Tabular object creation"""
@@ -622,7 +681,6 @@ class OraTable(OraTabular, OraSegment):
             owner=db.getUsername().upper()
         else:
             owner=self.getOwner()
-
         result=db.executeAll(tableSql["indexedColFromOwnerAndName"], [owner, self.getName()])
         return result
 
@@ -640,19 +698,29 @@ class OraTable(OraTabular, OraSegment):
         else:
             return None
 
-    def getNumRowsFromStat(self, db):
-        """Gets the number of rows from stats and last analyzed date
-        @return: (int, datetime)"""
+    def getLastAnalyzed(self, db):
+        """Gets date of last statistics computation"""
         if self.getOwner()=="":
             owner=db.getUsername().upper()
         else:
             owner=self.getOwner()
-
-        result=db.executeAll(tableSql["numRowsAndAnalyzedDateFromOwnerAndName"], [owner, self.getName()])
-        if result and result[0][0]:
-            return result[0]
+        result=db.executeAll(tableSql["lastAnalyzedFromOwnerAndName"], [owner, self.getName()])
+        if len(result)==0:
+            return ""
         else:
-            return None
+            return result[0][0]
+
+    def getNumRows(self, db):
+        """Gets number of rows from table's statistics"""
+        if self.getOwner()=="":
+            owner=db.getUsername().upper()
+        else:
+            owner=self.getOwner()
+        result=db.executeAll(tableSql["numRowsFromOwnerAndName"], [owner, self.getName()])
+        if len(result)==0:
+            return ""
+        else:
+            return result[0][0]
 
 class OraTablespace(OraObject):
     """Tablespace"""
@@ -727,7 +795,6 @@ class OraTrigger(OraObject):
         else:
             return result[0][0]
 
-
     def getEvent(self, db):
         """@return: trigger type (BEFORE/AFTER, STATEMENT/ROW)"""
         if self.getOwner()=="":
@@ -751,7 +818,6 @@ class OraTrigger(OraObject):
             return ""
         else:
             return result[0][0]
-
 
     def getTable(self, db):
         """@return: triggered table (OraTable)"""

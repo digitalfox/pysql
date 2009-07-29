@@ -58,7 +58,18 @@ guessInfoSql={
                         where tablespace_name=:1
                        union
                        select 'DATA FILE' from dba_data_files
-                        where file_name=:1"""
+                        where file_name=:1""",
+    "objectStatusFromName"    :    u"""select status from all_objects
+                        where object_name=:1""",
+    "objectStatusFromNameAndOwner"    :    u"""select status from all_objects
+                        where object_name=:1
+                        and owner=:2""",
+    "dbfStatusFromName"    :    u"""select status from dba_data_files
+                        where file_name=:1""",
+    "tbsStatusFromName"    :    u"""select status from dba_tablespaces
+                        where tablespace_name=:1""",
+    "userStatusFromName"    :    u"""select account_status from dba_users
+                        where username=:1"""
     }
 
 directorySql={
@@ -176,10 +187,14 @@ tableSql={
                                               and cons.table_name=col.table_name
                                               and col.constraint_name=cons.constraint_name
                                               order by col.position""",
-    "numRowsAndAnalyzedDateFromOwnerAndName" :   u"""select num_rows, last_analyzed from all_tables
-                                                        where owner=:1
-                                                        and table_name=:2"""
-
+    "lastAnalyzedFromOwnerAndName"       :    u"""select last_analyzed
+                                              from all_tab_statistics
+                                              where owner=:1
+                                              and table_name=:2""",
+    "numRowsFromOwnerAndName"       :    u"""select num_rows
+                                              from all_tab_statistics
+                                              where owner=:1
+                                              and table_name=:2"""
     }
 
 tablespaceSql={
@@ -195,6 +210,18 @@ tabularSql={
     "commentFromDBAAndName"    :    u"""select comments from dba_tab_comments
                         where owner=:1
                           and table_name=:2""",
+    "createdFromOwnerAndName"    :    u"""select created from all_objects
+                        where owner=:1
+                          and object_name=:2""",
+    "createdFromDBAAndName"    :    u"""select created from dba_objects
+                        where owner=:1
+                          and object_name=:2""",
+    "lastDDLFromOwnerAndName"    :    u"""select last_ddl_time from all_objects
+                        where owner=:1
+                          and object_name=:2""",
+    "lastDDLFromDBAAndName"    :    u"""select last_ddl_time from dba_objects
+                        where owner=:1
+                          and object_name=:2""",
     "columnsFromOwnerAndName"    :    u"""select a.column_name, a.data_type||'('||a.data_length||')', a.nullable, c.comments
                     from all_tab_columns a, all_col_comments c
                     where a.owner=:1
@@ -256,7 +283,7 @@ viewSql={
     "replaceQueryFromFullName"    :    u"""create or replace view %s as %s"""
     }
 
-# Thanks to TOra for many parts of these requests !
+# Thanks to TOra for many parts of these requests!
 sessionStatSql={
     "all"        :    u"""Select a.Sid "Id", a.Serial# "Serial", a.SchemaName "Schema",
                         a.OsUser "Osuser", a.Machine "Machine", a.Program "Program",
