@@ -2,8 +2,12 @@
 .*.swp
 .py*
 *~
+*.patch
+*.old
 .pydevproject
 .project
 .settings
+.directory
 doc/
 dist/
+www/

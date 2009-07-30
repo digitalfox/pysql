@@ -284,7 +284,9 @@ def desc(db, objectName, completeMethod=None, printComment=True, sort=False):
     # Displays some statistics about the object
     if oraObject.getType() in ("TABLE", "TABLE PARTITION"):
         print ORANGE+_("Last analyzed on: ")+str(oraObject.getLastAnalyzed(db))+RESET
-        print ORANGE+_("Est. nb rows\t: ")+str(oraObject.getNumRows(db))+RESET
+        print ORANGE+_("Nb rows\t\t: ")+str(oraObject.getNumRows(db))+RESET
+        print ORANGE+_("Nb used blocks\t: ")+str(oraObject.getUsedBlocks(db))+RESET
+        print ORANGE+_("Avg row length\t: ")+str(oraObject.getAvgRowLength(db))+RESET
 
     # Evaluates object type (among the 24 defined)
     if oraObject.getType() in ("TABLE" , "TABLE PARTITION"):

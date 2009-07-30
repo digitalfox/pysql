@@ -187,11 +187,19 @@ tableSql={
                                               and cons.table_name=col.table_name
                                               and col.constraint_name=cons.constraint_name
                                               order by col.position""",
-    "lastAnalyzedFromOwnerAndName"       :    u"""select last_analyzed
+    "lastAnalyzedFromOwnerAndName"  :    u"""select last_analyzed
                                               from all_tab_statistics
                                               where owner=:1
                                               and table_name=:2""",
     "numRowsFromOwnerAndName"       :    u"""select num_rows
+                                              from all_tab_statistics
+                                              where owner=:1
+                                              and table_name=:2""",
+    "avgRowLengthFromOwnerAndName"  :    u"""select avg_row_len
+                                              from all_tab_statistics
+                                              where owner=:1
+                                              and table_name=:2""",
+    "usedBlocksFromOwnerAndName"    :    u"""select blocks
                                               from all_tab_statistics
                                               where owner=:1
                                               and table_name=:2"""

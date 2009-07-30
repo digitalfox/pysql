@@ -722,6 +722,30 @@ class OraTable(OraTabular, OraSegment):
         else:
             return result[0][0]
 
+    def getAvgRowLength(self, db):
+        """Gets average length of a single row from table's statistics"""
+        if self.getOwner()=="":
+            owner=db.getUsername().upper()
+        else:
+            owner=self.getOwner()
+        result=db.executeAll(tableSql["avgRowLengthFromOwnerAndName"], [owner, self.getName()])
+        if len(result)==0:
+            return ""
+        else:
+            return result[0][0]
+
+    def getUsedBlocks(self, db):
+        """Gets number of used blocks from table's statistics"""
+        if self.getOwner()=="":
+            owner=db.getUsername().upper()
+        else:
+            owner=self.getOwner()
+        result=db.executeAll(tableSql["usedBlocksFromOwnerAndName"], [owner, self.getName()])
+        if len(result)==0:
+            return ""
+        else:
+            return result[0][0]
+
 class OraTablespace(OraObject):
     """Tablespace"""
 
