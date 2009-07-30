@@ -634,7 +634,7 @@ class PysqlShell(cmd.Cmd):
         parser.set_description("Describes any Oracle object")
         parser.add_option("-d", "--details", dest="printDetails",
                           default=False, action="store_true",
-                          help="Displays detailled information about the object")
+                          help="Displays detailed information about the object")
         parser.add_option("-t", "--stats", dest="printStats",
                           default=False, action="store_true",
                           help="Displays statistics on the object if any")

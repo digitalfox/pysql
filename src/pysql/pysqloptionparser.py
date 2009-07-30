@@ -27,6 +27,8 @@ class PysqlOptionParser(OptionParser):
         nargv = [] # New argv with escaped arg if needed
         earg = []  # Escaped argument
         for arg in argv:
+            if arg.strip()=="":
+                continue
             if self.get_option(arg):
                 nargv.append(arg)
             else:
