@@ -23,30 +23,11 @@ class PysqlOptionParser(OptionParser):
         # Splitting an empty line gives us [""], not an empty array
         if argv == [u""]:
             argv = []
-        # Escape things that looks like arg but are indeed value (a user text with a dash for example)
-        nargv = [] # New argv with escaped arg if needed
-        earg = []  # Escaped argument
-        for arg in argv:
-            if arg.strip()=="":
-                continue
-            if self.get_option(arg):
-                nargv.append(arg)
-            else:
-                arg=arg.replace("-", "\-")
-                earg.append(arg)
-                nargv.append(arg)
 
-        options, args =  OptionParser.parse_args(self, nargv)
+        # Remove extra spaces
+        argv = [i for i in argv if i is not u""]
 
-        # Now, remove escaping
-        nargs=[] # New args with escaping removed
-        for arg in args:
-            if arg in earg:
-                nargs.append(arg.replace("\-", "-"))
-            else:
-                nargs.append(arg)
-        return options, nargs
-
+        return OptionParser.parse_args(self, argv)
 
     def exit(self, status=0, msg=None):
         if msg:
