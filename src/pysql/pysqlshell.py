@@ -632,6 +632,12 @@ class PysqlShell(cmd.Cmd):
         parser=PysqlOptionParser()
         parser.set_usage("desc[ribe] [options] <object name>")
         parser.set_description("Describes any Oracle object")
+        parser.add_option("-d", "--details", dest="printDetails",
+                          default=False, action="store_true",
+                          help="Displays detailled information about the object")
+        parser.add_option("-t", "--stats", dest="printStats",
+                          default=False, action="store_true",
+                          help="Displays statistics on the object if any")
         parser.add_option("-s", "--sort", dest="sort",
                           default=False, action="store_true",
                           help="Sort column alphabetically instead of Oracle order")
@@ -646,6 +652,8 @@ class PysqlShell(cmd.Cmd):
         # Gives method pointer to desc function to allow it to update completelist
         (header, result)=pysqlfunctions.desc(self.db, args[0],
                                              completeMethod=self.__addToCompleteList,
+                                             printDetails=options.printDetails,
+                                             printStats=options.printStats,
                                              sort=options.sort)
         self.__displayTab(result, header)
 
@@ -663,7 +671,6 @@ class PysqlShell(cmd.Cmd):
         parser.add_option("-c", "--columns", dest="columns",
                           default=False, action="store_true",
                           help="Also draw table's columns")
-
         parser.add_option("-u", "--user", dest="user",
                           default=defaultUser,
                           help="User owner of tables (schema)")

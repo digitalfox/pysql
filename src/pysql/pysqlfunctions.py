@@ -228,7 +228,7 @@ def ddl(db, objectName):
     else:
         return oraObject.getDDL(db)
 
-def desc(db, objectName, completeMethod=None, printComment=True, sort=False):
+def desc(db, objectName, completeMethod=None, printDetails=True, printStats=False, sort=False):
     """Describes an object
     @param objectName: object to be described
     @return: header and resultset of definition as a tuple (header, definition)
@@ -258,7 +258,7 @@ def desc(db, objectName, completeMethod=None, printComment=True, sort=False):
             return ([], [])
 
     # Displays some information about the object
-    if printComment:
+    if printDetails:
         print CYAN+_("Name\t: ")+oraObject.getName()+RESET
         print CYAN+_("Type\t: ")+oraObject.getType()+RESET
         print CYAN+_("Owner\t: ")+oraObject.getOwner()+RESET
@@ -282,11 +282,12 @@ def desc(db, objectName, completeMethod=None, printComment=True, sort=False):
                 print CYAN+_("Last DDL on\t: <unable to get date of last DDL modification>")+RESET
 
     # Displays some statistics about the object
-    if oraObject.getType() in ("TABLE", "TABLE PARTITION"):
-        print ORANGE+_("Last analyzed on: ")+str(oraObject.getLastAnalyzed(db))+RESET
-        print ORANGE+_("Nb rows\t\t: ")+str(oraObject.getNumRows(db))+RESET
-        print ORANGE+_("Nb used blocks\t: ")+str(oraObject.getUsedBlocks(db))+RESET
-        print ORANGE+_("Avg row length\t: ")+str(oraObject.getAvgRowLength(db))+RESET
+    if printStats:
+        if oraObject.getType() in ("TABLE", "TABLE PARTITION"):
+            print ORANGE+_("Last analyzed on: ")+str(oraObject.getLastAnalyzed(db))+RESET
+            print ORANGE+_("Nb rows\t\t: ")+str(oraObject.getNumRows(db))+RESET
+            print ORANGE+_("Nb used blocks\t: ")+str(oraObject.getUsedBlocks(db))+RESET
+            print ORANGE+_("Avg row length\t: ")+str(oraObject.getAvgRowLength(db))+RESET
 
     # Evaluates object type (among the 24 defined)
     if oraObject.getType() in ("TABLE" , "TABLE PARTITION"):
