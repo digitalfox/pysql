@@ -76,7 +76,7 @@ import sys
 from os.path import dirname, join, pardir
 from optparse import OptionParser
 
-# Test if requisite modules are correctly installed
+# Tests if requisite modules are correctly installed
 # Oracle (mandatory)
 try:
     import cx_Oracle
@@ -89,7 +89,7 @@ except ImportError:
     print "(press enter key to exit)"
     sys.stdin.readline()
     sys.exit(1)
-# readline is a separate module for windows
+# readline is a separate module for Windows
 if os.name=="nt":
     try:
         import readline
@@ -121,7 +121,7 @@ def main():
     else:
         # Unix std path
         i18nPath=join(dirname(sys.argv[0]), pardir, "share", "locale")
-    # Load message catalog
+    # Loads message catalog
     gettext.install("pysql", i18nPath, unicode=1)
 
     # Loads config (first time)
@@ -140,12 +140,15 @@ def main():
             print _("PySQL - %s") % pysqlupdate.currentVersion()
         else:
             # Default is to launch pysql in standard mode (local client)
-            shell=PysqlShell(argv=argv)
-            shell.loop()
-            rc=shell.rc
+            shell=PysqlShell(silent=options.silent, argv=argv)
+            if options.oneTryLogin and shell.db==None:
+                rc=1
+            else:
+                shell.loop()
+                rc=shell.rc
         # Bye
         if os.name=="nt" and not options.version:
-            # Don't exit too fast for windows user, else they don't see error sum up
+            # Don't exit too fast for windows users, else they don't see error sum up
             print _("(press any key to exit)")
             sys.stdin.readline()
     except StandardError, e:
@@ -157,7 +160,7 @@ def main():
     except PysqlException, e:
         print u"*** Pysql error ***\n\t%s" % e
 
-    #Bye!
+    # Bye!
     sys.exit(rc)
 
 def setLocale(conf):
@@ -169,7 +172,7 @@ def setLocale(conf):
         codec="latin-1"
     if codec is None:
         codec="latin-1"
-    # Tests if codec exist
+    # Tests if codec exists
     try:
         str().encode(codec)
     except LookupError:
@@ -178,7 +181,7 @@ def setLocale(conf):
     # Stores codec in config
     conf.setCodec(codec)
 
-    # Set default encoding for stdout
+    # Sets default encoding for stdout
     reload(sys)
     sys.setdefaultencoding(codec)
 
@@ -188,11 +191,19 @@ def parseOptions():
 
     # Version
     parser.add_option("-v", "--version", dest="version", action="store_true",
-              help="Print PySQL version")
+              help="Prints PySQL version")
+
+    # Silent mode
+    parser.add_option("-S", "--Silent", dest="silent", action="store_true",
+              help="Sets silent mode which suppresses the dispay of banner, prompts and echoing of commands")
+
+    # Login
+    parser.add_option("-L", "--Login", dest="oneTryLogin", action="store_true",
+              help="Exits if login attempt failed, instead of starting not connected")
 
     # Update mode
     parser.add_option("-u", "--update", dest="update", action="store_true",
-              help="Check if PySQL update are available")
+              help="Checks if PySQL update are available")
     parser.add_option("-H", "--proxyHost", dest="proxyHost", type="string", default=None,
               help="proxy hostname for PySQL update. \t\tExemple : 'http://my-proxy.mydomain:8080'")
     parser.add_option("-U", "--proxyUser", dest="proxyUser", type="string", default="",
@@ -202,6 +213,6 @@ def parseOptions():
 
     return parser.parse_args()
 
-###### Start Pysql ########
+###### Starts Pysql ########
 if __name__ == "__main__":
     main()

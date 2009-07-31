@@ -31,7 +31,7 @@ from pysqloptionparser import PysqlOptionParser
 class PysqlShell(cmd.Cmd):
     """Main class that handle user interaction"""
 
-    def __init__(self, completekey='tab', stdin=None, stdout=None, argv=[]):
+    def __init__(self, completekey='tab', stdin=None, stdout=None, silent=False, argv=[]):
         """Shell initialisation"""
 
         # Instance attributs
@@ -42,13 +42,14 @@ class PysqlShell(cmd.Cmd):
         self.comment=False          # Indicate if the user is in an SQL multiline comment
         self.cmdBuffer=[]           # Command buffer for multiline command (list of line)
         self.lastStatement=""       # Last statement executed
-        self.tnsnamesAvailable=None # possible to read tnsnames.ora for completion ?
+        self.tnsnamesAvailable=None # possible to read tnsnames.ora for completion?
         self.conf=None              # Handle to pysql configuration instance
         self.cmds=[]                # List of defined cmds
         self.bgQueries=[]           # List of bg queries threads
         self.exceptions=[]          # List of PysqlException encountered
         self.useCompletion=True     # Indicate if we should use completion with "tab"
-        self.showBanner=True        # Indicate if intro banner should be displayed
+        self.showBanner=not silent  # Indicate if intro banner should be displayed
+        self.showPrompt=not silent  # Indicate if prompt should be displayed
         self.trace={}               # Store session trace statistics between two call to trace command
         self.rc=0                   # Shell exit code
         self.oldTermName=""         # Old terminal name
@@ -72,10 +73,10 @@ class PysqlShell(cmd.Cmd):
         try:
             self.__connect(argv[0])
         except IndexError:
-            # No argv given. Starts not connected
+            # No argv given.
             self.__setPrompt()
         except PysqlException, e:
-            # Connection failed, start not connected and warn user
+            # Connection failed, starts not connected and warns user
             print RED+BOLD+_("\nConnection failed:\n\t %s") % e + RESET
             self.exceptions.append(e)
             self.db=None
@@ -94,9 +95,7 @@ class PysqlShell(cmd.Cmd):
         if self.showBanner:
             banner=_("\nWelcome to pysql shell\n")
             banner+=_("Type 'help' for some help.\nUse Tab for completion\n")
-        else:
-            banner=""
-        print banner
+            print banner
 
     def loop(self):
         """Starts shell interactive loop"""
@@ -1490,7 +1489,7 @@ class PysqlShell(cmd.Cmd):
         @type finishedQuery: bool"""
         #TODO: do not update title for every line
         codec=self.conf.getCodec()
-        if blank:
+        if blank or not self.showPrompt:
             prompt=""
         else:
             if self.db is None:
@@ -1753,7 +1752,8 @@ class PysqlShell(cmd.Cmd):
             errors=[(e.getTimeStamp(), e.msg.replace("\n", " "), e.oraCode) for e in self.exceptions]
             self.__displayTab(errors, ("Date", "Error message", "Oracle error Code"))
 
-        print CYAN+_("\n\nBye !\n")+RESET
+        if self.showBanner:
+            print CYAN+_("\n\nBye !\n")+RESET
 
         rc=0
         # Flushes completion cache to disk
