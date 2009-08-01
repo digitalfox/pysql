@@ -157,9 +157,9 @@ class Version:
     Standard comparison operator are defined : <, >, <=, <= and =="""
     def __init__(self, versionStr):
         """Create version instance from version str"""
-        self.major=""
-        self.minor=""
-        self.fix=""
+        self.major=0
+        self.minor=0
+        self.fix=0
         self.isSnapshot=False
         
         if versionStr.lower()=="snapshot":
@@ -169,6 +169,13 @@ class Version:
         elif versionStr.count(".")==2:
             (self.major, self.minor, self.fix)=versionStr.split(".")
         else:
+            raise PysqlException(_("Bad release scheme (%s)") % versionStr)
+        
+        try:
+            self.major=int(self.major)
+            self.minor=int(self.minor)
+            self.fix=int(self.fix)
+        except ValueError:
             raise PysqlException(_("Bad release scheme (%s)") % versionStr)
 
     def __lt__(self, version):
@@ -208,4 +215,4 @@ class Version:
         if self.isSnapshot:
             return "snapshot"
         else:
-            return ".".join((self.major, self.minor, self.fix)).rstrip(".")
+            return ("%s.%s.%s" % (self.major, self.minor, self.fix)).rstrip(".0")
