@@ -183,7 +183,7 @@ class TestConnectedShellCommands(TestShellCommands):
             self.exeCmd("dep %s" % option)
             self.failIf(self.capturedStdout.gotPsyqlException())
 
-        for option in ("", "-r n dual", "-n n dual", "-r -1 dual", "-n -1 dual"):
+        for option in ("", "-r n dual", "-n n dual"):
             self.exeCmd("dep %s" % option)
             self.failUnless(self.capturedStdout.gotPsyqlException())
 
