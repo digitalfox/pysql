@@ -1,4 +1,4 @@
-﻿#!/usr/bin/python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 """ This module defines all high level graphical functions of pysql
@@ -27,13 +27,13 @@ from pysqlhelpers import generateWhere, getProg, removeComment, which
 # High level pysql graphical functions
 def datamodel(db, userName, tableFilter=None, withColumns=True):
     """Extracts the datamodel of the current user as a picture
-       The generation of the picture is powered by Graphviz (http://www.graphviz.org)
-       through the PyDot API (http://www.dkbza.org/pydot.html)
-       @param db: pysql db connection
-       @param userName: schema to be extracted
-       @param tableFilter: filter pattern (in pysql extended syntax to extract only some tables (None means all)
-       @param withColumns: Indicate whether columns are included or not in datamodel picture
-    """
+The generation of the picture is powered by Graphviz (http://www.graphviz.org)
+through the PyDot API (http://www.dkbza.org/pydot.html)
+@param db: pysql db connection
+@param userName: schema to be extracted
+@param tableFilter: filter pattern (in pysql extended syntax to extract only some tables (None means all)
+@param withColumns: Indicate whether columns are included or not in datamodel picture
+"""
     # Tries to import pydot module
     try:
         from pydot import find_graphviz, Dot, Edge, Node
@@ -44,19 +44,19 @@ def datamodel(db, userName, tableFilter=None, withColumns=True):
 
     # Reads conf
     conf=PysqlConf.getConfig()
-    format=conf.get("graph_format")             # Output format of the picture
-    fontname=conf.get("graph_fontname")         # Font used for table names
-    fontsize=conf.get("graph_fontsize")         # Font size for table names
-    fontcolor=conf.get("graph_fontcolor")       # Color of table and column names
-    tablecolor=conf.get("graph_tablecolor")     # Color of tables
-    bordercolor=conf.get("graph_bordercolor")   # Color of tables borders
-    linkcolor=conf.get("graph_linkcolor")       # Color of links between tables
-    linklabel=conf.get("graph_linklabel")       # Display constraints name or not
+    format=conf.get("graph_format") # Output format of the picture
+    fontname=conf.get("graph_fontname") # Font used for table names
+    fontsize=conf.get("graph_fontsize") # Font size for table names
+    fontcolor=conf.get("graph_fontcolor") # Color of table and column names
+    tablecolor=conf.get("graph_tablecolor") # Color of tables
+    bordercolor=conf.get("graph_bordercolor") # Color of tables borders
+    linkcolor=conf.get("graph_linkcolor") # Color of links between tables
+    linklabel=conf.get("graph_linklabel") # Display constraints name or not
 
     # Gets picture generator
     prog=getProg(find_graphviz(), conf.get("graph_program"), "fdp")
 
-    graph=Dot(prog=prog, overlap="false", splines="true")
+    graph=Dot(overlap="false", splines="true")
 
     # Tables, columns and constraints (temporary and external tables are excluded. So are TOAD tables)
     if tableFilter:
@@ -68,7 +68,7 @@ def datamodel(db, userName, tableFilter=None, withColumns=True):
     if nbTables==0:
         raise PysqlException(_("No table found. Your filter clause is too restrictive or the schema is empty"))
     tableList=", ".join(["'%s'" % table[0] for table in tables]) # Table list formated to be used in SQL query
-    print CYAN+_("Extracting %d tables...      ") % nbTables +RESET,
+    print CYAN+_("Extracting %d tables... ") % nbTables +RESET,
     current=0
     for table in tables:
         tableName=table[0]
@@ -86,7 +86,7 @@ def datamodel(db, userName, tableFilter=None, withColumns=True):
                 content+="""<FONT FACE="%s" POINT-SIZE="%f" COLOR="%s">""" % \
                          (fontname, fontsize-2, fontcolor)
                 if column[2] is None: # Normal field
-                    content+="   "
+                    content+=" "
                 else: # Primary key field
                     content+="PK%d" % int(column[2])
                 content+=" %s (%s)" % (columnName, columnType)
@@ -115,19 +115,19 @@ def datamodel(db, userName, tableFilter=None, withColumns=True):
        #sys.stdout.write(GREY+" (%4.1f%%) %s" % (100*float(current)/nbLinks, link[1]+" -> "+link[2])+RESET)
 
     filename=db.getDSN()+"_"+userName+"."+format
-    generateImage(graph, filename, format)
+    generateImage(graph, filename, prog, format)
     viewImage(filename)
 
 def dependencies(db, objectName, direction, maxDepth, maxNodes):
     """Displays object dependencies as a picture
-       The generation of the picture is powered by Graphviz (http://www.graphviz.org)
-       through the PyDot API (http://www.dkbza.org/pydot.html)
-       @param db: pysql db connection
-       @param objectName: name of the oracle object on which dependancies are computed
-       @param direction: direction of the dependancy graph. Can be "onto", "from" or "both"
-       @param maxDepth: Override default maxDepth value. If None, use default value
-       @param maxNodes: Override default maxNodes value. If None, use default value
-    """
+The generation of the picture is powered by Graphviz (http://www.graphviz.org)
+through the PyDot API (http://www.dkbza.org/pydot.html)
+@param db: pysql db connection
+@param objectName: name of the oracle object on which dependancies are computed
+@param direction: direction of the dependancy graph. Can be "onto", "from" or "both"
+@param maxDepth: Override default maxDepth value. If None, use default value
+@param maxNodes: Override default maxNodes value. If None, use default value
+"""
     # Tries to import pydot module
     try:
         from pydot import find_graphviz, Dot, Edge, Node
@@ -138,14 +138,14 @@ def dependencies(db, objectName, direction, maxDepth, maxNodes):
 
     # Reads conf
     conf=PysqlConf.getConfig()
-    format=conf.get("graph_format")             # Output format of the picture
-    fontname=conf.get("graph_fontname")         # Font used for object names
-    fontsize=conf.get("graph_fontsize")         # Font size for object names
+    format=conf.get("graph_format") # Output format of the picture
+    fontname=conf.get("graph_fontname") # Font used for object names
+    fontsize=conf.get("graph_fontsize") # Font size for object names
 
     # Gets picture generator
     prog=getProg(find_graphviz(), conf.get("graph_program"), "dot")
 
-    graph=Dot(prog=prog, overlap="false", splines="true", rankdir="TB")
+    graph=Dot(overlap="false", splines="true", rankdir="TB")
 
     if direction=="onto" or direction=="from":
         dirList=[direction]
@@ -189,7 +189,7 @@ def dependencies(db, objectName, direction, maxDepth, maxNodes):
                     if not currentRefObjectName in nodeList:
                         nodeList.append(currentRefObjectName)
                         # Object shape
-                        if   currentRefObjectType in ("TABLE", "VIEW", "SEQUENCE"):
+                        if currentRefObjectType in ("TABLE", "VIEW", "SEQUENCE"):
                             shape="box"
                         elif currentRefObjectType in ("PACKAGE", "FUNCTION", "PROCEDURE", "TRIGGER"):
                             shape="ellipse"
@@ -223,15 +223,15 @@ def dependencies(db, objectName, direction, maxDepth, maxNodes):
             print RED+"Warning: Reach max recursion limit, references lookup stopped on direction %s" % currentDir +RESET
 
     filename="dep_"+objectOwner+"."+objectName+"."+format
-    generateImage(graph, filename, format)
+    generateImage(graph, filename, prog, format)
     viewImage(filename)
 
 
 def diskusage(db, userName, withIndexes=False):
     """Extracts the physical storage of the current user as a picture based on Oracle statistics
-       The generation of the picture is powered by Graphviz (http://www.graphviz.org)
-       through the PyDot API (http://www.dkbza.org/pydot.html)
-    """
+The generation of the picture is powered by Graphviz (http://www.graphviz.org)
+through the PyDot API (http://www.dkbza.org/pydot.html)
+"""
     # Tries to import pydot module
     try:
         from pydot import find_graphviz, Dot, Subgraph, Cluster, Edge, Node
@@ -242,18 +242,18 @@ def diskusage(db, userName, withIndexes=False):
 
     # Reads conf
     conf=PysqlConf.getConfig()
-    format=conf.get("graph_format")             # Output format of the picture
-    fontname=conf.get("graph_fontname")         # Font used for table names
-    fontsize=conf.get("graph_fontsize")         # Font size for table names
-    fontcolor=conf.get("graph_fontcolor")       # Color of table and column names
-    tablecolor=conf.get("graph_tablecolor")     # Color of tables
-    indexcolor=conf.get("graph_indexcolor")     # Color of indexes
-    bordercolor=conf.get("graph_bordercolor")   # Color of borders
+    format=conf.get("graph_format") # Output format of the picture
+    fontname=conf.get("graph_fontname") # Font used for table names
+    fontsize=conf.get("graph_fontsize") # Font size for table names
+    fontcolor=conf.get("graph_fontcolor") # Color of table and column names
+    tablecolor=conf.get("graph_tablecolor") # Color of tables
+    indexcolor=conf.get("graph_indexcolor") # Color of indexes
+    bordercolor=conf.get("graph_bordercolor") # Color of borders
 
     # Gets picture generator
     prog=getProg(find_graphviz(), conf.get("graph_program"), "fdp")
 
-    graph=Dot(prog=prog, type="dirgraph", overlap="false", splines="true")
+    graph=Dot(type="dirgraph", overlap="false", splines="true")
 
     # Tablespaces
     tablespaces=db.executeAll(diskusageSql["TablespacesFromOwner"], [userName])
@@ -313,9 +313,9 @@ def diskusage(db, userName, withIndexes=False):
             width=round(log(distinct_keys)/10, 3)
             label=indexName+"\\n("+str(size)+" MB)"
             #print "tablespace="+tablespaceName+"; index="+indexName+ \
-            #            "; height="+str(height)+"; width="+str(width)
+            # "; height="+str(height)+"; width="+str(width)
             subGraph.add_node(Node(indexName, label=label, shape="box", style="filled", \
-                                   color=bordercolor, fillcolor=indexcolor,  \
+                                   color=bordercolor, fillcolor=indexcolor, \
                                    fontname="arial", fontcolor=fontcolor, fontsize=str(fontsize-2), \
                                    fixedsize="true", nodesep="0.01", height=str(height), width=str(width)))
             # Invisible edges for placement purpose only (not very usefull in fact)
@@ -323,7 +323,7 @@ def diskusage(db, userName, withIndexes=False):
 
     print
     filename="du_"+userName+"."+format
-    generateImage(graph, filename, format)
+    generateImage(graph, filename, prog, format)
     viewImage(filename)
 
 def pkgTree(db, packageName):
@@ -339,10 +339,10 @@ def pkgTree(db, packageName):
 
     # Reads conf
     conf=PysqlConf.getConfig()
-    format=conf.get("graph_format")             # Output format of the picture
-    fontname=conf.get("graph_fontname")         # Font used for functions names
-    fontsize=conf.get("graph_fontsize")         # Font size for functions names
-    fontcolor=conf.get("graph_fontcolor")       # Color of functions names
+    format=conf.get("graph_format") # Output format of the picture
+    fontname=conf.get("graph_fontname") # Font used for functions names
+    fontsize=conf.get("graph_fontsize") # Font size for functions names
+    fontcolor=conf.get("graph_fontcolor") # Color of functions names
 
     # Gets picture generator
     prog=getProg(find_graphviz(), conf.get("graph_program"), "fdp")
@@ -350,7 +350,7 @@ def pkgTree(db, packageName):
     package=OraObject(objectName=packageName)
     package.guessInfos(db)
 
-    graph=Dot(prog=prog, overlap="false", splines="true")
+    graph=Dot(overlap="false", splines="true")
 
     # Lists of function or procedure
     verbs=[]
@@ -408,12 +408,12 @@ def pkgTree(db, packageName):
                 graph.add_edge(Edge(src=currentVerb.upper(), dst=result.group(1).upper()))
 
     filename=package.getName()+"_dep."+format
-    generateImage(graph, filename, format)
+    generateImage(graph, filename, prog, format)
     viewImage(filename)
 
 def viewImage(imagePath):
     """Shows Image with prefered user image viewer
-    @param imagePath: path to image file"""
+@param imagePath: path to image file"""
     conf=PysqlConf.getConfig()
     viewer=conf.get("graph_viewer")
     if viewer=="off":
@@ -434,15 +434,17 @@ def viewImage(imagePath):
     else:
         raise PysqlException(_("Viewer was not found"))
 
-def generateImage(graph, filename, format):
+def generateImage(graph, filename, prog, format):
     """Generate graphviz image from graph
-    @param graph: pydot graph object
-    @param filename: image filename (str)
-    @param format: image format (str)
-    """
-    print CYAN+_("Generating picture...")+RESET
+@param graph: pydot graph object
+@param filename: image filename (str)
+@param format: image format (str)
+"""
+    print CYAN+_("Generating picture using %s filter...") % prog +RESET
+    import pydot
     try:
-        graph.write(filename, format=format)
-    except pydot.InvocationException, e:
+        graph.write(filename, prog=prog, format=format)
+    except (IOError, OSError, pydot.InvocationException), e:
         raise PysqlException("Graphviz failed to generate image:\n%s" % e)
     print GREEN+_("Image saved as ")+filename+RESET
+
