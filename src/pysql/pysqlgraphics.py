@@ -22,7 +22,7 @@ from pysqlexception import PysqlException, PysqlActionDenied
 from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
 from pysqlconf import PysqlConf
 from pysqloraobjects import OraObject
-from pysqlhelpers import generateWhere, getProg, removeComment, which
+from pysqlhelpers import convert, generateWhere, getProg, removeComment, which
 
 # High level pysql graphical functions
 def datamodel(db, userName, tableFilter=None, withColumns=True):
@@ -243,6 +243,7 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
 
     # Reads conf
     conf=PysqlConf.getConfig()
+    unit=conf.get("unit") # Unit used to format data
     format=conf.get("graph_format") # Output format of the picture
     fontname=conf.get("graph_fontname") # Font used for table names
     fontsize=conf.get("graph_fontsize") # Font size for table names
@@ -278,12 +279,12 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
                 continue
             num_rows=int(table[1])
             avg_row_len=float(table[2])
-            size=int(round(float(table[3])/1024/1024, 0))
+            size=int(convert(table[3], unit))
 
             # Mathematics at work
             height=round(log(num_rows)/10, 3)
             width=round(sqrt(avg_row_len)/5, 3)
-            label=tableName +"\\n("+str(size)+" MB)"
+            label=tableName +"\\n("+str(size)+" %s)" % unit.upper()
             subGraph.add_node(Node(tableName, label=label, shape="box", style="filled", \
                                    color=bordercolor, fillcolor=tablecolor, \
                                    fontname="arial", fontcolor=fontcolor, fontsize=str(fontsize-2), \
