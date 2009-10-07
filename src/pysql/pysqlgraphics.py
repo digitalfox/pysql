@@ -68,7 +68,7 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
     if nbTables==0:
         raise PysqlException(_("No table found. Your filter clause is too restrictive or the schema is empty"))
     tableList=", ".join(["'%s'" % table[0] for table in tables]) # Table list formated to be used in SQL query
-    print CYAN+_("Extracting %d tables... ") % nbTables +RESET,
+    print CYAN+_("Extracting %d tables...      ") % nbTables +RESET,
     current=0
     for table in tables:
         tableName=table[0]
@@ -103,7 +103,7 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
     # Only extract links from considered tables
     links=db.executeAll(datamodelSql["constraintsFromOwner"] % (userName, tableList, tableList))
     nbLinks=len(links)
-    print (CYAN+_("Extracting %d links...") % nbLinks +RESET)
+    print (CYAN+_("Extracting %d links...      ") % nbLinks +RESET),
     current=0
     for link in links:
         if linklabel=="yes":
@@ -112,8 +112,9 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
             graph.add_edge(Edge(src=link[1], dst=link[2], label=link[0], color=linkcolor, \
                                 fontcolor=linkcolor, fontname=fontname, fontsize=str(fontsize-3)))
         current+=1
-       #sys.stdout.write(GREY+" (%4.1f%%) %s" % (100*float(current)/nbLinks, link[1]+" -> "+link[2])+RESET)
+        sys.stdout.write("\b\b\b\b\b%4.1f%%" % round(100*float(current)/nbLinks, 1))
 
+    print
     filename=db.getDSN()+"_"+userName+"."+format
     generateImage(graph, filename, prog, format)
     viewImage(filename)
