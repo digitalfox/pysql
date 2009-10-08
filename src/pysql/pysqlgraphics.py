@@ -316,13 +316,13 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
                 continue
             num_rows=int(index[1])
             distinct_keys=int(index[2])
-            size=int(round(float(index[3])/1024/1024, 0))
+            size=int(convert(index[3], unit))
             tableName=str(index[4])
 
             # Mathematics at work again
             height=round(log(num_rows)/10, 3)
             width=round(log(distinct_keys)/10, 3)
-            label=indexName+"\\n("+str(size)+" MB)"
+            label=indexName +"\\n("+str(size)+" %s)" % unit.upper()
             #print "tablespace="+tablespaceName+"; index="+indexName+ \
             # "; height="+str(height)+"; width="+str(width)
             subGraph.add_node(Node(indexName, label=label, shape="box", style="filled", \
