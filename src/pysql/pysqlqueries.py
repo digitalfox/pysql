@@ -421,11 +421,38 @@ dependenciesSql={
 }
 
 diskusageSql={
+    "Tablespaces"  :            u"""SELECT DISTINCT tablespace_name
+                                   FROM user_segments
+                                   WHERE segment_type in ('TABLE', 'TABLE PARTITION',
+                                                          'INDEX', 'INDEX PARTITION')""",
     "TablespacesFromOwner"  :   u"""SELECT DISTINCT tablespace_name
                                    FROM dba_segments
                                    WHERE owner=:1
                                      AND segment_type in ('TABLE', 'TABLE PARTITION',
                                                           'INDEX', 'INDEX PARTITION')""",
+    "TablesFromTbs" :           u"""SELECT t.table_name, t.num_rows, t.avg_row_len, s.bytes
+                                   FROM all_tables t, user_segments s
+                                   WHERE t.tablespace_name=:1
+                                     AND t.table_name=s.segment_name
+                                     AND t.temporary='N'
+                                     AND t.table_name NOT IN (select table_name from all_external_tables)
+                                   UNION
+                                   SELECT p.partition_name, p.num_rows, p.avg_row_len, s.bytes
+                                   FROM all_tab_partitions p, user_segments s
+                                   WHERE p.tablespace_name=:1
+                                     AND p.partition_name=s.partition_name
+                                     AND s.segment_type='TABLE PARTITION'""",
+    "IndexesFromTbs" :          u"""SELECT i.index_name, i.num_rows, i.distinct_keys, s.bytes, i.table_name
+                                     FROM all_indexes i, user_segments s
+                                     WHERE i.tablespace_name=:1
+                                       AND i.index_name=s.segment_name
+                                       AND s.segment_type='INDEX'
+                                     UNION
+                                     SELECT p.partition_name, p.num_rows, p.distinct_keys, s.bytes, ''
+                                     FROM all_ind_partitions p, user_segments s
+                                     WHERE p.index_owner=s.owner
+                                       AND p.partition_name=s.partition_name
+                                       AND s.segment_type='INDEX PARTITION'""",
     "TablesFromOwnerAndTbs" :   u"""SELECT t.table_name, t.num_rows, t.avg_row_len, s.bytes
                                    FROM all_tables t, dba_segments s
                                    WHERE t.owner=:1
@@ -441,8 +468,7 @@ diskusageSql={
                                      AND p.tablespace_name=:2
                                      AND p.table_owner=s.owner
                                      AND p.partition_name=s.partition_name
-                                     AND s.segment_type='TABLE PARTITION'
-                                    """,
+                                     AND s.segment_type='TABLE PARTITION'""",
     "IndexesFromOwnerAndTbs" :   u"""SELECT i.index_name, i.num_rows, i.distinct_keys, s.bytes, i.table_name
                                      FROM all_indexes i, dba_segments s
                                      WHERE i.owner=:1

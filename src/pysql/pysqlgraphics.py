@@ -258,13 +258,19 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
     graph=Dot(type="dirgraph", overlap="false", splines="true")
 
     # Tablespaces
-    tablespaces=db.executeAll(diskusageSql["TablespacesFromOwner"], [userName])
+    if userName==db.getUsername().upper():
+        tablespaces=db.executeAll(diskusageSql["Tablespaces"])
+    else:
+        tablespaces=db.executeAll(diskusageSql["TablespacesFromOwner"], [userName])
     for tablespace in tablespaces:
         tablespaceName=unicode(tablespace[0])
         subGraph=Subgraph("cluster_"+tablespaceName, label=tablespaceName, bgcolor="palegreen")
         graph.add_subgraph(subGraph)
         # Tables
-        tables=db.executeAll(diskusageSql["TablesFromOwnerAndTbs"], [userName, tablespaceName])
+        if userName==db.getUsername().upper():
+            tables=db.executeAll(diskusageSql["TablesFromTbs"], [tablespaceName])
+        else:
+            tables=db.executeAll(diskusageSql["TablesFromOwnerAndTbs"], [userName, tablespaceName])
         nbTables=len(tables)
         print CYAN+_("Extracting %3d tables from tablespace %s") % (nbTables, tablespaceName) +RESET
         for table in tables:
@@ -292,7 +298,10 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
         if not withIndexes:
             continue
         # Indexes
-        indexes=db.executeAll(diskusageSql["IndexesFromOwnerAndTbs"], [userName, tablespaceName])
+        if userName==db.getUsername().upper():
+            indexes=db.executeAll(diskusageSql["IndexesFromTbs"], [tablespaceName])
+        else:
+            indexes=db.executeAll(diskusageSql["IndexesFromOwnerAndTbs"], [userName, tablespaceName])
         nbIndexes=len(indexes)
         print CYAN+_("Extracting %3d indexes from tablespace %s") % (nbIndexes, tablespaceName) +RESET
         for index in indexes:
