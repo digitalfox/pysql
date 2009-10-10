@@ -85,7 +85,7 @@ except ImportError:
     print "cx_Oracle module cannot be loaded.\nPlease, ensure you correctly install it from:"
     print "http://cx-oracle.sf.net"
     print "And that have the according Oracle client installation."
-    print "Get it from the Oracle site : http://www.oracle.Com"
+    print "Get it from the Oracle site : http://www.oracle.com"
     print "(press enter key to exit)"
     sys.stdin.readline()
     sys.exit(1)

@@ -71,7 +71,7 @@ class PysqlShell(cmd.Cmd):
 
         # If connectString was given as argument, connects to Oracle
         try:
-            self.__connect(argv[0])
+            self.do_connect(" ".join(argv))
         except IndexError:
             # No argv given.
             self.__setPrompt()
@@ -398,9 +398,9 @@ class PysqlShell(cmd.Cmd):
             self.db=None
         if len(arg)==1:
             mode=""
-        elif arg[1].lower()=="sysdba":
+        elif arg[1].lower()=="sysdba"  or len(arg)>2 and arg[1].lower()=="as" and arg[2].lower()=="sysdba":
             mode="sysdba"
-        elif arg[1].lower()=="sysoper":
+        elif arg[1].lower()=="sysoper" or len(arg)>2 and arg[1].lower()=="as" and arg[2].lower()=="sysoper":
             mode="sysoper"
         else:
             mode=""
