@@ -231,7 +231,7 @@ class PysqlShell(cmd.Cmd):
                 self.multilineCmd=True
                 self.cmdBuffer.append(line)
                 self.fetching=False # Cancel previous fetching if any
-                self.__setPrompt(blank=True) # blank the prompt (for easy cut&paste !)
+                self.__setPrompt(multiline=True)
                 try:
                     length=readline.get_current_history_length()
                     if length>1:
@@ -249,7 +249,7 @@ class PysqlShell(cmd.Cmd):
         Used to notify running and finished background queries
         @return: stop flag to end loop"""
         if self.multilineCmd:
-            self.__setPrompt(blank=True)
+            self.__setPrompt(multiline=True)
         else:
             queries=[i for i in self.bgQueries if not i.isAlive()]
             if len(queries)!=0:
@@ -1481,7 +1481,7 @@ class PysqlShell(cmd.Cmd):
             self.db=None
         self.__setPrompt()
 
-    def __setPrompt(self, blank=False, finishedQuery=False):
+    def __setPrompt(self, blank=False, multiline=False, finishedQuery=False):
         """Sets the prompt according to the connexion state
         @param blank: if true, no prompt is issue (default is False)
         @param finishedQuery: if true mark prompt with a * to notify a query is finished
@@ -1491,6 +1491,8 @@ class PysqlShell(cmd.Cmd):
         codec=self.conf.getCodec()
         if blank or not self.showPrompt:
             prompt=""
+        elif multiline:
+            prompt="> "
         else:
             if self.db is None:
                 prompt=self.notConnectedPrompt
