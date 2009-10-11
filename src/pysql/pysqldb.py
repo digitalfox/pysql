@@ -1,10 +1,10 @@
-﻿#!/usr/bin/python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 """ Database related stuff: Oracle interface (PysqlDb)
 and backgound queries (BgQuery)
 @author: Sébastien Renard (sebastien.renard@digitalfox.org)
-@license:GNU GPL V3
+@license: GNU GPL V3
 """
 
 # pylint: disable-msg=E0611

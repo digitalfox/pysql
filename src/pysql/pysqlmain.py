@@ -65,7 +65,7 @@ Developpement conventions:
 
 @author: Sébastien Renard (sebastien.renard@digitalfox.org)
 @author: Sébastien Delcros (Sebastien.Delcros@gmail.com)
-@license:GNU GPL V3
+@license: GNU GPL V3
 """
 
 # Python imports:

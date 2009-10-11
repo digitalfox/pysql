@@ -3,7 +3,7 @@
 
 """This module defines all pysql exceptions
 @author: Sébastien Renard (sebastien.renard@digitalfox.org)
-@license:GNU GPL V3
+@license: GNU GPL V3
 """
 
 # Python imports

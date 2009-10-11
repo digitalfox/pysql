@@ -4,7 +4,7 @@
 """This module defines some classes to make easier Oracle object manipulation
 @author: Sébastien Renard (sebastien.renard@digitalfox.org)
 @author: Sébastien Delcros (Sebastien.Delcros@gmail.com)
-@license:GNU GPL V3
+@license: GNU GPL V3
 """
 
 # pylint: disable-msg=E1101

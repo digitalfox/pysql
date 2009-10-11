@@ -1,13 +1,13 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 """
 An OptionParser which accepts a single string as input and raise an exception
 instead of calling sys.exit() in case of error
 
-Kindly borrowed from Yokadi Option parser (http://github.com/agateau/yokadi/) 
+Kindly borrowed from Yokadi Option parser (http://github.com/agateau/yokadi/)
 @author: Aurélien Gâteau <aurelien.gateau@free.fr>
 @author: Sébastien Renard <Sebastien.Renard@sigitalfox.org>
 
-@license: GPLv3
+@license: GNU GPL V3
 """
 from optparse import OptionParser
 import sys

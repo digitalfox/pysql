@@ -1,15 +1,15 @@
-﻿#!/usr/bin/python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 """This module defines the PysqlConf class
 that handles all pysql configuration stuff
 @author: Sébastien Renard (sebastien.renard@digitalfox.org)
-@license:GNU GPL V3
+@license: GNU GPL V3
 """
 
 # Python imports:
 import os
-from os.path import expandvars, join 
+from os.path import expandvars, join
 import cPickle
 from ConfigParser import ConfigParser
 import readline
@@ -32,11 +32,11 @@ class PysqlConf:
             basePath=join(expandvars("$APPDATA"), "pysql")
         else:
             basePath=join(expandvars("$HOME"), ".pysql")
-        
+
         # Create conf dir if it does not exist
         if not self.__isReadWrite(basePath):
             os.mkdir(basePath)
- 
+
         # Config Parser
         self.configParser=None
 

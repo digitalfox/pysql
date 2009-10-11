@@ -4,7 +4,7 @@
 """ This module defines all high level graphical functions of pysql
 @author: Sébastien Delcros (Sebastien.Delcros@gmail.com)
 @author: Sébastien Renard (sebastien.renard@digitalfox.org)
-@license:GNU GPL V3
+@license: GNU GPL V3
 """
 
 # pylint: disable-msg=E1101

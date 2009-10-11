@@ -4,7 +4,7 @@
 """SQL queries ordered by theme in dictionary
 @author: Sébastien Renard (sebastien.renard@digitalfox.org)
 @author: Sébastien Delcros (sebastien.delcros@gmail.com)
-@license:GNU GPL V3
+@license: GNU GPL V3
 """
 
 # pylint: disable-msg=C0103

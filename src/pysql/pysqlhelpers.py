@@ -3,7 +3,7 @@
 
 """This module defines some common useful helper functions
 @author: Sébastien Renard (sebastien.renard@digitalfox.org)
-@license:GNU GPL V3
+@license: GNU GPL V3
 """
 
 # Python imports:
@@ -136,7 +136,7 @@ def generateWhere(keyword, filterClause):
             result.append(word.lower())
             lastWordWasOperand=True
             startsWithParenthisis=False
-        # Construct like clause 
+        # Construct like clause
         elif len(word)>0 and lastWordWasOperand:
             if word.startswith("!"):
                 if len(word)>1 and word[1]=="(":

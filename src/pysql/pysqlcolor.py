@@ -3,7 +3,7 @@
 
 """ANSI terminal color code
 @author: Sébastien Renard (sebastien.renard@digitalfox.org)
-@license:GNU GPL V3
+@license: GNU GPL V3
 """
 
 # Python imports:

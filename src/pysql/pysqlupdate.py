@@ -3,7 +3,7 @@
 
 """This module check for PySQL updates and help user to update PySQL online
 @author: Sébastien Renard (sebastien.renard@digitalfox.org)
-@license:GNU GPL V3
+@license: GNU GPL V3
 """
 
 # Python import
@@ -26,7 +26,7 @@ PYSQLROOTDIR="pysql"
 def checkForUpdate(proxy=None, user="", password=""):
     """Check if the current PySQL is the latest one"""
     releases=[]     # Release list
-    
+
     # Web stuff to get available releases
     if proxy:
         proxy_handler=urllib2.ProxyHandler({'http': proxy})
@@ -45,7 +45,7 @@ def checkForUpdate(proxy=None, user="", password=""):
         releases.sort()
         last=releases[-1]
         current=Version(currentVersion())
-        
+
         print _("Available releases : %s") % ", ".join([str(i) for i in releases])
         print _("Latest is %s") % last
         print _("Current is %s") % current
@@ -88,14 +88,14 @@ def update(opener, version):
     @type version: string
     @return: True if everything is Ok, else False"""
     print CYAN + _("=>update to version %s<=") % version + RESET
-    
+
     # Create an update dir in PySQL dist and download tarball into it
     filename="pysql-"+str(version)+".tar.gz"
     pysqlPath=dirname(sys.argv[0])
     updatePath=join(pysqlPath, UPDATEDIR)
     newPath=join(updatePath, PYSQLROOTDIR)
     if not access(updatePath, X_OK):
-        mkdir(updatePath)    
+        mkdir(updatePath)
     # Remove any previous aborted install
     if access(newPath, X_OK):
         try:
@@ -152,8 +152,8 @@ class Version:
     """Pysql Version handling according to release policy
     Release model : Major.Minor.Fix
     Major and minor are mandatory, fix is optionnal
-    Release can be "snapshot" (case unsensitive). 
-    If not defined, major/minor/fix are set to empty str "" 
+    Release can be "snapshot" (case unsensitive).
+    If not defined, major/minor/fix are set to empty str ""
     Standard comparison operator are defined : <, >, <=, <= and =="""
     def __init__(self, versionStr):
         """Create version instance from version str"""
@@ -161,7 +161,7 @@ class Version:
         self.minor=0
         self.fix=0
         self.isSnapshot=False
-        
+
         if versionStr.lower()=="snapshot":
             self.isSnapshot=True
         elif versionStr.count(".")==1:
@@ -170,7 +170,7 @@ class Version:
             (self.major, self.minor, self.fix)=versionStr.split(".")
         else:
             raise PysqlException(_("Bad release scheme (%s)") % versionStr)
-        
+
         try:
             self.major=int(self.major)
             self.minor=int(self.minor)
@@ -198,19 +198,19 @@ class Version:
 
     def __gt__(self, version):
         return (version<self)
-    
+
     def __eq__(self, version):
         if self.major==version.major and self.minor==version.minor and self.fix==version.fix:
             return True
         else:
             return False
-    
+
     def __le__(self, version):
         return (self==version or self<version)
-    
+
     def __ge__(self, version):
         return (version<=self)
-    
+
     def __str__(self):
         if self.isSnapshot:
             return "snapshot"
