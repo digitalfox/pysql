@@ -69,22 +69,23 @@ class PysqlShell(cmd.Cmd):
         # Keep old term name
         self.oldTermName=getTitle()
 
-        # If connectString was given as argument, connects to Oracle
-        try:
-            self.do_connect(" ".join(argv))
-        except IndexError:
-            # No argv given.
+        if len(argv)==0:
+        # No argv given.
             self.__setPrompt()
-        except PysqlException, e:
-            # Connection failed, starts not connected and warns user
-            print RED+BOLD+_("\nConnection failed:\n\t %s") % e + RESET
-            self.exceptions.append(e)
-            self.db=None
-            self.__setPrompt()
-        except KeyboardInterrupt:
-            print RED+BOLD+_("Break !")+RESET
-            #TODO: validates this case (direct call of __exit() is not good)
-            self.__exit()
+        else:
+        # connectString was given as argument, connects to Oracle
+            try:
+                self.do_connect(" ".join(argv))
+            except PysqlException, e:
+                # Connection failed, starts not connected and warns user
+                print RED+BOLD+_("\nConnection failed:\n\t %s") % e + RESET
+                self.exceptions.append(e)
+                self.db=None
+                self.__setPrompt()
+            except KeyboardInterrupt:
+                print RED+BOLD+_("Break !")+RESET
+                #TODO: validates this case (direct call of __exit() is not good)
+                self.__exit()
 
     def preloop(self):
         """Prepares shell interactive loop"""
