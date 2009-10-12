@@ -391,6 +391,7 @@ class PysqlShell(cmd.Cmd):
         """Connect to instance"""
         self.__checkArg(arg, ">=1")
         arg=arg.split()
+
         try:
             self.__disconnect()
         except PysqlException, e:
@@ -399,13 +400,13 @@ class PysqlShell(cmd.Cmd):
             self.db=None
         if len(arg)==1:
             mode=""
-        elif arg[1].lower()=="sysdba"  or len(arg)>2 and arg[1].lower()=="as" and arg[2].lower()=="sysdba":
+        elif arg[1].lower()=="sysdba"  or ( len(arg)>2 and " ".join(arg[1:3]).lower()=="as sysdba"  ):
             mode="sysdba"
-        elif arg[1].lower()=="sysoper" or len(arg)>2 and arg[1].lower()=="as" and arg[2].lower()=="sysoper":
+        elif arg[1].lower()=="sysoper" or ( len(arg)>2 and " ".join(arg[1:3]).lower()=="as sysoper" ):
             mode="sysoper"
         else:
             mode=""
-            print RED+BOLD+_("Invalid Oracle mode: %s (ignored)") % arg[1] + RESET
+            print RED+BOLD+_("Invalid Oracle mode: %s (ignored)") % (" ".join(arg[1:])) + RESET
         self.__connect(arg[0], mode)
 
     def do_disconnect(self, arg):
