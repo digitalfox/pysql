@@ -25,7 +25,7 @@ import pysqlgraphics
 from pysqlexception import PysqlException, PysqlNotImplemented, PysqlOptionParserNormalExitException
 from pysqlconf import PysqlConf
 from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
-from pysqlhelpers import itemLength, removeComment, printStackTrace, setTitle, getTitle, getTermWidth
+from pysqlhelpers import itemLength, removeComment, printStackTrace, setTitle, getTitle, getTermWidth, WaitCursor
 from pysqloptionparser import PysqlOptionParser
 
 class PysqlShell(cmd.Cmd):
@@ -53,6 +53,7 @@ class PysqlShell(cmd.Cmd):
         self.trace={}               # Store session trace statistics between two call to trace command
         self.rc=0                   # Shell exit code
         self.oldTermName=""         # Old terminal name
+        self.waitCursor=None        # Waiting cursor thread handler
         self.notConnectedPrompt=RED+_("(not connected) ")+RESET
 
         # Reads conf
@@ -252,6 +253,9 @@ class PysqlShell(cmd.Cmd):
         """Hook executed just after command processing.
         Used to notify running and finished background queries
         @return: stop flag to end loop"""
+        if self.waitCursor:
+            self.waitCursor.stop() # Stop any running cursor
+            self.waitCursor=None
         if self.multilineCmd:
             self.__setPrompt(multiline=True)
         else:
@@ -530,12 +534,14 @@ class PysqlShell(cmd.Cmd):
     def do_commit(self, arg):
         """Commit pending transaction"""
         self.__checkConnection()
+        self.__animateCursor()
         self.db.commit()
         print GREEN+_("Commit completed")+RESET
 
     def do_rollback(self, arg):
         """Rollback pending transaction"""
         self.__checkConnection()
+        self.__animateCursor()
         self.db.rollback()
         print GREEN+_("Rollback completed")+RESET
 
@@ -544,8 +550,10 @@ class PysqlShell(cmd.Cmd):
         """Count segment lines"""
         self.__checkConnection()
         self.__checkArg(arg, "==1")
+        self.__animateCursor()
         result=pysqlfunctions.count(self.db, arg)
         print result
+
 
     def do_compare(self, arg):
         """Compare schema or object structure and data"""
@@ -781,6 +789,7 @@ class PysqlShell(cmd.Cmd):
         """ Emulates sqlplus execute"""
         self.__checkConnection()
         self.__checkArg(arg, ">=1")
+        self.__animateCursor()
         line="begin\n" + arg + ";\nend;\n"
         self.__executeSQL(line)
 
@@ -788,6 +797,7 @@ class PysqlShell(cmd.Cmd):
         """Explain SQL exec plan"""
         self.__checkConnection()
         self.__checkArg(arg, ">1")
+        self.__animateCursor()
         importantWords=["TABLE ACCESS FULL", "FULL SCAN"]
         result=pysqlfunctions.explain(self.db, arg)
         for line in result:
@@ -1002,6 +1012,7 @@ class PysqlShell(cmd.Cmd):
         """Display last lines of query set"""
         self.__checkConnection()
         self.__checkArg(arg, "<=1")
+        self.__animateCursor()
         try:
             nbLines=int(arg)
             if nbLines<self.conf.get("fetchSize"):
@@ -1026,6 +1037,7 @@ class PysqlShell(cmd.Cmd):
         """Display next lines of query set"""
         self.__checkConnection()
         self.__checkArg(arg, "<=1")
+        self.__animateCursor()
         try:
             nbLines=int(arg)
         except (ValueError, TypeError):
@@ -1058,7 +1070,7 @@ class PysqlShell(cmd.Cmd):
                 self.help_set()
 
     def do_write(self, arg):
-        """Write configuration to disj"""
+        """Write configuration to disk"""
         self.conf.write()
 
     # Shell execution
@@ -1166,6 +1178,7 @@ class PysqlShell(cmd.Cmd):
         """Dumps sql request to file"""
         self.__checkConnection()
         self.__checkArg(arg, ">=3")
+        self.__animateCursor()
         (fileName, sql)=match("(.+?)\s(.+)", arg).groups()
         self.__executeSQL(sql, output="csv", fileName=fileName)
 
@@ -1174,6 +1187,7 @@ class PysqlShell(cmd.Cmd):
         """Time request execution time"""
         self.__checkConnection()
         self.__checkArg(arg, ">=3")
+        self.__animateCursor()
         start=time()
         self.__executeSQL(arg, output="null")
         elapsed=time()-start
@@ -1424,6 +1438,13 @@ class PysqlShell(cmd.Cmd):
 
 
     # Helper functions (private so start with __ to never override any superclass methods)
+
+    def __animateCursor(self):
+        """Animate cursor to tell user something is really happening
+        End of animation and output flushing is done automatically in postcmd hook"""
+        self.waitCursor=WaitCursor()
+        self.waitCursor.start()
+
     def __addToCompleteList(self, wordList, theme="general"):
         """Adds wordList the completion list "theme"
         @param wordList: list of item to completion
@@ -1664,6 +1685,8 @@ class PysqlShell(cmd.Cmd):
         self.__checkConnection()
         if len(sql)<2:
             raise PysqlException("SQL command is too short")
+
+        self.__animateCursor()
 
         # Saves it for further editing (with edit command for example) or recall with /
         self.lastStatement=sql
