@@ -13,6 +13,9 @@ import traceback
 from re import match, sub
 import datetime
 from cx_Oracle import LOB
+from cStringIO import StringIO
+from time import sleep
+from threading import Thread
 
 # Pysql imports:
 from pysqlexception import PysqlException, PysqlActionDenied
@@ -278,3 +281,33 @@ def getTermWidth():
     else:
         # Unsupported system, use default 120
         return 120
+
+class WaitCursor(Thread):
+    """A waiting cursor for long operation that
+    catch output and flush it after waiting"""
+    def __init__(self):
+        self.realStdout=sys.stdout # Backup stdout
+        self.tmpStdout=StringIO()  # Store here all data output during waiting state
+        self.state="WAIT"
+        Thread.__init__(self)
+
+    def run(self):
+        """Method executed when the thread object start() method is called"""
+        # Capture stdout
+        sys.stdout=self.tmpStdout
+        i=0
+        while self.state=="WAIT":
+            self.realStdout.write(".") # TODO: replace that with a nice rotating pipe cursor
+            self.realStdout.flush()
+            sleep(0.1)
+            i+=1
+
+        # Restore standard output and print temp data
+        sys.stdout=self.realStdout
+        sys.stdout.write("\b"*i)
+        self.tmpStdout.seek(0)
+        sys.stdout.writelines(self.tmpStdout.readlines())
+        sys.stdout.flush()
+
+    def stop(self):
+        self.state="STOP"
