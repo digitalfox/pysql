@@ -296,13 +296,15 @@ class WaitCursor(Thread):
         realStdout=sys.stdout # Backup stdout
         tmpStdout=StringIO()  # Store here all data output during waiting state
         sys.stdout=tmpStdout  # Capture stdout
+        cursorState=("-", "\\", "|", "/")
+        i=0
         self.lock.acquire()
         while self.state=="WAIT":
-            for c in ("-", "\\", "|", "/"):
-                realStdout.write(c)
-                realStdout.flush()
-                sleep(0.2)
-                realStdout.write("\b")
+            realStdout.write(cursorState[i%4])
+            realStdout.flush()
+            sleep(0.1)
+            realStdout.write("\b")
+            i+=1
 
         # Restore standard output and print temp data
         sys.stdout=realStdout
