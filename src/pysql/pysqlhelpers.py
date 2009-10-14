@@ -15,7 +15,7 @@ import datetime
 from cx_Oracle import LOB
 from cStringIO import StringIO
 from time import sleep
-from threading import Thread
+from threading import Thread, Lock
 
 # Pysql imports:
 from pysqlexception import PysqlException, PysqlActionDenied
@@ -289,6 +289,7 @@ class WaitCursor(Thread):
         self.realStdout=sys.stdout # Backup stdout
         self.tmpStdout=StringIO()  # Store here all data output during waiting state
         self.state="WAIT"
+        self.lock=Lock()           # Lock used to synchronise IO and cursor stop
         Thread.__init__(self)
 
     def run(self):
@@ -296,6 +297,7 @@ class WaitCursor(Thread):
         # Capture stdout
         sys.stdout=self.tmpStdout
         i=0
+        self.lock.acquire()
         while self.state=="WAIT":
             self.realStdout.write(".") # TODO: replace that with a nice rotating pipe cursor
             self.realStdout.flush()
@@ -308,6 +310,8 @@ class WaitCursor(Thread):
         self.tmpStdout.seek(0)
         sys.stdout.writelines(self.tmpStdout.readlines())
         sys.stdout.flush()
+        self.lock.release()
 
     def stop(self):
         self.state="STOP"
+        self.lock.acquire() # Wait end of IO flush before returning
