@@ -296,17 +296,16 @@ class WaitCursor(Thread):
         """Method executed when the thread object start() method is called"""
         # Capture stdout
         sys.stdout=self.tmpStdout
-        i=0
         self.lock.acquire()
         while self.state=="WAIT":
-            self.realStdout.write(".") # TODO: replace that with a nice rotating pipe cursor
-            self.realStdout.flush()
-            sleep(0.1)
-            i+=1
+            for c in ("-", "\\", "|", "/"):
+                self.realStdout.write(c)
+                self.realStdout.flush()
+                sleep(0.2)
+                self.realStdout.write("\b")
 
         # Restore standard output and print temp data
         sys.stdout=self.realStdout
-        sys.stdout.write("\b"*i)
         self.tmpStdout.seek(0)
         sys.stdout.writelines(self.tmpStdout.readlines())
         sys.stdout.flush()
