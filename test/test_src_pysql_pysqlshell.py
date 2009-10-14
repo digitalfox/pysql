@@ -108,13 +108,10 @@ class TestConnectedShellCommands(TestShellCommands):
         self.exeCmd("connect %s" % CONNECT_STRING)
         self.failIf(self.capturedStdout.gotPsyqlException())
 
-        self.exeCmd("connect %s as sysdba" % CONNECT_STRING)
-        self.failIf(self.capturedStdout.gotPsyqlException(reset=False))
-        self.failUnless("as" in self.capturedStdout.readlines()[0])
-
-        self.exeCmd("connect %s sysdba" % CONNECT_STRING)
-        if self.capturedStdout.gotPsyqlException() and self.lastExceptionOraCode()!="ORA-01031":
-            self.fail("Cannot connect as sysdba or bad ORA code")
+        for cmd in ("connect %s sysdba", "connect %s as sysdba"):
+            self.exeCmd(cmd % CONNECT_STRING)
+            if self.capturedStdout.gotPsyqlException() and self.lastExceptionOraCode()!="ORA-01031":
+                self.fail("Cannot connect as sysdba or bad ORA code")
 
     def test_do_disconnect(self):
         self.exeCmd("disconnect")
