@@ -39,6 +39,7 @@ class TestShellCommands(unittest.TestCase):
         # Capture stdout - This must be done before shell init
         self.capturedStdout=testhelpers.CapturedStdout()
         self.shell=pysqlshell.PysqlShell(argv=[CONNECT_STRING,])
+        self.shell.allowAnimatedCursor=False # Disable animated cursor for tests
         self.shell.preloop() # Needed to populate command list (self.cmds)
 
     def exeCmd(self, line):

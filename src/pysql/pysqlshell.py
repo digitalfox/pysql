@@ -54,6 +54,7 @@ class PysqlShell(cmd.Cmd):
         self.rc=0                   # Shell exit code
         self.oldTermName=""         # Old terminal name
         self.waitCursor=None        # Waiting cursor thread handler
+        self.allowAnimatedCursor=True # Enable or not animated cursor. Useful for test.
         self.notConnectedPrompt=RED+_("(not connected) ")+RESET
 
         # Reads conf
@@ -1503,8 +1504,9 @@ class PysqlShell(cmd.Cmd):
     def __animateCursor(self):
         """Animate cursor to tell user something is really happening
         End of animation and output flushing is done automatically in postcmd hook"""
-        self.waitCursor=WaitCursor()
-        self.waitCursor.start()
+        if self.allowAnimatedCursor:
+            self.waitCursor=WaitCursor()
+            self.waitCursor.start()
 
     def __addToCompleteList(self, wordList, theme="general"):
         """Adds wordList the completion list "theme"
