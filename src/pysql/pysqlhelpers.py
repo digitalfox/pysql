@@ -286,28 +286,28 @@ class WaitCursor(Thread):
     """A waiting cursor for long operation that
     catch output and flush it after waiting"""
     def __init__(self):
-        self.realStdout=sys.stdout # Backup stdout
-        self.tmpStdout=StringIO()  # Store here all data output during waiting state
         self.state="WAIT"
         self.lock=Lock()           # Lock used to synchronise IO and cursor stop
         Thread.__init__(self)
 
     def run(self):
         """Method executed when the thread object start() method is called"""
-        # Capture stdout
-        sys.stdout=self.tmpStdout
+
+        realStdout=sys.stdout # Backup stdout
+        tmpStdout=StringIO()  # Store here all data output during waiting state
+        sys.stdout=tmpStdout  # Capture stdout
         self.lock.acquire()
         while self.state=="WAIT":
             for c in ("-", "\\", "|", "/"):
-                self.realStdout.write(c)
-                self.realStdout.flush()
+                realStdout.write(c)
+                realStdout.flush()
                 sleep(0.2)
-                self.realStdout.write("\b")
+                realStdout.write("\b")
 
         # Restore standard output and print temp data
-        sys.stdout=self.realStdout
-        self.tmpStdout.seek(0)
-        sys.stdout.writelines(self.tmpStdout.readlines())
+        sys.stdout=realStdout
+        tmpStdout.seek(0)
+        sys.stdout.writelines(tmpStdout.readlines())
         sys.stdout.flush()
         self.lock.release()
 
