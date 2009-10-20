@@ -1637,9 +1637,9 @@ class PysqlShell(cmd.Cmd):
                 # Quite stupid to test this for each line...
                 #TODO: Should be done one time before looping on each line
                 if isinstance(line[i], (int, long, float)):
-                    print str(line[i])[:width[i]].rjust(width[i]),
+                    sys.stdout.write(str(line[i])[:width[i]].rjust(width[i]))
                 else:
-                    print line[i][:width[i]].ljust(width[i]).replace('\r', ' '),
+                    sys.stdout.write(line[i][:width[i]].ljust(width[i]).replace('\r', ' '))
                 if header and i==0 and transpose:
                     print RESET,
                 sys.stdout.write(colsep) # Adds colsep
