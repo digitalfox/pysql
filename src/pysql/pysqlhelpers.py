@@ -308,8 +308,7 @@ class WaitCursor(Thread):
 
         # Restore standard output and print temp data
         sys.stdout=realStdout
-        tmpStdout.seek(0)
-        sys.stdout.writelines(tmpStdout.readlines())
+        sys.stdout.write(tmpStdout.getvalue())
         sys.stdout.flush()
         self.lock.release()
 
