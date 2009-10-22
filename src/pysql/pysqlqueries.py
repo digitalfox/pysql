@@ -450,7 +450,7 @@ diskusageSql={
                                      UNION
                                      SELECT p.partition_name, p.num_rows, p.distinct_keys, s.bytes, ''
                                      FROM all_ind_partitions p, user_segments s
-                                     WHERE p.index_owner=s.owner
+                                     WHERE p.tablespace_name=:1
                                        AND p.partition_name=s.partition_name
                                        AND s.segment_type='INDEX PARTITION'""",
     "TablesFromOwnerAndTbs" :   u"""SELECT t.table_name, t.num_rows, t.avg_row_len, s.bytes
