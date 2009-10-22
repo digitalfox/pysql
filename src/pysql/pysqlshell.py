@@ -1466,11 +1466,14 @@ class PysqlShell(cmd.Cmd):
         count=connectString.count("/")
         if count==0:
             user=connectString
-            passwd=getpass()
+            try:
+                passwd=getpass()
+            except (Exception):
+                raise PysqlException(_("Invalid connection string"))
         elif count==1:
             (user, passwd)=connectString.split("/")
         else:
-            raise PysqlException("Invalid connection string")
+            raise PysqlException(_("Invalid connection string"))
 
         connectString=user+"/"+passwd+"@"+sid
         self.db=PysqlDb(connectString, mode)
