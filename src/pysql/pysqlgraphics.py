@@ -454,9 +454,12 @@ def generateImage(graph, filename, prog, format):
     print CYAN+_("Generating picture using %s filter...") % prog +RESET
     filepath=os.getcwd()+os.sep+filename
     import pydot
+    sys.stdout = open(os.devnull, 'a')  # Mutes STDOUT
     try:
         graph.write(filepath, prog=prog, format=format)
     except (IOError, OSError, pydot.InvocationException), e:
+        sys.stdout = sys.__stdout__     # Restores STDOUT
         raise PysqlException("Graphviz failed to generate image:\n%s" % e)
+    sys.stdout = sys.__stdout__         # Restores STDOUT
     print GREEN+_("Image saved as ")+filepath+RESET
 
