@@ -264,7 +264,7 @@ class PysqlConf:
                 return True
             else:
                 return False
-        elif key in ("graph_bordercolor", "graph_linkcolor", "graph_tablecolor"):
+        elif key in ("graph_bordercolor", "graph_linkcolor", "graph_indexcolor", "graph_tablecolor"):
             return True
         else:
             print "(DEBUG) Key %s does not exist or does not have a verify routine !" % key
