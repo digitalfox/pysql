@@ -14,7 +14,7 @@ import os
 import sys
 import re
 import subprocess
-from math import log, sqrt
+from math import floor, log, sqrt
 
 # Pysql imports:
 from pysqlqueries import datamodelSql, dependenciesSql, diskusageSql
@@ -228,7 +228,7 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
     viewImage(filename)
 
 
-def diskusage(db, userName, withIndexes=False):
+def diskusage(db, userName, withIndexes=False, percent=True):
     """Extracts the physical storage of the current user as a picture based on Oracle statistics
 The generation of the picture is powered by Graphviz (http://www.graphviz.org)
 through the PyDot API (http://www.dkbza.org/pydot.html)
@@ -255,84 +255,134 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
     # Gets picture generator
     prog=getProg(find_graphviz(), conf.get("graph_program"), "fdp")
 
-    graph=Dot(type="dirgraph", overlap="false", splines="true")
-
+# First step: objects library building
     # Tablespaces
     if userName==db.getUsername().upper():
         tablespaces=db.executeAll(diskusageSql["Tablespaces"])
     else:
         tablespaces=db.executeAll(diskusageSql["TablespacesFromOwner"], [userName])
+    tbsBytes=0
+    tbsList=[]
     for tablespace in tablespaces:
         tablespaceName=unicode(tablespace[0])
-        subGraph=Subgraph("cluster_"+tablespaceName, label=tablespaceName, bgcolor="palegreen")
-        graph.add_subgraph(subGraph)
-        # Tables
+
+        # Tables from current tablespace
         if userName==db.getUsername().upper():
             tables=db.executeAll(diskusageSql["TablesFromTbs"], [tablespaceName])
         else:
             tables=db.executeAll(diskusageSql["TablesFromOwnerAndTbs"], [userName, tablespaceName])
-        nbTables=len(tables)
-        print CYAN+_("Extracting %3d tables from tablespace %s") % (nbTables, tablespaceName) +RESET
+        tabList=[]
+        print CYAN+_("Extracting %3d tables from tablespace %s") % (len(tables), tablespaceName) +RESET
         for table in tables:
             tableName=table[0]
             if table[1] is None:
-                print BOLD+RED+_("""Warning: table "%s" removed because no statistics have been found""") \
-                           % (tableName) +RESET
+                print RED+_("""Warning: table "%s" removed because no statistics have been found""") \
+                           % (tablespaceName+tableName) +RESET
                 continue
             if table[1]==0:
-                print BOLD+RED+_("""Warning: table "%s" removed because it is empty""") \
-                           % (tableName) +RESET
+                print RED+_("""Warning: table "%s" removed because it is empty""") \
+                           % (tablespaceName+tableName) +RESET
                 continue
-            num_rows=int(table[1])
-            avg_row_len=float(table[2])
-            size=int(convert(table[3], unit))
+            numRows=int(table[1])
+            avgRowLen=float(table[2])
+            bytes=int(table[3])
+            tbsBytes+=bytes
+            tabList+=[[tableName, bytes, numRows, avgRowLen]]
+
+        if withIndexes:
+            # Indexes from current tablespace
+            if userName==db.getUsername().upper():
+                indexes=db.executeAll(diskusageSql["IndexesFromTbs"], [tablespaceName])
+            else:
+                indexes=db.executeAll(diskusageSql["IndexesFromOwnerAndTbs"], [userName, tablespaceName])
+            idxList=[]
+            print CYAN+_("Extracting %3d indexes from tablespace %s") % (len(indexes), tablespaceName) +RESET
+            for index in indexes:
+                indexName=index[0]
+                if index[1] is None:
+                    print RED+_("""Warning: index "%s" removed because no statistics have been found""") \
+                            % (tablespaceName+indexName) +RESET
+                    continue
+                if index[1]==0:
+                    print RED+_("""Warning: index "%s" removed because it is empty""") \
+                            % (tablespaceName+indexName) +RESET
+                    continue
+                numRows=int(index[1])
+                distinctKeys=int(index[2])
+                bytes=int(index[3])
+                tabName=str(index[4])
+                tbsBytes+=bytes
+                idxList+=[[indexName, bytes, numRows, distinctKeys, tabName]]
+        else:
+            print CYAN+_("Not extracting indexes from tablespace %s (ignored)") % (tablespaceName) +RESET
+            idxList=[]
+        tbsList+=[[tablespaceName, tbsBytes, tabList, idxList]]
+
+# Second step: objects drawing
+    graph=Dot(label=userName, overlap="false", splines="true")
+
+    for tbs in tbsList:
+        tbsName=tbs[0]
+        tbsBytes=tbs[1]
+        tabList=tbs[2]
+        idxList=tbs[3]
+        subGraph=Subgraph("cluster_"+tbsName, bgcolor="palegreen", \
+                          fontname=fontname,  fontsize=str(fontsize-1), \
+                          label="%s\\n(%d %s)" % (tbsName, convert(tbsBytes, unit), unit.upper()))
+        graph.add_subgraph(subGraph)
+
+        print CYAN+_("Displaying %3d tables for tablespace %s") % (len(tabList), tbsName) +RESET
+        for tab in tabList:
+            name=tab[0]
+            bytes=tab[1]
+            numRows=tab[2]      # unused
+            avgRowLen=tab[3]    # unused
 
             # Mathematics at work
-            height=round(log(num_rows)/10, 3)
-            width=round(sqrt(avg_row_len)/5, 3)
-            label=tableName +"\\n("+str(size)+" %s)" % unit.upper()
-            subGraph.add_node(Node(tableName, label=label, shape="box", style="filled", \
-                                   color=bordercolor, fillcolor=tablecolor, \
-                                   fontname="arial", fontcolor=fontcolor, fontsize=str(fontsize-2), \
-                                   fixedsize="true", nodesep="0.01", height=str(height), width=str(width)))
-        if not withIndexes:
-            continue
-        # Indexes
-        if userName==db.getUsername().upper():
-            indexes=db.executeAll(diskusageSql["IndexesFromTbs"], [tablespaceName])
-        else:
-            indexes=db.executeAll(diskusageSql["IndexesFromOwnerAndTbs"], [userName, tablespaceName])
-        nbIndexes=len(indexes)
-        print CYAN+_("Extracting %3d indexes from tablespace %s") % (nbIndexes, tablespaceName) +RESET
-        for index in indexes:
-            indexName=index[0]
-            if index[1] is None:
-                print BOLD+RED+_("""Warning: index "%s" removed because no statistics have been found.""") \
-                           % (indexName) +RESET
-                continue
-            if index[1]==0:
-                print BOLD+RED+_("""Warning: index "%s" removed because it is empty""") \
-                           % (indexName) +RESET
-                continue
-            num_rows=int(index[1])
-            distinct_keys=int(index[2])
-            size=int(convert(index[3], unit))
-            tableName=str(index[4])
+            width=0.2
+            height=0.2
+            if percent:
+                height+=10*round(float(bytes)/tbsBytes,4)
+                label="%s\\n(%.2f %s)" % (name, round(100*float(bytes)/tbsBytes,2), "%")
 
-            # Mathematics at work again
-            height=round(log(num_rows)/10, 3)
-            width=round(log(distinct_keys)/10, 3)
-            label=indexName +"\\n("+str(size)+" %s)" % unit.upper()
-            #print "tablespace="+tablespaceName+"; index="+indexName+ \
-            # "; height="+str(height)+"; width="+str(width)
-            subGraph.add_node(Node(indexName, label=label, shape="box", style="filled", \
-                                   color=bordercolor, fillcolor=indexcolor, \
-                                   fontname="arial", fontcolor=fontcolor, fontsize=str(fontsize-2), \
-                                   fixedsize="true", nodesep="0.01", height=str(height), width=str(width)))
-            # Invisible edges for placement purpose only (not very usefull in fact)
-            #graph.add_edge(Edge(src=indexName, dst=tableName, constraint="false", style="invis"))
+            else:
+                height+=round(sqrt(bytes)/8192, 3)
+                width+=round(sqrt(bytes)/8192, 3)
+                label="%s\\n(%3d %s)" % (name, convert(bytes, unit), unit.upper())
+                print label+": "+str(height)
+            subGraph.add_node(Node(name, label=label, shape="box", style="filled", \
+                                   color="none", fillcolor=tablecolor, \
+                                   fontname=fontname, fontcolor=fontcolor, fixedsize="false", \
+                                   fontsize=str(fontsize-2-floor((len(label)-7)/15)), \
+                                   nodesep="0.01", height=str(height), width=str(max(width,1))))
 
-    print
+        print CYAN+_("Displaying %3d indexes for tablespace %s") % (len(idxList), tbsName) +RESET
+        for idx in idxList:
+            name=idx[0]
+            bytes=idx[1]
+            numRows=idx[2]      # unused
+            distinctKeys=idx[3] # unused
+            tabName=idx[4]      # unused
+
+            # Mathematics at work again)
+            width=0.2
+            height=0.2
+            if percent:
+                height+=10*round(float(bytes)/tbsBytes,4)
+                label="%s\\n(%.2f %s)" % (name, round(100*float(bytes)/tbsBytes,2), "%")
+            else:
+                height+=round(sqrt(bytes)/8192, 3)
+                width+=round(sqrt(bytes)/8192, 3)
+                label="%s\\n(%3d %s)" % (name, convert(bytes, unit), unit.upper())
+
+            subGraph.add_node(Node(name, label=label, shape="box", style="filled", \
+                                color="none", fillcolor=indexcolor, \
+                                fontname=fontname, fontcolor=fontcolor, fixedsize="false", \
+                                fontsize=str(fontsize-2-floor((len(label)-7)/15)), \
+                                nodesep="0.01", height=str(height), width=str(max(width,1))))
+            #Moving index near by its table (unused because it widens the graph)
+            #subGraph.add_edge(Edge(src=name, dst=tabName, constraint="false", style="invis"))
+
     filename="du_"+userName+"."+format
     generateImage(graph, filename, prog, format)
     viewImage(filename)

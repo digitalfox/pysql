@@ -726,7 +726,10 @@ class PysqlShell(cmd.Cmd):
             )
         parser.add_option("-i", "--index", dest="index",
                   default=False, action="store_true",
-                  help="Also draw index segment")
+                  help="Also draws index segment")
+        parser.add_option("-p", "--percent", dest="percent",
+                  default=False, action="store_true",
+                  help="Draws object sizes against others")
 
         return parser
 
@@ -739,7 +742,7 @@ class PysqlShell(cmd.Cmd):
             user=args[0]
         except IndexError:
             user=self.db.getUsername()
-        pysqlgraphics.diskusage(self.db, user.upper(), options.index)
+        pysqlgraphics.diskusage(self.db, user.upper(), options.index, options.percent)
 
     def do_ddl(self, arg):
         """Prints Oracle object DDL"""
