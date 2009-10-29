@@ -66,6 +66,9 @@ class PysqlShell(cmd.Cmd):
         # Calls father constructor
         cmd.Cmd.__init__(self, "tab", stdin, stdout)
 
+        # setup readline completion delimiter - remove dash (-) as separator
+        readline.set_completer_delims(readline.get_completer_delims().replace("-", ""))
+
         # Keep old term name
         self.oldTermName=getTitle()
 
