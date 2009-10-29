@@ -813,7 +813,6 @@ class PysqlShell(cmd.Cmd):
         """ Emulates sqlplus execute"""
         self.__checkConnection()
         self.__checkArg(arg, ">=1")
-        self.__animateCursor()
         line="begin\n" + arg + ";\nend;\n"
         self.__executeSQL(line)
 
@@ -1202,7 +1201,6 @@ class PysqlShell(cmd.Cmd):
         """Dumps sql request to file"""
         self.__checkConnection()
         self.__checkArg(arg, ">=3")
-        self.__animateCursor()
         (fileName, sql)=match("(.+?)\s(.+)", arg).groups()
         self.__executeSQL(sql, output="csv", fileName=fileName)
 
