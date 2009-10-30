@@ -349,7 +349,7 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
                 height+=round(sqrt(bytes)/8192, 3)
                 width+=round(sqrt(bytes)/8192, 3)
                 label="%s\\n(%3d %s)" % (name, convert(bytes, unit), unit.upper())
-                print label+": "+str(height)
+
             subGraph.add_node(Node(name, label=label, shape="box", style="filled", \
                                    color="none", fillcolor=tablecolor, \
                                    fontname=fontname, fontcolor=fontcolor, fixedsize="false", \
