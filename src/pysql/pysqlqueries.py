@@ -437,7 +437,7 @@ diskusageSql={
                                      AND t.temporary='N'
                                      AND t.table_name NOT IN (select table_name from all_external_tables)
                                    UNION
-                                   SELECT p.partition_name, p.num_rows, p.avg_row_len, s.bytes
+                                   SELECT p.table_name||'/'||p.partition_name, p.num_rows, p.avg_row_len, s.bytes
                                    FROM all_tab_partitions p, user_segments s
                                    WHERE p.tablespace_name=:1
                                      AND p.partition_name=s.partition_name
@@ -448,7 +448,7 @@ diskusageSql={
                                        AND i.index_name=s.segment_name
                                        AND s.segment_type='INDEX'
                                      UNION
-                                     SELECT p.partition_name, p.num_rows, p.distinct_keys, s.bytes, ''
+                                     SELECT p.index_name||'/'||p.partition_name, p.num_rows, p.distinct_keys, s.bytes, ''
                                      FROM all_ind_partitions p, user_segments s
                                      WHERE p.tablespace_name=:1
                                        AND p.partition_name=s.partition_name
@@ -462,7 +462,7 @@ diskusageSql={
                                      AND t.temporary='N'
                                      AND t.table_name NOT IN (select table_name from all_external_tables)
                                    UNION
-                                   SELECT p.partition_name, p.num_rows, p.avg_row_len, s.bytes
+                                   SELECT p.table_name||'/'||p.partition_name, p.num_rows, p.avg_row_len, s.bytes
                                    FROM all_tab_partitions p, dba_segments s
                                    WHERE p.table_owner=:1
                                      AND p.tablespace_name=:2
@@ -477,7 +477,7 @@ diskusageSql={
                                        AND i.index_name=s.segment_name
                                        AND s.segment_type='INDEX'
                                      UNION
-                                     SELECT p.partition_name, p.num_rows, p.distinct_keys, s.bytes, ''
+                                     SELECT p.index_name||'/'||p.partition_name, p.num_rows, p.distinct_keys, s.bytes, ''
                                      FROM all_ind_partitions p, dba_segments s
                                      WHERE s.owner=:1
                                        AND p.index_owner=s.owner
