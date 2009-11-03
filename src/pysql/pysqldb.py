@@ -44,7 +44,7 @@ class PysqlDb:
                 self.connection=connect(self.connectString, mode=SYSDBA)
             else:
                 self.connection=connect(self.connectString)
-        except (DatabaseError, RuntimeError), e:
+        except (DatabaseError, RuntimeError, InterfaceError), e:
             raise PysqlException(_("Cannot connect to Oracle: %s") % e)
 
 
