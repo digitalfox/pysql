@@ -328,8 +328,8 @@ def desc(db, objectName, completeMethod=None, printDetails=True, printStats=Fals
         if size!=0:
             used=100-float(100*free)/size
         else:
-            used=0
-        if printComment:
+            used = 0
+        if printDetails:
              print CYAN+_("Tablespace: ") + oraObject.getTablespace(db).getName()+RESET
         result=[[oraObject.getTablespace(db).getName(), round(size, 2), round(free, 2), round(used, 2)]]
 
