@@ -1,3 +1,9 @@
+V0.14 2009/12/20
+Automatic terminal width detection on Unix system. Add role/profile search.
+Add search to session display function. Many enhancement to desc function.
+Enhance prompt for multiline commands. Rewrite diskusage function. Update
+all graphical function to support last graphviz and pydot release.
+
 V0.13 2009/02/15
 Sql text is no more truncated is session summary. Restore terminal name
 at exit. Better support of AIX 5.3 and cx_Oracle 5.

@@ -1,3 +1,292 @@
+commit c486b6adb836b7803e584c3b51a28d315da5a9a4
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Mon Dec 14 22:28:02 2009 +0100
+
+    Code convention
+
+commit b40b6a77d65b8e717216030a982a6de9d6c10af1
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Mon Dec 14 22:22:08 2009 +0100
+
+    Fix crash on datafile desc
+
+commit b7376415a911f4509f8876d1653e93c62e538aa5
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Fri Oct 30 11:10:52 2009 +0100
+
+    Removes a debug print from diskusage function
+
+commit 9bd0111cbdb96586811398b2383747f4d0e853fa
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Fri Oct 30 11:10:07 2009 +0100
+
+    Best support for paritionned objects in diskusage function
+
+commit cc0a9eb0665729db89096ca2ed4d0a39bd339544
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Nov 3 19:39:04 2009 +0100
+
+    Handle case of bad or unset ORACLE_HOME
+
+commit 05c28f9d7df7988ce96b5f678dc655fe98eace6b
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Thu Oct 29 20:01:34 2009 +0100
+
+    Remove dash (-) as completion separator
+
+commit ee4e6e184337bf4a16a22ea57be27c52fd31f14c
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Tue Oct 27 21:59:44 2009 +0100
+
+    Rewrite of the diskusage function
+
+commit 13210ba84031cdb4af550c2a637aed97b88979c0
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Mon Oct 26 15:03:18 2009 +0100
+
+    Rectify an omission in conf parameters verification
+
+commit bafee5ef6188677c8d592dca1b59462c2ab1a6fc
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Sun Oct 25 14:54:50 2009 +0100
+
+    Suppress graphviz warnings in graphical functions (brutal redirection of stdout during picture generation)
+
+commit 539d8ae74c94234c4b1016d68111e284c8c28bdf
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Sun Oct 25 14:22:04 2009 +0100
+
+    Use full file path in generateImage function (graphics). Easier for troubleshooting.
+
+commit 94d42c07dc79e63d2d16db58203aca671eebdda6
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Thu Oct 22 15:29:14 2009 +0200
+
+    Fix bug for index display in diskusage function (mistake in the query; maybe a bloody copy/paste from hell)
+
+commit 266a1a023c1b00bfc1fa7cfae430504c72ec4d03
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Thu Oct 22 15:26:28 2009 +0200
+
+    Fix bug for password-less connection string in batch mode (i.e. when stdin is not a tty)
+
+commit f8665ec2c506e8beebd04468fe2900f7924565d4
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Oct 14 19:15:22 2009 +0200
+
+    Fix as sysdba unit test
+
+commit 4f18356eec38e21ac5beaecc7036f071d94d677e
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Mon Oct 12 17:09:40 2009 +0200
+
+    Rewrite ambiguous boolean expression in mode test
+
+commit 12a4492b92989344814e8700306950742a0b0e33
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Mon Oct 12 15:07:15 2009 +0200
+
+    Fix bug for nolog connection (bug added in commit ac0b57ed4bccb9b041d5b36c16ef3e19e76e8a08)
+
+commit 0b7b2f0283f0064a7186881ca4946fc14dba863f
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Sun Oct 11 22:17:33 2009 +0200
+
+    Add space in "@licence" tag for pysql doc generation (epydoc)
+
+commit 4f8a10d5d49c966df73905e7469ebb59947cb08a
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Sun Oct 11 21:45:49 2009 +0200
+
+    Enhance prompt support for multiline commands
+
+commit ac0b57ed4bccb9b041d5b36c16ef3e19e76e8a08
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Sat Oct 10 22:55:50 2009 +0200
+
+    Fix "as sysdba" support in command line
+
+commit 63d0e927241899bec6dbc3cbcc5e896e3fe49538
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Thu Oct 8 15:47:09 2009 +0200
+
+    Add unit support in diskusage function (index display was forgotten last time)
+
+commit c627acd9dfbf45eaf8ea872d4b5c3ad942aba473
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Thu Oct 8 15:27:31 2009 +0200
+
+    Fix diskusage function: allow unprivileged users to use 'du' for themselves (but, of course, they still cannot use 'du' for others)
+
+commit de2067aba6f3aee5ae551431e5f91aad47feb74e
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Wed Oct 7 13:57:27 2009 +0200
+
+    Add unit support in diskusage function
+
+commit 610b2f0258ee44019679d32ca05367e659fb433a
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Wed Oct 7 13:33:21 2009 +0200
+
+    Fix counter display in datamodel function
+
+commit 0fb95113d3f0a67f439db0f88073a64c1ff6545e
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Wed Oct 7 09:58:42 2009 +0200
+
+    Fix graphics generation bug (filter chosen by user was ignored)
+
+commit 09a561b0e6898c39688d08888813551b79cc6a48
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Aug 1 15:08:15 2009 +0200
+
+    Cast version to int to avoid stupid release sorting
+
+commit 494b8f5114b7b14d4123ebaa279c4ccd6bdd3727
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Aug 1 14:55:47 2009 +0200
+
+    Fix test. Negative value are just considered as zero
+
+commit 99fac9cb5849096062135715515c49bb70e8163b
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Fri Jul 31 17:57:56 2009 +0200
+
+    Add of 2 new options on pysql command line: -S (silent mode for batch) and -L (one try login)
+
+commit 4f0bad43968188707c455adf78c6b272cb069157
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Thu Jul 30 22:41:49 2009 +0200
+
+    Remove the espaping code from parser that break option cluster and is useless for pysql
+
+commit eb3ff8dd6a0dedfa20744b8a86c981e92b731fd2
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Thu Jul 30 22:09:06 2009 +0200
+
+    Tolerate extra space in line when parsing option
+
+commit 83494f93b41cfdc089cc86e975663209627a9dab
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Thu Jul 30 14:01:39 2009 +0200
+
+    Add display options to DESC command
+
+commit d3fa82c458fe3f9ea767a4fadf314bd0bf492fa6
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Thu Jul 30 13:39:11 2009 +0200
+
+    Add some more statistics on table (nb blocks, avg row length)
+
+commit 589c75fdf93825b2712bc18f8164ccc5cf352d3d
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Wed Jul 29 14:04:26 2009 +0200
+
+    DESC function enhancement (status, creation and last DDL dates & stats)
+
+commit d8fd8daa91d55c9c79f74bc3b77f8a7f04b08c2c
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Wed Jul 29 14:00:50 2009 +0200
+
+    Dont force upper object names (wait for next try)
+
+commit 62ea6b2e4f33fd0dddbde3fcba5bc03686c00bbe
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Wed Jul 29 13:46:29 2009 +0200
+
+    Code spacing alignement
+
+commit 7fbe8ff298e76555bfb40f54384c3f1c8b473cee
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Jul 28 13:32:45 2009 +0200
+
+    Bump version for next release
+
+commit 7fc54b3ece87062a3aeddacab190c06c6a9312fe
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Jul 28 13:30:20 2009 +0200
+
+    Fix encoding warning on disk_usage function
+
+commit 02414129ede079c58596bea707067de070dfd1d9
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Apr 5 17:40:01 2009 +0200
+
+    Translation update
+
+commit e257de9922ac7ebaa38865ecfcb735763dffa4cb
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Apr 5 17:31:18 2009 +0200
+
+    Fix message: args must be out gettext macro
+
+commit c83dd9b008e0f9093ad8d35f8caf5479a8c69613
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Apr 5 17:29:58 2009 +0200
+
+    Add "immediate" option to kill session
+
+commit 530ec3f5ff6ac97fec722e14d7443c66a7d9be34
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Mar 14 22:06:41 2009 +0100
+
+    Update LICENSE file to GPL v3 according to pysql license change
+
+commit e3251da77918eeae739bd037b2f8f42d81e82db0
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sat Mar 14 19:18:40 2009 +0100
+
+    Add number of rows and last analyzed date to desc table
+
+commit 0641435cb8f528a01a0eaa1dcab72137927c9a15
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Thu Mar 12 08:24:09 2009 +0100
+
+    Add a search feature to session display function
+
+commit 926dcfae0ee37c70744ec70018d8bdee145c1aa6
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Mar 10 19:35:51 2009 +0100
+
+    Add role and profile search (thanks to Sebastien Delcros)
+
+commit 0451e98b8d1c1a0a6aa669dab169412118b7f9bf
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Mar 10 19:29:53 2009 +0100
+
+    Fix xprop call. Use real hostname as default
+
+commit 8ae5e46b8cb22330d441617e3490ad47cb94dddc
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Mon Mar 2 10:57:15 2009 +0100
+
+    Use tput instead of stty to get terminal width. Fix wrong
+    terminal width computation on AIX.
+
+commit d82df41214e69d50a709f08cf6eb43f1cb97c435
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Mon Mar 2 10:43:38 2009 +0100
+
+    Don't break if there's no X display to get title
+
+commit 03a1d3351093acbc6ef4c77895dd159b9b7cbc7f
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Feb 18 19:59:59 2009 +0100
+
+    Squash nasty \r that blow out display with stupid SQL request
+
+commit 760d4509c41e165d727a781e8dec5e5c5f2124d5
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Feb 15 22:46:43 2009 +0100
+
+    Automatic terminal width determination for Unix system
+
+commit 55c5e397c4e7a4eb13edee93cee30b4dbb478903
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Feb 15 17:50:29 2009 +0100
+
+    Update changelog. Bump version to 0.13
+
 commit 987255b3a20c6c695ca487e659308f050d44939d
 Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
 Date:   Sun Feb 15 17:37:13 2009 +0100
