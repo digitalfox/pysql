@@ -56,7 +56,7 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
     # Gets picture generator
     prog=getProg(find_graphviz(), conf.get("graph_program"), "fdp")
 
-    graph=Dot(overlap="false", splines="true")
+    graph=Dot(splines="compound")
 
     # Tables, columns and constraints (temporary and external tables are excluded. So are TOAD tables)
     if tableFilter:
@@ -277,11 +277,11 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
             tableName=table[0]
             if table[1] is None:
                 print RED+_("""Warning: table "%s" removed because no statistics have been found""") \
-                           % (tablespaceName+tableName) +RESET
+                           % (tablespaceName+"/"+tableName) +RESET
                 continue
             if table[1]==0:
                 print RED+_("""Warning: table "%s" removed because it is empty""") \
-                           % (tablespaceName+tableName) +RESET
+                           % (tablespaceName+"/"+tableName) +RESET
                 continue
             numRows=int(table[1])
             avgRowLen=float(table[2])
@@ -301,11 +301,11 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
                 indexName=index[0]
                 if index[1] is None:
                     print RED+_("""Warning: index "%s" removed because no statistics have been found""") \
-                            % (tablespaceName+indexName) +RESET
+                            % (tablespaceName+"/"+indexName) +RESET
                     continue
                 if index[1]==0:
                     print RED+_("""Warning: index "%s" removed because it is empty""") \
-                            % (tablespaceName+indexName) +RESET
+                            % (tablespaceName+"/"+indexName) +RESET
                     continue
                 numRows=int(index[1])
                 distinctKeys=int(index[2])
@@ -349,7 +349,6 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
                 height+=round(sqrt(bytes)/8192, 3)
                 width+=round(sqrt(bytes)/8192, 3)
                 label="%s\\n(%3d %s)" % (name, convert(bytes, unit), unit.upper())
-
             subGraph.add_node(Node(name, label=label, shape="box", style="filled", \
                                    color="none", fillcolor=tablecolor, \
                                    fontname=fontname, fontcolor=fontcolor, fixedsize="false", \

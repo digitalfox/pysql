@@ -274,7 +274,7 @@ class OraTabular(OraObject):
         owner=self.getOwner()
         if owner=="":
             owner=db.getUsername().upper()
-        return db.executeAll(u"""select count(*) from %s.%s""" % (owner, self.getName()))[0][0]
+        return db.executeAll(u"""select count(*) from %s."%s" """ % (owner, self.getName()))[0][0]
 
     def getComment(self, db):
         """@return: db comment of the object"""
