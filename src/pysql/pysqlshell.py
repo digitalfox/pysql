@@ -1235,6 +1235,12 @@ class PysqlShell(cmd.Cmd):
         print CYAN+_("Usage:\n\tcount <table/view name>")+RESET
         print _("Counts the number of lines in a table or a view")
 
+    def help_csv(self):
+        """online help"""
+        print CYAN+_("Usage:\n\tcsv <output file> <sql query>")+RESET
+        print CYAN+_("Exemple:\n\tcsv out.csv select * from dummy;")+RESET
+        print _("Dumps sql query to file")
+
     def help_datafile(self):
         """online help"""
         self._help_for_search_method("datafile")
@@ -1389,6 +1395,11 @@ class PysqlShell(cmd.Cmd):
     def help_tablespace(self):
         """online help"""
         self._help_for_search_method("tablespace")
+
+    def do_time(self, arg):
+        """online help"""
+        print CYAN+_("Usage:\n\ttime <sql query>")+RESET
+        print _("Time request execution time")
 
     def help_trigger(self):
         """online help"""
