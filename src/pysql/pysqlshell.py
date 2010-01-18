@@ -500,7 +500,7 @@ class PysqlShell(cmd.Cmd):
 
     # background queries
     def do_bg(self, arg):
-        """Manage background queries"""
+        """Manages background queries"""
         arg=arg.split()
         if len(arg)==0:
             # Shows background queries
@@ -528,13 +528,13 @@ class PysqlShell(cmd.Cmd):
 
     # Transactions stuff
     def do_commit(self, arg):
-        """Commit pending transaction"""
+        """Commits pending transaction"""
         self.__checkConnection()
         self.db.commit()
         print GREEN+_("Commit completed")+RESET
 
     def do_rollback(self, arg):
-        """Rollback pending transaction"""
+        """Rolls pending transaction back"""
         self.__checkConnection()
         self.db.rollback()
         print GREEN+_("Rollback completed")+RESET
@@ -548,12 +548,12 @@ class PysqlShell(cmd.Cmd):
         print result
 
     def do_compare(self, arg):
-        """Compare schema or object structure and data"""
+        """Compares schema or object structure and data"""
         self.__checkArg(arg, ">=2")
         schemaNames=[] # Password striped connection string to schema
         tableNames=[]
         schemas=[]     # Complete connect string to schema
-        withData=False # Compare only structure (false) or data ?
+        withData=False # Compares only structure (false) or data ?
 
         arg=arg.split()
 
@@ -1215,15 +1215,22 @@ class PysqlShell(cmd.Cmd):
         return self.__exit()
 
     # Command help definitions (in alphabetic order)
+    def help_bg(self):
+        """online help"""
+        print CYAN+_("Usage:\n\tbg [order id]")+RESET
+        print _("\tto display all background queries:\n\t\tbg")
+        print _("\tto call back a background query:  \n\t\tbg <id>")
+        print _("Manages background queries")
+
     def help_compare(self):
         """online help"""
         print CYAN+_("Usage:")
-        print _("\tto compare two schema:\n\t\tcompare user/password@SID user'/password'@SID'")
-        print _("\tto compare two tables:\n\t\tcompare user/password@SID:table user'/password'@SID':table'")
+        print _("\tto compare two schemas:\n\t\tcompare user/password@SID user'/password'@SID'")
+        print _("\tto compare two tables: \n\t\tcompare user/password@SID:table user'/password'@SID':table'")
         print _("\tto compare two tables in current schema:\n\t\tcompare table table'") +RESET
         print _("By default, only structure is compared.")
-        print _("""To compare table data use the "data" keyword like this:""")
-        print CYAN+_("\t\tcompare data user/password@SID:table user'/password'@SID':table'")+RESET
+        print _("""To compare table data, use the "data" keyword this way:""")
+        print CYAN+_("\t\tCompares data user/password@SID:table user'/password'@SID':table'")+RESET
 
     def help_connect(self):
         """online help"""
@@ -1245,6 +1252,17 @@ class PysqlShell(cmd.Cmd):
         """online help"""
         self._help_for_search_method("datafile")
 
+    def help_ddl(self):
+        """online help"""
+        print CYAN+_("Usage:\n\tddl <table|view>")+RESET
+        print CYAN+_("Exemple:\n\tddl DUAL")+RESET
+        print _("Prints Oracle object DDL")
+
+    def help_describe(self):
+        """online help"""
+        print CYAN+_("Usage:\n\tdesc[ribe] [options] <object name>")+RESET
+        print _("Describes any Oracle object")
+
     def help_directory(self):
         """online help"""
         self._help_for_search_method("directory")
@@ -1253,7 +1271,6 @@ class PysqlShell(cmd.Cmd):
         """online help"""
         print CYAN+_("Usage:\n\tdisc[connect]")+RESET
         print _("Closes current connection if any")
-
 
     def help_edit(self):
         """online help"""
@@ -1302,6 +1319,11 @@ class PysqlShell(cmd.Cmd):
         print _("Fetches all lines of current result set and display only the last lines")
         print _("Default number of lines default to cursor array size")
 
+    def help_lcd(self):
+        """online help"""
+        print CYAN+_("Usage:\n\tlcd <path>")+RESET
+        print _("Changes working directory")
+
     def help_library(self):
         """online help"""
         print CYAN+_("Usage:\n\tlib[rary] <sqlName> <sqlText>")+RESET
@@ -1314,10 +1336,20 @@ class PysqlShell(cmd.Cmd):
         print _("\trecall a saved request: lib employeNumber")
         print _("\tTo remove the foo request: lib foo remove")
 
+    def help_lls(self):
+        """online help"""
+        print CYAN+_("Usage:\n\tlls [path/][file]")+RESET
+        print _("Lists directory contents")
+
     def help_lock(self):
         """online help"""
         print CYAN+_("Usage:\n\tlock")+RESET
         print _("Displays the locked objects")
+
+    def help_lpwd(self):
+        """online help"""
+        print CYAN+_("Usage:\n\tlpwd")+RESET
+        print _("Prints local directory")
 
     def help_next(self):
         """online help"""
@@ -1339,14 +1371,18 @@ class PysqlShell(cmd.Cmd):
         print CYAN+_("Usage:\n\t@ <script>")+RESET
         print _("Executes a PL/SQL script and displays the output on the standard output")
 
-    def help_set(self):
+    def help_segment(self):
         """online help"""
-        print CYAN+_("Usage:\n\tset <key>=<value>")+RESET
-        print _("Sets <value> to the parameter <key>")
+        self._help_for_search_method("segment")
 
     def help_sequence(self):
         """online help"""
         self._help_for_search_method("sequence")
+
+    def help_set(self):
+        """online help"""
+        print CYAN+_("Usage:\n\tset <key>=<value>")+RESET
+        print _("Sets <value> to the parameter <key>")
 
     def help_shell(self):
         """online help"""
@@ -1354,36 +1390,17 @@ class PysqlShell(cmd.Cmd):
         print _("Executes a command into the system terminal (depending on your system profile)")
         print _("If no commands are given then a subshell is openned")
 
-    def help_lcd(self):
-        """online help"""
-        print CYAN+_("Usage:\n\tlcd <path>")+RESET
-        print _("Changes working directory")
-
-    def help_lls(self):
-        """online help"""
-        print CYAN+_("Usage:\n\tlls [path/][file]")+RESET
-        print _("Lists directory contents")
-
-    def help_lpwd(self):
-        """online help"""
-        print CYAN+_("Usage:\n\tlpwd")+RESET
-        print _("Prints local directory")
-
-    def help_segment(self):
-        """online help"""
-        self._help_for_search_method("segment")
-
     def help_show(self):
         """online help"""
         print CYAN+_("Usage:\n\tshow instance")+RESET
         print _("Displays the database service name (DSN) of the current connection")
         print CYAN+_("Usage:\n\tshow version")+RESET
         print _("Displays the database server version")
-        print CYAN+_("\n\tshow parameter[s] <partial parameter name>")+RESET
+        print CYAN+_("Usage:\n\tshow parameter[s] <partial parameter name>")+RESET
         print _("Looks for session parameters with name like the partial name given")
         print _("Wilcard % can be used. ")
         print _("If none is provided, pysql adds a % at the begining and the end")
-        print CYAN+_("\n\tshow spparameter[s] <partial parameter name>")+RESET
+        print CYAN+_("Usage:\n\tshow spparameter[s] <partial parameter name>")+RESET
         print _("Looks for server parameters with name like the partial name given.")
         print _(" These parameters are defined in spfile. Wilcard % can be used.")
         print _("If none is provided, pysql adds a % at the begining and the end")
@@ -1396,7 +1413,7 @@ class PysqlShell(cmd.Cmd):
         """online help"""
         self._help_for_search_method("tablespace")
 
-    def do_time(self, arg):
+    def help_time(self, arg):
         """online help"""
         print CYAN+_("Usage:\n\ttime <sql query>")+RESET
         print _("Time request execution time")
