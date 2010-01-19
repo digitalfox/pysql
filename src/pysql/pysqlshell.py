@@ -362,9 +362,9 @@ class PysqlShell(cmd.Cmd):
         if not self.useCompletion:
             return
         return self.__getCompletionItems(text, ["table", "view", "index",
-                            "synonym", "sequence",
-                            "tablespace", "datafile"
-                            "directory"])
+                                                "synonym", "sequence",
+                                                "tablespace", "datafile"
+                                                "directory"])
 
     def complete_edit(self, text, line, begidx, endidx):
         """Completion for command edit"""
@@ -1066,7 +1066,7 @@ class PysqlShell(cmd.Cmd):
         # An empty command line enables to open a subshell
         if arg=="":
             if os.name=="posix":
-                arg=os.path.expandvars("$SHELL")
+                arg=os.environ["SHELL"]
             elif os.name=="nt":
                 arg="cmd"
             else:
@@ -1100,9 +1100,9 @@ class PysqlShell(cmd.Cmd):
         self.__checkArg(arg, "<=1")
         if arg=="":
             if os.name=="posix":
-                arg=os.path.expandvars("$HOME")
+                arg=os.environ["HOME"]
             elif os.name=="nt":
-                arg=os.path.expandvars("$HOMEDRIVE")+os.path.expandvars("$HOMEPATH")
+                arg=os.environ["HOMEDRIVE"]+os.environ["HOMEPATH"]
             else:
                 raise PysqlNotImplemented()
         try:
@@ -1490,7 +1490,7 @@ class PysqlShell(cmd.Cmd):
 
         count=connectString.count("@")
         if count==0:
-            sid=os.path.expandvars("$ORACLE_SID")
+            sid=os.environ["ORACLE_SID"]
         elif count==1:
             (connectString, sid)=connectString.split("@")
         else:
