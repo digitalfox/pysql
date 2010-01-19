@@ -810,7 +810,6 @@ class PysqlShell(cmd.Cmd):
                           help="Filter session display with given search term. Multiple search can be given to make 'and' search")
         return parser
 
-
     def do_session(self, arg):
         """Display Oracle session"""
         self.__checkConnection()
@@ -1547,13 +1546,11 @@ class PysqlShell(cmd.Cmd):
     def __searchObjet(self, objectType, objectName):
         """Searches Oracle object"""
         self.__checkConnection()
-        # Looks for schema in object name. Default is all (%)
-        objectOwner="%"
         # Try to find owner if a dot is provided
         try:
             (objectOwner, objectName)=objectName.split(".")
         except ValueError:
-            pass
+            objectOwner=self.db.getUsername()     # Default is current user
         objectOwner=objectOwner.upper()
         # If no name if given, searches for all
         if objectName=="":
