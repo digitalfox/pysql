@@ -539,6 +539,24 @@ class PysqlShell(cmd.Cmd):
         self.db.rollback()
         print GREEN+_("Rollback completed")+RESET
 
+    # Sysoper stuff
+    def do_startup(self, arg):
+        """Starts database up"""
+        self.db.startup()
+        print GREEN+_("Database opened")+RESET
+
+    def do_shutdown(self, arg):
+        """Shuts database down"""
+        self.__checkConnection()
+        self.__checkArg(arg, "<=1")
+        if arg=="abort":
+            self.db.shutdown("abort")
+        elif arg=="immediate":
+            self.db.shutdown("immediate")
+        else:
+            self.db.shutdown("normal")
+        print RED+_("Database shut down")+RESET
+
     # High level functions
     def do_count(self, arg):
         """Count segment lines"""
@@ -809,6 +827,7 @@ class PysqlShell(cmd.Cmd):
                           action="append",
                           help="Filter session display with given search term. Multiple search can be given to make 'and' search")
         return parser
+
 
     def do_session(self, arg):
         """Display Oracle session"""
@@ -1403,6 +1422,16 @@ class PysqlShell(cmd.Cmd):
         print _("Looks for server parameters with name like the partial name given.")
         print _(" These parameters are defined in spfile. Wilcard % can be used.")
         print _("If none is provided, pysql adds a % at the begining and the end")
+
+    def help_shutdown(self):
+        """online help"""
+        print CYAN+_("Usage:\n\tshutdown [abort|immediate|normal]")+RESET
+        print _("Shuts instance down")
+
+    def help_startup(self):
+        """online help"""
+        print CYAN+_("Usage:\n\tstartup [mount]")+RESET
+        print _("Starts instance up")
 
     def help_table(self):
         """online help"""
