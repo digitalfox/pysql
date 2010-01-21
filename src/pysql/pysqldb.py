@@ -10,7 +10,7 @@ and backgound queries (BgQuery)
 # pylint: disable-msg=E0611
 
 #Python imports:
-from cx_Oracle import connect, DatabaseError, InterfaceError, LOB, STRING, SYSDBA, SYSOPER
+from cx_Oracle import connect, DatabaseError, InterfaceError, LOB, STRING, SYSDBA, SYSOPER, PRELIM_AUTH, DBSHUTDOWN_ABORT, DBSHUTDOWN_IMMEDIATE, DBSHUTDOWN_TRANSACTIONAL, DBSHUTDOWN_FINAL
 from threading import Thread
 from datetime import datetime, date
 
@@ -39,14 +39,48 @@ class PysqlDb:
         # Connect to Oracle
         try:
             if mode=="sysoper":
-                self.connection=connect(self.connectString, mode=SYSOPER)
+                try:
+                    self.connection=connect(self.connectString, mode=SYSOPER)
+                except (DatabaseError), e:
+                    print CYAN+"Connected to an idle instance"+RESET
+                    self.connection=connect(self.connectString, mode=SYSOPER|PRELIM_AUTH)
             elif mode=="sysdba":
-                self.connection=connect(self.connectString, mode=SYSDBA)
+                try:
+                    self.connection=connect(self.connectString, mode=SYSDBA)
+                except (DatabaseError), e:
+                    print CYAN+"Connected to an idle instance"+RESET
+                    self.connection=connect(self.connectString, mode=SYSDBA|PRELIM_AUTH)
             else:
                 self.connection=connect(self.connectString)
         except (DatabaseError, RuntimeError, InterfaceError), e:
             raise PysqlException(_("Cannot connect to Oracle: %s") % e)
 
+    def startup(self, mode="normal"):
+        """Starts up Oracle instance"""
+        try:
+            self.connection.startup()
+            self.connection=connect("/", mode=SYSDBA)
+            self.cursor=self.connection.cursor()
+            self.cursor.execute("alter database mount")
+            if mode=="normal":
+                self.cursor.execute("alter database open")
+        except DatabaseError, e:
+            raise PysqlException(_("Cannot start instance up: %s") % e)
+
+    def shutdown(self, mode="normal"):
+        """Shuts down Oracle instance"""
+        try:
+            if mode=="abort":
+                self.connection.shutdown(mode=DBSHUTDOWN_ABORT)
+            elif mode=="immediate":
+                self.connection.shutdown(mode=DBSHUTDOWN_IMMEDIATE)
+                self.connection.shutdown(mode=DBSHUTDOWN_FINAL)
+            else:
+                self.connection.shutdown(mode=DBSHUTDOWN_TRANSACTIONAL)
+                self.connection.shutdown(mode=DBSHUTDOWN_FINAL)
+            self.connection=connect("/", mode=SYSDBA|PRELIM_AUTH)
+        except DatabaseError, e:
+            raise PysqlException(_("Cannot shut instance down: %s") % e)
 
     def commit(self):
         """Commit pending transaction"""

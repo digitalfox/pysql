@@ -541,12 +541,17 @@ class PysqlShell(cmd.Cmd):
 
     # Sysoper stuff
     def do_startup(self, arg):
-        """Starts database up"""
-        self.db.startup()
-        print GREEN+_("Database opened")+RESET
+        """Starts database up  (Oracle v10R2 or upper required)"""
+        self.__checkArg(arg, "<=1")
+        if arg=="mount":
+            self.db.startup("mount")
+            print GREEN+_("Database mounted")+RESET
+        else:
+            self.db.startup("normal")
+            print GREEN+_("Database opened")+RESET
 
     def do_shutdown(self, arg):
-        """Shuts database down"""
+        """Shuts database down (Oracle v10R2 or upper required)"""
         self.__checkConnection()
         self.__checkArg(arg, "<=1")
         if arg=="abort":
@@ -555,7 +560,7 @@ class PysqlShell(cmd.Cmd):
             self.db.shutdown("immediate")
         else:
             self.db.shutdown("normal")
-        print RED+_("Database shut down")+RESET
+        print GREEN+_("Instance shut down")+RESET
 
     # High level functions
     def do_count(self, arg):
@@ -1517,6 +1522,11 @@ class PysqlShell(cmd.Cmd):
     def __connect(self, connectString, mode=""):
         """Calls the PysqlDb class to connect to Oracle"""
 
+        if connectString=="/" and mode=="sysdba":
+            self.db=PysqlDb("/", "sysdba")
+            self.__setPrompt()
+            return
+
         count=connectString.count("@")
         if count==0:
             sid=os.environ["ORACLE_SID"]
@@ -1566,7 +1576,10 @@ class PysqlShell(cmd.Cmd):
                 # Update the title (without color else it is a huge mess)
                 setTitle(_("Pysql - Not connected"), codec)
             else:
-                prompt=self.db.getUsername()+"@"+self.db.getDSN()+" "
+                if self.db.getDSN()=="None":
+                    prompt=self.db.getConnectString()+" "
+                else:
+                    prompt=self.db.getUsername()+"@"+self.db.getDSN()+" "
                 if finishedQuery:
                     prompt+="* "
                 setTitle("Pysql - %s" % prompt, codec)
