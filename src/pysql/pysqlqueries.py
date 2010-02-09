@@ -8,7 +8,7 @@
 """
 
 # pylint: disable-msg=C0103
-searchObjectSql={
+searchObjectSql = {
     "datafile"  :    (u"""select 'Datafiles', file_name from dba_data_files
                 where  (%s) /*%s*/ order by %s""", "file_name"),
     "directory" :    (u"""select owner, directory_name from all_directories
@@ -41,7 +41,7 @@ searchObjectSql={
                 where (%s) and owner like '%s' order by %s""", "view_name")
     }
 
-guessInfoSql={
+guessInfoSql = {
     "commentFromNameAndOwner"    :    u"""select comments from all_tab_comments
                         where table_name=:1
                         and owner=:2""",
@@ -72,13 +72,13 @@ guessInfoSql={
                         where username=:1"""
     }
 
-directorySql={
+directorySql = {
     "pathFromName"        :    u"""select directory_path
                         from all_directories
                         where directory_name=:1"""
     }
 
-datafileSql={
+datafileSql = {
     "tablespaceFromName"    :    u"""select tablespace_name
                         from dba_data_files
                         where file_name=:1""",
@@ -91,7 +91,7 @@ datafileSql={
                           and df.file_name=:1"""
     }
 
-dbLinkSql={
+dbLinkSql = {
     "hostFromOwnerAndName"    :    u"""select owner, host
                         from all_db_links
                         where db_link=:1""",
@@ -100,7 +100,7 @@ dbLinkSql={
                         where db_link=:1"""
     }
 
-indexSql={
+indexSql = {
     "propertiesFromOwnerAndName" : u""" select TABLE_OWNER, TABLE_NAME, INDEX_TYPE, UNIQUENESS,
                                               COMPRESSION, LEAF_BLOCKS, DISTINCT_KEYS,
                                               AVG_LEAF_BLOCKS_PER_KEY
@@ -114,20 +114,20 @@ indexSql={
                                               order by COLUMN_POSITION"""
     }
 
-metadataSql={
+metadataSql = {
     "ddlFromTypeNameAndOwner"    : u"""select
                                          dbms_metadata.get_ddl(:1, :2, :3)
                                          from dual"""
      }
 
-mviewSql={
+mviewSql = {
     "queryFromOwnerAndName" :    u"""select owner, query
                         from all_mviews
                         where owner=:1
                           and mview_name=:2"""
     }
 
-packageSql={
+packageSql = {
     "proceduresFromOwnerAndName"    :    u"""select procedure_name
                         from all_procedures
                         where owner=:1
@@ -139,7 +139,7 @@ packageSql={
                         order by line"""
     }
 
-sequenceSql={
+sequenceSql = {
     "lastFromOwnerAndName"    :    u"""select sequence_owner, last_number
                         from all_sequences
                         where sequence_owner=:1
@@ -158,14 +158,14 @@ sequenceSql={
                           and sequence_name=:2"""
     }
 
-synonymSql={
+synonymSql = {
     "targetFromOwnerAndName" :     u"""select table_owner, table_name
                         from all_synonyms
                         where owner=:1
                           and synonym_name=:2"""
     }
 
-storedObjectSql={
+storedObjectSql = {
     "sourceFromOwnerAndNameAndType"   :    u"""select text from all_source
                                         where owner=:1
                                         and name=:2
@@ -173,7 +173,7 @@ storedObjectSql={
                                         order by line"""
     }
 
-tableSql={
+tableSql = {
     "indexedColFromOwnerAndName"    :    u"""select column_name, index_name, column_position
                                               from all_ind_columns
                                               where table_owner=:1
@@ -188,30 +188,30 @@ tableSql={
                                               and col.constraint_name=cons.constraint_name
                                               order by col.position""",
     "lastAnalyzedFromOwnerAndName"  :    u"""select last_analyzed
-                                              from all_tab_statistics
+                                              from all_tables
                                               where owner=:1
                                               and table_name=:2""",
     "numRowsFromOwnerAndName"       :    u"""select num_rows
-                                              from all_tab_statistics
+                                              from all_tables
                                               where owner=:1
                                               and table_name=:2""",
     "avgRowLengthFromOwnerAndName"  :    u"""select avg_row_len
-                                              from all_tab_statistics
+                                              from all_tables
                                               where owner=:1
                                               and table_name=:2""",
     "usedBlocksFromOwnerAndName"    :    u"""select blocks
-                                              from all_tab_statistics
+                                              from all_tables
                                               where owner=:1
                                               and table_name=:2"""
     }
 
-tablespaceSql={
+tablespaceSql = {
     "datafilesFromName"    :    u"""select file_name
                         from dba_data_files
                         where tablespace_name=:1"""
     }
 
-tabularSql={
+tabularSql = {
     "commentFromOwnerAndName"    :    u"""select comments from all_tab_comments
                         where owner=:1
                           and table_name=:2""",
@@ -250,7 +250,7 @@ tabularSql={
                                             and table_name=:2"""
     }
 
-triggerSql={
+triggerSql = {
     "typeFromOwnerAndName"    :    u"""select trigger_type
                         from all_triggers
                         where owner=:1
@@ -273,7 +273,7 @@ triggerSql={
                           and trigger_name=:2"""
     }
 
-userSql={
+userSql = {
     "defaultTbsFromName"    :    u"""select default_tablespace
                         from dba_users
                         where username=:1""",
@@ -282,7 +282,7 @@ userSql={
                         where username=:1"""
     }
 
-viewSql={
+viewSql = {
     "queryFromOwnerAndName" :    u"""select owner, text
                         from all_views
                         where owner=:1
@@ -292,7 +292,7 @@ viewSql={
     }
 
 # Thanks to TOra for many parts of these requests!
-sessionStatSql={
+sessionStatSql = {
     "all"        :    u"""Select a.Sid "Id", a.Serial# "Serial", a.SchemaName "Schema",
                         a.OsUser "Osuser", a.Machine "Machine", a.Program "Program",
                         b.Block_Gets "Blk Gets", b.Consistent_Gets "Cons Gets",
@@ -372,7 +372,7 @@ sessionStatSql={
 }
 
 # Queries used in pysqlgraphics
-datamodelSql={
+datamodelSql = {
     "tablesFromOwner"          :    u"""SELECT table_name
                                        FROM all_tables tab
                                        WHERE owner='%s'
@@ -409,7 +409,7 @@ datamodelSql={
                                          AND pk.constraint_type = 'P'"""
 }
 
-dependenciesSql={
+dependenciesSql = {
     "refByFromOwnerAndName"  :   u"""SELECT referenced_owner, referenced_name, referenced_type
                                        FROM all_dependencies
                                        WHERE owner=:1
@@ -420,7 +420,7 @@ dependenciesSql={
                                          AND referenced_name=:2 """
 }
 
-diskusageSql={
+diskusageSql = {
     "Tablespaces"  :            u"""SELECT DISTINCT tablespace_name
                                    FROM user_segments
                                    WHERE segment_type in ('TABLE', 'TABLE PARTITION',
