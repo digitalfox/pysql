@@ -10,7 +10,8 @@ and backgound queries (BgQuery)
 # pylint: disable-msg=E0611
 
 #Python imports:
-from cx_Oracle import connect, DatabaseError, InterfaceError, LOB, STRING, SYSDBA, SYSOPER, PRELIM_AUTH, DBSHUTDOWN_ABORT, DBSHUTDOWN_IMMEDIATE, DBSHUTDOWN_TRANSACTIONAL, DBSHUTDOWN_FINAL
+from cx_Oracle import connect, DatabaseError, InterfaceError, LOB, STRING, SYSDBA, SYSOPER
+
 from threading import Thread
 from datetime import datetime, date
 
@@ -20,65 +21,78 @@ from pysqlconf import PysqlConf
 from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
 from pysqlhelpers import warn
 
+# Aditionnal cx_Oracle Import
+CX_STARTUP_SHUTDOWN = True
+try:
+    from cx_Oracle import PRELIM_AUTH, DBSHUTDOWN_ABORT, DBSHUTDOWN_IMMEDIATE, DBSHUTDOWN_TRANSACTIONAL, DBSHUTDOWN_FINAL
+except ImportError:
+    CX_STARTUP_SHUTDOWN = False
+    PRELIM_AUTH = 0 # Means that PRELIM_AUTH is not used.
+
 class PysqlDb:
     """ Handles database interface"""
-    MAXIMUM_FETCH_SIZE=10000      # Maximum size of a result set to fetch in one time
-    FETCHALL_FETCH_SIZE=30        # Size of cursor for fetching all type queries
+    MAXIMUM_FETCH_SIZE = 10000      # Maximum size of a result set to fetch in one time
+    FETCHALL_FETCH_SIZE = 30        # Size of cursor for fetching all type queries
 
     def __init__(self, connectString, mode=""):
         # Instance attributs
-        self.connection=None
-        self.cursor=None
+        self.connection = None
+        self.cursor = None
 
         # Read Conf
-        self.conf=PysqlConf.getConfig()
+        self.conf = PysqlConf.getConfig()
 
         # Keep connection string to allow future connection
-        self.connectString=connectString.encode(self.conf.getCodec(), "ignore")
+        self.connectString = connectString.encode(self.conf.getCodec(), "ignore")
 
         # Connect to Oracle
         try:
-            if mode=="sysoper":
+            if mode == "sysoper":
                 try:
-                    self.connection=connect(self.connectString, mode=SYSOPER)
+                    self.connection = connect(self.connectString, mode=SYSOPER)
                 except (DatabaseError), e:
-                    print CYAN+"Connected to an idle instance"+RESET
-                    self.connection=connect(self.connectString, mode=SYSOPER|PRELIM_AUTH)
-            elif mode=="sysdba":
+                    print CYAN + "Connected to an idle instance" + RESET
+                    self.connection = connect(self.connectString, mode=SYSOPER | PRELIM_AUTH)
+            elif mode == "sysdba":
                 try:
-                    self.connection=connect(self.connectString, mode=SYSDBA)
+                    self.connection = connect(self.connectString, mode=SYSDBA)
                 except (DatabaseError), e:
-                    print CYAN+"Connected to an idle instance"+RESET
-                    self.connection=connect(self.connectString, mode=SYSDBA|PRELIM_AUTH)
+                    print CYAN + "Connected to an idle instance" + RESET
+                    self.connection = connect(self.connectString, mode=SYSDBA | PRELIM_AUTH)
             else:
-                self.connection=connect(self.connectString)
+                self.connection = connect(self.connectString)
         except (DatabaseError, RuntimeError, InterfaceError), e:
             raise PysqlException(_("Cannot connect to Oracle: %s") % e)
 
     def startup(self, mode="normal"):
         """Starts up Oracle instance"""
+        if not CX_STARTUP_SHUTDOWN:
+            raise PysqlException(_("Your Oracle and/or cx_Oracle version is too old to support startup option"))
         try:
             self.connection.startup()
-            self.connection=connect("/", mode=SYSDBA)
-            self.cursor=self.connection.cursor()
+            self.connection = connect("/", mode=SYSDBA)
+            self.cursor = self.connection.cursor()
             self.cursor.execute("alter database mount")
-            if mode=="normal":
+            if mode == "normal":
                 self.cursor.execute("alter database open")
         except DatabaseError, e:
             raise PysqlException(_("Cannot start instance up: %s") % e)
 
     def shutdown(self, mode="normal"):
         """Shuts down Oracle instance"""
+        if not CX_STARTUP_SHUTDOWN:
+            raise PysqlException(_("Your Oracle and/or cx_Oracle version is too old to support shutdown option"))
+
         try:
-            if mode=="abort":
+            if mode == "abort":
                 self.connection.shutdown(mode=DBSHUTDOWN_ABORT)
-            elif mode=="immediate":
+            elif mode == "immediate":
                 self.connection.shutdown(mode=DBSHUTDOWN_IMMEDIATE)
                 self.connection.shutdown(mode=DBSHUTDOWN_FINAL)
             else:
                 self.connection.shutdown(mode=DBSHUTDOWN_TRANSACTIONAL)
                 self.connection.shutdown(mode=DBSHUTDOWN_FINAL)
-            self.connection=connect("/", mode=SYSDBA|PRELIM_AUTH)
+            self.connection = connect("/", mode=SYSDBA | PRELIM_AUTH)
         except DatabaseError, e:
             raise PysqlException(_("Cannot shut instance down: %s") % e)
 
@@ -101,13 +115,13 @@ class PysqlDb:
         returns a list of record (a cursor.fetchall())
         Use a rpivate cursor not to pollute execute on.
         So the getDescription does not work for executeAll"""
-        sql=self.encodeSql(sql)
-        param=self.encodeSql(param)
+        sql = self.encodeSql(sql)
+        param = self.encodeSql(param)
         try:
             if self.cursor is None:
-                self.cursor=self.connection.cursor()
-            self.cursor.arraysize=self.FETCHALL_FETCH_SIZE
-            if param==[]:
+                self.cursor = self.connection.cursor()
+            self.cursor.arraysize = self.FETCHALL_FETCH_SIZE
+            if param == []:
                 self.cursor.execute(sql)
             else:
                 self.cursor.prepare(sql)
@@ -123,14 +137,14 @@ class PysqlDb:
          For insert/update/delete, return the number of record processed
          @param fetch: for select queries, start fetching (default is true)
          @param cursorSize: if defined, overide the config cursor size"""
-        sql=self.encodeSql(sql)
+        sql = self.encodeSql(sql)
         try:
             if self.cursor is None:
-                self.cursor=self.connection.cursor()
+                self.cursor = self.connection.cursor()
             if cursorSize:
-                self.cursor.arraysize=cursorSize
+                self.cursor.arraysize = cursorSize
             else:
-                self.cursor.arraysize=self.conf.get("fetchSize")
+                self.cursor.arraysize = self.conf.get("fetchSize")
             self.cursor.execute(sql)
             if sql.upper().startswith("SELECT") and fetch:
                 return self.fetchNext()
@@ -143,11 +157,11 @@ class PysqlDb:
         """Validates the syntax of the DML query given in parameter.
         @param sql: SQL query to validate
         @return: None but raise PysqlException if sql cannot be validated"""
-        sql=self.encodeSql(sql)
+        sql = self.encodeSql(sql)
         try:
             if self.cursor is None:
-                self.cursor=self.connection.cursor()
-            self.cursor.arraysize=1
+                self.cursor = self.connection.cursor()
+            self.cursor.arraysize = 1
             if sql.upper().startswith("SELECT"):
                 self.cursor.execute(sql)
                 return True
@@ -174,7 +188,7 @@ class PysqlDb:
             if short:
                 return [i[0] for i in self.cursor.description]
             else:
-                return [i[0]+" ("+i[1].__name__+")" for i in self.cursor.description]
+                return [i[0] + " (" + i[1].__name__ + ")" for i in self.cursor.description]
 
     def getRowCount(self):
         """Returns number of line processed with last request"""
@@ -187,18 +201,18 @@ class PysqlDb:
         """Fetches nbLines from current cursor.
         Returns a list of record and a flag to indicate if there's more record"""
         try:
-            moreRows=False
+            moreRows = False
             if self.cursor is not None:
-                if nbLines<=0:
+                if nbLines <= 0:
                     # Ok, default value or stupid value. Using Cursor array size
-                    nbLines=self.cursor.arraysize
-                elif nbLines>self.MAXIMUM_FETCH_SIZE:
+                    nbLines = self.cursor.arraysize
+                elif nbLines > self.MAXIMUM_FETCH_SIZE:
                     # Don't fetch too much!
-                    nbLines=self.MAXIMUM_FETCH_SIZE
+                    nbLines = self.MAXIMUM_FETCH_SIZE
 
-                result=self.cursor.fetchmany(nbLines)
-                if len(result)==nbLines:
-                    moreRows=True
+                result = self.cursor.fetchmany(nbLines)
+                if len(result) == nbLines:
+                    moreRows = True
                 return (self.decodeData(result), moreRows)
             else:
                 raise PysqlException(_("No result set. Execute a query before fetching result !"))
@@ -211,9 +225,9 @@ class PysqlDb:
         Return list of string or empty list [] if there's nothing to get."""
         if not self.cursor:
             return
-        result=[]
-        serverOutput=self.cursor.var(STRING)
-        serverRC=self.cursor.var(STRING)
+        result = []
+        serverOutput = self.cursor.var(STRING)
+        serverRC = self.cursor.var(STRING)
         while True:
             self.cursor.execute("""begin dbms_output.get_line(:x,:y); end;""",
                                 [serverOutput, serverRC])
@@ -257,7 +271,7 @@ class PysqlDb:
         @return: sql text encoded
         """
         if self.connection:
-            encoding=self.connection.nencoding
+            encoding = self.connection.nencoding
         else:
             raise PysqlException(_("Cannot encode data, not connected to Oracle"))
         if sql is None:
@@ -270,9 +284,9 @@ class PysqlDb:
             warn(_("string '%s' is already encoded") % sql)
             return sql
         try:
-            sql=sql.encode(encoding)
+            sql = sql.encode(encoding)
         except UnicodeEncodeError:
-            sql=sql.encode(encoding, "replace")
+            sql = sql.encode(encoding, "replace")
             warn(_("Got unicode error while encoding '%s'") % sql)
         return sql
 
@@ -282,7 +296,7 @@ class PysqlDb:
         @return: encoded data"""
         #TODO: factorise code with encodeSql function
         if self.connection:
-            encoding=self.connection.nencoding
+            encoding = self.connection.nencoding
         else:
             raise PysqlException("Cannot decode data, not connected to Oracle")
         if data is None: # This correspond to the NULL Oracle object
@@ -296,22 +310,22 @@ class PysqlDb:
         elif isinstance(data, datetime):
             #TODO: use user define format or Oracle settings
             # Don't use strftime because it does not support year < 1900
-            data=unicode(data)
+            data = unicode(data)
         elif isinstance(data, date):
             #TODO: use user define format or Oracle settings
             # Don't use strftime because it does not support year < 1900
-            data=unicode(data)
+            data = unicode(data)
         elif isinstance(data, LOB):
-            data=data.read(1, data.size())
+            data = data.read(1, data.size())
         elif isinstance(data, unicode):
             warn(_("Warning, string '%s' is already Unicode") % data)
             return data
 
         # Decode data
         try:
-            data=data.decode(encoding)
+            data = data.decode(encoding)
         except UnicodeDecodeError:
-            data=data.decode(encoding, "ignore")
+            data = data.decode(encoding, "ignore")
             warn(_("Can't decode '%s' with %s codec. Check your NLS_LANG variable") % (data, encoding))
         except AttributeError:
             warn(_("Cannot decode %s object") % type(data))
@@ -329,24 +343,24 @@ class BgQuery(Thread):
         @param exceptions: list of current exception to sum up error at exit
         @type exceptions: list
         """
-        self.db=PysqlDb(connect_string)
-        self.query=query
-        self.exceptions=exceptions
-        self.result=None
-        self.moreRows=False
-        self.error=_("None")
+        self.db = PysqlDb(connect_string)
+        self.query = query
+        self.exceptions = exceptions
+        self.result = None
+        self.moreRows = False
+        self.error = _("None")
         Thread.__init__(self)
         self.setDaemon(True)
 
     def run(self):
         """Method executed when the thread object start() method is called"""
         try:
-            (self.result, self.moreRows)=self.db.execute(self.query)
+            (self.result, self.moreRows) = self.db.execute(self.query)
         except PysqlException, e:
-            self.error=unicode(e)
+            self.error = unicode(e)
             self.exceptions.append(e)
-            self.result=None
-            self.moreRows=False
+            self.result = None
+            self.moreRows = False
 
     def getName(self):
         """Return a simple name: the ID of the python thread"""
