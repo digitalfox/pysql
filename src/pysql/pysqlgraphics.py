@@ -219,9 +219,9 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
             nextObjectList = []
 
         if len(nodeList) > maxNodes:
-            print RED + "Warning: Reach max node, references lookup stopped on direction %s" % currentDir + RESET
+            print RED + _("Warning: reach max node, references lookup stopped on direction %s") % currentDir + RESET
         if depth > maxDepth:
-            print RED + "Warning: Reach max recursion limit, references lookup stopped on direction %s" % currentDir + RESET
+            print RED + "_(Warning: reach max recursion limit, references lookup stopped on direction %s") % currentDir + RESET
 
     filename = "dep_" + objectOwner + "." + objectName + "." + format
     generateImage(graph, filename, prog, format)
@@ -420,7 +420,7 @@ def pkgTree(db, packageName):
     if package.getType() == "SYNONYM":
         package = package.getTarget(db)
         if package.getType() == "SYNONYM":
-            raise PysqlException("Too much synonym recursion")
+            raise PysqlException(_("Too much synonym recursion"))
 
     if package.getType() not in ("PACKAGE", "PACKAGE BODY"):
         raise PysqlException(_("This is not a package or package not found"))
@@ -509,7 +509,7 @@ def generateImage(graph, filename, prog, format):
         graph.write(filepath, prog=prog, format=format)
     except (IOError, OSError, pydot.InvocationException), e:
         sys.stdout = sys.__stdout__     # Restores STDOUT
-        raise PysqlException("Graphviz failed to generate image:\n%s" % e)
+        raise PysqlException(_("Graphviz failed to generate image:\n%s") % e)
     sys.stdout = oldstdout         # Restores STDOUT
     print GREEN + _("Image saved as ") + filepath + RESET
 

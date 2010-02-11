@@ -263,9 +263,9 @@ def desc(db, objectName, completeMethod=None, printDetails=True, printStats=Fals
         print CYAN + _("Type\t: ") + oraObject.getType() + RESET
         print CYAN + _("Owner\t: ") + oraObject.getOwner() + RESET
         if oraObject.getStatus() in ("INVALID", "OFFLINE"):
-            print CYAN + ("Status\t\t: ") + BOLD + RED + oraObject.getStatus() + RESET
+            print CYAN + _("Status\t\t: ") + BOLD + RED + oraObject.getStatus() + RESET
         else:
-            print CYAN + ("Status\t\t: ") + oraObject.getStatus() + RESET
+            print CYAN + _("Status\t\t: ") + oraObject.getStatus() + RESET
         if oraObject.getType() in ("TABLE", "TABLE PARTITION", "VIEW", "MATERIALIZED VIEW"):
             try:
                 print CYAN + _("Comment\t: ") + oraObject.getComment(db) + RESET

@@ -51,13 +51,13 @@ class PysqlDb:
                 try:
                     self.connection = connect(self.connectString, mode=SYSOPER)
                 except (DatabaseError), e:
-                    print CYAN + "Connected to an idle instance" + RESET
+                    print CYAN + _("Connected to an idle instance") + RESET
                     self.connection = connect(self.connectString, mode=SYSOPER | PRELIM_AUTH)
             elif mode == "sysdba":
                 try:
                     self.connection = connect(self.connectString, mode=SYSDBA)
                 except (DatabaseError), e:
-                    print CYAN + "Connected to an idle instance" + RESET
+                    print CYAN + _("Connected to an idle instance") + RESET
                     self.connection = connect(self.connectString, mode=SYSDBA | PRELIM_AUTH)
             else:
                 self.connection = connect(self.connectString)

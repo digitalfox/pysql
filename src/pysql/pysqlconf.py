@@ -282,9 +282,9 @@ class PysqlConf:
                 self.configParser.set("PYSQL", key, value)
                 self.setChanged(True)
             else:
-                raise PysqlException("Sorry, value %s is not valid for parameter %s" % (value, key))
+                raise PysqlException(_("Sorry, value %s is not valid for parameter %s") % (value, key))
         else:
-            raise PysqlException("Cannot set config, no configParser exist !")
+            raise PysqlException(_("Cannot set config, no configParser exist !"))
 
     def write(self):
         """Writes config to disk"""

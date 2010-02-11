@@ -146,7 +146,7 @@ class PysqlShell(cmd.Cmd):
             print RED + BOLD + _("Break !") + RESET
         except StandardError, e:
             # Just a hook for a more pleasant error handling
-            print RED + BOLD + "\n==> Unhandled error. Sorry <==" + RESET
+            print RED+BOLD+_("\n==> Unhandled error. Sorry <==")+RESET
             printStackTrace()
 
     def precmd(self, line):
@@ -851,7 +851,7 @@ class PysqlShell(cmd.Cmd):
         parser = self.parser_session()
         options, args = parser.parse_args(arg)
         if options.all and args:
-            print CYAN + "Note: the all (-a / --all) option is useless when display one session" + RESET
+            print CYAN+_("Note: the all (-a / --all) option is useless when display one session")+RESET
         if not args:
             # Lists all session
             result = pysqlfunctions.sessions(self.db, all=options.all, search=options.search)
@@ -1752,7 +1752,7 @@ class PysqlShell(cmd.Cmd):
 
         self.__checkConnection()
         if len(sql) < 2:
-            raise PysqlException("SQL command is too short")
+            raise PysqlException(_("SQL command is too short"))
 
         self.__animateCursor()
 
@@ -1825,7 +1825,7 @@ class PysqlShell(cmd.Cmd):
         if result:
             self.__displayTab(result, self.db.getDescription())
         else:
-            print CYAN + "(no result)" + RESET
+            print CYAN+_("(no result)")+RESET
 
         if moreRows:
             self.fetching = True
