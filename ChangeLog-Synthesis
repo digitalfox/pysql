@@ -1,4 +1,4 @@
-V0.14 2009/12/20
+V0.14 2010/02/14
 Automatic terminal width detection on Unix system. Add role/profile search.
 Add search to session display function. Many enhancement to desc function.
 Enhance prompt for multiline commands. Rewrite diskusage function. Update
