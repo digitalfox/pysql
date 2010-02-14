@@ -1,3 +1,137 @@
+commit e5336264947e8f523d0e4f44bbff7ded2e6af066
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Thu Feb 11 19:13:59 2010 +0100
+
+    Disable color when input or output is not a tty
+
+commit b3bea60b3e3fe221d4d5cd8b071b622a86f94ded
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Feb 10 19:57:30 2010 +0100
+
+    Add waiting cursor when moving background query to foreground
+    Apply formating rules to code
+
+commit 84177f8f426b413b256cb3054da3bc1f70fcfb0f
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Thu Oct 29 11:45:14 2009 +0100
+
+    Don't call animate cursor twice for csv and exec function
+
+commit cf5b588c94ad76a5ccd916e4342f2a3047ea5a2e
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Oct 20 20:18:04 2009 +0200
+
+    Use sys.stdout.write instead of print, to avoid extraspace when using animated cursor buffer
+
+commit aca8d33280d81688f4d11606798a219a377a517e
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Oct 20 20:17:34 2009 +0200
+
+    Use getValue instead of readlines/writelines (simplification)
+
+commit 491b2a146a30104823ed81ab5bf5456798d191da
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Oct 14 19:10:32 2009 +0200
+
+    Add a flag to disable animatedcursor (useful for unit test)
+
+commit 47cb253609398539f9eb7af1ec6c014e3d302bc8
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Oct 14 18:58:29 2009 +0200
+
+    Allow to interrupt waiting cursor at any step, not only at the loop begining
+
+commit fe7131cc9ce3afbef13b5c8d38cf0cc82a879fa2
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Oct 14 08:59:48 2009 +0200
+
+    Make stdout handler local to run method
+
+commit b9fc08391f305c449b94cb1c7c8fe6dac4c52ea8
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Oct 14 08:54:11 2009 +0200
+
+    Pimp up waiting cursor
+
+commit d921e5c1427f36e596259b4414840fbed6ed6fd7
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Oct 14 08:41:57 2009 +0200
+
+    Synchronise end of cursor and IO flush to avoid trashing output
+
+commit a0a237994ad177e54170899c95d4ff3737932513
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Oct 13 23:24:44 2009 +0200
+
+    Simple dot waiting cursor - issue with readline
+
+commit 5c7dcf5b7991efa23f3962f335ff97dd01b255ff
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Feb 10 08:58:34 2010 +0100
+
+    Backup stdout instead of restoring it from system to avoid unit test mess up
+
+commit 36849c8ae91b8e4933a2423ce8088ebd8cf76326
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Feb 10 08:56:53 2010 +0100
+
+    Make cx_Oracle advanced stuff (startup/shutdown) optionnal to allow 9i/10g client and old Cx_Oracle
+    Reformat code
+
+commit 64e10f4ca2b5821aeba3607d374163d066a2c968
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Fri Jan 22 00:31:50 2010 +0100
+
+    Add of startup and shutdown commands for 10r2 instances
+
+commit fa125b145523fdde85a4127b5e42dfb2bce65904
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Thu Jan 21 17:11:25 2010 +0100
+
+    add of high-level functions for startup and shutdown
+
+commit 05fed71e8b93aa19aef8ee57a7bf4f0546b35d77
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Tue Feb 9 22:13:42 2010 +0100
+
+    Use all_tables instead of all_tab_statistics that is only available since 10g
+
+commit 07c6235047ddef76a72314ca31497b262828fe73
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Tue Jan 19 17:19:38 2010 +0100
+
+    Use os.environ to get env settings instead of os.path.expandvars
+
+commit d590f2ef14e35bec563a913c56502ae205a0f481
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Tue Jan 19 13:45:34 2010 +0100
+
+    Use current user by default for searchObject method (more convinient for end user)
+
+commit 8766a271bf4c40eff14466d53a6ce7653757678f
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Mon Jan 18 22:01:42 2010 +0100
+
+    More help for end users
+
+commit 215ca5e41ff228cdd4e152f0506ce7c2cb6b3f8c
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Thu Dec 31 19:08:04 2009 +0100
+
+    Minor corrections
+
+commit bcda91b7b1e16b705f8ec528b192090b293f41e9
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Thu Dec 31 15:39:57 2009 +0100
+
+    Add help for csv and time commands
+
+commit eefeb837aa0185e3c45751b3903ccf29714f9150
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Dec 20 22:03:58 2009 +0100
+
+    update changelog and translation
+
 commit c486b6adb836b7803e584c3b51a28d315da5a9a4
 Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
 Date:   Mon Dec 14 22:28:02 2009 +0100
