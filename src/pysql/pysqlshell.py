@@ -550,6 +550,7 @@ class PysqlShell(cmd.Cmd):
     # Sysoper stuff
     def do_startup(self, arg):
         """Starts database up  (Oracle v10R2 or upper required)"""
+        self.__checkConnection()
         self.__checkArg(arg, "<=1")
         if arg == "mount":
             self.db.startup("mount")
