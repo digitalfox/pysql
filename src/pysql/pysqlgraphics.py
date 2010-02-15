@@ -221,7 +221,7 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
         if len(nodeList) > maxNodes:
             print RED + _("Warning: reach max node, references lookup stopped on direction %s") % currentDir + RESET
         if depth > maxDepth:
-            print RED + "_(Warning: reach max recursion limit, references lookup stopped on direction %s") % currentDir + RESET
+            print RED + _("Warning: reach max recursion limit, references lookup stopped on direction %s") % currentDir + RESET
 
     filename = "dep_" + objectOwner + "." + objectName + "." + format
     generateImage(graph, filename, prog, format)
