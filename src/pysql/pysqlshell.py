@@ -430,7 +430,7 @@ class PysqlShell(cmd.Cmd):
     def do_showCompletion(self, arg):
         """Shows completion list"""
         for theme in self.conf.completeLists.keys():
-            print GREEN + ("***** %s *****" % theme) + RESET
+            print GREEN + _("***** %s *****") % theme + RESET
             self.__displayCol(self.conf.completeLists[theme])
             print
 
@@ -1624,7 +1624,7 @@ class PysqlShell(cmd.Cmd):
             objectName = objectName.upper()
         result = pysqlfunctions.searchObject(self.db, objectType, objectName, objectOwner)
         for owner in result.keys():
-            print GREEN + ("***** %s *****" % owner) + RESET
+            print GREEN + _("***** %s *****") % owner + RESET
             self.__addToCompleteList(result[owner], objectType)
             self.__displayCol(result[owner])
 
@@ -1652,7 +1652,7 @@ class PysqlShell(cmd.Cmd):
 
         nbLine = len(array)
         if len(array) == 0:
-            print CYAN + "(no result)" + RESET
+            print CYAN + _("(no result)") + RESET
             return
         nbColumn = len(array[0]) # Yes, we suppose it to be a real array
 
