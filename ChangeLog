@@ -1,3 +1,39 @@
+commit d93c5b51b76e233e9587e18f60b7ad99d45e65e4
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Tue Feb 16 16:25:53 2010 +0100
+
+    Better internationalization
+
+commit e9a379f0281e4b24aa3c60df8c8a570a26ed530e
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Mon Feb 15 18:01:48 2010 +0100
+
+    Add connection check when starting up in order to fix a crash case
+
+commit 1398ef8d0ff1fa4922279cf57e50ddfce9b30145
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Mon Feb 15 17:11:44 2010 +0100
+
+    Fix syntax error in i18n macro call. Update catalog
+
+commit 09288366c529943861081795cb960c1675580be9
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Thu Feb 11 23:47:59 2010 +0100
+
+    Fix missing _() for better internalization
+
+commit 0a4ed2be7b68d7b363bbd6786b796b807a98da35
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Feb 14 21:51:27 2010 +0100
+
+    Message catalog and French translation update.
+
+commit 8611d235e723d48a33f15b49c3446b0211aec99c
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Feb 14 21:44:24 2010 +0100
+
+    update changelog
+
 commit e5336264947e8f523d0e4f44bbff7ded2e6af066
 Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
 Date:   Thu Feb 11 19:13:59 2010 +0100
