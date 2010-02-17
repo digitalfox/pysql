@@ -24,7 +24,19 @@ class OraObject:
 
     def __str__(self):
         """String representation (mostly used for debug purpose)"""
-        return self.getOwner()+"."+self.getName()+" ("+self.getType()+")"
+        return self.getOwner() + "." + self.getName() + " (" + self.getType() + ")"
+
+    def __eq__(self, other):
+        """Define equal operator. Object are identical if they have same name, type and owner"""
+        if hash(self) == hash(other):
+            return True
+        else:
+            return False
+
+    def __hash__(self):
+        """Unique hash of object. Used to determine if objects are identical and to create
+        set of unique object"""
+        return hash("%s.%s.%s" % (self.getType(), self.getOwner(), self.getName()))
 
     def getCopy(self):
         """@return: a deep copy of the current object"""
@@ -37,7 +49,7 @@ class OraObject:
     def getFullName(self):
         """@return: object name prefixed with owner name (str)
         Ex. "scott.my_table" """
-        return self.getOwner()+"."+self.getName()
+        return self.getOwner() + "." + self.getName()
 
     def getType(self):
         """@return: object type (str)"""
@@ -53,19 +65,19 @@ class OraObject:
 
     def setName(self, objectName):
         """ Sets name (and owner if name is given like "user.object")"""
-        if objectName=="":
+        if objectName == "":
             raise PysqlException("Object name must be defined!")
         if objectName.startswith("/"):
             # This should be a datafile
             #TODO: check if fully compliant with Windows
-            self.objectName=objectName
-        elif objectName.count(".")==1:
-            (owner, name)=objectName.split(".")
+            self.objectName = objectName
+        elif objectName.count(".") == 1:
+            (owner, name) = objectName.split(".")
             self.setOwner(owner)
-            self.objectName=name
+            self.objectName = name
         else:
             # Default to simple setName
-            self.objectName=objectName
+            self.objectName = objectName
 
     def setType(self, objectType):
         """Sets the object type.
@@ -73,52 +85,52 @@ class OraObject:
         @type objectType: str
         """
         if objectType is None:
-            self.objectType=""
+            self.objectType = ""
         else:
-            self.objectType=objectType.upper()
+            self.objectType = objectType.upper()
         # Transtypes to object type if possible
-        if   self.objectType=="DATABASE LINK":
-            self.__class__=OraDBLink
-        elif self.objectType=="DATA FILE":
-            self.__class__=OraDatafile
-        elif self.objectType=="DIRECTORY":
-            self.__class__=OraDirectory
-        elif self.objectType=="FUNCTION":
-            self.__class__=OraFunction
+        if   self.objectType == "DATABASE LINK":
+            self.__class__ = OraDBLink
+        elif self.objectType == "DATA FILE":
+            self.__class__ = OraDatafile
+        elif self.objectType == "DIRECTORY":
+            self.__class__ = OraDirectory
+        elif self.objectType == "FUNCTION":
+            self.__class__ = OraFunction
         elif self.objectType in ("INDEX", "INDEX PARTITION"):
-            self.__class__=OraIndex
-        elif self.objectType=="MATERIALIZED VIEW":
-            self.__class__=OraMaterializedView
-        elif self.objectType=="PACKAGE":
-            self.__class__=OraPackage
-        elif self.objectType=="PACKAGE BODY":
-            self.__class__=OraPackageBody
-        elif self.objectType=="PROCEDURE":
-            self.__class__=OraProcedure
-        elif self.objectType=="SEQUENCE":
-            self.__class__=OraSequence
-        elif self.objectType=="SYNONYM":
-            self.__class__=OraSynonym
+            self.__class__ = OraIndex
+        elif self.objectType == "MATERIALIZED VIEW":
+            self.__class__ = OraMaterializedView
+        elif self.objectType == "PACKAGE":
+            self.__class__ = OraPackage
+        elif self.objectType == "PACKAGE BODY":
+            self.__class__ = OraPackageBody
+        elif self.objectType == "PROCEDURE":
+            self.__class__ = OraProcedure
+        elif self.objectType == "SEQUENCE":
+            self.__class__ = OraSequence
+        elif self.objectType == "SYNONYM":
+            self.__class__ = OraSynonym
         elif self.objectType in ("TABLE", "TABLE PARTITION"):
-            self.__class__=OraTable
-        elif self.objectType=="TABLESPACE":
-            self.__class__=OraTablespace
-        elif self.objectType=="TRIGGER":
-            self.__class__=OraTrigger
-        elif self.objectType=="VIEW":
-            self.__class__=OraView
-        elif self.objectType=="USER":
-            self.__class__=OraUser
+            self.__class__ = OraTable
+        elif self.objectType == "TABLESPACE":
+            self.__class__ = OraTablespace
+        elif self.objectType == "TRIGGER":
+            self.__class__ = OraTrigger
+        elif self.objectType == "VIEW":
+            self.__class__ = OraView
+        elif self.objectType == "USER":
+            self.__class__ = OraUser
 
     def setOwner(self, objectOwner):
         """Sets the object owner. Name is uppercased.
         This is not fully compliant with Oracle."""
-        self.objectOwner=objectOwner.upper()
+        self.objectOwner = objectOwner.upper()
 
     def setStatus(self, objectStatus):
         """Sets the object status. Name is uppercased.
         This is not fully compliant with Oracle."""
-        self.objectStatus=objectStatus
+        self.objectStatus = objectStatus
 
     def guessInfos(self, db, interactive=False):
         """Guesses and sets object type, owner and status
@@ -129,71 +141,71 @@ class OraObject:
         @return: True if type and owner are guessed. In interactive mode, returns list of objects found
         """
         #TODO: this code should be factorized
-        result=[] # Store here all guessInfos results
-        currentUsername=db.getUsername().upper()
+        result = set() # Store here all guessInfos results
+        currentUsername = db.getUsername().upper()
         for name in (self.getName(), self.getName().upper()):
-            owner=self.getOwner()
-            if owner=="":
-                objectType=db.executeAll(guessInfoSql["typeFromNameAndOwner"], [name, currentUsername])
+            owner = self.getOwner()
+            if owner == "":
+                objectType = db.executeAll(guessInfoSql["typeFromNameAndOwner"], [name, currentUsername])
                 for type in objectType:
                     if interactive:
-                        result.append(OraObject(owner, name, type[0]))
+                        result.add(OraObject(owner, name, type[0]))
                     else:
                         self.setOwner(currentUsername)
                         self.setName(name)
                         self.setType(type[0])
-                        status=db.executeAll(guessInfoSql["objectStatusFromName"], [name])
+                        status = db.executeAll(guessInfoSql["objectStatusFromName"], [name])
                         self.setStatus(status[0][0])
                         return True
-                owner=u"PUBLIC"
+                owner = u"PUBLIC"
 
-            objectType=db.executeAll(guessInfoSql["typeFromNameAndOwner"], [name, owner])
+            objectType = db.executeAll(guessInfoSql["typeFromNameAndOwner"], [name, owner])
             for type in objectType:
                 if interactive:
-                    result.append(OraObject(owner, name, type[0]))
+                    result.add(OraObject(owner, name, type[0]))
                 else:
                     self.setOwner(owner)
                     self.setName(name)
                     self.setType(type[0])
-                    status=db.executeAll(guessInfoSql["objectStatusFromName"], [name])
+                    status = db.executeAll(guessInfoSql["objectStatusFromName"], [name])
                     self.setStatus(status[0][0])
                     return True
 
-            owner=u"SYS"
+            owner = u"SYS"
             try:
-                objectType=db.executeAll(guessInfoSql["typeFromNameAndSYS"], [name])
+                objectType = db.executeAll(guessInfoSql["typeFromNameAndSYS"], [name])
             except PysqlException:
-                objectType=db.executeAll(guessInfoSql["typeFromNameAndOwner"], [name, owner])
+                objectType = db.executeAll(guessInfoSql["typeFromNameAndOwner"], [name, owner])
             for type in objectType:
                 if interactive:
-                    result.append(OraObject(owner, name, type[0]))
+                    result.add(OraObject(owner, name, type[0]))
                 else:
                     self.setOwner(owner)
                     self.setName(name)
                     self.setType(type[0])
-                    status=db.executeAll(guessInfoSql["objectStatusFromName"], [name])
+                    status = db.executeAll(guessInfoSql["objectStatusFromName"], [name])
                     self.setStatus(status[0][0])
                     return True
 
         # Tries user, tablespace and so on
         for name in (self.getName(), self.getName().upper()):
             try:
-                objectType=db.executeAll(guessInfoSql["otherTypeFromName"], [name])
+                objectType = db.executeAll(guessInfoSql["otherTypeFromName"], [name])
             except PysqlException:
-                objectType=[]
+                objectType = []
             for type in objectType:
                 if interactive:
-                    result.append(OraObject(owner, name, type[0]))
+                    result.add(OraObject(owner, name, type[0]))
                 else:
                     self.setOwner(owner)
                     self.setName(name)
                     self.setType(type[0])
-                    if self.getType()=="DATA FILE":
-                        status=db.executeAll(guessInfoSql["dbfStatusFromName"], [name])
-                    elif self.getType()=="TABLESPACE":
-                        status=db.executeAll(guessInfoSql["tbsStatusFromName"], [name])
-                    elif self.getType()=="USER":
-                        status=db.executeAll(guessInfoSql["userStatusFromName"], [name])
+                    if self.getType() == "DATA FILE":
+                        status = db.executeAll(guessInfoSql["dbfStatusFromName"], [name])
+                    elif self.getType() == "TABLESPACE":
+                        status = db.executeAll(guessInfoSql["tbsStatusFromName"], [name])
+                    elif self.getType() == "USER":
+                        status = db.executeAll(guessInfoSql["userStatusFromName"], [name])
                     self.setStatus(status[0][0])
                     return True
 
@@ -205,17 +217,17 @@ class OraObject:
 
     def getCreated(self, db):
         """@return: date of creation of the object"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
-            result=db.executeAll(tabularSql["createdFromOwnerAndName"], [owner, self.getName()])
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
+            result = db.executeAll(tabularSql["createdFromOwnerAndName"], [owner, self.getName()])
         else:
             try:
-                result=db.executeAll(tabularSql["createdFromDBAAndName"],
+                result = db.executeAll(tabularSql["createdFromDBAAndName"],
                                      [self.getOwner(), self.getName()])
             except PysqlException:
-                result=db.executeAll(tabularSql["createdFromOwnerAndName"],
+                result = db.executeAll(tabularSql["createdFromOwnerAndName"],
                                      [self.getOwner(), self.getName()])
-        if len(result)==1:
+        if len(result) == 1:
             #TODO: use database encoding instead of just using str()
             return str(result[0][0])
         else:
@@ -223,17 +235,17 @@ class OraObject:
 
     def getLastDDL(self, db):
         """@return: date of last DDL modification of the object"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
-            result=db.executeAll(tabularSql["lastDDLFromOwnerAndName"], [owner, self.getName()])
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
+            result = db.executeAll(tabularSql["lastDDLFromOwnerAndName"], [owner, self.getName()])
         else:
             try:
-                result=db.executeAll(tabularSql["lastDDLFromDBAAndName"],
+                result = db.executeAll(tabularSql["lastDDLFromDBAAndName"],
                                      [self.getOwner(), self.getName()])
             except PysqlException:
-                result=db.executeAll(tabularSql["lastDDLFromOwnerAndName"],
+                result = db.executeAll(tabularSql["lastDDLFromOwnerAndName"],
                                      [self.getOwner(), self.getName()])
-        if len(result)==1:
+        if len(result) == 1:
             #TODO: use database encoding instead of just using str()
             return str(result[0][0])
         else:
@@ -241,14 +253,14 @@ class OraObject:
 
     def getDDL(self, db):
         """@return: SQL needed to create this object as a str"""
-        if self.getType()=="":
+        if self.getType() == "":
             raise PysqlException("Object type is not defined !")
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        result=db.executeAll(metadataSql["ddlFromTypeNameAndOwner"], [self.getType(), self.getName(), owner])
-        if len(result)==0:
+            owner = self.getOwner()
+        result = db.executeAll(metadataSql["ddlFromTypeNameAndOwner"], [self.getType(), self.getName(), owner])
+        if len(result) == 0:
             return None
         else:
             return result[0][0]
@@ -271,24 +283,24 @@ class OraTabular(OraObject):
 
     def getRowCount(self, db):
         """@return: row count (select count(*) from ...)"""
-        owner=self.getOwner()
-        if owner=="":
-            owner=db.getUsername().upper()
+        owner = self.getOwner()
+        if owner == "":
+            owner = db.getUsername().upper()
         return db.executeAll(u"""select count(*) from %s."%s" """ % (owner, self.getName()))[0][0]
 
     def getComment(self, db):
         """@return: db comment of the object"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
-            result=db.executeAll(tabularSql["commentFromOwnerAndName"], [owner, self.getName()])
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
+            result = db.executeAll(tabularSql["commentFromOwnerAndName"], [owner, self.getName()])
         else:
             try:
-                result=db.executeAll(tabularSql["commentFromDBAAndName"],
+                result = db.executeAll(tabularSql["commentFromDBAAndName"],
                                      [self.getOwner(), self.getName()])
             except PysqlException:
-                result=db.executeAll(tabularSql["commentFromOwnerAndName"],
+                result = db.executeAll(tabularSql["commentFromOwnerAndName"],
                                      [self.getOwner(), self.getName()])
-        if len(result)==1:
+        if len(result) == 1:
             #TODO: use database encoding instead of just using str()
             return str(result[0][0])
         else:
@@ -301,30 +313,30 @@ class OraTabular(OraObject):
         @return: array of column_name, columns_type, comments
         """
         if sort:
-            sortCondition=" order by 1"
+            sortCondition = " order by 1"
         else:
-            sortCondition=""
+            sortCondition = ""
 
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
-            columns=db.executeAll(tabularSql["columnsFromOwnerAndName"]+sortCondition,
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
+            columns = db.executeAll(tabularSql["columnsFromOwnerAndName"] + sortCondition,
                                   [owner, self.getName()])
         else:
             try:
-                columns=db.executeAll(tabularSql["columnsFromDBAAndName"]+sortCondition,
+                columns = db.executeAll(tabularSql["columnsFromDBAAndName"] + sortCondition,
                                       [self.getOwner(), self.getName()])
             except PysqlException:
-                columns=db.executeAll(tabularSql["columnsFromOwnerAndName"]+sortCondition,
+                columns = db.executeAll(tabularSql["columnsFromOwnerAndName"] + sortCondition,
                                       [self.getOwner(), self.getName()])
-        if len(columns)==0:
+        if len(columns) == 0:
             return (None, None, None)
         else:
             return columns
 
     def getNumberOfColumns(self, db):
         """@return: the number (int) of columns of the table/view"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         return db.executeAll(tabularSql["numberOfColumnsFromOwnerAndName"],
                              [self.getOwner(), self.getName()])[0][0]
 
@@ -336,27 +348,27 @@ class OraDatafile(OraObject):
 
     def getTablespace(self, db):
         """@return: tablespace"""
-        result=db.executeAll(datafileSql["tablespaceFromName"], [self.getName()])
-        if len(result)==0:
+        result = db.executeAll(datafileSql["tablespaceFromName"], [self.getName()])
+        if len(result) == 0:
             return None
         else:
             return OraTablespace(tablespaceName=result[0][0])
 
     def getAllocatedBytes(self, db):
         """@return: number of bytes currently allocated in the data file"""
-        result=db.executeAll(datafileSql["allocatedBytesFromName"], [self.getName()])
-        if len(result)==0:
+        result = db.executeAll(datafileSql["allocatedBytesFromName"], [self.getName()])
+        if len(result) == 0:
             raise PysqlException("Data file %s does not exist" % self.getName())
         elif result[0][0] is None:
-            msg=_("Privilege SELECT_CATALOG is missing")
+            msg = _("Privilege SELECT_CATALOG is missing")
             raise PysqlException(msg)
         else:
             return int(result[0][0])
 
     def getFreeBytes(self, db):
         """@return: number of bytes currently free in the data file"""
-        result=db.executeAll(datafileSql["freeBytesFromName"], [self.getName()])
-        if len(result)==0:
+        result = db.executeAll(datafileSql["freeBytesFromName"], [self.getName()])
+        if len(result) == 0:
             raise PysqlException("Data file %s does not exist" % self.getName())
         else:
             return int(result[0][0])
@@ -369,24 +381,24 @@ class OraDBLink(OraObject):
 
     def getRemoteHost(self, db):
         """@return: host of the db link"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        result=db.executeAll(dbLinkSql["hostFromOwnerAndName"], [owner, self.getName()])
-        if len(result)==0:
+            owner = self.getOwner()
+        result = db.executeAll(dbLinkSql["hostFromOwnerAndName"], [owner, self.getName()])
+        if len(result) == 0:
             return ""
         else:
             return result[0][1]
 
     def getRemoteUser(self, db):
         """@return: user of the remote db"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        result=db.executeAll(dbLinkSql["usernameFromOwnerAndName"], [owner, self.getName()])
-        if len(result)==0:
+            owner = self.getOwner()
+        result = db.executeAll(dbLinkSql["usernameFromOwnerAndName"], [owner, self.getName()])
+        if len(result) == 0:
             return ""
         else:
             return result[0][1]
@@ -400,8 +412,8 @@ class OraDirectory(OraObject):
     def getPath(self, db):
         """Gets the OS path of the directory object
         @return: full path (str)"""
-        result=db.executeAll(directorySql["pathFromName"], [self.getName()])
-        if len(result)==0:
+        result = db.executeAll(directorySql["pathFromName"], [self.getName()])
+        if len(result) == 0:
             return ""
         else:
             return result[0][0]
@@ -416,30 +428,30 @@ class OraIndex(OraSegment):
         """Returns index following properties :
         Index_type, uniqueness, table_owner, table_name, compression, leaf_blocks, destincts_keys
         avg_lef_blocks_per_leys as a list of (property_name, property_value)"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        result=db.executeAll(indexSql["propertiesFromOwnerAndName"], [owner, self.getName()])
+            owner = self.getOwner()
+        result = db.executeAll(indexSql["propertiesFromOwnerAndName"], [owner, self.getName()])
         result.insert(0, db.getDescription())
 
         if not result:
             return None
         # Transpose the result
-        result=[[result[i][j] for i in range(len(result))] for j in range(len(result[0]))]
+        result = [[result[i][j] for i in range(len(result))] for j in range(len(result[0]))]
 
         # Add indexed columns
-        indexedColumns=self.getIndexedColumns(db)
+        indexedColumns = self.getIndexedColumns(db)
         result.append([_("Indexed Columns"), ", ".join(["%s(%s)" % (i[0], i[1]) for i in indexedColumns])])
 
         return result
 
     def getIndexedColumns(self, db):
         """Returns indexed columns as a list of (column_name, column_position)"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
+            owner = self.getOwner()
         return db.executeAll(indexSql["indexedColumnsFromOwnerAndName"], [owner, self.getName()])
 
 class OraMaterializedView(OraTabular, OraSegment):
@@ -450,12 +462,12 @@ class OraMaterializedView(OraTabular, OraSegment):
 
     def getSQL(self, db):
         """@return: SQL code behind the materialized view"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        result=db.executeAll(mviewSql["queryFromOwnerAndName"], [owner, self.getName()])
-        if len(result)==0:
+            owner = self.getOwner()
+        result = db.executeAll(mviewSql["queryFromOwnerAndName"], [owner, self.getName()])
+        if len(result) == 0:
             return ""
         else:
             return result[0][1]
@@ -465,20 +477,20 @@ class OraStoredObject(OraObject):
     def getSQL(self, db):
         """Gets object SQL source code
         @return: source code (str)"""
-        result=self.getSQLAsList(db)
+        result = self.getSQLAsList(db)
         # Transform list of list of str to str
         return "".join(result)
 
     def getSQLAsList(self, db):
         """Gets object SQL source code
         @return: source code (list of str)"""
-        if self.getType()=="":
+        if self.getType() == "":
             raise PysqlException("object type is not defined !")
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        result=db.executeAll(storedObjectSql["sourceFromOwnerAndNameAndType"],
+            owner = self.getOwner()
+        result = db.executeAll(storedObjectSql["sourceFromOwnerAndNameAndType"],
                                             [owner, self.getName(), self.getType()])
         return [i[0] for i in result]
 
@@ -501,12 +513,12 @@ class OraProcedure(OraStoredObject):
         """Gets source code
         @return: array of source line
         """
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        source=db.executeAll(packageSql["sourceFromOwnerAndName"], [owner, self.getName()])
-        if len(source)==0:
+            owner = self.getOwner()
+        source = db.executeAll(packageSql["sourceFromOwnerAndName"], [owner, self.getName()])
+        if len(source) == 0:
             return (None)
         else:
             return source
@@ -520,12 +532,12 @@ class OraFunction(OraStoredObject):
         """Gets source code
         @return: array of source line
         """
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        source=db.executeAll(packageSql["sourceFromOwnerAndName"], [owner, self.getName()])
-        if len(source)==0:
+            owner = self.getOwner()
+        source = db.executeAll(packageSql["sourceFromOwnerAndName"], [owner, self.getName()])
+        if len(source) == 0:
             return (None)
         else:
             return source
@@ -539,12 +551,12 @@ class OraPackage(OraStoredObject):
         """Gets procedure names
         @return: array of procedure_name
         """
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        columns=db.executeAll(packageSql["proceduresFromOwnerAndName"], [owner, self.getName()])
-        if len(columns)==0:
+            owner = self.getOwner()
+        columns = db.executeAll(packageSql["proceduresFromOwnerAndName"], [owner, self.getName()])
+        if len(columns) == 0:
             return (None)
         else:
             return columns
@@ -553,12 +565,12 @@ class OraPackage(OraStoredObject):
         """Gets source code
         @return: array of source line
         """
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        source=db.executeAll(packageSql["sourceFromOwnerAndName"], [owner, self.getName()])
-        if len(source)==0:
+            owner = self.getOwner()
+        source = db.executeAll(packageSql["sourceFromOwnerAndName"], [owner, self.getName()])
+        if len(source) == 0:
             return (None)
         else:
             return source
@@ -577,12 +589,12 @@ class OraSequence(OraObject):
     def getLast(self, db):
         """Gets the last value of the sequence object
         @return: full path (str)"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        result=db.executeAll(sequenceSql["lastFromOwnerAndName"], [owner, self.getName()])
-        if len(result)==0:
+            owner = self.getOwner()
+        result = db.executeAll(sequenceSql["lastFromOwnerAndName"], [owner, self.getName()])
+        if len(result) == 0:
             return ""
         else:
             return result[0][1]
@@ -590,13 +602,13 @@ class OraSequence(OraObject):
     def getMin(self, db):
         """Gets the min value of the sequence object
         @return: full path (str)"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
+            owner = self.getOwner()
 
-        result=db.executeAll(sequenceSql["minFromOwnerAndName"], [owner, self.getName()])
-        if len(result)==0:
+        result = db.executeAll(sequenceSql["minFromOwnerAndName"], [owner, self.getName()])
+        if len(result) == 0:
             return ""
         else:
             return result[0][1]
@@ -604,12 +616,12 @@ class OraSequence(OraObject):
     def getMax(self, db):
         """Gets the max value of the sequence object
         @return: full path (str)"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        result=db.executeAll(sequenceSql["maxFromOwnerAndName"], [owner, self.getName()])
-        if len(result)==0:
+            owner = self.getOwner()
+        result = db.executeAll(sequenceSql["maxFromOwnerAndName"], [owner, self.getName()])
+        if len(result) == 0:
             return ""
         else:
             return result[0][1]
@@ -617,12 +629,12 @@ class OraSequence(OraObject):
     def getStep(self, db):
         """Gets the step value of the sequence object
         @return: full path (str)"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        result=db.executeAll(sequenceSql["stepFromOwnerAndName"], [owner, self.getName()])
-        if len(result)==0:
+            owner = self.getOwner()
+        result = db.executeAll(sequenceSql["stepFromOwnerAndName"], [owner, self.getName()])
+        if len(result) == 0:
             return ""
         else:
             return result[0][1]
@@ -640,25 +652,25 @@ class OraSynonym(OraObject):
         If the target is a synonym, recurse to find the real object.
         @return: Returns the synonym target as an OraObject object
         """
-        recursionLimit=4 # Maximum recursion allowed
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        recursionLimit = 4 # Maximum recursion allowed
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
+            owner = self.getOwner()
 
-        result=db.executeAll(synonymSql["targetFromOwnerAndName"], [owner, self.getName().upper()])
-        if len(result)==0:
+        result = db.executeAll(synonymSql["targetFromOwnerAndName"], [owner, self.getName().upper()])
+        if len(result) == 0:
             return None
         # if more than one synonym, takes the first (other public and equal)
-        oraObject=OraObject(objectOwner=result[0][0], objectName=result[0][1])
+        oraObject = OraObject(objectOwner=result[0][0], objectName=result[0][1])
         oraObject.guessInfos(db)
 
-        if oraObject.getType()=="":
+        if oraObject.getType() == "":
             raise PysqlActionDenied("unable to resolve system synonyms")
-        elif oraObject.getType()=="SYNONYM":
-            recursionStep+=1
+        elif oraObject.getType() == "SYNONYM":
+            recursionStep += 1
             # Checks that we do not recurse too much
-            if recursionStep>recursionLimit:
+            if recursionStep > recursionLimit:
                 print "(DEBUG) More than %d synonyms imbricated... Maybe a circular reference?" \
                         % recursionLimit
                 return oraObject
@@ -677,22 +689,22 @@ class OraTable(OraTabular, OraSegment):
     def getIndexedColumns(self, db):
         """Gets all table's indexed columns
         @return: array with column_name, index_name and index_position"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        result=db.executeAll(tableSql["indexedColFromOwnerAndName"], [owner, self.getName()])
+            owner = self.getOwner()
+        result = db.executeAll(tableSql["indexedColFromOwnerAndName"], [owner, self.getName()])
         return result
 
     def getPrimaryKeys(self, db):
         """Gets table primary key column name
         @return: list of columns used in primary key. Empty list if not PK found"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
+            owner = self.getOwner()
 
-        result=db.executeAll(tableSql["primaryKeyFromOwnerAndName"], [owner, self.getName()])
+        result = db.executeAll(tableSql["primaryKeyFromOwnerAndName"], [owner, self.getName()])
         if result:
             return [i[0] for i in result]
         else:
@@ -700,48 +712,48 @@ class OraTable(OraTabular, OraSegment):
 
     def getLastAnalyzed(self, db):
         """Gets date of last statistics computation"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        result=db.executeAll(tableSql["lastAnalyzedFromOwnerAndName"], [owner, self.getName()])
-        if len(result)==0:
+            owner = self.getOwner()
+        result = db.executeAll(tableSql["lastAnalyzedFromOwnerAndName"], [owner, self.getName()])
+        if len(result) == 0:
             return ""
         else:
             return result[0][0]
 
     def getNumRows(self, db):
         """Gets number of rows from table's statistics"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        result=db.executeAll(tableSql["numRowsFromOwnerAndName"], [owner, self.getName()])
-        if len(result)==0:
+            owner = self.getOwner()
+        result = db.executeAll(tableSql["numRowsFromOwnerAndName"], [owner, self.getName()])
+        if len(result) == 0:
             return ""
         else:
             return result[0][0]
 
     def getAvgRowLength(self, db):
         """Gets average length of a single row from table's statistics"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        result=db.executeAll(tableSql["avgRowLengthFromOwnerAndName"], [owner, self.getName()])
-        if len(result)==0:
+            owner = self.getOwner()
+        result = db.executeAll(tableSql["avgRowLengthFromOwnerAndName"], [owner, self.getName()])
+        if len(result) == 0:
             return ""
         else:
             return result[0][0]
 
     def getUsedBlocks(self, db):
         """Gets number of used blocks from table's statistics"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        result=db.executeAll(tableSql["usedBlocksFromOwnerAndName"], [owner, self.getName()])
-        if len(result)==0:
+            owner = self.getOwner()
+        result = db.executeAll(tableSql["usedBlocksFromOwnerAndName"], [owner, self.getName()])
+        if len(result) == 0:
             return ""
         else:
             return result[0][0]
@@ -752,37 +764,37 @@ class OraTablespace(OraObject):
     def __init__(self, tablespaceOwner="", tablespaceName=""):
         """Tablespace creation"""
         OraObject.__init__(self, tablespaceOwner, tablespaceName, u"TABLESPACE")
-        self.datafiles=[]
+        self.datafiles = []
 
     def updateDatafileList(self, db):
         """Gets list of the data files which compose the tablespace"""
-        self.datafiles=[]
-        if self.getName()!="":
-            datafileNameList=db.executeAll(tablespaceSql["datafilesFromName"], [self.getName()])
-            if len(datafileNameList)==0:
+        self.datafiles = []
+        if self.getName() != "":
+            datafileNameList = db.executeAll(tablespaceSql["datafilesFromName"], [self.getName()])
+            if len(datafileNameList) == 0:
                 # Tries upper case
                 self.setName(self.getName().upper())
-                datafileNameList=db.executeAll(tablespaceSql["datafilesFromName"], [self.getName()])
-                if len(datafileNameList)==0:
+                datafileNameList = db.executeAll(tablespaceSql["datafilesFromName"], [self.getName()])
+                if len(datafileNameList) == 0:
                     return
             # Transposes datafile names vector
-            datafileNames=[i[0] for i in datafileNameList]
+            datafileNames = [i[0] for i in datafileNameList]
             # Fills data file list
             for fileName in datafileNames:
                 self.datafiles.append(OraDatafile("", fileName))
 
     def getAllocatedBytes(self, db):
         """@return: number of bytes currently allocated in the tablespace"""
-        nbBytes=0
+        nbBytes = 0
         for datafile in self.datafiles:
-            nbBytes+=datafile.getAllocatedBytes(db)
+            nbBytes += datafile.getAllocatedBytes(db)
         return nbBytes
 
     def getFreeBytes(self, db):
         """@return: number of bytes currently free in the tablespace"""
-        nbBytes=0
+        nbBytes = 0
         for datafile in self.datafiles:
-            nbBytes+=datafile.getFreeBytes(db)
+            nbBytes += datafile.getFreeBytes(db)
         return nbBytes
 
     def getDatafiles(self):
@@ -795,50 +807,50 @@ class OraTrigger(OraObject):
     def __init__(self, triggerOwner="", triggerName=""):
         """Trigger creation"""
         OraObject.__init__(self, triggerOwner, triggerName, u"TRIGGER")
-        self.table=None
+        self.table = None
 
     def updateTable(self, db):
         """Gets the triggered table"""
-        self.table=None
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        self.table = None
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        result=db.executeAll(triggerSql["tableFromOwnerAndName"], [owner, self.getName()])
-        self.table=OraTable(tableOwner=result[0][0], tableName=result[0][1])
+            owner = self.getOwner()
+        result = db.executeAll(triggerSql["tableFromOwnerAndName"], [owner, self.getName()])
+        self.table = OraTable(tableOwner=result[0][0], tableName=result[0][1])
 
     def getBody(self, db):
         """@return: trigger body"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        result=db.executeAll(triggerSql["bodyFromOwnerAndName"], [owner, self.getName()])
-        if len(result)==0:
+            owner = self.getOwner()
+        result = db.executeAll(triggerSql["bodyFromOwnerAndName"], [owner, self.getName()])
+        if len(result) == 0:
             return ""
         else:
             return result[0][0]
 
     def getEvent(self, db):
         """@return: trigger type (BEFORE/AFTER, STATEMENT/ROW)"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        result=db.executeAll(triggerSql["eventFromOwnerAndName"], [owner, self.getName()])
-        if len(result)==0:
+            owner = self.getOwner()
+        result = db.executeAll(triggerSql["eventFromOwnerAndName"], [owner, self.getName()])
+        if len(result) == 0:
             return ""
         else:
             return result[0][0]
 
     def getStatus(self, db):
         """@return: trigger status (ENABLED/DISABLED)"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        result=db.executeAll(triggerSql["statusFromOwnerAndName"], [owner, self.getName()])
-        if len(result)==0:
+            owner = self.getOwner()
+        result = db.executeAll(triggerSql["statusFromOwnerAndName"], [owner, self.getName()])
+        if len(result) == 0:
             return ""
         else:
             return result[0][0]
@@ -851,12 +863,12 @@ class OraTrigger(OraObject):
 
     def getTriggerType(self, db):
         """@return: triggering event (INSERT, DELETE or UPDATE)"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        result=db.executeAll(triggerSql["typeFromOwnerAndName"], [owner, self.getName()])
-        if len(result)==0:
+            owner = self.getOwner()
+        result = db.executeAll(triggerSql["typeFromOwnerAndName"], [owner, self.getName()])
+        if len(result) == 0:
             return ""
         else:
             return result[0][0]
@@ -870,8 +882,8 @@ class OraUser(OraObject):
     def getDefaultTablespace(self, db):
         """@return: default tablespace name of the user"""
         self.setName(self.getName().upper())
-        result=db.executeAll(userSql["defaultTbsFromName"], [self.getName()])
-        if len(result)==0:
+        result = db.executeAll(userSql["defaultTbsFromName"], [self.getName()])
+        if len(result) == 0:
             return ""
         else:
             return result[0][0]
@@ -879,8 +891,8 @@ class OraUser(OraObject):
     def getTempTablespace(self, db):
         """@return: temporary tablespace name of the user"""
         self.setName(self.getName().upper())
-        result=db.executeAll(userSql["tempTbsFromName"], [self.getName()])
-        if len(result)==0:
+        result = db.executeAll(userSql["tempTbsFromName"], [self.getName()])
+        if len(result) == 0:
             return ""
         else:
             return result[0][0]
@@ -893,21 +905,21 @@ class OraView(OraTabular):
 
     def getSQL(self, db):
         """@return: SQL code behind the view"""
-        if self.getOwner()=="":
-            owner=db.getUsername().upper()
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
         else:
-            owner=self.getOwner()
-        result=db.executeAll(viewSql["queryFromOwnerAndName"], [owner, self.getName()])
-        if len(result)==0:
+            owner = self.getOwner()
+        result = db.executeAll(viewSql["queryFromOwnerAndName"], [owner, self.getName()])
+        if len(result) == 0:
             return ""
         else:
             return result[0][1]
 
     def setSQL(self, db, sql):
         """@return: True if succeeded in editing SQL code behind the view, False otherwise"""
-        if sql=="":
+        if sql == "":
             raise PysqlException("SQL code of the view cannont be empty")
-        if self.getOwner()=="":
+        if self.getOwner() == "":
             db.execute(viewSql["replaceQueryFromName"] % (self.getName(), sql), fetch=False)
         else:
             db.execute(viewSql["replaceQueryFromFullName"] % (self.getFullName(), sql), fetch=False)
