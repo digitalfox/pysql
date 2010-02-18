@@ -244,7 +244,18 @@ def desc(db, objectName, completeMethod=None, printDetails=True, printStats=Fals
 
     # Gets the object type and owner
     oraObject = OraObject(objectName=objectName)
-    oraObject.guessInfos(db)
+    oraObjectSet = oraObject.guessInfos(db, interactive=True)
+
+    if len(oraObjectSet) == 1:
+        oraObject = oraObjectSet.pop()
+    elif len(oraObjectSet) > 1:
+        print CYAN + _("Got multiple result:") + "\n-" + RESET,
+        print "\n- ".join([str(x) for x in oraObjectSet])
+        # Looking for public objects
+        publicOraObjects = [o for o in oraObjectSet if o.getOwner() == "PUBLIC"]
+        if len(publicOraObjects) == 1:
+            oraObject = publicOraObjects.pop()
+            print BOLD + RED + _("Defaulting to public object: %s" % oraObject) + RESET
 
     # Object or type unknown?
     if oraObject.getType() == "":
