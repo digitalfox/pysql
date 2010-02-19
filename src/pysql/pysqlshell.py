@@ -146,7 +146,7 @@ class PysqlShell(cmd.Cmd):
             print RED + BOLD + _("Break !") + RESET
         except StandardError, e:
             # Just a hook for a more pleasant error handling
-            print RED+BOLD+_("\n==> Unhandled error. Sorry <==")+RESET
+            print RED + BOLD + _("\n==> Unhandled error. Sorry <==") + RESET
             printStackTrace()
 
     def precmd(self, line):
@@ -686,9 +686,9 @@ class PysqlShell(cmd.Cmd):
         parser = self.parser_describe()
         options, args = parser.parse_args(arg)
         self.__checkConnection()
-        self.__checkArg(args, "==1")
+        self.__checkArg(args, ">=1")
         # Gives method pointer to desc function to allow it to update completelist
-        (header, result) = pysqlfunctions.desc(self.db, args[0],
+        (header, result) = pysqlfunctions.desc(self.db, " ".join(args),
                                              completeMethod=self.__addToCompleteList,
                                              printDetails=options.printDetails,
                                              printStats=options.printStats,
@@ -852,7 +852,7 @@ class PysqlShell(cmd.Cmd):
         parser = self.parser_session()
         options, args = parser.parse_args(arg)
         if options.all and args:
-            print CYAN+_("Note: the all (-a / --all) option is useless when display one session")+RESET
+            print CYAN + _("Note: the all (-a / --all) option is useless when display one session") + RESET
         if not args:
             # Lists all session
             result = pysqlfunctions.sessions(self.db, all=options.all, search=options.search)
@@ -1826,7 +1826,7 @@ class PysqlShell(cmd.Cmd):
         if result:
             self.__displayTab(result, self.db.getDescription())
         else:
-            print CYAN+_("(no result)")+RESET
+            print CYAN + _("(no result)") + RESET
 
         if moreRows:
             self.fetching = True

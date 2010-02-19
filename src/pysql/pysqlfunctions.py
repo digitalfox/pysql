@@ -10,7 +10,7 @@
 # pylint: disable-msg=E1101
 
 # Python imports:
-import os
+import os, re
 from os import getenv, unlink
 from md5 import md5
 from difflib import ndiff
@@ -242,8 +242,15 @@ def desc(db, objectName, completeMethod=None, printDetails=True, printStats=Fals
     conf = PysqlConf.getConfig()
     unit = conf.get("unit") # Unit used to format data
 
+    # Look for object type if given
+    matchResult = re.match("(.*) \((.+)\)", objectName)
+    if matchResult:
+        oraObject = OraObject(objectName=matchResult.group(1),
+                              objectType=matchResult.group(2))
+    else:
+        oraObject = OraObject(objectName=objectName)
+
     # Gets the object type and owner
-    oraObject = OraObject(objectName=objectName)
     oraObjectSet = oraObject.guessInfos(db, interactive=True)
 
     if len(oraObjectSet) == 1:
