@@ -258,9 +258,14 @@ def desc(db, objectName, completeMethod=None, printDetails=True, printStats=Fals
     elif len(oraObjectSet) > 1:
         print CYAN + _("Got multiple result:") + "\n-" + RESET,
         print "\n- ".join([str(x) for x in oraObjectSet])
-        # Looking for public objects
+        # Looking for own object
+        ownOraObjects = [o for o in oraObjectSet if o.getOwner() == db.getUsername().upper()]
         publicOraObjects = [o for o in oraObjectSet if o.getOwner() == "PUBLIC"]
-        if len(publicOraObjects) == 1:
+        if len(ownOraObjects) == 1:
+            oraObject = ownOraObjects.pop()
+            print BOLD + RED + _("Defaulting to own object: %s" % oraObject) + RESET
+        # Looking for public objects
+        elif len(publicOraObjects) == 1:
             oraObject = publicOraObjects.pop()
             print BOLD + RED + _("Defaulting to public object: %s" % oraObject) + RESET
 
