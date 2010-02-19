@@ -149,7 +149,7 @@ class OraObject:
                 objectType = db.executeAll(guessInfoSql["typeFromNameAndOwner"], [name, currentUsername])
                 for type in objectType:
                     if interactive:
-                        result.add(OraObject(owner, name, type[0]))
+                        result.add(OraObject(currentUsername, name, type[0]))
                     else:
                         self.setOwner(currentUsername)
                         self.setName(name)
