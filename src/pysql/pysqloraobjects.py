@@ -78,7 +78,7 @@ class OraObject:
             self.objectName = pysqlhelpers.upperIfNoQuotes(name)
         else:
             # Default to simple setName
-            self.objectName = objectName
+            self.objectName = pysqlhelpers.upperIfNoQuotes(objectName)
 
     def setType(self, objectType):
         """Sets the object type.
@@ -146,48 +146,52 @@ class OraObject:
         #TODO: this code should be factorized
         result = set() # Store here all guessInfos results
         currentUsername = db.getUsername().upper()
-        for name in (self.getName(), self.getName().upper()):
-            owner = self.getOwner()
-            if owner == "":
-                objectType = db.executeAll(guessInfoSql["typeFromNameAndOwner"], [name, currentUsername])
-                for type in objectType:
-                    if interactive:
-                        result.add(OraObject(currentUsername, name, type[0]))
-                    else:
-                        self.setOwner(currentUsername)
-                        self.setName(name)
-                        self.setType(type[0])
-                        self.guessStatus(db)
-                        return True
-                owner = u"PUBLIC"
+        name = self.getName()
+        owner = self.getOwner()
 
+        # Assume object is in current schema
+        if owner == "":
+            objectType = db.executeAll(guessInfoSql["typeFromNameAndOwner"], [name, currentUsername])
+            for type in objectType:
+                if interactive:
+                    result.add(OraObject(currentUsername, name, type[0]))
+                else:
+                    self.setOwner(currentUsername)
+                    self.setName(name)
+                    self.setType(type[0])
+                    self.guessStatus(db)
+                    return True
+            # Default to public
+            owner = u"PUBLIC"
+
+        objectType = db.executeAll(guessInfoSql["typeFromNameAndOwner"], [name, owner])
+        for type in objectType:
+            if interactive:
+                result.add(OraObject(owner, name, type[0]))
+            else:
+                self.setOwner(owner)
+                self.setName(name)
+                self.setType(type[0])
+                self.guessStatus(db)
+                return True
+
+        # Try SYS objects
+        owner = u"SYS"
+        try:
+            objectType = db.executeAll(guessInfoSql["typeFromNameAndSYS"], [name])
+        except PysqlException:
             objectType = db.executeAll(guessInfoSql["typeFromNameAndOwner"], [name, owner])
-            for type in objectType:
-                if interactive:
-                    result.add(OraObject(owner, name, type[0]))
-                else:
-                    self.setOwner(owner)
-                    self.setName(name)
-                    self.setType(type[0])
-                    self.guessStatus(db)
-                    return True
+        for type in objectType:
+            if interactive:
+                result.add(OraObject(owner, name, type[0]))
+            else:
+                self.setOwner(owner)
+                self.setName(name)
+                self.setType(type[0])
+                self.guessStatus(db)
+                return True
 
-            owner = u"SYS"
-            try:
-                objectType = db.executeAll(guessInfoSql["typeFromNameAndSYS"], [name])
-            except PysqlException:
-                objectType = db.executeAll(guessInfoSql["typeFromNameAndOwner"], [name, owner])
-            for type in objectType:
-                if interactive:
-                    result.add(OraObject(owner, name, type[0]))
-                else:
-                    self.setOwner(owner)
-                    self.setName(name)
-                    self.setType(type[0])
-                    self.guessStatus(db)
-                    return True
-
-        # Tries user, tablespace and so on
+        # Try user, tablespace and so on
         for name in (self.getName(), self.getName().upper()):
             try:
                 objectType = db.executeAll(guessInfoSql["otherTypeFromName"], [name])
