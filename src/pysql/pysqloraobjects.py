@@ -12,6 +12,7 @@
 # Pysql imports:
 from pysqlqueries import *
 from pysqlexception import PysqlException, PysqlNotImplemented, PysqlActionDenied
+import pysqlhelpers
 
 class OraObject:
     """Father of all pysql Oracle objects"""
@@ -74,7 +75,7 @@ class OraObject:
         elif objectName.count(".") == 1:
             (owner, name) = objectName.split(".")
             self.setOwner(owner)
-            self.objectName = name
+            self.objectName = pysqlhelpers.upperIfNoQuotes(name)
         else:
             # Default to simple setName
             self.objectName = objectName
@@ -123,9 +124,8 @@ class OraObject:
             self.__class__ = OraUser
 
     def setOwner(self, objectOwner):
-        """Sets the object owner. Name is uppercased.
-        This is not fully compliant with Oracle."""
-        self.objectOwner = objectOwner.upper()
+        """Sets the object owner. Name is uppercased if quote are not given"""
+        self.objectOwner = pysqlhelpers.upperIfNoQuotes(objectOwner)
 
     def setStatus(self, objectStatus):
         """Sets the object status. Name is uppercased.
