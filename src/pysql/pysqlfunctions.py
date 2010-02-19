@@ -253,6 +253,7 @@ def desc(db, objectName, completeMethod=None, printDetails=True, printStats=Fals
     # Gets the object type and owner
     oraObjectSet = oraObject.guessInfos(db, interactive=True)
 
+
     if len(oraObjectSet) == 1:
         oraObject = oraObjectSet.pop()
     elif len(oraObjectSet) > 1:
@@ -282,6 +283,9 @@ def desc(db, objectName, completeMethod=None, printDetails=True, printStats=Fals
         if oraObject.getType() == "SYNONYM":
             # cannot desc, too much synonym recursion
             return ([], [])
+
+    # Guess object status
+    oraObject.guessStatus(db)
 
     # Displays some information about the object
     if printDetails:

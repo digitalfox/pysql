@@ -128,9 +128,12 @@ class OraObject:
         self.objectOwner = pysqlhelpers.upperIfNoQuotes(objectOwner)
 
     def setStatus(self, objectStatus):
-        """Sets the object status. Name is uppercased.
-        This is not fully compliant with Oracle."""
         self.objectStatus = objectStatus
+
+    def guessStatus(self, db):
+        """guess the object status"""
+        status = db.executeAll(guessInfoSql["objectStatusFromName"], [self.getName()])
+        self.setStatus(status[0][0])
 
     def guessInfos(self, db, interactive=False):
         """Guesses and sets object type, owner and status
@@ -154,8 +157,7 @@ class OraObject:
                         self.setOwner(currentUsername)
                         self.setName(name)
                         self.setType(type[0])
-                        status = db.executeAll(guessInfoSql["objectStatusFromName"], [name])
-                        self.setStatus(status[0][0])
+                        self.guessStatus(db)
                         return True
                 owner = u"PUBLIC"
 
@@ -167,8 +169,7 @@ class OraObject:
                     self.setOwner(owner)
                     self.setName(name)
                     self.setType(type[0])
-                    status = db.executeAll(guessInfoSql["objectStatusFromName"], [name])
-                    self.setStatus(status[0][0])
+                    self.guessStatus(db)
                     return True
 
             owner = u"SYS"
@@ -183,8 +184,7 @@ class OraObject:
                     self.setOwner(owner)
                     self.setName(name)
                     self.setType(type[0])
-                    status = db.executeAll(guessInfoSql["objectStatusFromName"], [name])
-                    self.setStatus(status[0][0])
+                    self.guessStatus(db)
                     return True
 
         # Tries user, tablespace and so on
@@ -200,13 +200,7 @@ class OraObject:
                     self.setOwner(owner)
                     self.setName(name)
                     self.setType(type[0])
-                    if self.getType() == "DATA FILE":
-                        status = db.executeAll(guessInfoSql["dbfStatusFromName"], [name])
-                    elif self.getType() == "TABLESPACE":
-                        status = db.executeAll(guessInfoSql["tbsStatusFromName"], [name])
-                    elif self.getType() == "USER":
-                        status = db.executeAll(guessInfoSql["userStatusFromName"], [name])
-                    self.setStatus(status[0][0])
+                    self.guessStatus(db)
                     return True
 
         if interactive:
@@ -375,6 +369,11 @@ class OraDatafile(OraObject):
             raise PysqlException("Data file %s does not exist" % self.getName())
         else:
             return int(result[0][0])
+
+    def guessStatus(self, db):
+        """Guess datafile status"""
+        status = db.executeAll(guessInfoSql["dbfStatusFromName"], [self.getName()])
+        self.setStatus(status[0][0])
 
 class OraDBLink(OraObject):
     """Database link"""
@@ -804,6 +803,12 @@ class OraTablespace(OraObject):
         """@return: list of datafiles (updateDatafileList must be called before !)"""
         return self.datafiles
 
+    def guessStatus(self, db):
+        """guess tablespace status"""
+        status = db.executeAll(guessInfoSql["tbsStatusFromName"], [self.getName()])
+        self.setStatus(status[0][0])
+
+
 class OraTrigger(OraObject):
     """Trigger"""
 
@@ -899,6 +904,11 @@ class OraUser(OraObject):
             return ""
         else:
             return result[0][0]
+
+    def guessStatus(self, db):
+        """Guess user status"""
+        status = db.executeAll(guessInfoSql["userStatusFromName"], [self.getName()])
+        self.setStatus(status[0][0])
 
 class OraView(OraTabular):
     """Oracle view"""
