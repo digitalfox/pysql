@@ -1,50 +1,36 @@
-TODO
-
-*** Bugs *** 
-- les accents sont nickés sous windows
-- completion bizarre sous windows (ajout d'espaces entre les lettres)
-- lors d'un copier/coller les tabulations déclenchent la complétion et foutent le bazar...
-- gérer correctement les pb de droit sur les objets oracle (quasi fini)
-- si le prompt est en couleur l'affichage d'une commande de plus d'une ligne est tout pourri
-- gérer le cas de ce pauvre windows pour les couleurs (cf. source ipython)
-- desc un peu lent sur les tables (recherche des colonnes indexées sans doute). Investigation à faire
-- ctrl-C (break) ne marche pas toujours comme il faut : 
-	- ss unix : ok pour interrompre une requête, pas tjrs ok (dépend v. python et Oracle) pour interrompre une saisie en cours
-=> pb reproductible en ligne de cmd ss unix : la création de l'objet connection Cx_Oracle bloque l'exception keyboard interrupt
-	- ss win : nok pour interrompre une requête mais ok pour interrompre une saisie en cours...
-	
-
-*** Fonctionnalités à implémenter ***
-- implémenter la fonction archive de SQLplus
-- utiliser distutils/setuptools
-- fonction perfstat simplifiée (perfstat snap et perfstat report)
-- rendre la touche utilisée pour la complétion paramétrable
-- faire un mode interactif pour guessinfo afin de choisir l'objet souhaité par l'utilisateur en cas d'homonymie.
-- faire complétion sur les noms des commandes SQL de base
-- compléter la fonction desc
-	- desc table : ajouter les statistiques si elles existent
-	- desc trigger : indiquer table
-	- desc index : colonnes et position + nom table
-	- desc table : + PK + FK + unique
-	- desc index : info analyse profondeur+remplisssage
-- gérer des paramètres (get/set) pour : 
-	- la largeur du terminal (pour l'affichage par colonnes, à définir par defaut avec la taille du term)
-	- autres ?
-	- mieux gérer la lecture et l'enregistrement du fichier de conf (plutôt dégueu pour le moment)
-- ajouter des complétions un peu partout (en cours)
-- commande SID pour afficher la liste des SIDs
-- fonctions de recherche pour les synonyms,
-- test de surbooking tablespace/filesystem (pas possible si non local)
-- analyse table : nbre de liste chaînée, taux de fragmentation, highwatermark
-- faire une fonction watch (qui marche) pour répeter une requête toutes les n secondes
-- faire un mode "safe" qui filtre l'histo pour virer les DDL
-- visualisation et modification en ligne du code des packages, des triggers et des vues (vue : ok)
-
-*** Améliorations ***
-- générer les graph en arrière plan ?
-- rajouter une option "auto" pour le graph_program qui laisse à chaque fonction pysqlgraphics le soin de
-	prendre le bon programme
-- fonction csv pour les commandes pysql aussi (desc par exemple)
-- mieux structurer les commentaires du code pour mettre en évidence les paramètres et les valeurs retournées (en cours)
-- migrer un maximum (100% ?) de requêtes dans pysqlQueries
-- mettre en place des jeux de tests unitaire pour automatiser la non reg (en cours)
+- watch is broken            
+- unicode warning when describing tablespace
+- do_edit: don't update if nothing has been changed
+- catch ORA-00028 (session killed) to disconnect user
+- squash current cursor when changing connection     
+- datamodel does not handle table with accentuated name
+- migrate all function to OptionParser                 
+- update web site: screenshot, tutorial...             
+- move docstring from main to __init__ for proper display in epydoc
+- manage long ops (view V$SESSION_LONGOPS)                         
+- remove warning on unicode decode (make a replace with ?)         
+- warn user if NLS_LANG is stupid
+- allow to explain plan with hash value
+- find a solution to split pysqlshell in small pieces
+- add pyparsing deps in documentation
+- d�sactiver couleurs et banni�res en batch
+- ajouter date/heure de d�marrage de l'ordre sql dans la commande session
+- enhance browsing of procdure inside package
+- change md5 import to avoid deprec warning on python2.6
+- add function based index support (in desc index and desc table)
+- add user right management
+- add invalid object search and explanation
+- ease session trace and tkprof creation
+- generate graphics in background ?
+- extend csv function for other tabular output pysql function (ex. desc, sessions...)
+- enhance package browsing/editing
+- add a "safe history" mode that filter out DDL
+- enhance table desc with chained block, fragmentation rate, highwatermark...
+- function to test tablespace/filesystem surbooking (only when using pysql locally)
+- advanced desc function on table (PK, FK, UC), index, trigger...
+- better completion system on SQL request
+- function to start user trace
+- add function to manage advisory package
+- issues with accentuated caracter on windows
+- copy/paste with tabs make the terminal messy due to completion
+- colors for windows
