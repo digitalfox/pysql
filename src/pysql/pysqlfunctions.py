@@ -268,6 +268,9 @@ def desc(db, objectName, completeMethod=None, printDetails=True, printStats=Fals
         elif len(publicOraObjects) == 1:
             oraObject = publicOraObjects.pop()
             print BOLD + RED + _("Defaulting to public object: %s" % oraObject) + RESET
+    else:
+        # No result
+        return ([], [])
 
     # Object or type unknown?
     if oraObject.getType() == "":

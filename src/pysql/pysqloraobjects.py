@@ -210,6 +210,9 @@ class OraObject:
                     return True
 
         if interactive:
+            # If type is already defined, filter out object that does not match
+            if self.getType():
+                result = set([o for o in result if o.getType() == self.getType()])
             return result
         else:
             #Giving up.
