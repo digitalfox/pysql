@@ -8,6 +8,7 @@ that handles all pysql configuration stuff
 """
 
 # Python imports:
+import sys
 import os
 from os.path import expandvars, join
 import cPickle
@@ -111,7 +112,7 @@ class PysqlConf:
 
         # Searches for config file in $HOME (Unix) or %HOMEPATH% (Windows)
 
-        if self.__isReadWrite(self.configPath):
+        if self.__isReadWrite(self.configPath) and sys.stdin.isatty() and sys.stdout.isatty():
             print CYAN+_("Using config file %s") % self.configPath + RESET
 
         # Reads config file

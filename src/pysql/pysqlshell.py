@@ -61,9 +61,10 @@ class PysqlShell(cmd.Cmd):
         self.conf = PysqlConf.getConfig()
 
         # Are we in tty (user interaction) or not (script, pipe...) ?
-        # If not, doesn't use completion in script
-        if not sys.stdin.isatty():
+        # If not, doesn't use completion in script neither cursor animation
+        if not sys.stdin.isatty() or not sys.stdout.isatty():
             self.useCompletion = False
+            self.allowAnimatedCursor = False
 
         # Calls father constructor
         cmd.Cmd.__init__(self, "tab", stdin, stdout)
@@ -273,7 +274,10 @@ class PysqlShell(cmd.Cmd):
         if arg == "EOF":
             return self.__exit()
         else:
-            self.__executeSQL(arg)
+            if sys.stdin.isatty() and sys.stdout.isatty():
+                self.__executeSQL(arg, output="tty")
+            else:
+                self.__executeSQL(arg, output="notty")
 
     def do_help(self, arg):
         """
@@ -1645,10 +1649,17 @@ class PysqlShell(cmd.Cmd):
             termWidth = getTermWidth()
         widthMin = int(self.conf.get("widthMin"))   # Minimum size of the column
         transpose = (self.conf.get("transpose") == "yes")
-        shrink = (self.conf.get("shrink") == "yes")
         colsep = self.conf.get("colsep")
         if colsep == "space":
             colsep = " "
+
+        # Should output be shrinked to fit terminal width?
+        if sys.stdout.isatty():
+        # Uses configuration value
+            shrink = (self.conf.get("shrink") == "yes")
+        else:
+        # Disables shrinking if stdout isn't a tty
+            shrink = False
 
         nbLine = len(array)
         if len(array) == 0:
@@ -1742,7 +1753,7 @@ class PysqlShell(cmd.Cmd):
         except SyntaxError, e:
             raise PysqlException(_("Invalid syntax for argument checking"))
 
-    def __executeSQL(self, sql, output="screen", fileName="pysql.csv"):
+    def __executeSQL(self, sql, output="tty", fileName="pysql.csv"):
         """Executes SQL request
         @param sql: SQL request to executed
         @type sql: str
@@ -1772,13 +1783,16 @@ class PysqlShell(cmd.Cmd):
         # Choosing command with the first keyword
         keyword = sql.upper().split()[0]
         if keyword.startswith("SELECT"):
-            if output == "screen":
+            if output == "tty":
                 (result, moreRows) = self.db.execute(sql)
                 self.__toScreen(result, moreRows)
+            elif output == "notty":
+                result = self.db.executeAll(sql)
+                self.__toScreen(result, False)
             elif output == "csv":
                 self.db.execute(sql, fetch=False)
                 self.__toCsv(fileName)
-                print GREEN + "(Completed)" + RESET
+                print GREEN + _("(Completed)") + RESET
             elif output == "xml":
                 raise PysqlNotImplemented()
             elif output == "null":
@@ -1786,7 +1800,7 @@ class PysqlShell(cmd.Cmd):
                 for i in self.db.getCursor().fetchmany():
                     pass
             else:
-                raise PysqlException(_("Unknown output type !"))
+                raise PysqlException(_("Unknown output type!"))
         elif keyword.startswith("INSERT"):
             lines = self.db.execute(sql)
             print GREEN + unicode(lines) + _(" line(s) inserted") + RESET
