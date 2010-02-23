@@ -11,7 +11,7 @@ and backgound queries (BgQuery)
 
 #Python imports:
 from cx_Oracle import connect, DatabaseError, InterfaceError, LOB, STRING, SYSDBA, SYSOPER
-
+import sys
 from threading import Thread
 from datetime import datetime, date
 
@@ -113,7 +113,7 @@ class PysqlDb:
     def executeAll(self, sql, param=[]):
         """Executes the request given in parameter and
         returns a list of record (a cursor.fetchall())
-        Use a rpivate cursor not to pollute execute on.
+        Use a private cursor not to pollute execute on.
         So the getDescription does not work for executeAll"""
         sql = self.encodeSql(sql)
         param = self.encodeSql(param)
@@ -138,6 +138,8 @@ class PysqlDb:
          @param fetch: for select queries, start fetching (default is true)
          @param cursorSize: if defined, overide the config cursor size"""
         sql = self.encodeSql(sql)
+        if not sys.stdin.isatty():
+            fetch = False
         try:
             if self.cursor is None:
                 self.cursor = self.connection.cursor()
@@ -148,6 +150,8 @@ class PysqlDb:
             self.cursor.execute(sql)
             if sql.upper().startswith("SELECT") and fetch:
                 return self.fetchNext()
+            elif sql.upper().startswith("SELECT") and not fetch:
+                return (self.decodeData(self.cursor.fetchall()), False)
             else:
                 return self.getRowCount()
         except (DatabaseError, InterfaceError), e:

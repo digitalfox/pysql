@@ -484,3 +484,12 @@ diskusageSql = {
                                        AND p.partition_name=s.partition_name
                                        AND s.segment_type='INDEX PARTITION'"""
 }
+
+perfSql = {
+    "db_id"             : u"""select to_char(dbid) from v$database""",
+    "instance_num"      : u"""select to_char(instance_number) from v$instance""",
+    "snapshots"         : u"""select snap_id id, begin_interval_time time from dba_hist_snapshot where begin_interval_time > (sysdate - :1) order by snap_id desc""",
+    "addm_report_text"  : u"""select dbms_advisor.get_task_report(:1, 'TEXT', 'ALL') from sys.dual""",
+    "awr_report_html"   : u"""select * from table(dbms_workload_repository.awr_report_html(:1, :2, :3, :4))""",
+    "awr_report_text"   : u"""select * from table(dbms_workload_repository.awr_report_text(:1, :2, :3, :4))"""
+}

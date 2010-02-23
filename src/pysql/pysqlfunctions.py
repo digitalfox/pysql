@@ -44,7 +44,7 @@ def count(db, objectName):
     return oraObject.getRowCount(db)
 
 def compare(schemaA, schemaB):
-    """Compare two Oracle schema and return the difference"""
+    """Compares two Oracle schema and return the difference"""
     # First, compare list of tables
     tables = {}         # Store list of schema tables (key is schema)
     dbList = {}         # Store list of connect object to schema (key is schema)
@@ -155,7 +155,7 @@ def compareTableData(schemaA, schemaB, tableNameA, tableNameB, dbList):
 
     if tableStruct["A"] != tableStruct["B"]:
         raise PysqlException(
-         _("Unable to compare data of tables that does not have a common structure (columns name and type)"))
+         _("Unable to compare data of tables that do not have same structure (columns name and type)"))
 
     if tablePK["A"] == tablePK["B"] and tablePK["A"]: # identical and not None
         order = "order by %s" % (", ".join(tablePK["A"]))
@@ -469,7 +469,7 @@ def edit(db, objectName, content=""):
     if oraObject.getType() == "SYNONYM":
         oraObject = oraObject.getTarget(db)
         if oraObject.getType() == "SYNONYM":
-            raise PysqlException("Too much synonym recursion")
+            raise PysqlException(_("Too much synonym recursion"))
     if content == "":
         try:
             content = oraObject.getSQL(db)

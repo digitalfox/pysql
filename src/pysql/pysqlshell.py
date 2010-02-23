@@ -22,6 +22,7 @@ import csv
 from pysqldb import PysqlDb, BgQuery
 import pysqlfunctions
 import pysqlgraphics
+import pysqlaudit
 from pysqlexception import PysqlException, PysqlNotImplemented, PysqlOptionParserNormalExitException
 from pysqlconf import PysqlConf
 from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
@@ -62,7 +63,7 @@ class PysqlShell(cmd.Cmd):
 
         # Are we in tty (user interaction) or not (script, pipe...) ?
         # If not, doesn't use completion in script neither cursor animation
-        if not sys.stdin.isatty() or not sys.stdout.isatty():
+        if not sys.stdin.isatty():
             self.useCompletion = False
             self.allowAnimatedCursor = False
 
@@ -274,7 +275,7 @@ class PysqlShell(cmd.Cmd):
         if arg == "EOF":
             return self.__exit()
         else:
-            if sys.stdin.isatty() and sys.stdout.isatty():
+            if sys.stdin.isatty():
                 self.__executeSQL(arg, output="tty")
             else:
                 self.__executeSQL(arg, output="notty")
@@ -489,7 +490,8 @@ class PysqlShell(cmd.Cmd):
                             _("SQL request was loaded in your history. Use up arrow to get it now") \
                             + RESET
             else:
-                msg = _("Request %s does not exist. Type 'lib' without argument to see all request") % arg
+                msg = _("Request %s does not exist. ") % name + \
+                      _("Type 'lib' without argument to see all requests")
                 raise PysqlException(msg)
         elif nArgs > 1:
             # First argument is name and second argument can be sql or keyword remove
@@ -500,7 +502,8 @@ class PysqlShell(cmd.Cmd):
                     del self.conf.sqlLibrary[name]
                     print GREEN + _("Request has been removed") + RESET
                 else:
-                    msg = _("Request %s does not exist. Type 'lib' without argument to see all request") % name
+                    msg = _("Request %s does not exist. ") % name + \
+                          _("Type 'lib' without argument to see all requests")
                     raise PysqlException(msg)
             else:
                 # Add request
@@ -576,14 +579,14 @@ class PysqlShell(cmd.Cmd):
         print GREEN + _("Instance shut down") + RESET
 
     # High level functions
+
     def do_count(self, arg):
-        """Count segment lines"""
+        """Counts segment lines"""
         self.__checkConnection()
         self.__checkArg(arg, "==1")
         self.__animateCursor()
         result = pysqlfunctions.count(self.db, arg)
         print result
-
 
     def do_compare(self, arg):
         """Compares schema or object structure and data"""
@@ -631,7 +634,7 @@ class PysqlShell(cmd.Cmd):
         if tableNames:
             # We are just comparing two tables
             if len(tableNames) != 2:
-                raise PysqlException(_("Cannot compare a table and a schema !"))
+                raise PysqlException(_("Cannot compare a table and a schema!"))
             result = pysqlfunctions.compareTables(schemas[0], schemas[1],
                                                 tableNames[0], tableNames[1],
                                                 dbList, data=withData)
@@ -672,17 +675,17 @@ class PysqlShell(cmd.Cmd):
 
     def parser_describe(self):
         parser = PysqlOptionParser()
-        parser.set_usage("desc[ribe] [options] <object name>")
-        parser.set_description("Describes any Oracle object")
+        parser.set_usage(CYAN+_("desc[ribe] [options] <object name>")+RESET)
+        parser.set_description(_("Describes any Oracle object"))
         parser.add_option("-d", "--details", dest="printDetails",
                           default=False, action="store_true",
-                          help="Displays detailed information about the object")
+                          help=_("displays detailed information about the object"))
         parser.add_option("-t", "--stats", dest="printStats",
                           default=False, action="store_true",
-                          help="Displays statistics on the object if any")
+                          help=_("displays statistics on the object if any"))
         parser.add_option("-s", "--sort", dest="sort",
                           default=False, action="store_true",
-                          help="Sort column alphabetically instead of Oracle order")
+                          help=_("sorts column alphabetically instead of Oracle native order"))
         return parser
 
     def do_describe(self, arg):
@@ -699,12 +702,117 @@ class PysqlShell(cmd.Cmd):
                                              sort=options.sort)
         self.__displayTab(result, header)
 
+    # Audit functions
+    def parser_addmrpt(self):
+        parser = PysqlOptionParser()
+        parser.set_usage(CYAN+_("addm[rpt] [options]")+RESET)
+        parser.set_description(_("Generates tuning advice report based on AWR statistics. ")+
+        _("10g or upper is required. ")+
+        _("Before starting, please ensure that you have the required license to use it."))
+        parser.add_option("-b", "--begin", dest="begin_snap",
+                          default=u"0",
+                          help=_("begin snapshot identifier"))
+        parser.add_option("-e", "--end", dest="end_snap",
+                          default=u"0",
+                          help=_("end snapshot identifier"))
+        parser.add_option("-o", "--output-file", dest="filename",
+                          default=u"",
+                          help=_("output file"))
+        return parser
+
+    def do_addmrpt(self, arg):
+        """Generates ADDM report"""
+        parser = self.parser_addmrpt()
+        options, args = parser.parse_args(arg)
+        self.__checkConnection()
+        self.__checkArg(arg, "<=6")
+        if sys.stdin.isatty():
+            if options.begin_snap == "0":
+                (numDays, options.begin_snap) = self.__askForSnapshotId(0, _("begin"))
+            if options.end_snap   == "0":
+                (numDays, options.end_snap) = self.__askForSnapshotId(numDays, _("end"))
+        else:
+        # Not a tty, so command line must be complete.
+            if options.begin_snap == "0" or options.end_snap == "0":
+                raise PysqlException(_("Missing arguments. Please, specify snaphsot identifiers."))
+        self.__animateCursor() # Only after user interaction
+        result = pysqlaudit.addmReport(self.db,
+                                          options.begin_snap,
+                                          options.end_snap)
+        if options.filename == "":
+            self.__toScreen(result, moreRows=False, header=False)
+        else:
+            self.__toCsv(result, options.filename, header=False)
+            print GREEN + _("(Completed)") + RESET
+
+    def parser_awrrpt(self):
+        parser = PysqlOptionParser()
+        parser.set_usage(CYAN+_("awr[rpt] [options]")+RESET)
+        parser.set_description(_("Generates performance report based on AWR statistics. ")+
+        _("10g or upper is required. ")+
+        _("Before starting, please ensure that you have the required license to use it."))
+        parser.add_option("-t", "--type", dest="type",
+                          default="txt",
+                          help=_("output type: html or text"))
+        parser.add_option("-b", "--begin", dest="begin_snap",
+                          default=u"0",
+                          help=_("begin snapshot identifier"))
+        parser.add_option("-e", "--end", dest="end_snap",
+                          default=u"0",
+                          help=_("end snapshot identifier"))
+        parser.add_option("-o", "--output-file", dest="filename",
+                          default=u"",
+                          help=_("output file"))
+        return parser
+
+    def do_awrrpt(self, arg):
+        """Generates AWR report"""
+        parser = self.parser_awrrpt()
+        options, args = parser.parse_args(arg)
+        self.__checkConnection()
+        self.__checkArg(arg, "<=8")
+        if sys.stdin.isatty():
+            if options.begin_snap == "0":
+                (numDays, options.begin_snap) = self.__askForSnapshotId(0, _("begin"))
+            if options.end_snap   == "0":
+                (numDays, options.end_snap) = self.__askForSnapshotId(numDays, _("end"))
+        else:
+        # Not a tty, so command line must be complete.
+            if options.begin_snap == "0" or options.end_snap == "0":
+                raise PysqlException(_("Missing arguments. Please, specify snaphsot identifiers."))
+        self.__animateCursor() # Only after user interaction
+        result = pysqlaudit.awrReport(self.db,
+                                          options.type.lower(),
+                                          options.begin_snap,
+                                          options.end_snap)
+        if options.filename == "":
+            self.__toScreen(result, moreRows=False, header=False)
+        else:
+            self.__toCsv(result, options.filename, header=False)
+            print GREEN + _("(Completed)") + RESET
+
+    def parser_sprpt(self):
+        parser = PysqlOptionParser()
+        parser.set_usage(CYAN+_("sp[rpt] [options]")+RESET)
+        parser.set_description(_("Generates performance report based on Statpack statistics. "))
+        parser.add_option("-b", "--begin", dest="begin_snap",
+                          default="",
+                          help=_("begin snapshot identifier"))
+        parser.add_option("-e", "--end", dest="end_snap",
+                          default="",
+                          help=_("end snapshot identifier"))
+        parser.add_option("-o", "--output-file", dest="filename",
+                          default=u"",
+                          help=_("output file"))
+        return parser
+
+    # Graphic functions
     def parser_datamodel(self):
         parser = PysqlOptionParser()
-        parser.set_usage("datamodel [options] [filters on table name]]")
+        parser.set_usage(CYAN+_("datamodel [options] [filters on table name]]")+RESET)
         parser.set_description(
-            "Extracts the datamodel of a user filtered on selected table pattern. "
-            "The generation of the output is powered by Graphviz (http://www.graphviz.org)"
+            _("Extracts the datamodel of a user filtered on selected table pattern. ")+
+            _("The generation of the output is powered by Graphviz (http://www.graphviz.org)")
             )
         if self.db:
             defaultUser = self.db.getUsername()
@@ -712,10 +820,10 @@ class PysqlShell(cmd.Cmd):
             defaultUser = ""
         parser.add_option("-c", "--columns", dest="columns",
                           default=False, action="store_true",
-                          help="Also draw table's columns")
+                          help=_("also draws table's columns"))
         parser.add_option("-u", "--user", dest="user",
                           default=defaultUser,
-                          help="User owner of tables (schema)")
+                          help=_("user owner of tables (schema)"))
         return parser
 
     def do_datamodel(self, arg):
@@ -729,22 +837,22 @@ class PysqlShell(cmd.Cmd):
 
     def parser_dependencies(self):
         parser = PysqlOptionParser()
-        parser.set_usage("dep[endencies] [options] <object name>")
+        parser.set_usage(CYAN+_("dep[endencies] [options] <object name>")+RESET)
         parser.set_description(
-            "Displays object dependencies as a picture. "
-            "The generation of the output is powered by Graphviz (http://www.graphviz.org)"
+            _("Displays object dependencies as a picture. ")+
+            _("The generation of the output is powered by Graphviz (http://www.graphviz.org)")
             )
         directions = ("onto", "from", "both")
         parser.add_option("-d", "--direction", dest="direction",
                           default="both", type="choice",
                           metavar="<direction>", choices=directions,
-                          help="Direction of dependency tracking: %s" % ", ".join(directions))
+                          help=_("direction of dependency tracking: %s") % ", ".join(directions))
         parser.add_option("-r", "--recursion", dest="maxDepth",
                           default=self.conf.get("graph_depmaxdepth"), type="int",
-                          help="Maximum level of recursion")
+                          help=_("maximum level of recursion"))
         parser.add_option("-n", "--nodes", dest="maxNodes",
                           default=self.conf.get("graph_depmaxnodes"), type="int",
-                          help="Maximum number of nodes on graph")
+                          help=_("maximum number of nodes on graph"))
         return parser
 
     def do_dependencies(self, arg):
@@ -760,17 +868,17 @@ class PysqlShell(cmd.Cmd):
 
     def parser_diskusage(self):
         parser = PysqlOptionParser()
-        parser.set_usage("diskusage (or du) [options] <schema name>")
+        parser.set_usage(CYAN+_("diskusage (or du) [options] <schema name>")+RESET)
         parser.set_description(
-            "Extracts the physical storage of a user as a picture based on Oracle statistics. "
-            "The generation of the output is powered by Graphviz (http://www.graphviz.org)"
+            _("Extracts the physical storage of a user as a picture based on Oracle statistics. ")+
+            _("The generation of the output is powered by Graphviz (http://www.graphviz.org)")
             )
         parser.add_option("-i", "--index", dest="index",
                   default=False, action="store_true",
-                  help="Also draws index segment")
+                  help=_("also draws index segment"))
         parser.add_option("-p", "--percent", dest="percent",
                   default=False, action="store_true",
-                  help="Draws object sizes against others")
+                  help=_("draws object sizes against others"))
 
         return parser
 
@@ -837,16 +945,16 @@ class PysqlShell(cmd.Cmd):
 
     def parser_session(self):
         parser = PysqlOptionParser()
-        parser.set_usage("session [options] <session id>")
-        parser.set_description("Display Oracle sessions. "
-                               "If a session id is provided, display detailed session informations, "
-                               "else display all session summary")
+        parser.set_usage(CYAN+_("session [options] <session id>")+RESET)
+        parser.set_description(_("Display Oracle sessions. ")+
+                               _("If a session id is provided, display detailed session informations, ")+
+                               _("else display all session summary"))
         parser.add_option("-a", "--all", dest="all",
                           default=False, action="store_true",
-                          help="Display all foreground sessions, both active and inactive")
+                          help=_("displays all foreground sessions, both active and inactive"))
         parser.add_option("-s", "--search", dest="search",
                           action="append",
-                          help="Filter session display with given search term. Multiple search can be given to make 'and' search")
+                          help=_("filters session display with given search term. Multiple searches can be given to make 'and' search"))
         return parser
 
 
@@ -893,12 +1001,12 @@ class PysqlShell(cmd.Cmd):
 
     def parser_kill(self):
         parser = PysqlOptionParser()
-        parser.set_usage("kill [options] <session-id> <session-serial>")
-        parser.set_description("Kills the session given in parameter"
-                               "Uses the 'session' command to find session-id and session-serial (two first columns)")
+        parser.set_usage(CYAN+_("kill [options] <session-id> <session-serial>")+RESET)
+        parser.set_description(_("Kills the session given in parameter. ")+
+                               _("Uses the 'session' command to find session-id and session-serial (two first columns)"))
         parser.add_option("-i", "--immediate", dest="immediate",
                           default=False, action="store_true",
-                          help="Kill immediatly the current session")
+                          help=_("kills immediatly the current session"))
         return parser
 
     def do_kill(self, arg):
@@ -908,7 +1016,7 @@ class PysqlShell(cmd.Cmd):
         options, args = parser.parse_args(arg)
         self.__checkArg(args, "==2")
         pysqlfunctions.killSession(self.db, ",".join(args), immediate=options.immediate)
-        print GREEN + _("Kill has been sent to the session") + RESET
+        print GREEN + _("Kill signal has been sent to the session") + RESET
 
     def do_lock(self, arg):
         """Display instance lock"""
@@ -1317,7 +1425,7 @@ class PysqlShell(cmd.Cmd):
     def help_edit(self):
         """online help"""
         print CYAN + _("Usage:\n\ted[it] <object name>") + RESET
-        print _("Edit (view or modify) an object)")
+        print _("Edits (view or modify) an object)")
         print _("If no arg is provided, edits last SQL statement")
 
     def help_exit(self):
@@ -1654,11 +1762,11 @@ class PysqlShell(cmd.Cmd):
             colsep = " "
 
         # Should output be shrinked to fit terminal width?
-        if sys.stdout.isatty():
+        if header and sys.stdin.isatty():
         # Uses configuration value
             shrink = (self.conf.get("shrink") == "yes")
         else:
-        # Disables shrinking if stdout isn't a tty
+        # Disables shrinking if isn't a tty
             shrink = False
 
         nbLine = len(array)
@@ -1683,7 +1791,8 @@ class PysqlShell(cmd.Cmd):
         for i in xrange(nbLine):
             for j in xrange(nbColumn):
                 if array[i][j] is None:
-                    array[i][j] = "NULL"
+                    #array[i][j] = "NULL"
+                    array[i][j] = ""
 
         # Computes width max of each column (comprehension list are cool)
         width = [max([itemLength(i[j]) for i in array]) for j in range(nbColumn)]
@@ -1787,11 +1896,11 @@ class PysqlShell(cmd.Cmd):
                 (result, moreRows) = self.db.execute(sql)
                 self.__toScreen(result, moreRows)
             elif output == "notty":
-                result = self.db.executeAll(sql)
+                (result, moreRows) = self.db.execute(sql, fetch=False)
                 self.__toScreen(result, False)
             elif output == "csv":
-                self.db.execute(sql, fetch=False)
-                self.__toCsv(fileName)
+                (result, moreRows) = self.db.execute(sql, fetch=False)
+                self.__toCsv(result, fileName)
                 print GREEN + _("(Completed)") + RESET
             elif output == "xml":
                 raise PysqlNotImplemented()
@@ -1830,15 +1939,20 @@ class PysqlShell(cmd.Cmd):
         else:
             print RED + BOLD + _("Unknown command or sql order. Type help for help") + RESET
 
-    def __toScreen(self, result, moreRows):
+    def __toScreen(self, result, moreRows, header=True):
         """Displays first part of fetch on screen
         @param result: array of tabular data
         @type result: list of list of str
         @param moreRows: indicates if there's more data to fetching
         @type moreRows: bool
+        @param header: indicates if header must be displayed or not
+        @type header: bool
         """
         if result:
-            self.__displayTab(result, self.db.getDescription())
+            if header:
+                self.__displayTab(result, self.db.getDescription())
+            else:
+                self.__displayTab(result)
         else:
             print CYAN + _("(no result)") + RESET
 
@@ -1848,16 +1962,18 @@ class PysqlShell(cmd.Cmd):
         else:
             self.fetching = False
 
-    def __toCsv(self, fileName):
-        """Write query result to a file"""
+    def __toCsv(self, result, fileName, header=True):
+        """Writes query result to a file"""
         try:
             fileHandle = file(fileName, "w")
             csv_writer = csv.writer(fileHandle, dialect="excel")
-            csv_writer.writerow(self.db.getDescription()) # Header
-            for line in self.db.getCursor():
+            if header:
+                csv_writer.writerow(self.db.getDescription()) # Header
+            for line in result:
                 csv_writer.writerow(line)
         except Exception, e:
             raise PysqlException(e)
+        fileHandle.close()
 
     def __fetchNext(self, nbLines=0):
         """ Fetches next result of current cursor"""
@@ -1902,12 +2018,33 @@ class PysqlShell(cmd.Cmd):
         self.rc = rc
         return True
 
+    def __askForSnapshotId(self, numDays=0, text=""):
+        """ Prompts user and asks him to choose a snapshot id"""
+        if numDays == 0:
+            try:
+                answer=raw_input(CYAN+_("Specify the number of days of snapshots to choose from: ")+RESET)
+                numDays=int(answer)
+            except (SyntaxError, ValueError), e:
+                raise PysqlException(_("Invalid number of days"))
+        if numDays <= 0:
+            raise PysqlException(_("Invalid number of days"))
+        result=pysqlaudit.listSnapshotId(self.db, numDays)
+        self.__toScreen(result, False)
+        try:
+            answer=raw_input(CYAN+_("Enter %s snapshot identifier: ") % text +RESET)
+            return (numDays, str(int(answer)))
+        except (SyntaxError, ValueError), e:
+            raise PysqlException(_("Invalid snaphsot id"))
+
     # Complete functions aliases
     complete_conn = complete_connect
     complete_lib = complete_library
 
     # Functions aliases
-    aliases = {"conn" : "connect",
+    aliases = {
+             "addm" : "addmrpt",
+             "awr"  : "awrrpt",
+             "conn" : "connect",
              "dep"  : "dependencies",
              "desc" : "describe",
              "disc" : "disconnect",
