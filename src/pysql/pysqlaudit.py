@@ -24,7 +24,7 @@ def listSnapshotId(db, numDays=1):
     """Prompts user to choose a snapshot id
     @arg db: connection object
     @arg numDays: the number of days of snapshots"""
-    return db.executeAll(perfSql["snapshots"], [str(numDays)])
+    return db.executeAll(perfSql["snapshots"], [unicode(numDays)])
 
 def addmReport(db, begin_snap="0", end_snap="0"):
     """Generates ADDM report
@@ -76,7 +76,7 @@ def addmReport(db, begin_snap="0", end_snap="0"):
 
   END;
 END;
-""" %(dbid, inum, begin_snap, end_snap)
+""" % (dbid, inum, begin_snap, end_snap)
 
     # Creates task
     db.execute(sql)
