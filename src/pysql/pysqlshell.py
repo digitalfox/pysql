@@ -801,7 +801,7 @@ class PysqlShell(cmd.Cmd):
                           help=_("type of segment: TABLE | INDEX | BOTH"))
         parser.add_option("-t", "--tablespace", dest="tbs",
                           default=u"%",
-                          help=_("filters by user"))
+                          help=_("filters by tablespace"))
         parser.add_option("-u", "--user", dest="user",
                           default=u"%",
                           help=_("filters by user"))

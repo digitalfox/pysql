@@ -24,7 +24,10 @@ def listSnapshotId(db, numDays=1):
     """Prompts user to choose a snapshot id
     @arg db: connection object
     @arg numDays: the number of days of snapshots"""
-    return db.executeAll(perfSql["snapshots"], [unicode(numDays)])
+    try:
+        return db.executeAll(perfSql["snapshots"], [unicode(numDays)])
+    except Exception, e:
+        raise PysqlException(_("Insufficient privileges"))
 
 def addmReport(db, begin_snap="0", end_snap="0"):
     """Generates ADDM report
@@ -33,8 +36,11 @@ def addmReport(db, begin_snap="0", end_snap="0"):
     @arg end_snap: snapshot"""
 
     # Gets database id and instance number
-    dbid = db.executeAll(perfSql["db_id"])[0][0]
-    inum = db.executeAll(perfSql["instance_num"])[0][0]
+    try:
+        dbid = db.executeAll(perfSql["db_id"])[0][0]
+        inum = db.executeAll(perfSql["instance_num"])[0][0]
+    except Exception, e:
+        raise PysqlException(_("Insufficient privileges"))
 
     if begin_snap == "0" or end_snap == "0":
         raise PysqlException(_("Invalid snapshot pair: (%s ; %s)") % (begin_snap, end_snap))
@@ -82,7 +88,7 @@ END;
     try:
         db.execute(sql)
     except Exception, e:
-        raise(_("Insufficient privileges"))
+        raise PysqlException(_("Insufficient privileges"))
     # Gets task name
     task_name = db.getServerOuput()[0]
     # Generates report from task
@@ -97,8 +103,11 @@ def awrReport(db, type="txt", begin_snap="0", end_snap="0"):
     @arg end_snap: snapshot"""
 
     # Gets database id and instance number
-    dbid = db.executeAll(perfSql["db_id"])[0][0]
-    inum = db.executeAll(perfSql["instance_num"])[0][0]
+    try:
+        dbid = db.executeAll(perfSql["db_id"])[0][0]
+        inum = db.executeAll(perfSql["instance_num"])[0][0]
+    except Exception, e:
+        raise PysqlException(_("Insufficient privileges"))
 
     if begin_snap == "0" or end_snap == "0":
         raise PysqlException(_("Invalid snapshot pair: (%s ; %s)") % (begin_snap, end_snap))
@@ -122,17 +131,17 @@ def duReport(db, segmentType, tbs="%", user="%", nbRows=-1):
     @arg nbRows: number of lines to return, all if not specified
     """
     # Gets storage size used considering user and tablespace restrictions
-    size = db.executeAll(durptSql["nbTotalBlocks"], [tbs, user])[0][0]
-
     try:
-    # Generates report
-        if segmentType.lower() == "table":
-            result = db.executeAll(durptSql["tablesForTbsAndUser"],  [unicode(size), tbs, user])
-        elif segmentType.lower() == "index":
-            result = db.executeAll(durptSql["indexesForTbsAndUser"], [unicode(size), tbs, user])
-        else:
-            raise(_("Internal error: type %s not supported") % segmentType)
-    except Exception, e:
+        size = db.executeAll(durptSql["nbTotalBlocks"], [tbs, user])[0][0]
+    except PysqlException, e:
         raise PysqlException(_("Insufficient privileges"))
+
+    # Generates report
+    if segmentType.lower() == "table":
+        result = db.executeAll(durptSql["tablesForTbsAndUser"],  [unicode(size), tbs, user])
+    elif segmentType.lower() == "index":
+        result = db.executeAll(durptSql["indexesForTbsAndUser"], [unicode(size), tbs, user])
+    else:
+        raise PysqlException(_("Internal error: type %s not supported") % segmentType)
 
     return result[:nbRows]

@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pysql\n"
-"POT-Creation-Date: 2010-02-27 09:48+CET\n"
-"PO-Revision-Date: 2010-02-27 09:52+0100\n"
+"POT-Creation-Date: 2010-02-27 10:54+CET\n"
+"PO-Revision-Date: 2010-02-27 10:54+0100\n"
 "Last-Translator: Sébastien Delcros <Sebastien.Delcros@Gmail.com>\n"
 "Language-Team: French <>\n"
 "MIME-Version: 1.0\n"
@@ -870,7 +870,8 @@ msgstr "durpt [options]"
 #: src/pysql/pysqlshell.py:797
 msgid "Generates storage report based on segment statistics. "
 msgstr ""
-"Génère un rapport sur le stockage à partir des des statistiques des segments. "
+"Génère un rapport sur le stockage à partir des des statistiques des "
+"segments. "
 
 #: src/pysql/pysqlshell.py:798
 msgid "DBA grants are required. "
@@ -880,7 +881,11 @@ msgstr "Les permissions DBA sont requises."
 msgid "type of segment: TABLE | INDEX | BOTH"
 msgstr "type de segment : TABLE ou INDEX ou BOTH (les deux)"
 
-#: src/pysql/pysqlshell.py:804 src/pysql/pysqlshell.py:807
+#: src/pysql/pysqlshell.py:804
+msgid "filters by tablespace"
+msgstr "filtre par tablespace"
+
+#: src/pysql/pysqlshell.py:807
 msgid "filters by user"
 msgstr "filtre par utilisateur"
 
