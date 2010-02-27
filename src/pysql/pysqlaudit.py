@@ -79,7 +79,10 @@ END;
 """ % (dbid, inum, begin_snap, end_snap)
 
     # Creates task
-    db.execute(sql)
+    try:
+        db.execute(sql)
+    except Exception, e:
+        raise(_("Insufficient privileges"))
     # Gets task name
     task_name = db.getServerOuput()[0]
     # Generates report from task
@@ -101,8 +104,35 @@ def awrReport(db, type="txt", begin_snap="0", end_snap="0"):
         raise PysqlException(_("Invalid snapshot pair: (%s ; %s)") % (begin_snap, end_snap))
 
     # Generates report
-    if type == "html":
-        result = db.executeAll(perfSql["awr_report_html"], [dbid, inum, begin_snap, end_snap])
-    else:
-        result = db.executeAll(perfSql["awr_report_text"], [dbid, inum, begin_snap, end_snap])
+    try:
+        if type.lower() == "html":
+            result = db.executeAll(perfSql["awr_report_html"], [dbid, inum, begin_snap, end_snap])
+        else:
+            result = db.executeAll(perfSql["awr_report_text"], [dbid, inum, begin_snap, end_snap])
+    except Exception, e:
+        raise PysqlException(_("Insufficient privileges"))
     return result
+
+def duReport(db, segmentType, tbs="%", user="%", nbRows=-1):
+    """Generates storage report
+    @arg db: connection object
+    @arg segmentType: type (table or index)
+    @arg tbs: tablespace to analyze, all if not specified
+    @arg user: user to analyze, all users if not specified
+    @arg nbRows: number of lines to return, all if not specified
+    """
+    # Gets storage size used considering user and tablespace restrictions
+    size = db.executeAll(durptSql["nbTotalBlocks"], [tbs, user])[0][0]
+
+    try:
+    # Generates report
+        if segmentType.lower() == "table":
+            result = db.executeAll(durptSql["tablesForTbsAndUser"],  [unicode(size), tbs, user])
+        elif segmentType.lower() == "index":
+            result = db.executeAll(durptSql["indexesForTbsAndUser"], [unicode(size), tbs, user])
+        else:
+            raise(_("Internal error: type %s not supported") % segmentType)
+    except Exception, e:
+        raise PysqlException(_("Insufficient privileges"))
+
+    return result[:nbRows]

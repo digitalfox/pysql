@@ -753,7 +753,7 @@ class PysqlShell(cmd.Cmd):
         _("Before starting, please ensure that you have the required license to use it."))
         parser.add_option("-t", "--type", dest="type",
                           default="txt",
-                          help=_("output type: html or text"))
+                          help=_("output type: HTML | TEXT"))
         parser.add_option("-b", "--begin", dest="begin_snap",
                           default=u"0",
                           help=_("begin snapshot identifier"))
@@ -791,20 +791,55 @@ class PysqlShell(cmd.Cmd):
             self.__toCsv(result, options.filename, header=False)
             print GREEN + _("(Completed)") + RESET
 
-    def parser_sprpt(self):
+    def parser_durpt(self):
         parser = PysqlOptionParser()
-        parser.set_usage(CYAN+_("sp[rpt] [options]")+RESET)
-        parser.set_description(_("Generates performance report based on Statpack statistics. "))
-        parser.add_option("-b", "--begin", dest="begin_snap",
-                          default="",
-                          help=_("begin snapshot identifier"))
-        parser.add_option("-e", "--end", dest="end_snap",
-                          default="",
-                          help=_("end snapshot identifier"))
+        parser.set_usage(CYAN+_("durpt [options]")+RESET)
+        parser.set_description(_("Generates storage report based on segment statistics. ")+
+        _("DBA grants are required. "))
+        parser.add_option("-s", "--segment-type", dest="type",
+                          default=u"both",
+                          help=_("type of segment: TABLE | INDEX | BOTH"))
+        parser.add_option("-t", "--tablespace", dest="tbs",
+                          default=u"%",
+                          help=_("filters by user"))
+        parser.add_option("-u", "--user", dest="user",
+                          default=u"%",
+                          help=_("filters by user"))
+        parser.add_option("-n", "--nbLines", dest="nbLines",
+                          default=-1,
+                          help=_("filters resultset to the n first rows"))
         parser.add_option("-o", "--output-file", dest="filename",
                           default=u"",
-                          help=_("output file"))
+                          help=_("output file")+_(" (1 distinct file per segment type)"))
         return parser
+
+    def do_durpt(self, arg):
+        """Generates disk usage report"""
+        parser = self.parser_durpt()
+        options, args = parser.parse_args(arg)
+        self.__checkConnection()
+        self.__checkArg(arg, "<=8")
+        self.__animateCursor()
+        for type in ("table", "index"):
+            if options.type.lower() in ("both", type):
+                result = pysqlaudit.duReport(self.db,
+                            type,
+                            options.tbs.upper().replace('*', '%'),
+                            options.user.upper().replace('*', '%'),
+                            int(options.nbLines))
+            if options.filename == "":
+                print GREEN + _("***** %s *****") % type.upper() + RESET
+                self.__toScreen(result, moreRows=False)
+                print
+            else:
+                if options.filename.split(".")[-1] == "csv":
+                    filename=options.filename.replace(".csv", "_%s.csv" % type.lower())
+                elif options.filename.split(".")[-1] == "CSV":
+                    filename=options.filename.replace(".CSV", "_%s.CSV" % type.upper())
+                else:
+                    filename=options.filename+"_"+type
+                self.__toCsv(result, filename)
+                print GREEN + _("(Completed)") + RESET
 
     # Graphic functions
     def parser_datamodel(self):
@@ -1704,7 +1739,7 @@ class PysqlShell(cmd.Cmd):
         if blank or not self.showPrompt:
             prompt = ""
         elif multiline:
-            prompt = "> "
+            prompt = ""
         else:
             if self.db is None:
                 prompt = self.notConnectedPrompt
