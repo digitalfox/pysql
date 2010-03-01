@@ -145,3 +145,20 @@ def duReport(db, segmentType, tbs="%", user="%", nbRows=-1):
         raise PysqlException(_("Internal error: type %s not supported") % segmentType)
 
     return result[:nbRows]
+
+def assmReport(db, name):
+    """Generates a storage report (may take a while)
+    @arg db: connection object
+    @arg name: table name
+    """
+    table = OraTable(tableName=name)
+    allocatedBlocks  = table.getUsedBlocks(db)
+    reallyUsedBlocks = table.getReallyUsedBlocks(db)
+    lostBlocks = allocatedBlocks - reallyUsedBlocks
+
+    header = [_("Owner"), _("Name"), _("Allocated"), _("Really used"), _("Lost"), _("Lost(%)")]
+    result = [[table.getOwner(), table.getName(), allocatedBlocks, reallyUsedBlocks, lostBlocks, round(100*lostBlocks/allocatedBlocks, 1)]]
+
+    return (result, header)
+
+

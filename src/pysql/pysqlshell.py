@@ -37,7 +37,6 @@ class PysqlShell(cmd.Cmd):
 
         # Instance attributes
         self.db = None                # Db connection object
-
         self.fetching = False         # Indicate if a request is running
         self.multilineCmd = False     # Indicate if the user is in a multiline command
         self.plBloc = False           # Indicate if the user is in a PL/SQL bloc
@@ -842,6 +841,14 @@ class PysqlShell(cmd.Cmd):
                     filename=options.filename+"_"+type
                 self.__toCsv(result, filename)
                 print GREEN + _("(Completed)") + RESET
+
+    def do_assmrpt(self, arg):
+        """Generates ASSM report"""
+        self.__checkConnection()
+        self.__checkArg(arg, "<=8")
+        self.__animateCursor()
+        (result, header) = pysqlaudit.assmReport(self.db, arg)
+        self.__displayTab(result, header)
 
     # Graphic functions
     def parser_datamodel(self):

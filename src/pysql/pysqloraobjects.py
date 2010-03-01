@@ -764,6 +764,31 @@ class OraTable(OraTabular, OraSegment):
         else:
             return result[0][0]
 
+    def getReallyUsedBlocks(self, db):
+        """Gets number of really used blocks from rowids"""
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
+        else:
+            owner = self.getOwner()
+        result = db.executeAll(tableSql["reallyUsedBlocksFromOwnerAndName"] % (owner, self.getName()))
+        if len(result) == 0:
+            return ""
+        else:
+            return result[0][0]
+
+    def isPartitioned(self, db):
+        """Gets True if the table is partitioned
+        @return: true if table is partitioned, false otherwise"""
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
+        else:
+            owner = self.getOwner()
+        result = db.executeAll(tableSql["isPartitionedFromOwnerAndName"], [owner, self.getName()])
+        if len(result) == 0:
+            return ""
+        else:
+            return (result[0][0] == "YES")
+
 class OraTablespace(OraObject):
     """Tablespace"""
 

@@ -202,6 +202,12 @@ tableSql = {
     "usedBlocksFromOwnerAndName"    :    u"""select blocks
                                               from all_tables
                                               where owner=:1
+                                              and table_name=:2""",
+    "reallyUsedBlocksFromOwnerAndName" : u"""select count(distinct dbms_rowid.rowid_block_number(rowid))
+                                              from %s.%s""",
+    "isPartitionedFromOwnerAndName" : u"""select partitioned
+                                              from all_tables
+                                              where owner=:1
                                               and table_name=:2"""
     }
 
