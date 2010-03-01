@@ -35,8 +35,9 @@ class PysqlShell(cmd.Cmd):
     def __init__(self, completekey='tab', stdin=None, stdout=None, silent=False, argv=[]):
         """Shell initialisation"""
 
-        # Instance attributs
+        # Instance attributes
         self.db = None                # Db connection object
+
         self.fetching = False         # Indicate if a request is running
         self.multilineCmd = False     # Indicate if the user is in a multiline command
         self.plBloc = False           # Indicate if the user is in a PL/SQL bloc
@@ -55,6 +56,7 @@ class PysqlShell(cmd.Cmd):
         self.rc = 0                   # Shell exit code
         self.oldTermName = ""         # Old terminal name
         self.waitCursor = None        # Waiting cursor thread handler
+        self.tty = sys.stdin.isatty() # Indicate if user interactivity is possible or not.
         self.allowAnimatedCursor = True # Enable or not animated cursor. Useful for test.
         self.notConnectedPrompt = RED + _("(not connected) ") + RESET
 
@@ -63,7 +65,7 @@ class PysqlShell(cmd.Cmd):
 
         # Are we in tty (user interaction) or not (script, pipe...) ?
         # If not, doesn't use completion in script neither cursor animation
-        if not sys.stdin.isatty():
+        if not self.tty:
             self.useCompletion = False
             self.allowAnimatedCursor = False
 
@@ -275,7 +277,7 @@ class PysqlShell(cmd.Cmd):
         if arg == "EOF":
             return self.__exit()
         else:
-            if sys.stdin.isatty():
+            if self.tty:
                 self.__executeSQL(arg, output="tty")
             else:
                 self.__executeSQL(arg, output="notty")
@@ -726,7 +728,7 @@ class PysqlShell(cmd.Cmd):
         options, args = parser.parse_args(arg)
         self.__checkConnection()
         self.__checkArg(arg, "<=6")
-        if sys.stdin.isatty():
+        if self.tty:
             if options.begin_snap == "0":
                 (numDays, options.begin_snap) = self.__askForSnapshotId(0, _("begin"))
             if options.end_snap   == "0":
@@ -771,7 +773,7 @@ class PysqlShell(cmd.Cmd):
         options, args = parser.parse_args(arg)
         self.__checkConnection()
         self.__checkArg(arg, "<=8")
-        if sys.stdin.isatty():
+        if self.tty:
             if options.begin_snap == "0":
                 (numDays, options.begin_snap) = self.__askForSnapshotId(0, _("begin"))
             if options.end_snap   == "0":
@@ -1797,7 +1799,7 @@ class PysqlShell(cmd.Cmd):
             colsep = " "
 
         # Should output be shrinked to fit terminal width?
-        if header and sys.stdin.isatty():
+        if header and self.tty:
         # Uses configuration value
             shrink = (self.conf.get("shrink") == "yes")
         else:
