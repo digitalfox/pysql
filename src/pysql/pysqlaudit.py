@@ -152,12 +152,19 @@ def assmReport(db, name):
     @arg name: table name
     """
     table = OraTable(tableName=name)
-    allocatedBlocks  = table.getUsedBlocks(db)
-    reallyUsedBlocks = table.getReallyUsedBlocks(db)
-    lostBlocks = allocatedBlocks - reallyUsedBlocks
+    table.guessInfos(db)
+    try:
+        neededBlocks = table.getNeededBlocks(db)
+    except PysqlException, e:
+        raise PysqlException(_("Table %s does not exist") % table.getName())
+    try:
+        allocatedBlocks = table.getUsedBlocks(db)
+    except PysqlException, e:
+        raise PysqlActionDenied(_("Insufficient privileges"))
+    lostBlocks = allocatedBlocks - neededBlocks
 
-    header = [_("Owner"), _("Name"), _("Allocated"), _("Really used"), _("Lost"), _("Lost(%)")]
-    result = [[table.getOwner(), table.getName(), allocatedBlocks, reallyUsedBlocks, lostBlocks, round(100*lostBlocks/allocatedBlocks, 1)]]
+    header = [_("Owner"), _("Name"), _("Allocated"), _("Needed"), _("Lost"), _("Lost(%)")]
+    result = [[table.getOwner(), table.getName(), allocatedBlocks, neededBlocks, lostBlocks, round(100*float(lostBlocks)/allocatedBlocks, 1)]]
 
     return (result, header)
 

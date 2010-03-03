@@ -200,12 +200,14 @@ tableSql = {
                                               where owner=:1
                                               and table_name=:2""",
     "usedBlocksFromOwnerAndName"    :    u"""select blocks
-                                              from all_tables
+                                              from dba_segments
                                               where owner=:1
-                                              and table_name=:2""",
-    "reallyUsedBlocksFromOwnerAndName" : u"""select count(distinct dbms_rowid.rowid_block_number(rowid))
+                                              and segment_type='TABLE'
+                                              and segment_name=:2""",
+    "neededBlocksFromOwnerAndName"  :    u"""select
+                                              count(distinct dbms_rowid.rowid_block_number(rowid))
                                               from %s.%s""",
-    "isPartitionedFromOwnerAndName" : u"""select partitioned
+    "isPartitionedFromOwnerAndName" :    u"""select partitioned
                                               from all_tables
                                               where owner=:1
                                               and table_name=:2"""

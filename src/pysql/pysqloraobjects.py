@@ -764,13 +764,13 @@ class OraTable(OraTabular, OraSegment):
         else:
             return result[0][0]
 
-    def getReallyUsedBlocks(self, db):
+    def getNeededBlocks(self, db):
         """Gets number of really used blocks from rowids"""
         if self.getOwner() == "":
             owner = db.getUsername().upper()
         else:
             owner = self.getOwner()
-        result = db.executeAll(tableSql["reallyUsedBlocksFromOwnerAndName"] % (owner, self.getName()))
+        result = db.executeAll(tableSql["neededBlocksFromOwnerAndName"] % (owner, self.getName()))
         if len(result) == 0:
             return ""
         else:

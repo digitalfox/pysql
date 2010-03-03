@@ -845,7 +845,7 @@ class PysqlShell(cmd.Cmd):
     def do_assmrpt(self, arg):
         """Generates ASSM report"""
         self.__checkConnection()
-        self.__checkArg(arg, "<=8")
+        self.__checkArg(arg, "=1")
         self.__animateCursor()
         (result, header) = pysqlaudit.assmReport(self.db, arg)
         self.__displayTab(result, header)
@@ -1408,6 +1408,12 @@ class PysqlShell(cmd.Cmd):
         return self.__exit()
 
     # Command help definitions (in alphabetic order)
+    def help_assmrpt(self):
+        """online help"""
+        print _("Usage:")
+        print "\t" + CYAN + "assmrpt " + _("<table name>") + RESET
+        print _("Computes block clustering introduced by Oracle ASSM")
+
     def help_bg(self):
         """online help"""
         print _("Usage:")
@@ -1470,12 +1476,6 @@ class PysqlShell(cmd.Cmd):
         print
         print _("Example:")
         print "\t" + CYAN + _("ddl DUAL") + RESET
-
-    def help_describe(self):
-        """online help"""
-        print _("Usage:")
-        print "\t" + CYAN + _("desc[ribe] [options] <object name>") + RESET
-        print _("Describes any Oracle object")
 
     def help_directory(self):
         """online help"""
