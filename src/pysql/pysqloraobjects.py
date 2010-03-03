@@ -915,6 +915,28 @@ class OraUser(OraObject):
     def __init__(self, userOwner="", userName=""):
         """Directory creation"""
         OraObject.__init__(self, userOwner, userName, u"USER")
+        self.tablespaces = []
+
+    def updateTablespaceList(self, db):
+        """Gets list of the tablespace which stores user segments"""
+        self.tablespaces = []
+        if self.getName() != "":
+            tablespaceNameList = db.executeAll(userSql["tablespaceFromName"], [self.getName()])
+            if len(tablespaceNameList) == 0:
+                # Tries upper case
+                self.setName(self.getName().upper())
+                tablespaceNameList = db.executeAll(userSql["tablespaceFromName"], [self.getName()])
+                if len(tablespaceNameList) == 0:
+                    return
+            # Transposes datafile names vector
+            tablespaceNames = [i[0] for i in tablespaceNameList]
+            # Fills data file list
+            for tablespaceName in tablespaceNames:
+                self.tablespaces.append(OraTablespace("", tablespaceName))
+
+    def getTablespaces(self):
+        """@return: list of tablespaces (updateTablespaceList must be called before !)"""
+        return self.tablespaces
 
     def getDefaultTablespace(self, db):
         """@return: default tablespace name of the user"""
@@ -929,6 +951,24 @@ class OraUser(OraObject):
         """@return: temporary tablespace name of the user"""
         self.setName(self.getName().upper())
         result = db.executeAll(userSql["tempTbsFromName"], [self.getName()])
+        if len(result) == 0:
+            return ""
+        else:
+            return result[0][0]
+
+    def getNbTables(self, db, tablespace=u"%"):
+        """@return: number of tables owned by the user"""
+        self.setName(self.getName().upper())
+        result = db.executeAll(userSql["nbTablesFromNameAndTbs"], [self.getName(), tablespace])
+        if len(result) == 0:
+            return ""
+        else:
+            return result[0][0]
+
+    def getNbIndexes(self, db, tablespace=u"%"):
+        """@return: number of indexes owned by the user"""
+        self.setName(self.getName().upper())
+        result = db.executeAll(userSql["nbIndexesFromNameAndTbs"], [self.getName(), tablespace])
         if len(result) == 0:
             return ""
         else:

@@ -280,12 +280,28 @@ triggerSql = {
     }
 
 userSql = {
-    "defaultTbsFromName"    :    u"""select default_tablespace
+    "tablespaceFromName" :    u"""select tablespace_name
+                        from dba_segments
+                        where owner=:1
+                        group by tablespace_name
+                        union
+                        select default_tablespace
+                        from dba_users
+                        where username=:1""",
+    "defaultTbsFromName" :    u"""select default_tablespace
                         from dba_users
                         where username=:1""",
     "tempTbsFromName"    :    u"""select temporary_tablespace
                         from dba_users
-                        where username=:1"""
+                        where username=:1""",
+    "nbTablesFromNameAndTbs"  :    u"""select count(*)
+                        from all_tables
+                        where owner=:1
+                          and tablespace_name like :2""",
+    "nbIndexesFromNameAndTbs"  :    u"""select count(*)
+                        from all_indexes
+                        where owner=:1
+                          and tablespace_name like :2"""
     }
 
 viewSql = {

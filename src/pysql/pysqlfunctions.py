@@ -435,7 +435,10 @@ def desc(db, objectName, completeMethod=None, printDetails=True, printStats=Fals
             totalUsed = 100 - float(100 * totalFree) / totalSize
         else:
             totalUsed = 0
-        result[0] = ["TOTAL", round(totalSize, 2), round(totalFree, 2), round(totalUsed, 2)]
+        if len(oraObject.getDatafiles()) > 1:
+            result[0] = ["> "+_("TOTAL"), round(totalSize, 2), round(totalFree, 2), round(totalUsed, 2)]
+        else:
+            result.pop(0)
 
     elif oraObject.getType() == "TRIGGER":
         oraObject.updateTable(db)
@@ -445,9 +448,28 @@ def desc(db, objectName, completeMethod=None, printDetails=True, printStats=Fals
                  oraObject.getBody(db).replace("\n", " ")]]
 
     elif oraObject.getType() == "USER":
-        header = [_("Default tbs"), _("Temp tbs")]
-        result = [[oraObject.getDefaultTablespace(db), oraObject.getTempTablespace(db)]]
-
+        oraObject.updateTablespaceList(db)
+        header = [_("Tablespace"), _("Default?"), _("#Tables"), _("#Indexes")]
+        result = [[]]
+        totalTables  = 0
+        totalIndexes = 0
+        defaultTbs = oraObject.getDefaultTablespace(db)
+        #tempTbs = oraObject.getTempTablespace(db)
+        for tablespace in oraObject.getTablespaces():
+            name = tablespace.getName()
+            nbTables  = oraObject.getNbTables(db, tablespace=tablespace.getName())
+            nbIndexes = oraObject.getNbIndexes(db, tablespace=tablespace.getName())
+            if name == defaultTbs:
+                defstr = u"*"
+            else:
+                defstr = u""
+            result.append([name, defstr, nbTables, nbIndexes])
+            totalTables  += nbTables
+            totalIndexes += nbIndexes
+        if len(oraObject.getTablespaces()) > 1:
+            result[0] = ["> "+_("TOTAL"), u"", totalTables, totalIndexes]
+        else:
+            result.pop(0)
     else:
         raise PysqlException(_("Type not handled: %s") % oraObject.getType())
     return (header, result)
@@ -571,7 +593,7 @@ def sessions(db, all=False, search=None):
 
     sessionFilter = []
     if not all:
-        sessionFilter.append("a.Status!= 'INACTIVE'")
+        sessionFilter.append("a.Status != 'INACTIVE'")
     if search:
         for searchTerm in search:
             searchFilter = []
