@@ -27,7 +27,7 @@ def listSnapshotId(db, numDays=1):
     try:
         return db.executeAll(perfSql["snapshots"], [unicode(numDays)])
     except Exception, e:
-        raise PysqlException(_("Insufficient privileges"))
+        raise PysqlActionDenied(_("Insufficient privileges"))
 
 def addmReport(db, begin_snap="0", end_snap="0"):
     """Generates ADDM report
@@ -40,10 +40,10 @@ def addmReport(db, begin_snap="0", end_snap="0"):
         dbid = db.executeAll(perfSql["db_id"])[0][0]
         inum = db.executeAll(perfSql["instance_num"])[0][0]
     except Exception, e:
-        raise PysqlException(_("Insufficient privileges"))
+        raise PysqlActionDenied(_("Insufficient privileges"))
 
     if begin_snap == "0" or end_snap == "0":
-        raise PysqlException(_("Invalid snapshot pair: (%s ; %s)") % (begin_snap, end_snap))
+        raise PysqlActionDenied(_("Invalid snapshot pair: (%s ; %s)") % (begin_snap, end_snap))
 
     # PL/SQL procedure because of bloody in/out parameters in create_task function
     sql = """BEGIN
@@ -107,10 +107,10 @@ def awrReport(db, type="txt", begin_snap="0", end_snap="0"):
         dbid = db.executeAll(perfSql["db_id"])[0][0]
         inum = db.executeAll(perfSql["instance_num"])[0][0]
     except Exception, e:
-        raise PysqlException(_("Insufficient privileges"))
+        raise PysqlActionDenied(_("Insufficient privileges"))
 
     if begin_snap == "0" or end_snap == "0":
-        raise PysqlException(_("Invalid snapshot pair: (%s ; %s)") % (begin_snap, end_snap))
+        raise PysqlActionDenied(_("Invalid snapshot pair: (%s ; %s)") % (begin_snap, end_snap))
 
     # Generates report
     try:
@@ -119,7 +119,7 @@ def awrReport(db, type="txt", begin_snap="0", end_snap="0"):
         else:
             result = db.executeAll(perfSql["awr_report_text"], [dbid, inum, begin_snap, end_snap])
     except Exception, e:
-        raise PysqlException(_("Insufficient privileges"))
+        raise PysqlActionDenied(_("Insufficient privileges"))
     return result
 
 def duReport(db, segmentType, tbs="%", user="%", nbRows=-1):
@@ -134,7 +134,7 @@ def duReport(db, segmentType, tbs="%", user="%", nbRows=-1):
     try:
         size = db.executeAll(durptSql["nbTotalBlocks"], [tbs, user])[0][0]
     except PysqlException, e:
-        raise PysqlException(_("Insufficient privileges"))
+        raise PysqlActionDenied(_("Insufficient privileges"))
 
     # Generates report
     if segmentType.lower() == "table":

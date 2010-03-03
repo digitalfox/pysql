@@ -289,35 +289,35 @@ def desc(db, objectName, completeMethod=None, printDetails=True, printStats=Fals
 
     # Displays some information about the object
     if printDetails:
-        print CYAN + _("Name\t: ") + oraObject.getName() + RESET
-        print CYAN + _("Type\t: ") + oraObject.getType() + RESET
-        print CYAN + _("Owner\t: ") + oraObject.getOwner() + RESET
-        if oraObject.getStatus() in ("INVALID", "OFFLINE"):
-            print CYAN + _("Status\t\t: ") + BOLD + RED + oraObject.getStatus() + RESET
+        print CYAN + _("Name")  + "\t: " + oraObject.getName() + RESET
+        print CYAN + _("Type")  + "\t: " + oraObject.getType() + RESET
+        print CYAN + _("Owner") + "\t: " + oraObject.getOwner() + RESET
+        if oraObject.getStatus() in ("INVALID", "OFFLINE", "UNUSED"):
+            print CYAN + _("Status") + "\t\t: " + BOLD + RED + oraObject.getStatus() + RESET
         else:
-            print CYAN + _("Status\t\t: ") + oraObject.getStatus() + RESET
+            print CYAN + _("Status") + "\t\t: " + oraObject.getStatus() + RESET
         if oraObject.getType() in ("TABLE", "TABLE PARTITION", "VIEW", "MATERIALIZED VIEW"):
             try:
-                print CYAN + _("Comment\t: ") + oraObject.getComment(db) + RESET
+                print CYAN + _("Comment") + "\t: " + oraObject.getComment(db) + RESET
             except PysqlException:
-                print CYAN + _("Comment\t: <unable to get comment>") + RESET
+                print CYAN + _("Comment") + "\t: " + _("<unable to get comment>") + RESET
         if oraObject.getType() not in ("DATA FILE", "TABLESPACE", "USER"):
             try:
-                print CYAN + _("Created on\t: ") + oraObject.getCreated(db) + RESET
+                print CYAN + _("Created on") + "\t: " + oraObject.getCreated(db) + RESET
             except PysqlException:
-                print CYAN + _("Created on\t: <unable to get date of creation>") + RESET
+                print CYAN + _("Created on") + "\t: " + _("<unable to get date of creation>") + RESET
             try:
-                print CYAN + _("Last DDL on\t: ") + oraObject.getLastDDL(db) + RESET
+                print CYAN + _("Last DDL on") + "\t: " + oraObject.getLastDDL(db) + RESET
             except PysqlException:
-                print CYAN + _("Last DDL on\t: <unable to get date of last DDL modification>") + RESET
+                print CYAN + _("Last DDL on") + "\t: " + _("<unable to get date of last DDL modification>") + RESET
 
     # Displays some statistics about the object
     if printStats:
         if oraObject.getType() in ("TABLE", "TABLE PARTITION"):
-            print ORANGE + _("Last analyzed on: ") + str(oraObject.getLastAnalyzed(db)) + RESET
-            print ORANGE + _("Nb rows\t\t: ") + str(oraObject.getNumRows(db)) + RESET
-            print ORANGE + _("Nb used blocks\t: ") + str(oraObject.getUsedBlocks(db)) + RESET
-            print ORANGE + _("Avg row length\t: ") + str(oraObject.getAvgRowLength(db)) + RESET
+            print ORANGE + _("Last analyzed on") + ": " + str(oraObject.getLastAnalyzed(db)) + RESET
+            print ORANGE + _("Nb rows")      + "\t\t: " + str(oraObject.getNumRows(db)) + RESET
+            print ORANGE + _("Nb used blocks") + "\t: " + str(oraObject.getUsedBlocks(db)) + RESET
+            print ORANGE + _("Avg row length") + "\t: " + str(oraObject.getAvgRowLength(db)) + RESET
 
     # Evaluates object type (among the 24 defined)
     if oraObject.getType() in ("TABLE" , "TABLE PARTITION"):
@@ -542,7 +542,7 @@ def lock(db):
     """Displays locks on objects
     @return: resultset in tabular format
     """
-    header = ["username", "osuser", "mode", "object"]
+    header = [_("User"), _("OS user"), _("Mode"), _("Object")]
     try:
         result = db.executeAll(u"""SELECT
             oracle_username,
@@ -559,7 +559,7 @@ def lock(db):
             FROM v$locked_object lo, dba_objects o
             WHERE lo.object_id=o.object_id""")
     except PysqlException:
-        raise PysqlActionDenied(_("privilege SELECT_ANY_DICTIONARY is missing"))
+        raise PysqlActionDenied(_("Insufficient privileges"))
     return (header, result)
 
 def sessions(db, all=False, search=None):
@@ -586,7 +586,7 @@ def sessions(db, all=False, search=None):
     try:
         result = db.executeAll(sessionStatSql["all"] % whereClause)
     except PysqlException:
-        raise PysqlActionDenied(_("privilege SELECT_ANY_DICTIONARY is missing"))
+        raise PysqlActionDenied(_("Insufficient privileges"))
     return result
 
 def sessionStat(db, sid, stat=None):
@@ -613,7 +613,7 @@ def killSession(db, session, immediate=False):
     try:
         db.execute(sql)
     except PysqlException:
-        raise PysqlActionDenied(_("privilege ALTER SYSTEM is missing or session does not exist"))
+        raise PysqlActionDenied(_("Insufficient privileges"))
 
 def showParameter(db, param=""):
     """Shows the session parameters matching the pattern 'param'
@@ -622,7 +622,7 @@ def showParameter(db, param=""):
     @return: resultset in tabular format
     """
     param = addWildCardIfNeeded(param)
-    header = ["Name", "Type", "Value", "#", "Session?", "System?", "Comments"]
+    header = [_("Name"), _("Type"), _("Value"), _("#"), _("Session?"), _("System?"), _("Comments")]
     #TODO: move this request to pysqlQueries
     try:
         result = db.executeAll("""select name
@@ -640,7 +640,7 @@ def showParameter(db, param=""):
         where name like '%s'
         order by 1""" % param)
     except PysqlException:
-        raise PysqlActionDenied(_("privilege SELECT_ANY_DICTIONARY is missing"))
+        raise PysqlActionDenied(_("Insufficient privileges"))
     return (header, result)
 
 def showServerParameter(db, param=""):
@@ -650,7 +650,7 @@ def showServerParameter(db, param=""):
     @return: resultset in tabular format
     """
     param = addWildCardIfNeeded(param)
-    header = ["Name", "Type", "Value", "#", "Used?", "Comments"]
+    header = [_("Name"), _("Type"), _("Value"), _("#"), _("Used?"), _("Comments")]
     #TODO: move this request to pysqlQueries
     try:
         result = db.executeAll("""select distinct sp.name
@@ -668,7 +668,7 @@ def showServerParameter(db, param=""):
           and sp.name like '%s'
         order by 1""" % param)
     except PysqlException:
-        raise PysqlActionDenied(_("privilege SELECT_ANY_DICTIONARY is missing"))
+        raise PysqlActionDenied(_("Insufficient privileges"))
     return (header, result)
 
 # Oracle object searching

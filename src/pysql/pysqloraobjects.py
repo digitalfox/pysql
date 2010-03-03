@@ -18,7 +18,7 @@ class OraObject:
     """Father of all pysql Oracle objects"""
     def __init__(self, objectOwner="", objectName="", objectType="", objectStatus=""):
         """Object creation"""
-        self.setOwner(objectOwner) # Set owner first because setName may override !
+        self.setOwner(objectOwner) # Set owner first because setName may override
         self.setName(objectName)
         self.setType(objectType)
         self.setStatus(objectStatus)
@@ -81,7 +81,7 @@ class OraObject:
             self.objectName = pysqlhelpers.upperIfNoQuotes(objectName)
 
     def setType(self, objectType):
-        """Sets the object type.
+        """Sets the object type
         @param objectType: Oracle object type as defined in Oracle dynamic views
         @type objectType: str
         """
@@ -232,7 +232,7 @@ class OraObject:
             #TODO: use database encoding instead of just using str()
             return str(result[0][0])
         else:
-            raise PysqlException("Cannot get the date of creation on object %s" % self.getName())
+            raise PysqlException(_("Cannot get the date of creation on object %s") % self.getName())
 
     def getLastDDL(self, db):
         """@return: date of last DDL modification of the object"""
@@ -250,12 +250,12 @@ class OraObject:
             #TODO: use database encoding instead of just using str()
             return str(result[0][0])
         else:
-            raise PysqlException("Cannot get the date of last DDL modification on object %s" % self.getName())
+            raise PysqlException(_("Cannot get the date of last DDL modification on object %s") % self.getName())
 
     def getDDL(self, db):
         """@return: SQL needed to create this object as a str"""
         if self.getType() == "":
-            raise PysqlException("Object type is not defined !")
+            raise PysqlException(_("Object type is not defined"))
         if self.getOwner() == "":
             owner = db.getUsername().upper()
         else:
@@ -305,7 +305,7 @@ class OraTabular(OraObject):
             #TODO: use database encoding instead of just using str()
             return str(result[0][0])
         else:
-            raise PysqlException("Cannot get the comment on object %s" % self.getName())
+            raise PysqlException(_("Cannot get the comment on object %s") % self.getName())
 
     def getTableColumns(self, db, sort=False):
         """Gets table or view columns
@@ -359,9 +359,9 @@ class OraDatafile(OraObject):
         """@return: number of bytes currently allocated in the data file"""
         result = db.executeAll(datafileSql["allocatedBytesFromName"], [self.getName()])
         if len(result) == 0:
-            raise PysqlException("Data file %s does not exist" % self.getName())
+            raise PysqlException(_("Data file %s does not exist") % self.getName())
         elif result[0][0] is None:
-            msg = _("Privilege SELECT_CATALOG is missing")
+            msg = _("Insufficient privileges")
             raise PysqlException(msg)
         else:
             return int(result[0][0])
@@ -370,7 +370,7 @@ class OraDatafile(OraObject):
         """@return: number of bytes currently free in the data file"""
         result = db.executeAll(datafileSql["freeBytesFromName"], [self.getName()])
         if len(result) == 0:
-            raise PysqlException("Data file %s does not exist" % self.getName())
+            raise PysqlException(_("Data file %s does not exist") % self.getName())
         else:
             return int(result[0][0])
 
@@ -672,12 +672,12 @@ class OraSynonym(OraObject):
         oraObject.guessInfos(db)
 
         if oraObject.getType() == "":
-            raise PysqlActionDenied("unable to resolve system synonyms")
+            raise PysqlActionDenied(_("Unable to resolve system synonyms"))
         elif oraObject.getType() == "SYNONYM":
             recursionStep += 1
             # Checks that we do not recurse too much
             if recursionStep > recursionLimit:
-                print "(DEBUG) More than %d synonyms imbricated... Maybe a circular reference?" \
+                print "[DEBUG] More than %d synonyms imbricated... Maybe a circular reference?" \
                         % recursionLimit
                 return oraObject
             else:
@@ -960,7 +960,7 @@ class OraView(OraTabular):
     def setSQL(self, db, sql):
         """@return: True if succeeded in editing SQL code behind the view, False otherwise"""
         if sql == "":
-            raise PysqlException("SQL code of the view cannont be empty")
+            raise PysqlException(_("SQL code of the view cannot be empty"))
         if self.getOwner() == "":
             db.execute(viewSql["replaceQueryFromName"] % (self.getName(), sql), fetch=False)
         else:

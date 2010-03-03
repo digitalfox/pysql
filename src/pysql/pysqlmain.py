@@ -155,10 +155,11 @@ def main():
         # Just a hook for a more pleasant error handling
         print "\n==> Unrecoverable error during initialisation. Exiting <=="
         printStackTrace()
-        print "(press enter key to exit)"
+        print _("(press enter key to exit)")
         sys.stdin.readline()
     except PysqlException, e:
-        print u"*** Pysql error ***\n\t%s" % e
+        print "*** " + _("Pysql error") + " ***"
+        print "\t%s" % e
 
     # Bye!
     sys.exit(rc)
@@ -191,21 +192,21 @@ def parseOptions():
 
     # Version
     parser.add_option("-v", "--version", dest="version", action="store_true",
-              help="Prints PySQL version")
+              help="prints PySQL version")
 
     # Silent mode
     parser.add_option("-S", "--Silent", dest="silent", action="store_true",
-              help="Sets silent mode which suppresses the dispay of banner, prompts and echoing of commands")
+              help="sets silent mode which suppresses the dispay of banner, prompts and echoing of commands")
 
     # Login
     parser.add_option("-L", "--Login", dest="oneTryLogin", action="store_true",
-              help="Exits if login attempt failed, instead of starting not connected")
+              help="exits if login attempt failed, instead of starting not connected")
 
     # Update mode
     parser.add_option("-u", "--update", dest="update", action="store_true",
-              help="Checks if PySQL update are available")
+              help="checks if PySQL update are available")
     parser.add_option("-H", "--proxyHost", dest="proxyHost", type="string", default=None,
-              help="proxy hostname for PySQL update. \t\tExemple : 'http://my-proxy.mydomain:8080'")
+              help="proxy hostname for PySQL update. \t\tExample: 'http://my-proxy.mydomain:8080'")
     parser.add_option("-U", "--proxyUser", dest="proxyUser", type="string", default="",
               help="proxy username if authentication is required")
     parser.add_option("-P", "--proxyPassword", dest="proxyPassword", type="string", default="",

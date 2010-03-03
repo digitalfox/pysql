@@ -103,7 +103,7 @@ class PysqlShell(cmd.Cmd):
         self.cmds.remove("csv") # so does csv
         if self.showBanner:
             banner = _("\nWelcome to pysql shell\n")
-            banner += _("Type 'help' for some help.\nUse Tab for completion\n")
+            banner += _("""Type "help" for some help.\nUse Tab for completion\n""")
             print banner
 
     def loop(self):
@@ -141,7 +141,7 @@ class PysqlShell(cmd.Cmd):
             # Do nothing, we are just catching parser exit function when help is called
             pass
         except PysqlException, e:
-            print RED + BOLD + _("*** Pysql error ***\n\t%s") % e + RESET
+            print RED + BOLD + "*** " + _("Pysql error") + " ***\n\t%s" % e + RESET
             self.exceptions.append(e)
             if e.oraCode == "ORA-03114": # Not connected to Oracle
                 self.db = None
@@ -234,7 +234,7 @@ class PysqlShell(cmd.Cmd):
                                              "alter", "truncate", "drop", "begin",
                                              "declare", "comment", "create", "grant",
                                              "revoke", "analyze", "explain", "csv"):
-                print RED + BOLD + _("Unknown command or sql order. Type help for help") + RESET
+                print RED + BOLD + _("""Unknown command or sql order. Type "help" for help""") + RESET
             else:
                 # Bufferise the command and wait for the rest
                 self.multilineCmd = True
@@ -436,7 +436,7 @@ class PysqlShell(cmd.Cmd):
     def do_showCompletion(self, arg):
         """Shows completion list"""
         for theme in self.conf.completeLists.keys():
-            print GREEN + _("***** %s *****") % theme + RESET
+            print GREEN + "***** " + theme +  " *****" + RESET
             self.__displayCol(self.conf.completeLists[theme])
             print
 
@@ -482,7 +482,7 @@ class PysqlShell(cmd.Cmd):
         nArgs = len(arg.split())
         if nArgs == 0:
             # Shows all sql library
-            self.__displayTab(self.conf.sqlLibrary.items(), ("Name", "SQL request"))
+            self.__displayTab(self.conf.sqlLibrary.items(), (_("Name"), _("SQL request")))
         elif nArgs == 1:
             # Recalls a request
             if self.conf.sqlLibrary.has_key(arg):
@@ -492,7 +492,7 @@ class PysqlShell(cmd.Cmd):
                             + RESET
             else:
                 msg = _("Request %s does not exist. ") % name + \
-                      _("Type 'lib' without argument to see all requests")
+                      _("""Type "lib" without argument to see all requests""")
                 raise PysqlException(msg)
         elif nArgs > 1:
             # First argument is name and second argument can be sql or keyword remove
@@ -504,7 +504,7 @@ class PysqlShell(cmd.Cmd):
                     print GREEN + _("Request has been removed") + RESET
                 else:
                     msg = _("Request %s does not exist. ") % name + \
-                          _("Type 'lib' without argument to see all requests")
+                          _("""Type "lib" without argument to see all requests""")
                     raise PysqlException(msg)
             else:
                 # Add request
@@ -518,7 +518,7 @@ class PysqlShell(cmd.Cmd):
         if len(arg) == 0:
             # Shows background queries
             result = [(i.getName(), i.query, not i.isAlive(), i.error) for i in self.bgQueries]
-            self.__displayTab(result, ["#", "SQL Request", "Finished?", "Error"])
+            self.__displayTab(result, [_("#"), _("SQL request"), _("Finished?"), _("Error")])
         elif len(arg) == 1:
             # Finds the thread
             bgQuery = [i for i in self.bgQueries if i.getName() == arg[0]]
@@ -549,7 +549,7 @@ class PysqlShell(cmd.Cmd):
         print GREEN + _("Commit completed") + RESET
 
     def do_rollback(self, arg):
-        """Rolls pending transaction back"""
+        """Rolls back pending transaction"""
         self.__checkConnection()
         self.__animateCursor()
         self.db.rollback()
@@ -650,21 +650,21 @@ class PysqlShell(cmd.Cmd):
             # We have to compare the whole schema
             result = pysqlfunctions.compare(schemas[0], schemas[1])
 
-            print GREEN + _("**** Tables found in %s but not in %s ****") \
+            print GREEN + "**** " + _("Tables found in %s but not in %s ") + "****" \
                         % (schemaNames[0], schemaNames[1]) + RESET
             print ", ".join(result[0])
             print
 
-            print GREEN + _("**** Tables found in %s but not in %s ****") \
+            print GREEN + "**** " + _("Tables found in %s but not in %s ") + "****" \
                         % (schemaNames[1], schemaNames[0]) + RESET
             print ", ".join(result[1])
             print
 
-            print GREEN + _("**** Tables identical in both schema ****") + RESET
+            print GREEN + "**** " + _("Tables identical in both schema ") + "****" + RESET
             print ", ".join([i[0] for i in result[2].items() if not i[1]])
             print
 
-            print GREEN + _("**** Tables not identical in both schema ****") + RESET
+            print GREEN + "**** " + _("Tables not identical in both schema") + "****" + RESET
             for tableName, tableDiff in result[2].items():
                 if tableDiff:
                     print CYAN + _("""Table %s differ from schema %s""")  \
@@ -676,7 +676,7 @@ class PysqlShell(cmd.Cmd):
 
     def parser_describe(self):
         parser = PysqlOptionParser()
-        parser.set_usage(CYAN+_("desc[ribe] [options] <object name>")+RESET)
+        parser.set_usage(CYAN + "desc[ribe] " + _("[options] <object name>") + RESET)
         parser.set_description(_("Describes any Oracle object"))
         parser.add_option("-d", "--details", dest="printDetails",
                           default=False, action="store_true",
@@ -706,7 +706,7 @@ class PysqlShell(cmd.Cmd):
     # Audit functions
     def parser_addmrpt(self):
         parser = PysqlOptionParser()
-        parser.set_usage(CYAN+_("addm[rpt] [options]")+RESET)
+        parser.set_usage(CYAN + "addm[rpt] " + _("[options]") + RESET)
         parser.set_description(_("Generates tuning advice report based on AWR statistics. ")+
         _("10g or upper is required. ")+
         _("Before starting, please ensure that you have the required license to use it."))
@@ -748,7 +748,7 @@ class PysqlShell(cmd.Cmd):
 
     def parser_awrrpt(self):
         parser = PysqlOptionParser()
-        parser.set_usage(CYAN+_("awr[rpt] [options]")+RESET)
+        parser.set_usage(CYAN + "awr[rpt] " + _("[options]") + RESET)
         parser.set_description(_("Generates performance report based on AWR statistics. ")+
         _("10g or upper is required. ")+
         _("Before starting, please ensure that you have the required license to use it."))
@@ -794,7 +794,7 @@ class PysqlShell(cmd.Cmd):
 
     def parser_durpt(self):
         parser = PysqlOptionParser()
-        parser.set_usage(CYAN+_("durpt [options]")+RESET)
+        parser.set_usage(CYAN + "durpt " + _("[options]") + RESET)
         parser.set_description(_("Generates storage report based on segment statistics. ")+
         _("DBA grants are required. "))
         parser.add_option("-s", "--segment-type", dest="type",
@@ -829,7 +829,7 @@ class PysqlShell(cmd.Cmd):
                             options.user.upper().replace('*', '%'),
                             int(options.nbLines))
             if options.filename == "":
-                print GREEN + _("***** %s *****") % type.upper() + RESET
+                print GREEN + "*****" + type.upper() + "*****" + RESET
                 self.__toScreen(result, moreRows=False)
                 print
             else:
@@ -853,7 +853,7 @@ class PysqlShell(cmd.Cmd):
     # Graphic functions
     def parser_datamodel(self):
         parser = PysqlOptionParser()
-        parser.set_usage(CYAN+_("datamodel [options] [filters on table name]]")+RESET)
+        parser.set_usage(CYAN + "datamodel " + _("[options] [filters on table name]]") + RESET)
         parser.set_description(
             _("Extracts the datamodel of a user filtered on selected table pattern. ")+
             _("The generation of the output is powered by Graphviz (http://www.graphviz.org)")
@@ -881,7 +881,7 @@ class PysqlShell(cmd.Cmd):
 
     def parser_dependencies(self):
         parser = PysqlOptionParser()
-        parser.set_usage(CYAN+_("dep[endencies] [options] <object name>")+RESET)
+        parser.set_usage(CYAN + "dep[endencies] " + _("[options] <object name>") + RESET)
         parser.set_description(
             _("Displays object dependencies as a picture. ")+
             _("The generation of the output is powered by Graphviz (http://www.graphviz.org)")
@@ -912,7 +912,7 @@ class PysqlShell(cmd.Cmd):
 
     def parser_diskusage(self):
         parser = PysqlOptionParser()
-        parser.set_usage(CYAN+_("diskusage (or du) [options] <schema name>")+RESET)
+        parser.set_usage(CYAN + "diskusage|du " + _("[options] <schema name>") + RESET)
         parser.set_description(
             _("Extracts the physical storage of a user as a picture based on Oracle statistics. ")+
             _("The generation of the output is powered by Graphviz (http://www.graphviz.org)")
@@ -989,8 +989,8 @@ class PysqlShell(cmd.Cmd):
 
     def parser_session(self):
         parser = PysqlOptionParser()
-        parser.set_usage(CYAN+_("session [options] <session id>")+RESET)
-        parser.set_description(_("Display Oracle sessions. ")+
+        parser.set_usage(CYAN + "session " + _("[options] <session id>") + RESET)
+        parser.set_description(_("Displays Oracle sessions. ")+
                                _("If a session id is provided, display detailed session informations, ")+
                                _("else display all session summary"))
         parser.add_option("-a", "--all", dest="all",
@@ -1000,7 +1000,6 @@ class PysqlShell(cmd.Cmd):
                           action="append",
                           help=_("filters session display with given search term. Multiple searches can be given to make 'and' search"))
         return parser
-
 
     def do_session(self, arg):
         """Display Oracle session"""
@@ -1016,13 +1015,13 @@ class PysqlShell(cmd.Cmd):
         else:
             sessionId = args[0]
             # Displays details about one session
-            print CYAN + _("***** Input/Output statistics *****") + RESET
+            print CYAN + "*****" + _("Input/Output statistics") + "*****" + RESET
             result = pysqlfunctions.sessionStat(self.db, sessionId, stat="ios")
             self.__displayTab(result, self.db.getDescription())
-            print CYAN + _("***** Wait events***** ") + RESET
+            print CYAN + "*****" + _("Wait events") + "*****" + RESET
             result = pysqlfunctions.sessionStat(self.db, sessionId, stat="waitEvents")
             self.__displayTab(result, self.db.getDescription())
-            print CYAN + _("***** Current statement *****") + RESET
+            print CYAN + "*****" + _("Current statement") + "*****" + RESET
             result = pysqlfunctions.sessionStat(self.db, sessionId, stat="currentStatement")
             if result and result[0][0]:
                 result = "".join([i[0] for i in result]) # Merge all in one string
@@ -1036,16 +1035,16 @@ class PysqlShell(cmd.Cmd):
                     print _("Cannot explain plan (%s)") % e
             else:
                 print _("No statement")
-            print CYAN + _("***** Open cursors *****") + RESET
+            print CYAN + "*****" + _("Open cursors") + "*****" + RESET
             result = pysqlfunctions.sessionStat(self.db, sessionId, stat="openCursors")
             self.__displayTab(result, self.db.getDescription())
-            print CYAN + _("***** Locks *****") + RESET
+            print CYAN + "*****" + _("Locks") + "*****" + RESET
             result = pysqlfunctions.sessionStat(self.db, sessionId, stat="locks")
             self.__displayTab(result, self.db.getDescription())
 
     def parser_kill(self):
         parser = PysqlOptionParser()
-        parser.set_usage(CYAN+_("kill [options] <session-id> <session-serial>")+RESET)
+        parser.set_usage(CYAN + "kill [options] " + _("<session-id> <session-serial>") + RESET)
         parser.set_description(_("Kills the session given in parameter. ")+
                                _("Uses the 'session' command to find session-id and session-serial (two first columns)"))
         parser.add_option("-i", "--immediate", dest="immediate",
@@ -1099,9 +1098,9 @@ class PysqlShell(cmd.Cmd):
                 for i in xrange(len(ios)):
                     resultIos.append(ios[i] - self.trace[sid][0][i])
                     resultWaits.append(waits[i] - self.trace[sid][1][i])
-                print CYAN + _("***** Input/Output delta for session %s *****") % sid + RESET
+                print CYAN + "*****" + _("Input/Output delta for session %s") % sid + "*****" + RESET
                 self.__displayTab([resultIos], iosHeader)
-                print CYAN + _("***** Wait events delta for session %s ***** ") % sid + RESET
+                print CYAN + "*****" + _("Wait events delta for session %s") % sid + "*****" + RESET
                 self.__displayTab([resultWaits], waitsHeader)
                 # Removes trace point for this session
                 del self.trace[sid]
@@ -1151,9 +1150,9 @@ class PysqlShell(cmd.Cmd):
 
     def do_segment(self, arg):
         """Display segments (tables, index)"""
-        print CYAN + _("***** Tables *****") + RESET
+        print CYAN + "***** " + _("Tables") + " *****" + RESET
         self.__searchObjet("table", arg)
-        print CYAN + _("\n**** Indexes *****") + RESET
+        print CYAN + "\n***** " + _("Indexes") + " *****" + RESET
         self.__searchObjet("index", arg)
 
     def do_sequence(self, arg):
@@ -1235,7 +1234,7 @@ class PysqlShell(cmd.Cmd):
                 result[i] = [str(result[i][j]) for j in xrange(len(result[i]))]
             self.__addToCompleteList([i[0] for i in result], "parameters")
             self.__displayTab(result,
-                ["Parameter", "User defined value", "Default value"])
+                [_("Parameter"), _("User defined value"), _("Default value")])
         else:
             print self.conf.get(arg)
 
@@ -1269,7 +1268,7 @@ class PysqlShell(cmd.Cmd):
         exitStatus = os.system(arg)
         # Display exit status if an error occurred
         if exitStatus != 0:
-            print CYAN + "Exited with code " + str(exitStatus) + RESET
+            print CYAN + _("Exited with code ") + str(exitStatus) + RESET
 
     def do_lls(self, arg):
         """A simple local ls"""
@@ -1411,36 +1410,53 @@ class PysqlShell(cmd.Cmd):
     # Command help definitions (in alphabetic order)
     def help_bg(self):
         """online help"""
-        print CYAN + _("Usage:\n\tbg [order id]") + RESET
-        print _("\tto display all background queries:\n\t\tbg")
-        print _("\tto call back a background query:  \n\t\tbg <id>")
+        print _("Usage:")
+        print "\t" + CYAN + "bg " + _("[order id]") + RESET
         print _("Manages background queries")
+        print
+        print _("Sample usages:")
+        print "\t" + _("To display all background queries:")
+        print "\t\t" + CYAN + "bg" + RESET
+        print "\t" + _("To call back a background query:")
+        print "\t\t" + CYAN + "bg " + _("<id>") + RESET
 
     def help_compare(self):
         """online help"""
-        print CYAN + _("Usage:")
-        print _("\tto compare two schemas:\n\t\tcompare user/password@SID user'/password'@SID'")
-        print _("\tto compare two tables: \n\t\tcompare user/password@SID:table user'/password'@SID':table'")
-        print _("\tto compare two tables in current schema:\n\t\tcompare table table'") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "compare [data] " + _("<user>[/<password>@<SID>][:<table>] <user>[/<password>@<SID>][:<table>]") + RESET
+        print _("Compares structure or data of two schemas or two tables. Objects could be in two distinct databases.")
         print _("By default, only structure is compared.")
-        print _("""To compare table data, use the "data" keyword this way:""")
-        print CYAN + _("\t\tCompares data user/password@SID:table user'/password'@SID':table'") + RESET
+        print
+        print _("Sample usages:")
+        print "\t" + _("To compare two schemas:")
+        print "\t\t" + CYAN + "compare " + _("user/password@SID user/password@SID") + RESET
+        print "\t" + _("To compare two tables:")
+        print "\t\t" + CYAN + "compare " + _("user/password@SID:table user/password@SID:table") + RESET
+        print "\t" + _("To compare two tables in current schema:")
+        print "\t\t" + CYAN + "compare " + _("table table") + RESET
+        print "\t" + _("""To compare table data, use the "data" keyword this way:""")
+        print "\t\t" + CYAN + "compare data " + _("user/password@SID:table user/password@SID:table") + RESET
 
     def help_connect(self):
         """online help"""
-        print CYAN + _("Usage:\n\tconn[ect] user[/password][@[host[:port]/]SID] [sysdba|sysoper]") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "conn[ect] " + _("user[/password][@[host[:port]/]SID]") + " [sysdba|sysoper]" + RESET
         print _("Connects to Oracle and closes previous connection if any")
 
     def help_count(self):
         """online help"""
-        print CYAN + _("Usage:\n\tcount <table/view name>") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "count " + _("<table/view name>") + RESET
         print _("Counts the number of lines in a table or a view")
 
     def help_csv(self):
         """online help"""
-        print CYAN + _("Usage:\n\tcsv <output file> <sql query>") + RESET
-        print CYAN + _("Exemple:\n\tcsv out.csv select * from dummy;") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "csv " + _("<output file> <sql query>") + RESET
         print _("Dumps sql query to file")
+        print
+        print _("Example:")
+        print "\t" + CYAN + "csv " + _("out.csv select * from dummy;") + RESET
 
     def help_datafile(self):
         """online help"""
@@ -1448,13 +1464,17 @@ class PysqlShell(cmd.Cmd):
 
     def help_ddl(self):
         """online help"""
-        print CYAN + _("Usage:\n\tddl <table|view>") + RESET
-        print CYAN + _("Exemple:\n\tddl DUAL") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + _("ddl <table|view>") + RESET
         print _("Prints Oracle object DDL")
+        print
+        print _("Example:")
+        print "\t" + CYAN + _("ddl DUAL") + RESET
 
     def help_describe(self):
         """online help"""
-        print CYAN + _("Usage:\n\tdesc[ribe] [options] <object name>") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + _("desc[ribe] [options] <object name>") + RESET
         print _("Describes any Oracle object")
 
     def help_directory(self):
@@ -1463,22 +1483,27 @@ class PysqlShell(cmd.Cmd):
 
     def help_disconnect(self):
         """online help"""
-        print CYAN + _("Usage:\n\tdisc[connect]") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "disc[connect]" + RESET
         print _("Closes current connection if any")
 
     def help_edit(self):
         """online help"""
-        print CYAN + _("Usage:\n\ted[it] <object name>") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "ed[it] " + _("<object name>") + RESET
         print _("Edits (view or modify) an object)")
         print _("If no arg is provided, edits last SQL statement")
 
     def help_exit(self):
         """online help"""
+        print _("Usage:")
+        print "\t" + CYAN + "exit" + RESET
         print _("Well, it seems rather explicit, isn't it?")
 
     def help_explain(self):
         """online help"""
-        print CYAN + _("Usage:\n\texplain <sql statement>") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "explain " + _("<sql statement>") + RESET
         print _("Computes and displays explain plan for the statement")
 
     def help_function(self):
@@ -1487,19 +1512,22 @@ class PysqlShell(cmd.Cmd):
 
     def help_get(self):
         """online help"""
-        print CYAN + _("Usage:\n\tget <key>") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "get " + _("<key>") + RESET
         print _("Prints the value of the parameter <key>")
         print _("The special key « all » allows to print all parameters")
 
     def help_help(self):
         """online help"""
-        print CYAN + _("Usage:\n\thelp <pysql command>") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "help " + _("<pysql command>") + RESET
         print _("Brings some help like usage and a short description")
         print _("about the command and its parameters")
 
     def help_history(self):
         """online help"""
-        print CYAN + _("Usage:\n\th[istory] <n>") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "h[istory] " + _("<n>") + RESET
         print _("Without any argument, prints the last 20 commands")
         print _("If argument is supplied, executes the nth command")
 
@@ -1509,45 +1537,55 @@ class PysqlShell(cmd.Cmd):
 
     def help_last(self):
         """online help"""
-        print CYAN + _("Usage:\n\tlast <number of lines>") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "last " + _("<number of lines>") + RESET
         print _("Fetches all lines of current result set and display only the last lines")
         print _("Default number of lines default to cursor array size")
 
     def help_lcd(self):
         """online help"""
-        print CYAN + _("Usage:\n\tlcd <path>") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "lcd " + _("<path>") + RESET
         print _("Changes working directory")
 
     def help_library(self):
         """online help"""
-        print CYAN + _("Usage:\n\tlib[rary] <sqlName> <sqlText>") + RESET
-        print _("Handles user custom sql library. Allow user to save and recall")
-        print _("sql requests")
-        print _("Sample usage: ")
-        print _("\tTo see all saved request: lib")
-        print _("\tTo save a request as 'employeeNumber': ")
-        print _("\t\tlib employeeNumber select count(*) from employee")
-        print _("\trecall a saved request: lib employeNumber")
-        print _("\tTo remove the foo request: lib foo remove")
+        print _("Usage:")
+        print "\t" + CYAN + "lib[rary] " + _("<sqlName> <sqlText>") + RESET
+        print "\t" +_("Handles user custom sql library. Allows user to save and recall sql requests.")
+        print
+        print _("Sample usages: ")
+        print "\t" + _("To see all saved request:")
+        print "\t\t" + CYAN + "lib" + RESET
+        print "\t" + _("To save a request as 'employeeNumber':")
+        print "\t\t" + CYAN + "lib " + _("employeeNumber select count(*) from employee") + RESET
+        print "\t" + _("recall a saved request:")
+        print "\t\t" + CYAN + "lib " + _("employeNumber") + RESET
+        print "\t" + _("To remove the foo request:")
+        print "\t\t" + CYAN + "lib " + _("foo remove") + RESET
 
     def help_lls(self):
         """online help"""
-        print CYAN + _("Usage:\n\tlls [path/][file]") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "lls " + _("[path/][file]") + RESET
         print _("Lists directory contents")
 
     def help_lock(self):
         """online help"""
-        print CYAN + _("Usage:\n\tlock") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "lock" + RESET
         print _("Displays the locked objects")
 
     def help_lpwd(self):
         """online help"""
-        print CYAN + _("Usage:\n\tlpwd") + RESET
+        print _("Usage:")
+        print "\t" + CYAN +  "lpwd" + RESET
         print _("Prints local directory")
 
     def help_next(self):
         """online help"""
-        print CYAN + _("Usage:\n\tnext <number of lines>") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "next " + _("<number of lines>") + RESET
         print _("Fetches the n next lines of current result set")
         print _("Default number of lines default to cursor array size")
         print _("Just press enter is equivalent to next without arguments")
@@ -1562,7 +1600,8 @@ class PysqlShell(cmd.Cmd):
 
     def help_script(self):
         """online help"""
-        print CYAN + _("Usage:\n\t@ <script>") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "@ " + _("<script>") + RESET
         print _("Executes a PL/SQL script and displays the output on the standard output")
 
     def help_segment(self):
@@ -1575,38 +1614,58 @@ class PysqlShell(cmd.Cmd):
 
     def help_set(self):
         """online help"""
-        print CYAN + _("Usage:\n\tset <key>=<value>") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "set " + _("<key>=<value>") + RESET
         print _("Sets <value> to the parameter <key>")
 
     def help_shell(self):
         """online help"""
-        print CYAN + _("Usage:\n\t! <command line>") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "! " + _("<command line>") + RESET
         print _("Executes a command into the system terminal (depending on your system profile)")
         print _("If no commands are given then a subshell is openned")
 
     def help_show(self):
         """online help"""
-        print CYAN + _("Usage:\n\tshow instance") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "show instance" + RESET
         print _("Displays the database service name (DSN) of the current connection")
-        print CYAN + _("Usage:\n\tshow version") + RESET
+        print
+        print "\t" + CYAN + "show version" + RESET
         print _("Displays the database server version")
-        print CYAN + _("Usage:\n\tshow parameter[s] <partial parameter name>") + RESET
-        print _("Looks for session parameters with name like the partial name given")
-        print _("Wilcard % can be used. ")
-        print _("If none is provided, pysql adds a % at the begining and the end")
-        print CYAN + _("Usage:\n\tshow spparameter[s] <partial parameter name>") + RESET
+        print
+        print "\t" + CYAN + "show parameter[s] " + _("<partial parameter name>") + RESET
+        print _("Looks for session parameters with name like the partial name given.")
+        print _("Wilcard % can be used.")
+        print _("If none is provided, pysql adds a % at the begining and the end.")
+        print
+        print "\t" + CYAN + "show spparameter[s] " + _("<partial parameter name>") + RESET
         print _("Looks for server parameters with name like the partial name given.")
-        print _(" These parameters are defined in spfile. Wilcard % can be used.")
-        print _("If none is provided, pysql adds a % at the begining and the end")
+        print _("These parameters are defined in spfile. Wilcard % can be used.")
+        print _("If none is provided, pysql adds a % at the begining and the end.")
+
+    def help_commit(self):
+        """online help"""
+        print _("Usage:")
+        print "\t" + CYAN + "commit" + RESET
+        print _("Commits pending transaction")
+
+    def help_rollback(self):
+        """online help"""
+        print _("Usage:")
+        print "\t" + CYAN + "rollback" + RESET
+        print _("Cancels pending transaction")
 
     def help_shutdown(self):
         """online help"""
-        print CYAN + _("Usage:\n\tshutdown [abort|immediate|normal]") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "shutdown [abort|immediate|normal]" + RESET
         print _("Shuts instance down")
 
     def help_startup(self):
         """online help"""
-        print CYAN + _("Usage:\n\tstartup [mount]") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "startup [mount]" + RESET
         print _("Starts instance up")
 
     def help_table(self):
@@ -1619,7 +1678,8 @@ class PysqlShell(cmd.Cmd):
 
     def help_time(self, arg):
         """online help"""
-        print CYAN + _("Usage:\n\ttime <sql query>") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "time " + _("<sql query>") + RESET
         print _("Time request execution time")
 
     def help_trigger(self):
@@ -1636,19 +1696,23 @@ class PysqlShell(cmd.Cmd):
 
     def help_watch(self):
         """online help"""
-        print CYAN + _("Usage:\n\twatch <n> <pysql cmd or sql order>") + RESET
+        print _("Usage:")
+        print "\t" + CYAN + "watch " + _("<n>") + " " + _("<pysql command or sql order>") + RESET
         print _("Repeats the command each n seconds")
         print _("If n is ommited, repeat each 3 seconds")
 
     def help_write(self):
         """online help"""
+        print _("Usage:")
+        print "\t" + CYAN +  "write" + RESET
         print _("Writes configuration to disk")
         print _("Path is $HOME/.pysql/pysqlrc on Unix, %APPDATA%/pysql/pysqrc on Windows")
         print _("This command takes no argument")
 
     def _help_for_search_method(self, searchObject):
         """generic online help all object search method"""
-        print CYAN + _("Usage:\n\t%s <search pattern on %s name>") % (searchObject, searchObject) + RESET
+        print _("Usage:")
+        print "\t" + CYAN + _("%s <search pattern on %s name>") % (searchObject, searchObject) + RESET
         print _("Looks for %s which match the search pattern") % searchObject
         print _("Wilcard % and boolean operators (and/or) can be used.")
         print _("If a single word and no % is provided, pysql adds a % at the begining and the end")
@@ -1780,7 +1844,7 @@ class PysqlShell(cmd.Cmd):
             objectName = objectName.upper()
         result = pysqlfunctions.searchObject(self.db, objectType, objectName, objectOwner)
         for owner in result.keys():
-            print GREEN + _("***** %s *****") % owner + RESET
+            print GREEN + "***** " + owner + " *****" + RESET
             self.__addToCompleteList(result[owner], objectType)
             self.__displayCol(result[owner])
 
@@ -1981,7 +2045,7 @@ class PysqlShell(cmd.Cmd):
             for line in result:
                 print line
         else:
-            print RED + BOLD + _("Unknown command or sql order. Type help for help") + RESET
+            print RED + BOLD + _("""Unknown command or sql order. Type "help" for help""") + RESET
 
     def __toScreen(self, result, moreRows, header=True):
         """Displays first part of fetch on screen
@@ -2027,12 +2091,12 @@ class PysqlShell(cmd.Cmd):
     def __exit(self):
         """ Closes current connection and exits pysql"""
         if len(self.exceptions) > 0:
-            print CYAN + _("******* Error sum up *******") + RESET
+            print CYAN + "******* " + _("Error sum up") + " *******" + RESET
             errors = [(e.getTimeStamp(), e.msg.replace("\n", " "), e.oraCode) for e in self.exceptions]
-            self.__displayTab(errors, ("Date", "Error message", "Oracle error Code"))
+            self.__displayTab(errors, (_("Date"), _("Error message"), _("Oracle error Code")))
 
         if self.showBanner:
-            print CYAN + _("\n\nBye !\n") + RESET
+            print CYAN + "\n\n" + _("Bye !") + "\n" + RESET
 
         rc = 0
         # Flushes completion cache to disk

@@ -16,7 +16,7 @@ from pysqlexception import PysqlException, PysqlOptionParserNormalExitException
 
 class PysqlOptionParser(OptionParser):
     def __init__(self):
-        OptionParser.__init__(self)
+        OptionParser.__init__(self, add_help_option=False)
 
     def parse_args(self, line):
         argv = line.split(u" ")
