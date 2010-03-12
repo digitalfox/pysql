@@ -697,10 +697,10 @@ class PysqlShell(cmd.Cmd):
         self.__checkArg(args, ">=1")
         # Gives method pointer to desc function to allow it to update completelist
         (header, result) = pysqlfunctions.desc(self.db, " ".join(args),
-                                             completeMethod=self.__addToCompleteList,
-                                             printDetails=options.printDetails,
-                                             printStats=options.printStats,
-                                             sort=options.sort)
+                                            completeMethod=self.__addToCompleteList,
+                                            printDetails=options.printDetails,
+                                            printStats=options.printStats,
+                                            sort=options.sort)
         self.__displayTab(result, header)
 
     # Audit functions
@@ -710,6 +710,13 @@ class PysqlShell(cmd.Cmd):
         parser.set_description(_("Generates tuning advice report based on AWR statistics. ")+
         _("10g or upper is required. ")+
         _("Before starting, please ensure that you have the required license to use it."))
+        # Oracle only supports TEXT but HTML and XML will be added in next releases
+        #parser.add_option("-t", "--type", dest="type",
+                          #default="TEXT",
+                          #help=_("output type: HTML | XML | TEXT (default)"))
+        parser.add_option("-l", "--level", dest="level",
+                          default="TYPICAL",
+                          help=_("level: BASIC | TYPICAL (default) | ALL"))
         parser.add_option("-b", "--begin", dest="begin_snap",
                           default=u"0",
                           help=_("begin snapshot identifier"))
@@ -738,8 +745,10 @@ class PysqlShell(cmd.Cmd):
                 raise PysqlException(_("Missing arguments. Please, specify snaphsot identifiers."))
         self.__animateCursor() # Only after user interaction
         result = pysqlaudit.addmReport(self.db,
-                                          options.begin_snap,
-                                          options.end_snap)
+                                        options.begin_snap,
+                                        options.end_snap,
+                                        #text=options.text,
+                                        level=options.level)
         if options.filename == "":
             self.__toScreen(result, moreRows=False, header=False)
         else:
@@ -753,8 +762,8 @@ class PysqlShell(cmd.Cmd):
         _("10g or upper is required. ")+
         _("Before starting, please ensure that you have the required license to use it."))
         parser.add_option("-t", "--type", dest="type",
-                          default="txt",
-                          help=_("output type: HTML | TEXT"))
+                          default="TEXT",
+                          help=_("output type: HTML | TEXT (default)"))
         parser.add_option("-b", "--begin", dest="begin_snap",
                           default=u"0",
                           help=_("begin snapshot identifier"))
@@ -783,9 +792,42 @@ class PysqlShell(cmd.Cmd):
                 raise PysqlException(_("Missing arguments. Please, specify snaphsot identifiers."))
         self.__animateCursor() # Only after user interaction
         result = pysqlaudit.awrReport(self.db,
-                                          options.type.lower(),
-                                          options.begin_snap,
-                                          options.end_snap)
+                                        options.type,
+                                        options.begin_snap,
+                                        options.end_snap)
+        if options.filename == "":
+            self.__toScreen(result, moreRows=False, header=False)
+        else:
+            self.__toCsv(result, options.filename, header=False)
+            print GREEN + _("(Completed)") + RESET
+
+    def parser_sqltune(self):
+        parser = PysqlOptionParser()
+        parser.set_usage(CYAN + "sqltune " + _("[options] <sql statement>") + RESET)
+        parser.set_description(_("Generates tuning advice report for an SQL query. ")+
+        _("10g or upper is required. "))
+        # Oracle only supports TEXT but HTML and XML will be added in next releases
+        #parser.add_option("-t", "--type", dest="type",
+                          #default="TEXT",
+                          #help=_("output type: HTML | XML | TEXT (default)"))
+        parser.add_option("-l", "--level", dest="level",
+                          default="TYPICAL",
+                          help=_("level: BASIC | TYPICAL (default) | ALL"))
+        parser.add_option("-o", "--output-file", dest="filename",
+                          default=u"",
+                          help=_("output file"))
+        return parser
+
+    def do_sqltune(self, arg):
+        """Generates SQL tuning advice"""
+        parser = self.parser_sqltune()
+        options, args = parser.parse_args(arg)
+        self.__checkConnection()
+        self.__checkArg(arg, ">1")
+        self.__animateCursor() # Only after user interaction
+        result = pysqlaudit.sqlTune(self.db, " ".join(args),
+                                    #text=options.text,
+                                    level=options.level)
         if options.filename == "":
             self.__toScreen(result, moreRows=False, header=False)
         else:
@@ -799,7 +841,7 @@ class PysqlShell(cmd.Cmd):
         _("DBA grants are required. "))
         parser.add_option("-s", "--segment-type", dest="type",
                           default=u"both",
-                          help=_("type of segment: TABLE | INDEX | BOTH"))
+                          help=_("type of segment: TABLE | INDEX | BOTH (default)"))
         parser.add_option("-t", "--tablespace", dest="tbs",
                           default=u"%",
                           help=_("filters by tablespace"))
@@ -823,14 +865,14 @@ class PysqlShell(cmd.Cmd):
         self.__animateCursor()
         for type in ("table", "index"):
             if options.type.lower() in ("both", type):
-                result = pysqlaudit.duReport(self.db,
+                (result, header) = pysqlaudit.duReport(self.db,
                             type,
                             options.tbs.upper().replace('*', '%'),
                             options.user.upper().replace('*', '%'),
                             int(options.nbLines))
             if options.filename == "":
-                print GREEN + "*****" + type.upper() + "*****" + RESET
-                self.__toScreen(result, moreRows=False)
+                print GREEN + "***** " + type.upper() + " *****" + RESET
+                self.__displayTab(result, header)
                 print
             else:
                 if options.filename.split(".")[-1] == "csv":

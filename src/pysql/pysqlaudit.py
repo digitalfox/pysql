@@ -29,7 +29,7 @@ def listSnapshotId(db, numDays=1):
     except Exception, e:
         raise PysqlActionDenied(_("Insufficient privileges"))
 
-def addmReport(db, begin_snap="0", end_snap="0"):
+def addmReport(db, begin_snap="0", end_snap="0", type="TEXT", level="TYPICAL"):
     """Generates ADDM report
     @arg db: connection object
     @arg begin_snap: snapshot
@@ -64,19 +64,19 @@ def addmReport(db, begin_snap="0", end_snap="0"):
     name := '';
     descr := 'ADDM run: snapshots [' || bid || ', ' || eid || '], instance ' || inum || ', database id ' || dbid;
 
-    -- create task
+    -- creates task
     dbms_advisor.create_task('ADDM', id, name, descr, null);
 
-    -- set task parameters
+    -- sets task parameters
     dbms_advisor.set_task_parameter(name, 'DB_ID', dbid);
     dbms_advisor.set_task_parameter(name, 'INSTANCE', inum);
     dbms_advisor.set_task_parameter(name, 'END_SNAPSHOT', eid);
     dbms_advisor.set_task_parameter(name, 'START_SNAPSHOT', bid);
 
-    -- execute task
+    -- executes task
     dbms_advisor.execute_task(name);
 
-    -- display task name
+    -- displays task name
     dbms_output.enable;
     dbms_output.put_line(name);
 
@@ -92,7 +92,7 @@ END;
     # Gets task name
     task_name = db.getServerOuput()[0]
     # Generates report from task
-    result = db.executeAll(perfSql["addm_report_text"], [task_name])
+    result = db.executeAll(perfSql["addm_report_text"], [unicode(task_name), unicode(type.upper()), unicode(level.upper())])
     return result
 
 def awrReport(db, type="txt", begin_snap="0", end_snap="0"):
@@ -114,12 +114,65 @@ def awrReport(db, type="txt", begin_snap="0", end_snap="0"):
 
     # Generates report
     try:
-        if type.lower() == "html":
+        if type.upper() == "HTML":
             result = db.executeAll(perfSql["awr_report_html"], [dbid, inum, begin_snap, end_snap])
         else:
             result = db.executeAll(perfSql["awr_report_text"], [dbid, inum, begin_snap, end_snap])
     except Exception, e:
         raise PysqlActionDenied(_("Insufficient privileges"))
+    return result
+
+def sqlTune(db, statement, type="TEXT", level="TYPICAL"):
+    """Generates a SQL tunung advice report
+    @arg db: connection object
+    @arg statement: sql statement to be tuned
+    """
+    # Doubles quote because of sql statement parsing
+    statement = statement.replace("'", "''")
+
+    # PL/SQL procedure because of bloody in/out parameters in create_task function
+    sql = """BEGIN
+  DECLARE
+    sql_text  clob;
+    user_name varchar2(30);
+    task_name varchar2(30);
+
+  BEGIN
+    sql_text  := '%s';
+    user_name := '%s';
+    task_name := '';
+
+    -- creates new task
+    task_name := dbms_sqltune.create_tuning_task(
+        sql_text    => sql_text,
+        scope       => 'comprehensive',
+        time_limit  => 60,
+        task_name   => task_name,
+        description => 'task to tune a query');
+
+    -- executes task
+    dbms_sqltune.execute_tuning_task(task_name => task_name);
+
+    -- displays task name
+    dbms_output.enable;
+    dbms_output.put_line(task_name);
+  END;
+END;
+""" % (statement, db.getUsername())
+
+    # Creates task
+    try:
+        db.execute(sql)
+    except Exception, e:
+        raise PysqlException(_("Insufficient privileges"))
+    # Gets task name
+    task_name = db.getServerOuput()[0]
+    # Generates report from task
+    try:
+        result = db.executeAll(perfSql["sqltune_text"], [unicode(task_name), unicode(type.upper()), unicode(level.upper())])
+    except Exception, e:
+        raise PysqlException(_("Insufficient privileges"))
+
     return result
 
 def duReport(db, segmentType, tbs="%", user="%", nbRows=-1):
@@ -138,13 +191,15 @@ def duReport(db, segmentType, tbs="%", user="%", nbRows=-1):
 
     # Generates report
     if segmentType.lower() == "table":
+        header = [_("Owner"), _("Tablespace"), _("Table"), _("Part?"), _("#Cols"), _("#Rows"), _("Size(blk)"), _("Size(MB)"), _("Size(%)")]
         result = db.executeAll(durptSql["tablesForTbsAndUser"],  [unicode(size), tbs, user])
     elif segmentType.lower() == "index":
+        header = [_("Owner"), _("Tablespace"), _("Index"), _("Part?"), _("Level"), _("Keys"), _("Size(blk)"), _("Size(MB)"), _("Size(%)")]
         result = db.executeAll(durptSql["indexesForTbsAndUser"], [unicode(size), tbs, user])
     else:
         raise PysqlException(_("Internal error: type %s not supported") % segmentType)
 
-    return result[:nbRows]
+    return (result[:nbRows], header)
 
 def assmReport(db, name):
     """Generates a storage report (may take a while)
@@ -167,5 +222,4 @@ def assmReport(db, name):
     result = [[table.getOwner(), table.getName(), allocatedBlocks, neededBlocks, lostBlocks, round(100*float(lostBlocks)/allocatedBlocks, 1)]]
 
     return (result, header)
-
 

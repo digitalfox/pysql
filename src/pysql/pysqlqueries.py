@@ -514,9 +514,10 @@ perfSql = {
     "db_id"             : u"""select to_char(dbid) from v$database""",
     "instance_num"      : u"""select to_char(instance_number) from v$instance""",
     "snapshots"         : u"""select snap_id id, begin_interval_time time from dba_hist_snapshot where begin_interval_time > (sysdate - :1) order by snap_id desc""",
-    "addm_report_text"  : u"""select dbms_advisor.get_task_report(:1, 'TEXT', 'ALL') from sys.dual""",
+    "addm_report_text"  : u"""select dbms_advisor.get_task_report(:1, :2, :3) from sys.dual""",
     "awr_report_html"   : u"""select * from table(dbms_workload_repository.awr_report_html(:1, :2, :3, :4))""",
-    "awr_report_text"   : u"""select * from table(dbms_workload_repository.awr_report_text(:1, :2, :3, :4))"""
+    "awr_report_text"   : u"""select * from table(dbms_workload_repository.awr_report_text(:1, :2, :3, :4))""",
+    "sqltune_text"      : u"""select dbms_sqltune.report_tuning_task(:1, :2, :3) from sys.dual"""
 }
 
 durptSql = {
@@ -524,3 +525,4 @@ durptSql = {
     "tablesForTbsAndUser"  : u"""SELECT a.owner "Owner", a.tablespace_name "Tablespace", a.segment_name "Table", DECODE(COUNT(a.partition_name), 0, '', '*') "Part?", COUNT(c.column_name) "#Cols", d.num_rows "#Rows", a.blocks "Size(blk)", ROUND(a.blocks*b.block_size/1024/1024, 1) "Size(Mo)", ROUND((100*a.blocks)/:1, 1) "Size(%)" FROM DBA_SEGMENTS a, DBA_TABLESPACES b, DBA_TAB_COLUMNS C, DBA_TABLES d WHERE a.tablespace_name LIKE :2 AND a.owner LIKE :3 AND a.tablespace_name=b.tablespace_name AND a.segment_name=c.table_name AND a.segment_name=d.table_name AND a.segment_name NOT LIKE '%PLAN_TABLE' AND a.segment_type LIKE 'TABLE%' AND NOT EXISTS (SELECT NULL FROM DBA_TABLES WHERE owner=a.owner AND temporary='Y' AND table_name=a.segment_name) GROUP BY a.owner, a.tablespace_name, a.segment_name, a.blocks, b.block_size, d.num_rows ORDER BY a.blocks DESC""",
     "indexesForTbsAndUser" : u"""SELECT a.owner "Owner", a.tablespace_name "Tablespace", a.segment_name "Index", DECODE(COUNT(a.partition_name), 0, '', '*') "Part?", COUNT(c.blevel) "Level", c.distinct_keys "Keys", a.blocks "Size(blk)", ROUND(a.blocks*b.block_size/1024/1024, 1) "Size(Mo)", ROUND((100*a.blocks)/:1, 1) "Size(%)" FROM DBA_SEGMENTS a, DBA_TABLESPACES b, DBA_INDEXES c WHERE a.tablespace_name LIKE :2 AND a.owner LIKE :3 AND a.tablespace_name=b.tablespace_name AND a.segment_name=c.index_name AND a.segment_name NOT LIKE '%PLAN_TABLE' AND a.segment_type LIKE 'INDEX%' AND NOT EXISTS (SELECT NULL FROM DBA_TABLES WHERE owner=a.owner AND temporary='Y' AND table_name=a.segment_name) GROUP BY a.owner, a.tablespace_name, a.segment_name, a.blocks, b.block_size, c.blevel, c.distinct_keys ORDER BY a.blocks DESC"""
 }
+
