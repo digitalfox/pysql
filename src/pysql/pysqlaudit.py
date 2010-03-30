@@ -163,15 +163,18 @@ END;
     # Creates task
     try:
         db.execute(sql)
-    except Exception, e:
+    except PysqlException, e:
         raise PysqlException(_("Insufficient privileges"))
     # Gets task name
     task_name = db.getServerOuput()[0]
     # Generates report from task
     try:
         result = db.executeAll(perfSql["sqltune_text"], [unicode(task_name), unicode(type.upper()), unicode(level.upper())])
-    except Exception, e:
-        raise PysqlException(_("Insufficient privileges"))
+    except PysqlException, e:
+        if str(e).count(unicode(task_name)) > 0:
+            raise PysqlException(_("Insufficient privileges"))
+        else:
+            raise e
 
     return result
 

@@ -238,7 +238,7 @@ def setTitle(title, codec):
     @param title: window title
     @type title: unicode string
     @param codec: codec used to encode string"""
-    if os.name == 'posix' and os.getenv("PYDEVDEBUG", "0") == "0":
+    if os.name == 'posix' and os.environ["TERM"] == 'xterm' and os.getenv("PYDEVDEBUG", "0") == "0":
         title = "\033]0;%s\007" % title
         sys.stdout.write(title.encode(codec, "replace"))
     elif os.name == "nt":

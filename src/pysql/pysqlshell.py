@@ -983,6 +983,7 @@ class PysqlShell(cmd.Cmd):
         """Prints Oracle object DDL"""
         self.__checkConnection()
         self.__checkArg(arg, "==1")
+        self.__animateCursor()
         result = pysqlfunctions.ddl(self.db, arg)
         if result is None:
             print CYAN + _("(no result)") + RESET
