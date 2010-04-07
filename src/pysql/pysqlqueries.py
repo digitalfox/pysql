@@ -319,6 +319,7 @@ viewSql = {
 sessionStatSql = {
     "all"        :    u"""Select a.Sid "Id", a.Serial# "Serial", a.SchemaName "Schema",
                         a.OsUser "Osuser", a.Machine "Machine", a.Program "Program",
+                        a.Logon_Time "Logged On Since",
                         b.Block_Gets "Blk Gets", b.Consistent_Gets "Cons Gets",
                         b.Physical_Reads "Phy Rds", b.Block_Changes "Blk Chg",
                         b.Consistent_Changes "Cons Chg", c.Value * 10 "CPU(ms)",
