@@ -1053,8 +1053,8 @@ class PysqlShell(cmd.Cmd):
             print CYAN + _("Note: the all (-a / --all) option is useless when display one session") + RESET
         if not args:
             # Lists all session
-            result = pysqlfunctions.sessions(self.db, all=options.all, search=options.search)
-            self.__displayTab(result, self.db.getDescription())
+            (header, result) = pysqlfunctions.sessions(self.db, all=options.all, search=options.search)
+            self.__displayTab(result, header)
         else:
             sessionId = args[0]
             # Displays details about one session

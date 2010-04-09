@@ -591,6 +591,8 @@ def sessions(db, all=False, search=None):
     @param search: search session program, name, ouser... that looks like the str given
     @return: huge resultset in tabular format"""
 
+    header = [_("Id"), _("Serial"), _("Schema"), _("OsUser"), _("Machine"), _("Program"), _("Logged Since"), _("Blk Gets"), _("Cons Gets"), _("Phy Rds"), _("Blk Chg"), _("Cons Chg"), _("CPU(ms)"), _("C PID"), _("S PID"), _("SQL")]
+
     sessionFilter = []
     if not all:
         sessionFilter.append("a.Status != 'INACTIVE'")
@@ -609,7 +611,7 @@ def sessions(db, all=False, search=None):
         result = db.executeAll(sessionStatSql["all"] % whereClause)
     except PysqlException:
         raise PysqlActionDenied(_("Insufficient privileges"))
-    return result
+    return (header, result)
 
 def sessionStat(db, sid, stat=None):
     """Displays detailed statistics for one session
