@@ -206,10 +206,11 @@ def which(progName):
     return None
 
 def warn(message):
-    """Just print a formated warning message on screen
+    """Just print a formated warning message on screen if PYSQL_WARNING env var is set (whatever value)
     @param message: unicode or str message. Conversion will done with print and default encoding
     """
-    print "%s==>Warning:%s %s%s" % (RED, BOLD, message, RESET)
+    if os.environ.has_key("PYSQL_WARNING"):
+        print "%s==>Warning:%s %s%s" % (RED, BOLD, message, RESET)
 
 def printStackTrace():
     """Print stack trace with debug information"""
