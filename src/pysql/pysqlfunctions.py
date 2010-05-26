@@ -293,8 +293,8 @@ def desc(db, objectName, completeMethod=None, printDetails=True, printStats=Fals
 
     # Displays some information about the object
     if printDetails:
-        print CYAN + _("Name")  + "\t: " + oraObject.getName() + RESET
-        print CYAN + _("Type")  + "\t: " + oraObject.getType() + RESET
+        print CYAN + _("Name") + "\t: " + oraObject.getName() + RESET
+        print CYAN + _("Type") + "\t: " + oraObject.getType() + RESET
         print CYAN + _("Owner") + "\t: " + oraObject.getOwner() + RESET
         if oraObject.getStatus() in ("INVALID", "OFFLINE", "UNUSED"):
             print CYAN + _("Status") + "\t\t: " + BOLD + RED + oraObject.getStatus() + RESET
@@ -323,7 +323,7 @@ def desc(db, objectName, completeMethod=None, printDetails=True, printStats=Fals
             except PysqlException:
                 print CYAN + _("Last analyzed on") + "\t: " + _("<unable to get date of last statistics computation>") + RESET
             try:
-                print ORANGE + _("Nb rows")      + "\t\t: " + str(oraObject.getNumRows(db)) + RESET
+                print ORANGE + _("Nb rows") + "\t\t: " + str(oraObject.getNumRows(db)) + RESET
             except PysqlException:
                 print CYAN + _("Nb rows") + "\t: " + _("<unable to get number of rows>") + RESET
             try:
@@ -452,7 +452,7 @@ def desc(db, objectName, completeMethod=None, printDetails=True, printStats=Fals
         else:
             totalUsed = 0
         if len(oraObject.getDatafiles()) > 1:
-            result[0] = ["> "+_("TOTAL"), round(totalSize, 2), round(totalFree, 2), round(totalUsed, 2)]
+            result[0] = ["> " + _("TOTAL"), round(totalSize, 2), round(totalFree, 2), round(totalUsed, 2)]
         else:
             result.pop(0)
 
@@ -467,23 +467,23 @@ def desc(db, objectName, completeMethod=None, printDetails=True, printStats=Fals
         oraObject.updateTablespaceList(db)
         header = [_("Tablespace"), _("Default?"), _("#Tables"), _("#Indexes")]
         result = [[]]
-        totalTables  = 0
+        totalTables = 0
         totalIndexes = 0
         defaultTbs = oraObject.getDefaultTablespace(db)
         #tempTbs = oraObject.getTempTablespace(db)
         for tablespace in oraObject.getTablespaces():
             name = tablespace.getName()
-            nbTables  = oraObject.getNbTables(db, tablespace=tablespace.getName())
+            nbTables = oraObject.getNbTables(db, tablespace=tablespace.getName())
             nbIndexes = oraObject.getNbIndexes(db, tablespace=tablespace.getName())
             if name == defaultTbs:
                 defstr = u"*"
             else:
                 defstr = u""
             result.append([name, defstr, nbTables, nbIndexes])
-            totalTables  += nbTables
+            totalTables += nbTables
             totalIndexes += nbIndexes
         if len(oraObject.getTablespaces()) > 1:
-            result[0] = ["> "+_("TOTAL"), u"", totalTables, totalIndexes]
+            result[0] = ["> " + _("TOTAL"), u"", totalTables, totalIndexes]
         else:
             result.pop(0)
     else:
