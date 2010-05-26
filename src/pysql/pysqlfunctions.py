@@ -314,10 +314,22 @@ def desc(db, objectName, completeMethod=None, printDetails=True, printStats=Fals
     # Displays some statistics about the object
     if printStats:
         if oraObject.getType() in ("TABLE", "TABLE PARTITION"):
-            print ORANGE + _("Last analyzed on") + ": " + str(oraObject.getLastAnalyzed(db)) + RESET
-            print ORANGE + _("Nb rows")      + "\t\t: " + str(oraObject.getNumRows(db)) + RESET
-            print ORANGE + _("Nb used blocks") + "\t: " + str(oraObject.getUsedBlocks(db)) + RESET
-            print ORANGE + _("Avg row length") + "\t: " + str(oraObject.getAvgRowLength(db)) + RESET
+            try:
+                print ORANGE + _("Last analyzed on") + ": " + str(oraObject.getLastAnalyzed(db)) + RESET
+            except PysqlException:
+                print CYAN + _("Last analyzed on") + "\t: " + _("<unable to get date of last statistics computation>") + RESET
+            try:
+                print ORANGE + _("Nb rows")      + "\t\t: " + str(oraObject.getNumRows(db)) + RESET
+            except PysqlException:
+                print CYAN + _("Nb rows") + "\t: " + _("<unable to get number of rows>") + RESET
+            try:
+                print ORANGE + _("Nb used blocks") + "\t: " + str(oraObject.getUsedBlocks(db)) + RESET
+            except PysqlException:
+                print CYAN + _("Nb used blocks") + "\t: " + _("<unable to get number of used blocks>") + RESET
+            try:
+                print ORANGE + _("Avg row length") + "\t: " + str(oraObject.getAvgRowLength(db)) + RESET
+            except PysqlException:
+                print CYAN + _("Avg row length") + "\t: " + _("<unable to get average row length") + RESET
 
     # Evaluates object type (among the 24 defined)
     if oraObject.getType() in ("TABLE" , "TABLE PARTITION"):
