@@ -1,5 +1,9 @@
 V0.15 2010/XX/XX
-Animate cursor during long queries. Add startup/shutdown option (10/11g only)
+Animated cursor during long queries or operations.
+Add startup/shutdown option (10/11g only). Desc function
+is now interactive if multiple object match. Support for
+new Oracle audit function (addm, awr) and assm report.
+New function for awr sqltune. 
 
 V0.14 2010/02/14
 Automatic terminal width detection on Unix system. Add role/profile search.

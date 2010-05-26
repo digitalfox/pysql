@@ -1,26 +1,23 @@
-- watch is broken            
+- watch is broken
 - unicode warning when describing tablespace
 - do_edit: don't update if nothing has been changed
 - catch ORA-00028 (session killed) to disconnect user
-- squash current cursor when changing connection     
+- squash current cursor when changing connection
+- encoding bug when database is not opened
 - datamodel does not handle table with accentuated name
-- migrate all function to OptionParser                 
-- update web site: screenshot, tutorial...             
+- migrate all function to OptionParser
+- update web site: screenshot, tutorial...
 - move docstring from main to __init__ for proper display in epydoc
-- manage long ops (view V$SESSION_LONGOPS)                         
-- remove warning on unicode decode (make a replace with ?)         
+- manage long ops (view V$SESSION_LONGOPS)
+- remove warning on unicode decode (make a replace with ?)
 - warn user if NLS_LANG is stupid
 - allow to explain plan with hash value
 - find a solution to split pysqlshell in small pieces
 - add pyparsing deps in documentation
-- désactiver couleurs et bannières en batch
-- ajouter date/heure de démarrage de l'ordre sql dans la commande session
 - enhance browsing of procdure inside package
-- change md5 import to avoid deprec warning on python2.6
 - add function based index support (in desc index and desc table)
 - add user right management
 - add invalid object search and explanation
-- ease session trace and tkprof creation
 - generate graphics in background ?
 - extend csv function for other tabular output pysql function (ex. desc, sessions...)
 - enhance package browsing/editing
@@ -30,7 +27,8 @@
 - advanced desc function on table (PK, FK, UC), index, trigger...
 - better completion system on SQL request
 - function to start user trace
-- add function to manage advisory package
 - issues with accentuated caracter on windows
 - copy/paste with tabs make the terminal messy due to completion
 - colors for windows
+- set title should be smarter with konsole/yakuake terminals and set the tab name instead of windows name
+- add synonym and object command

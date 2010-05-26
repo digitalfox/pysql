@@ -1,3 +1,197 @@
+commit 7c78fda29c994a56b2419eaa22f803ae210e2620
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed May 26 22:57:19 2010 +0200
+
+    Only show warning if PYSQL_WARNING env variable is set
+
+commit 8cf359274731683fae432998f7ea7ff0b12f0d64
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed May 26 22:46:24 2010 +0200
+
+    Code formating
+
+commit a532bcca9bc46044c9305a3530a2e3701486c510
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed May 26 22:46:12 2010 +0200
+
+    Remove warning about deprecated md5 module
+
+commit 11fd89516476bbcdf0858e1e3bfe7aeb86290d87
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed May 26 18:26:16 2010 +0200
+
+    Fix code alignement and broken dep function parser
+
+commit 23a4cfe24c6abbca034756368f3160e392168a89
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Wed May 26 10:12:30 2010 +0200
+
+    Catches error on detailed desc (ex : no used blocks for synonyms)
+
+commit 44d86fc08c079f652ed35dbc38d645cb03e8917c
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Wed May 5 22:22:00 2010 +0200
+
+    I18n requirements for next release
+
+commit 79d8babab3c502622efef944d46f79c2f4ea3479
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Fri Apr 9 14:56:02 2010 +0200
+
+    Field shrinking in command 'session' for whiners
+    Get headers out of 'session' query to enable i18n
+
+commit 6799141cb02f89e56b40afaa32ed6cf6dfa8df85
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Wed Apr 7 21:55:17 2010 +0200
+
+    Add session logon time in command 'session'
+
+commit 406232714d0eb0d66cb68a9f71fee51e319a6af7
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Thu Apr 1 23:35:32 2010 +0200
+
+    Add manual page contributed by Sebastien Delcros
+
+commit 2c4f0b353379834cd78ae3b4f91a78be75e90e2d
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Tue Mar 30 22:14:06 2010 +0200
+
+    Disable title update for non-xterm terminals and some other minor fixes
+
+commit 153c0b5c19509d023d8298c942a86d76f330e5d7
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Fri Mar 12 23:30:51 2010 +0100
+
+    Add sqltune based on AWR sqltune options in Oracle 10 and upper
+
+commit cdc1092c0710b7f3b2eae98d53940cb4853a04f4
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Wed Mar 3 22:19:59 2010 +0100
+
+    minor fixes for assmrpt
+
+commit 3b69c9e6c0884433d85706e76d8bf03abdf540b3
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Wed Mar 3 21:29:43 2010 +0100
+
+    New desc for users
+
+commit 341d1ab514b810502552ead26669ba449d243a48
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Wed Mar 3 14:15:42 2010 +0100
+
+    Reformat help messages, add more i18n-ed strings and correct some display errors
+
+commit 7ed0ebaeec8f12488749bf3ba1300f2ef93c1b68
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Mon Mar 1 17:56:55 2010 +0100
+
+    Add simple assm report to analyze table blocks clustering
+
+commit 790304c0459f17c5d4e18583819550d2b0a6b478
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Mon Mar 1 15:03:01 2010 +0100
+
+    Add an instance attribute to simplify interactivity tests
+
+commit 401dabb08d7ff7b5d0c000fc96aa30b388fe64e8
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Sat Feb 27 11:02:57 2010 +0100
+
+    Fix permission management in audit functions
+
+commit 2dfe000a3a4b59c5f978857058ce50e06e8379bb
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Sat Feb 27 09:53:33 2010 +0100
+
+    Add a plain text storage report to follow biggest objets. Also add i18 and some cleanings.
+
+commit 283d25e439072978cf62d9cc45e0216111a5fc32
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Feb 24 09:36:36 2010 +0100
+
+    Fix unicode warning
+
+commit b745bccf7ddbd3db04cfc36338f8e06e8642b7a0
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Tue Feb 23 23:24:21 2010 +0100
+
+    New module pysqlaudit pour high-level audit fonctions such as performance reports. Also adds more internationalization.
+
+commit d503fe5e9bbe1de1770a16e7caf553463aa8a7db
+Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
+Date:   Sat Feb 20 11:17:31 2010 +0100
+
+    Output beautification when not using a tty
+
+commit ec1f402857229b76c2e49245242d18db52a79f2a
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Feb 19 23:34:07 2010 +0100
+
+    Guessing info for name and uppercase name is no more needed
+
+commit dd88ffad731833d3bd79b4ce78126aabab003eb1
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Feb 19 23:11:15 2010 +0100
+
+    Factorize object status code
+
+commit 8291572922bb1f3374b23f4233e3a1c4b6687218
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Feb 19 22:19:31 2010 +0100
+
+    If type is already defined, filter out object that does not match and return if nothing match.
+
+commit ee1bfbed629735aa8cac33b15c6f629514e90dd5
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Feb 19 22:04:04 2010 +0100
+
+    Fix object owner
+
+commit 80d974fb5a23f974832a2720e1a53b22006003d3
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Feb 19 21:55:16 2010 +0100
+
+    Huge update and cleanup
+
+commit 767222321ad581f04193d86327a99210460fcc57
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Feb 19 19:09:57 2010 +0100
+
+    Use own object before public ones when desc encounter multiple objects
+
+commit dd3d4d91c59ac128922d096663af6c8a913b33c1
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Feb 19 19:08:51 2010 +0100
+
+    Respect case for owner and name if quotes are used
+
+commit 79638aa47a8e2ebd1870893b4f6e9bc78858c643
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri Feb 19 08:41:08 2010 +0100
+
+    Allow to give object type in parenthisis to desc command
+
+commit 3383c4bdc094ee8d65e91e2c0ce304f80057d1a5
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Thu Feb 18 20:11:01 2010 +0100
+
+    Add interactive feature to desc when multiple object have the same name
+
+commit c44bb6891d24c157f399c4136a9229f5ced27c39
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Feb 17 19:27:35 2010 +0100
+
+    Add hash and __eq__ function to object.
+    Use set instead of list in guessinfo
+
+commit 333a6781bfdd7f29552cca7ecbc5f1d30609066f
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed Feb 17 11:07:56 2010 +0100
+
+    Bump version to 0.15 (next release) and update changelog
+
 commit d93c5b51b76e233e9587e18f60b7ad99d45e65e4
 Author: Sébastien Delcros <Sebastien.Delcros@gmail.com>
 Date:   Tue Feb 16 16:25:53 2010 +0100
