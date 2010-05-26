@@ -12,8 +12,12 @@
 # Python imports:
 import os, re
 from os import getenv, unlink
-from md5 import md5
 from difflib import ndiff
+try:
+    from hashlib import md5
+except ImportError:
+    # before python 2.5 hashlib did not exist
+    from md5 import md5
 
 # Pysql imports:
 from pysqlqueries import *
