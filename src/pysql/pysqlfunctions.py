@@ -329,7 +329,7 @@ def desc(db, objectName, completeMethod=None, printDetails=True, printStats=Fals
             try:
                 print ORANGE + _("Nb used blocks") + "\t: " + str(oraObject.getUsedBlocks(db)) + RESET
             except PysqlException:
-                print CYAN + _("Nb used blocks") + "\t: " + _("<unable to get number of used blocks>") + RESET
+                print ORANGE + _("Nb used blocks") + "\t: " + _("<unable to get number of used blocks>") + RESET
             try:
                 print ORANGE + _("Avg row length") + "\t: " + str(oraObject.getAvgRowLength(db)) + RESET
             except PysqlException:
