@@ -1,3 +1,21 @@
+commit 63e5c4997587fa98d20a23c048978b1889bfa4e1
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Sun Jun 13 18:41:04 2010 +0200
+
+    Translation update for 0.15 release
+
+commit 8f4389c3386ecba0013b1aef881364d187e51477
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Fri May 28 15:18:53 2010 +0200
+
+    Fix desc color
+
+commit a3f86b7cf3cbcb48fdc2c20a35742fa7fc22ce1a
+Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
+Date:   Wed May 26 23:13:00 2010 +0200
+
+    Update for future 0.15 release
+
 commit 7c78fda29c994a56b2419eaa22f803ae210e2620
 Author: Sébastien Renard <Sebastien.Renard@digitalfox.org>
 Date:   Wed May 26 22:57:19 2010 +0200

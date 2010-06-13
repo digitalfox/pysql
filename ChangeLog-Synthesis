@@ -1,4 +1,4 @@
-V0.15 2010/XX/XX
+V0.15 2010/06/13
 Animated cursor during long queries or operations.
 Add startup/shutdown option (10/11g only). Desc function
 is now interactive if multiple object match. Support for
