@@ -5,13 +5,14 @@
 # Sébastien Renard <Sebastien.Renard@digitalfox.org>, 2006, 2007, 2008, 2009.
 # Sebastien Renard <Sebastien.Renard@digitalfox.org>, 2009, 2010.
 # Sébastien Delcros <Sebastien.Delcros@Gmail.com>, 2010.
+# Sébastien Renard <renard@kde.org>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: pysql\n"
-"POT-Creation-Date: 2010-04-27 10:44+CEST\n"
-"PO-Revision-Date: 2010-04-27 10:50+0200\n"
-"Last-Translator: Sébastien Delcros <Sebastien.Delcros@Gmail.com>\n"
-"Language-Team: French <>\n"
+"POT-Creation-Date: 2010-06-13 18:36+CEST\n"
+"PO-Revision-Date: 2010-06-13 18:40+0200\n"
+"Last-Translator: Sébastien Renard <renard@kde.org>\n"
+"Language-Team: French <kde-francophone@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -23,9 +24,9 @@ msgstr ""
 #: src/pysql/pysqlaudit.py:91 src/pysql/pysqlaudit.py:110
 #: src/pysql/pysqlaudit.py:122 src/pysql/pysqlaudit.py:167
 #: src/pysql/pysqlaudit.py:175 src/pysql/pysqlaudit.py:193
-#: src/pysql/pysqlaudit.py:221 src/pysql/pysqlfunctions.py:584
-#: src/pysql/pysqlfunctions.py:613 src/pysql/pysqlfunctions.py:640
-#: src/pysql/pysqlfunctions.py:667 src/pysql/pysqlfunctions.py:695
+#: src/pysql/pysqlaudit.py:221 src/pysql/pysqlfunctions.py:600
+#: src/pysql/pysqlfunctions.py:629 src/pysql/pysqlfunctions.py:656
+#: src/pysql/pysqlfunctions.py:683 src/pysql/pysqlfunctions.py:711
 #: src/pysql/pysqloraobjects.py:364
 msgid "Insufficient privileges"
 msgstr "Privilèges insuffisants"
@@ -59,16 +60,16 @@ msgid "Size(blk)"
 msgstr "Taille(blc)"
 
 #: src/pysql/pysqlaudit.py:197 src/pysql/pysqlaudit.py:200
-#: src/pysql/pysqlaudit.py:224 src/pysql/pysqlfunctions.py:294
+#: src/pysql/pysqlaudit.py:224 src/pysql/pysqlfunctions.py:298
 msgid "Owner"
 msgstr "Propriétaire"
 
 #: src/pysql/pysqlaudit.py:197 src/pysql/pysqlaudit.py:200
-#: src/pysql/pysqlfunctions.py:355 src/pysql/pysqlfunctions.py:452
+#: src/pysql/pysqlfunctions.py:371 src/pysql/pysqlfunctions.py:468
 msgid "Tablespace"
 msgstr "Tablespace"
 
-#: src/pysql/pysqlaudit.py:197 src/pysql/pysqlfunctions.py:445
+#: src/pysql/pysqlaudit.py:197 src/pysql/pysqlfunctions.py:461
 msgid "Table"
 msgstr "Table"
 
@@ -108,9 +109,9 @@ msgstr "Perdus(%)"
 msgid "Needed"
 msgstr "Nécessaires"
 
-#: src/pysql/pysqlaudit.py:224 src/pysql/pysqlfunctions.py:292
-#: src/pysql/pysqlfunctions.py:324 src/pysql/pysqlfunctions.py:342
-#: src/pysql/pysqlfunctions.py:649 src/pysql/pysqlfunctions.py:677
+#: src/pysql/pysqlaudit.py:224 src/pysql/pysqlfunctions.py:296
+#: src/pysql/pysqlfunctions.py:340 src/pysql/pysqlfunctions.py:358
+#: src/pysql/pysqlfunctions.py:665 src/pysql/pysqlfunctions.py:693
 #: src/pysql/pysqlshell.py:485
 msgid "Name"
 msgstr "Nom"
@@ -274,28 +275,28 @@ msgstr "Non encore implémenté."
 msgid "Action denied: %s"
 msgstr "Action non permise : %s"
 
-#: src/pysql/pysqlfunctions.py:41 src/pysql/pysqlfunctions.py:494
+#: src/pysql/pysqlfunctions.py:45 src/pysql/pysqlfunctions.py:510
 #: src/pysql/pysqlgraphics.py:423
 msgid "Too much synonym recursion"
 msgstr "Trop d'imbrication de synonymes"
 
-#: src/pysql/pysqlfunctions.py:43
+#: src/pysql/pysqlfunctions.py:47
 msgid "Cannot count rows of such object : %s"
 msgstr "Impossible de compter les enregistrements d'un tel objet : %s"
 
-#: src/pysql/pysqlfunctions.py:76
+#: src/pysql/pysqlfunctions.py:80
 msgid "unknown diff control caracter (%s)"
 msgstr "Caractère de contrôle de différence inconnu (%s)"
 
-#: src/pysql/pysqlfunctions.py:122
+#: src/pysql/pysqlfunctions.py:126
 msgid "Could not find table %s"
 msgstr "Impossible de trouver la table %s"
 
-#: src/pysql/pysqlfunctions.py:153
+#: src/pysql/pysqlfunctions.py:157
 msgid "%s does not seem to be a table in %s"
 msgstr "% ne semble pas être une table dans %s"
 
-#: src/pysql/pysqlfunctions.py:158
+#: src/pysql/pysqlfunctions.py:162
 msgid ""
 "Unable to compare data of tables that do not have same structure (columns "
 "name and type)"
@@ -303,277 +304,293 @@ msgstr ""
 "Impossible de comparer les données de tables qui ne possèdent pas la même "
 "structure (nom et type des colonnes)"
 
-#: src/pysql/pysqlfunctions.py:260
+#: src/pysql/pysqlfunctions.py:264
 msgid "Got multiple result:"
 msgstr "Plusieurs résultats obtenus :"
 
-#: src/pysql/pysqlfunctions.py:267
+#: src/pysql/pysqlfunctions.py:271
 msgid "Defaulting to own object: %s"
 msgstr "Utilisation de l'objet propre à l'utilisateur : %s"
 
-#: src/pysql/pysqlfunctions.py:271
+#: src/pysql/pysqlfunctions.py:275
 msgid "Defaulting to public object: %s"
 msgstr "Utilisation de l'objet public : %s"
 
-#: src/pysql/pysqlfunctions.py:293 src/pysql/pysqlfunctions.py:324
-#: src/pysql/pysqlfunctions.py:342 src/pysql/pysqlfunctions.py:445
-#: src/pysql/pysqlfunctions.py:649 src/pysql/pysqlfunctions.py:677
+#: src/pysql/pysqlfunctions.py:297 src/pysql/pysqlfunctions.py:340
+#: src/pysql/pysqlfunctions.py:358 src/pysql/pysqlfunctions.py:461
+#: src/pysql/pysqlfunctions.py:665 src/pysql/pysqlfunctions.py:693
 msgid "Type"
 msgstr "Type"
 
-#: src/pysql/pysqlfunctions.py:296 src/pysql/pysqlfunctions.py:298
-#: src/pysql/pysqlfunctions.py:445
+#: src/pysql/pysqlfunctions.py:300 src/pysql/pysqlfunctions.py:302
+#: src/pysql/pysqlfunctions.py:461
 msgid "Status"
 msgstr "Statut"
 
-#: src/pysql/pysqlfunctions.py:301 src/pysql/pysqlfunctions.py:303
+#: src/pysql/pysqlfunctions.py:305 src/pysql/pysqlfunctions.py:307
 msgid "Comment"
 msgstr "Commentaires"
 
-#: src/pysql/pysqlfunctions.py:303
+#: src/pysql/pysqlfunctions.py:307
 msgid "<unable to get comment>"
 msgstr "<impossible d'afficher le commentaire>"
 
-#: src/pysql/pysqlfunctions.py:306 src/pysql/pysqlfunctions.py:308
+#: src/pysql/pysqlfunctions.py:310 src/pysql/pysqlfunctions.py:312
 msgid "Created on"
 msgstr "Création"
 
-#: src/pysql/pysqlfunctions.py:308
+#: src/pysql/pysqlfunctions.py:312
 msgid "<unable to get date of creation>"
 msgstr "<impossible d'obtenir la date de création>"
 
-#: src/pysql/pysqlfunctions.py:310 src/pysql/pysqlfunctions.py:312
+#: src/pysql/pysqlfunctions.py:314 src/pysql/pysqlfunctions.py:316
 msgid "Last DDL on"
 msgstr "Dernier DDL"
 
-#: src/pysql/pysqlfunctions.py:312
+#: src/pysql/pysqlfunctions.py:316
 msgid "<unable to get date of last DDL modification>"
 msgstr "<impossible d'obtenir la date de dernière modification>"
 
-#: src/pysql/pysqlfunctions.py:317
+#: src/pysql/pysqlfunctions.py:322 src/pysql/pysqlfunctions.py:324
 msgid "Last analyzed on"
 msgstr "Dernière analyse"
 
-#: src/pysql/pysqlfunctions.py:318
+#: src/pysql/pysqlfunctions.py:324
+msgid "<unable to get date of last statistics computation>"
+msgstr "<impossible d'obtenir la date de calcul des statistiques>"
+
+#: src/pysql/pysqlfunctions.py:326 src/pysql/pysqlfunctions.py:328
 msgid "Nb rows"
 msgstr "Nb de lignes"
 
-#: src/pysql/pysqlfunctions.py:319
+#: src/pysql/pysqlfunctions.py:328
+msgid "<unable to get number of rows>"
+msgstr "<impossible d'obtenir le nombre de lignes>"
+
+#: src/pysql/pysqlfunctions.py:330 src/pysql/pysqlfunctions.py:332
 msgid "Nb used blocks"
 msgstr "Nb de blocs utilisés"
 
-#: src/pysql/pysqlfunctions.py:320
+#: src/pysql/pysqlfunctions.py:332
+msgid "<unable to get number of used blocks>"
+msgstr "<impossible d'obtenir le nombre de blocs utilisés>"
+
+#: src/pysql/pysqlfunctions.py:334 src/pysql/pysqlfunctions.py:336
 msgid "Avg row length"
 msgstr "Long. moyenne de ligne"
 
-#: src/pysql/pysqlfunctions.py:324 src/pysql/pysqlfunctions.py:342
+#: src/pysql/pysqlfunctions.py:336
+msgid "<unable to get average row length"
+msgstr "<impossible d'obtenir la longueur moyenne des lignes>"
+
+#: src/pysql/pysqlfunctions.py:340 src/pysql/pysqlfunctions.py:358
 msgid "Null?"
 msgstr "Null?"
 
-#: src/pysql/pysqlfunctions.py:324 src/pysql/pysqlfunctions.py:342
-#: src/pysql/pysqlfunctions.py:649 src/pysql/pysqlfunctions.py:677
+#: src/pysql/pysqlfunctions.py:340 src/pysql/pysqlfunctions.py:358
+#: src/pysql/pysqlfunctions.py:665 src/pysql/pysqlfunctions.py:693
 msgid "Comments"
 msgstr "Commentaires"
 
-#: src/pysql/pysqlfunctions.py:324 src/pysql/pysqlshell.py:1198
+#: src/pysql/pysqlfunctions.py:340 src/pysql/pysqlshell.py:1198
 msgid "Indexes"
 msgstr "Index"
 
-#: src/pysql/pysqlfunctions.py:355 src/pysql/pysqlfunctions.py:418
+#: src/pysql/pysqlfunctions.py:371 src/pysql/pysqlfunctions.py:434
 msgid "%Used"
 msgstr "Utilisation (%)"
 
-#: src/pysql/pysqlfunctions.py:355 src/pysql/pysqlfunctions.py:418
+#: src/pysql/pysqlfunctions.py:371 src/pysql/pysqlfunctions.py:434
 msgid "Free (%s)"
 msgstr "Libre (%s)"
 
-#: src/pysql/pysqlfunctions.py:355 src/pysql/pysqlfunctions.py:418
+#: src/pysql/pysqlfunctions.py:371 src/pysql/pysqlfunctions.py:434
 msgid "Size (%s)"
 msgstr "Taille (%s)"
 
-#: src/pysql/pysqlfunctions.py:363
+#: src/pysql/pysqlfunctions.py:379
 msgid "Tablespace: "
 msgstr "Tablespace : "
 
-#: src/pysql/pysqlfunctions.py:367
+#: src/pysql/pysqlfunctions.py:383
 msgid "Target"
 msgstr "Cible"
 
-#: src/pysql/pysqlfunctions.py:371
+#: src/pysql/pysqlfunctions.py:387
 msgid "Path"
 msgstr "Chemin"
 
-#: src/pysql/pysqlfunctions.py:378
+#: src/pysql/pysqlfunctions.py:394
 msgid "Source"
 msgstr "Source"
 
-#: src/pysql/pysqlfunctions.py:378 src/pysql/pysqlfunctions.py:649
-#: src/pysql/pysqlfunctions.py:677 src/pysql/pysqlshell.py:521
+#: src/pysql/pysqlfunctions.py:394 src/pysql/pysqlfunctions.py:665
+#: src/pysql/pysqlfunctions.py:693 src/pysql/pysqlshell.py:521
 msgid "#"
 msgstr "N°"
 
-#: src/pysql/pysqlfunctions.py:382
+#: src/pysql/pysqlfunctions.py:398
 msgid "Property"
 msgstr "Propriété"
 
-#: src/pysql/pysqlfunctions.py:382 src/pysql/pysqlfunctions.py:649
-#: src/pysql/pysqlfunctions.py:677
+#: src/pysql/pysqlfunctions.py:398 src/pysql/pysqlfunctions.py:665
+#: src/pysql/pysqlfunctions.py:693
 msgid "Value"
 msgstr "Valeur"
 
-#: src/pysql/pysqlfunctions.py:410
+#: src/pysql/pysqlfunctions.py:426
 msgid "Last"
 msgstr "Dernier"
 
-#: src/pysql/pysqlfunctions.py:410
+#: src/pysql/pysqlfunctions.py:426
 msgid "Max"
 msgstr "Maximum"
 
-#: src/pysql/pysqlfunctions.py:410
+#: src/pysql/pysqlfunctions.py:426
 msgid "Min"
 msgstr "Minimum"
 
-#: src/pysql/pysqlfunctions.py:410
+#: src/pysql/pysqlfunctions.py:426
 msgid "Step"
 msgstr "Pas"
 
-#: src/pysql/pysqlfunctions.py:418
+#: src/pysql/pysqlfunctions.py:434
 msgid "Datafile"
 msgstr "Datafile"
 
-#: src/pysql/pysqlfunctions.py:439 src/pysql/pysqlfunctions.py:470
+#: src/pysql/pysqlfunctions.py:455 src/pysql/pysqlfunctions.py:486
 msgid "TOTAL"
 msgstr "TOTAL"
 
-#: src/pysql/pysqlfunctions.py:445
+#: src/pysql/pysqlfunctions.py:461
 msgid "Body"
 msgstr "Corps"
 
-#: src/pysql/pysqlfunctions.py:445
+#: src/pysql/pysqlfunctions.py:461
 msgid "Event"
 msgstr "Événement"
 
-#: src/pysql/pysqlfunctions.py:452
+#: src/pysql/pysqlfunctions.py:468
 msgid "#Indexes"
 msgstr "NbIndex"
 
-#: src/pysql/pysqlfunctions.py:452
+#: src/pysql/pysqlfunctions.py:468
 msgid "#Tables"
 msgstr "NbTables"
 
-#: src/pysql/pysqlfunctions.py:452
+#: src/pysql/pysqlfunctions.py:468
 msgid "Default?"
 msgstr "Défaut?"
 
-#: src/pysql/pysqlfunctions.py:474
+#: src/pysql/pysqlfunctions.py:490
 msgid "Type not handled: %s"
 msgstr "Type non géré : %s"
 
-#: src/pysql/pysqlfunctions.py:528
+#: src/pysql/pysqlfunctions.py:544
 msgid "No editors are supported on this platform. Sorry."
 msgstr "Aucun éditeur n'est supporté sur cette plate-forme. Désolé."
 
-#: src/pysql/pysqlfunctions.py:540
+#: src/pysql/pysqlfunctions.py:556
 msgid "Editor exited with status %s"
 msgstr "L'éditeur est sortie avec le code retour : %s"
 
-#: src/pysql/pysqlfunctions.py:547
+#: src/pysql/pysqlfunctions.py:563
 msgid "Error while using temporary file (%s)"
 msgstr "Erreur lors de l'utilisation du fichier temporaire (%s)"
 
-#: src/pysql/pysqlfunctions.py:567
+#: src/pysql/pysqlfunctions.py:583
 msgid "Mode"
 msgstr "Mode"
 
-#: src/pysql/pysqlfunctions.py:567
+#: src/pysql/pysqlfunctions.py:583
 msgid "OS user"
 msgstr "Utilisateur OS"
 
-#: src/pysql/pysqlfunctions.py:567
+#: src/pysql/pysqlfunctions.py:583
 msgid "Object"
 msgstr "Objet"
 
-#: src/pysql/pysqlfunctions.py:567
+#: src/pysql/pysqlfunctions.py:583
 msgid "User"
 msgstr "Utilisateur"
 
-#: src/pysql/pysqlfunctions.py:594
+#: src/pysql/pysqlfunctions.py:610
 msgid "Blk Chg"
 msgstr "Blk Chg"
 
-#: src/pysql/pysqlfunctions.py:594
+#: src/pysql/pysqlfunctions.py:610
 msgid "Blk Gets"
 msgstr "Blk Gets"
 
-#: src/pysql/pysqlfunctions.py:594
+#: src/pysql/pysqlfunctions.py:610
 msgid "C PID"
 msgstr "C PID"
 
-#: src/pysql/pysqlfunctions.py:594
+#: src/pysql/pysqlfunctions.py:610
 msgid "CPU(ms)"
 msgstr "CPU(ms)"
 
-#: src/pysql/pysqlfunctions.py:594
+#: src/pysql/pysqlfunctions.py:610
 msgid "Cons Chg"
 msgstr "Cons Chg"
 
-#: src/pysql/pysqlfunctions.py:594
+#: src/pysql/pysqlfunctions.py:610
 msgid "Cons Gets"
 msgstr "Cons Gets"
 
-#: src/pysql/pysqlfunctions.py:594
+#: src/pysql/pysqlfunctions.py:610
 msgid "Id"
 msgstr "Id"
 
-#: src/pysql/pysqlfunctions.py:594
+#: src/pysql/pysqlfunctions.py:610
 msgid "Logged Since"
 msgstr "Depuis"
 
-#: src/pysql/pysqlfunctions.py:594
+#: src/pysql/pysqlfunctions.py:610
 msgid "Machine"
 msgstr "Machine"
 
-#: src/pysql/pysqlfunctions.py:594
+#: src/pysql/pysqlfunctions.py:610
 msgid "OsUser"
 msgstr "Utilisateur"
 
-#: src/pysql/pysqlfunctions.py:594
+#: src/pysql/pysqlfunctions.py:610
 msgid "Phy Rds"
 msgstr "Phy Rds"
 
-#: src/pysql/pysqlfunctions.py:594
+#: src/pysql/pysqlfunctions.py:610
 msgid "Program"
 msgstr "Programme"
 
-#: src/pysql/pysqlfunctions.py:594
+#: src/pysql/pysqlfunctions.py:610
 msgid "S PID"
 msgstr "S PID"
 
-#: src/pysql/pysqlfunctions.py:594
+#: src/pysql/pysqlfunctions.py:610
 msgid "SQL"
 msgstr "SQL"
 
-#: src/pysql/pysqlfunctions.py:594
+#: src/pysql/pysqlfunctions.py:610
 msgid "Schema"
 msgstr "Schéma"
 
-#: src/pysql/pysqlfunctions.py:594
+#: src/pysql/pysqlfunctions.py:610
 msgid "Serial"
 msgstr "Serial"
 
-#: src/pysql/pysqlfunctions.py:649
+#: src/pysql/pysqlfunctions.py:665
 msgid "Session?"
 msgstr "Session?"
 
-#: src/pysql/pysqlfunctions.py:649
+#: src/pysql/pysqlfunctions.py:665
 msgid "System?"
 msgstr "Système?"
 
-#: src/pysql/pysqlfunctions.py:677
+#: src/pysql/pysqlfunctions.py:693
 msgid "Used?"
 msgstr "Utilisé ?"
 
-#: src/pysql/pysqlfunctions.py:713
+#: src/pysql/pysqlfunctions.py:729
 msgid "SQL entry not defined for searchObjectSql: %s"
 msgstr "Aucune entrée SQL définie dans le tableau searchObjectSql : %s"
 
@@ -1111,10 +1128,6 @@ msgstr "propriétaire des tables (schéma)"
 #: src/pysql/pysqlshell.py:928
 msgid "Displays object dependencies as a picture. "
 msgstr "Affiche les dépendances d'un objet sous forme d'image. "
-
-#: src/pysql/pysqlshell.py:935
-msgid "direction of dependency tracking: %s"
-msgstr "direction de parcours des dépendances"
 
 #: src/pysql/pysqlshell.py:938
 msgid "maximum level of recursion"
@@ -1946,6 +1959,9 @@ msgstr "Mauvais modèle de version (%s)"
 #: src/pysql/pysqlupdate.py:183
 msgid "Cannot compare with snapshot release"
 msgstr "Impossible de comparer avec une version de développement"
+
+#~ msgid "direction of dependency tracking: %s"
+#~ msgstr "direction de parcours des dépendances"
 
 #~ msgid "Really used"
 #~ msgstr "Réellement utilisés"
