@@ -76,36 +76,13 @@ import sys
 from os.path import dirname, join, pardir
 from optparse import OptionParser
 
-# Tests if requisite modules are correctly installed
-# Oracle (mandatory)
-try:
-    import cx_Oracle
-except ImportError:
-    # Untranslatable error message (i18n still not initialized at this step)
-    print "cx_Oracle module cannot be loaded.\nPlease, ensure you correctly install it from:"
-    print "http://cx-oracle.sf.net"
-    print "And that have the according Oracle client installation."
-    print "Get it from the Oracle site : http://www.oracle.com"
-    print "(press enter key to exit)"
-    sys.stdin.readline()
-    sys.exit(1)
-# readline is a separate module for Windows
-if os.name=="nt":
-    try:
-        import readline
-    except ImportError:
-        print "pyreadline module cannot be found on your system and is needed on Windows.\nPlease, get it at:"
-        print "http://ipython.scipy.org/moin/PyReadline/Intro"
-        print "(press enter key to exit)"
-        sys.stdin.readline()
-        sys.exit(1)
+from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
 
 # Pysql imports:
-from pysqlshell import PysqlShell
 from pysqlconf import PysqlConf
 from pysqlexception import PysqlException
 import pysqlupdate
-from pysqlhelpers import printStackTrace
+from pysqlhelpers import printStackTrace, printComponentsVersion
 
 def main():
     """Pysql main function"""
@@ -137,8 +114,21 @@ def main():
             except KeyboardInterrupt:
                 print _("Aborting update")
         elif options.version:
-            print _("PySQL - %s") % pysqlupdate.currentVersion()
+            printComponentsVersion()
         else:
+            try:
+                import cx_Oracle
+            except ImportError:
+                # Untranslatable error message (i18n still not initialized at this step)
+                print RED + BOLD + "cx_Oracle module cannot be loaded." + RESET
+                print
+                print "Please, ensure you correctly install it from: " + CYAN + "http://cx-oracle.sf.net" + RESET
+                print "And that have the according Oracle client installation."
+                print "Get it from the Oracle site : http://www.oracle.com"
+                print
+                print "(press enter key to exit)"
+                sys.stdin.readline()
+                sys.exit(1)
             # Default is to launch pysql in standard mode (local client)
             shell=PysqlShell(silent=options.silent, argv=argv)
             if options.oneTryLogin and shell.db==None:

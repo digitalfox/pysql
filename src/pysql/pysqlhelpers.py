@@ -12,10 +12,13 @@ import sys
 import traceback
 from re import match, sub
 import datetime
-from cx_Oracle import LOB
 from cStringIO import StringIO
 from time import sleep
 from threading import Thread, Lock
+try:
+    from cx_Oracle import LOB
+except:
+    pass
 
 # Pysql imports:
 from pysqlexception import PysqlException, PysqlActionDenied
@@ -218,21 +221,24 @@ def printStackTrace():
     print "------------------8<-------------------------------------"
     traceback.print_exc()
     print "------------------8<-------------------------------------"
+    printComponentsVersion()
+    print
+    print RED + BOLD + "Please, send the text above to pysql@digitalfox.org" + RESET
+    print
+
+def printComponentsVersion():
     try:
         pysqlVersion = pysqlupdate.currentVersion()
     except PysqlException:
-        pysqlVersion = "unknown"
+        pysqlVersion = RED + BOLD + "missing" + RESET
     try:
         import cx_Oracle
         cxVersion = cx_Oracle.version
     except Exception:
-        cxVersion = "unknown"
-    print "Pysql release: %s" % pysqlVersion
-    print "cx Oracle release: %s" % cxVersion
-    print "Python release: %s" % sys.version.replace("\n", " ")
-    print
-    print RED + BOLD + "Please, send the text above to pysql@digitalfox.org" + RESET
-    print
+        cxVersion = RED + BOLD + "missing" + RESET
+    print BOLD + "PySQL release: %s" % pysqlVersion + RESET
+    print "    cx Oracle release: %s" % cxVersion
+    print "    Python release: %s" % sys.version.replace("\n", " ")
 
 def setTitle(title, codec):
     """Sets the window title

@@ -108,6 +108,30 @@ class PysqlShell(cmd.Cmd):
 
     def loop(self):
         """Starts shell interactive loop"""
+
+        # Tests if requisite modules are correctly installed
+        # Oracle (mandatory)
+        try:
+            import cx_Oracle
+        except ImportError:
+            # Untranslatable error message (i18n still not initialized at this step)
+            print RED + BOLD + "cx_Oracle module cannot be loaded." + RESET
+            print "Please, ensure you correctly install it from: " + CYAN + "http://cx-oracle.sf.net" + RESET
+            print "And that have the according Oracle client installation."
+            print "Get it from the Oracle site : http://www.oracle.com"
+            print "(press enter key to exit)"
+            sys.stdin.readline()
+            sys.exit(1)
+        # readline is a separate module for Windows
+        if os.name=="nt":
+            try:
+                import readline
+            except ImportError:
+                print "pyreadline module cannot be found on your system and is needed on Windows.\nPlease, get it at:"
+                print "http://ipython.scipy.org/moin/PyReadline/Intro"
+                print "(press enter key to exit)"
+                sys.stdin.readline()
+                sys.exit(1)
         try:
             self.cmdloop()
         except KeyboardInterrupt:
