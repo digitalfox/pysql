@@ -373,13 +373,18 @@ class PysqlShell(cmd.Cmd):
         """Completion of SID for connect method"""
         if not self.useCompletion:
             return
-        # Completes only on SID (after the @)
+
         if line.count("@"):
+            # Completes on SID (after the @)
             sid = line.split("@")[-1]
             return self.__getCompletionItems(sid, ["SID"])
         else:
-            # No @, cannot complete.
-            return []
+            # Try to complete on username
+            if len(line.split()) > 1:
+                username = line.split()[-1]
+            else:
+                username = ""
+            return self.__getCompletionItems(username, ["user"])
 
     def complete_desc(self, text, line, begidx, endidx):
         """Completion for command desc"""
