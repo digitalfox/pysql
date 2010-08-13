@@ -28,6 +28,7 @@ from pysqlconf import PysqlConf
 from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
 from pysqlhelpers import itemLength, removeComment, printStackTrace, setTitle, getTitle, getTermWidth, WaitCursor
 from pysqloptionparser import PysqlOptionParser
+from pysqlcomplete import CompleteGatheringWorker
 
 class PysqlShell(cmd.Cmd):
     """Main class that handle user interaction"""
@@ -57,6 +58,8 @@ class PysqlShell(cmd.Cmd):
         self.waitCursor = None        # Waiting cursor thread handler
         self.tty = sys.stdin.isatty() # Indicate if user interactivity is possible or not.
         self.allowAnimatedCursor = True # Enable or not animated cursor. Useful for test.
+        self.completeLists = {}       # Completionlist dictionary
+
         self.notConnectedPrompt = RED + _("(not connected) ") + RESET
 
         # Reads conf
@@ -373,23 +376,9 @@ class PysqlShell(cmd.Cmd):
         # Completes only on SID (after the @)
         if line.count("@"):
             sid = line.split("@")[-1]
-        else:
-            # No @, cannot complete.
-            return []
-
-        if self.tnsnamesAvailable is None:
-            # First try to open tnsnames.ora
-            try:
-                tnsnames = file(expandvars("$ORACLE_HOME/network/admin/tnsnames.ora")).readlines()
-                self.conf.completeLists["SID"] = sum([findall("^(\w+)\s*=", line) for line in tnsnames], [])
-                self.tnsnamesAvailable = True
-            except Exception, e:
-                # Do not raise a PysqlException (useless)
-                print RED + BOLD + _("Cannot open tnsnames.ora file (%s)") % e + RESET
-                self.tnsnamesAvailable = False
-        if self.tnsnamesAvailable:
             return self.__getCompletionItems(sid, ["SID"])
         else:
+            # No @, cannot complete.
             return []
 
     def complete_desc(self, text, line, begidx, endidx):
@@ -459,9 +448,9 @@ class PysqlShell(cmd.Cmd):
     # Completion, history and sql library
     def do_showCompletion(self, arg):
         """Shows completion list"""
-        for theme in self.conf.completeLists.keys():
+        for theme in self.completeLists.keys():
             print GREEN + "***** " + theme + " *****" + RESET
-            self.__displayCol(self.conf.completeLists[theme])
+            self.__displayCol(self.completeLists[theme])
             print
 
     def do_history(self, arg):
@@ -719,9 +708,7 @@ class PysqlShell(cmd.Cmd):
         options, args = parser.parse_args(arg)
         self.__checkConnection()
         self.__checkArg(args, ">=1")
-        # Gives method pointer to desc function to allow it to update completelist
         (header, result) = pysqlfunctions.desc(self.db, " ".join(args),
-                                            completeMethod=self.__addToCompleteList,
                                             printDetails=options.printDetails,
                                             printStats=options.printStats,
                                             sort=options.sort)
@@ -1303,7 +1290,6 @@ class PysqlShell(cmd.Cmd):
             # Converts all to str to avoid strange alignement
             for i in xrange(len(result)):
                 result[i] = [str(result[i][j]) for j in xrange(len(result[i]))]
-            self.__addToCompleteList([i[0] for i in result], "parameters")
             self.__displayTab(result,
                 [_("Parameter"), _("User defined value"), _("Default value")])
         else:
@@ -1799,23 +1785,6 @@ class PysqlShell(cmd.Cmd):
             self.waitCursor = WaitCursor()
             self.waitCursor.start()
 
-    def __addToCompleteList(self, wordList, theme="general"):
-        """Adds wordList the completion list "theme"
-        @param wordList: list of item to completion
-        @param theme: string theme
-        @return: None
-        """
-        if not self.conf.completeLists.has_key(theme):
-            # Creates the theme
-            self.conf.completeLists[theme] = []
-
-        for word in [unicode(j).upper() for j in wordList]:
-            if word not in self.conf.completeLists[theme]:
-                self.conf.completeLists[theme].append(word)
-        # Keeps completeList small by truncating to the 100 last words
-        limit = self.conf.get("completionListSize")
-        self.conf.completeLists[theme] = self.conf.completeLists[theme][-limit:]
-
     def __getCompletionItems(self, text, themes=["general"], prefix=""):
         """Returns list of item matching text for lists of theme
         @param text: word to match for completion
@@ -1827,7 +1796,7 @@ class PysqlShell(cmd.Cmd):
         completeList = []
         for theme in themes:
             try:
-                completeList += self.conf.completeLists[theme]
+                completeList += self.completeLists[theme]
             except KeyError:
                 # Some theme can be undefined. No pb
                 pass
@@ -1864,6 +1833,9 @@ class PysqlShell(cmd.Cmd):
         connectString = user + "/" + passwd + "@" + sid
         self.db = PysqlDb(connectString, mode)
         self.__setPrompt()
+        if self.db:
+            # Connected, let's gather in background all terms useful for completion
+            CompleteGatheringWorker(connectString, self.completeLists).run()
 
     def __disconnect(self):
         """Disconnects from Oracle and update prompt"""
@@ -1916,7 +1888,6 @@ class PysqlShell(cmd.Cmd):
         result = pysqlfunctions.searchObject(self.db, objectType, objectName, objectOwner)
         for owner in result.keys():
             print GREEN + "***** " + owner + " *****" + RESET
-            self.__addToCompleteList(result[owner], objectType)
             self.__displayCol(result[owner])
 
     def __displayCol(self, listOfString):
@@ -2170,12 +2141,6 @@ class PysqlShell(cmd.Cmd):
             print CYAN + "\n\n" + _("Bye !") + "\n" + RESET
 
         rc = 0
-        # Flushes completion cache to disk
-        try:
-            self.conf.writeCache()
-        except PysqlException, e:
-            print e
-            rc = 1
         # Flushes history to disk
         try:
             self.conf.writeHistory()

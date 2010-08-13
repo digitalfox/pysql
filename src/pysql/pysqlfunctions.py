@@ -233,7 +233,7 @@ def ddl(db, objectName):
     else:
         return oraObject.getDDL(db)
 
-def desc(db, objectName, completeMethod=None, printDetails=True, printStats=False, sort=False):
+def desc(db, objectName, printDetails=True, printStats=False, sort=False):
     """Describes an object
     @param objectName: object to be described
     @return: header and resultset of definition as a tuple (header, definition)
@@ -351,16 +351,10 @@ def desc(db, objectName, completeMethod=None, printDetails=True, printStats=Fals
             indexInfo = [i[1] for i in indexedColumns if i[0] == column[0]]
             column.append(", ".join(indexInfo))
             result.append(column)
-        # Adds to complete list
-        if completeMethod is not None:
-            completeMethod([i[0] for i in result], "columns")
 
     elif oraObject.getType() in ("VIEW", "MATERIALIZED VIEW"):
         header = [_("Name"), _("Type"), _("Null?"), _("Comments")]
         result = oraObject.getTableColumns(db)
-        # Adds to complete list
-        if completeMethod is not None:
-            completeMethod([i[0] for i in result], "columns")
 
     elif oraObject.getType() == "CONSUMER GROUP":
         raise PysqlNotImplemented()

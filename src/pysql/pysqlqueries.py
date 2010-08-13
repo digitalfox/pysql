@@ -549,3 +549,14 @@ lockSql = {
                      where s1.sid=l1.sid and s2.sid=l2.sid and l1.BLOCK=1 
                      and l2.request > 0 and l1.id1 = l2.id1 and l2.id2 = l2.id2"""
 }
+
+gatherCompleteSql = {
+    "table"     : u"""select table_name from user_tables""",
+    "index"     : u"""select index_name from user_indexes""",
+    "sequence"  : u"""select sequence_name from user_sequences""",
+    "directory" : u"""select directory_name from all_directories""",
+    "view"      : u"""select view_name from user_views""",
+    "synonym"   : u"""select synonym_name from user_synonyms""",
+    "trigger"   : u"""select trigger_name from user_triggers""",
+    "user"      : u"""select username from all_users""",
+}
