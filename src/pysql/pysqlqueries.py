@@ -527,3 +527,25 @@ durptSql = {
     "indexesForTbsAndUser" : u"""SELECT a.owner "Owner", a.tablespace_name "Tablespace", a.segment_name "Index", DECODE(COUNT(a.partition_name), 0, '', '*') "Part?", COUNT(c.blevel) "Level", c.distinct_keys "Keys", a.blocks "Size(blk)", ROUND(a.blocks*b.block_size/1024/1024, 1) "Size(Mo)", ROUND((100*a.blocks)/:1, 1) "Size(%)" FROM DBA_SEGMENTS a, DBA_TABLESPACES b, DBA_INDEXES c WHERE a.tablespace_name LIKE :2 AND a.owner LIKE :3 AND a.tablespace_name=b.tablespace_name AND a.segment_name=c.index_name AND a.segment_name NOT LIKE '%PLAN_TABLE' AND a.segment_type LIKE 'INDEX%' AND NOT EXISTS (SELECT NULL FROM DBA_TABLES WHERE owner=a.owner AND temporary='Y' AND table_name=a.segment_name) GROUP BY a.owner, a.tablespace_name, a.segment_name, a.blocks, b.block_size, c.blevel, c.distinct_keys ORDER BY a.blocks DESC"""
 }
 
+lockSql = {
+    "objects" : u"""select  lo.oracle_username,
+                            s.program,
+                            lo.os_user_name,
+                            decode(lo.locked_mode,
+                                1, 'No Lock',
+                                2, 'Row Share',
+                                3, 'Row Exclusive',
+                                4, 'Share',
+                                5, 'Share Row Exclusive',
+                                6, 'Exclusive',
+                                'NONE') lock_mode,
+                            o.object_name
+                    from v$locked_object lo, dba_objects o, v$session s
+                    where lo.object_id=o.object_id
+                    and lo.session_id=s.sid""",
+    "sessions" : u"""select s1.username || '-' || s1.program || ' ( SID=' || s1.sid || ' )',
+                            s2.username || '-' || s2.program || ' ( SID=' || s2.sid || ' )'
+                     from v$lock l1, v$session s1, v$lock l2, v$session s2
+                     where s1.sid=l1.sid and s2.sid=l2.sid and l1.BLOCK=1 
+                     and l2.request > 0 and l1.id1 = l2.id1 and l2.id2 = l2.id2"""
+}

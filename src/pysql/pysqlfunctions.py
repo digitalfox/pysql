@@ -13,6 +13,7 @@
 import os, re
 from os import getenv, unlink
 from difflib import ndiff
+
 try:
     from hashlib import md5
 except ImportError:
@@ -576,29 +577,29 @@ def explain(db, statement):
     return db.executeAll(u"""select plan_table_output
                 from table(dbms_xplan.display('PLAN_TABLE',null,'serial'))""")
 
-def lock(db):
+def objectsLock(db):
     """Displays locks on objects
     @return: resultset in tabular format
     """
-    header = [_("User"), _("OS user"), _("Mode"), _("Object")]
+    header = [_("User"), _("Program"), _("OS user"), _("Mode"), _("Object")]
     try:
-        result = db.executeAll(u"""SELECT
-            oracle_username,
-            os_user_name,
-            decode(locked_mode,
-                1, 'No Lock',
-                2, 'Row Share',
-                3, 'Row Exclusive',
-                4, 'Share',
-                5, 'Share Row Exclusive',
-                6, 'Exclusive',
-                'NONE') lock_mode,
-            object_name
-            FROM v$locked_object lo, dba_objects o
-            WHERE lo.object_id=o.object_id""")
+        result = db.executeAll(lockSql["objects"])
     except PysqlException:
         raise PysqlActionDenied(_("Insufficient privileges"))
     return (header, result)
+
+def sessionsLock(db):
+    """Displays sessions lock that block other sessions
+    @return: resultset in tabular format
+    """
+    header = [_("Blocking session"), _("Blocked session")]
+    try:
+        result = db.executeAll(lockSql["sessions"])
+    except PysqlException:
+        raise PysqlActionDenied(_("Insufficient privileges"))
+    return (header, result)
+
+
 
 def sessions(db, all=False, search=None):
     """Returns top session, filter by "sort"

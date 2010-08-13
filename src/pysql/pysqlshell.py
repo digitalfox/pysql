@@ -1132,8 +1132,12 @@ class PysqlShell(cmd.Cmd):
         """Display instance lock"""
         self.__checkConnection()
         self.__checkArg(arg, "==0")
-        (header, result) = pysqlfunctions.lock(self.db)
-        self.__addToCompleteList([i[0] for i in result], "columns") # buggy !
+        print GREEN + "***** " + _("Locked objects") + " *****" + RESET
+        (header, result) = pysqlfunctions.objectsLock(self.db)
+        self.__displayTab(result, header)
+        print
+        print GREEN + "***** " + _("Locked sessions") + " *****" + RESET
+        (header, result) = pysqlfunctions.sessionsLock(self.db)
         self.__displayTab(result, header)
 
     def do_trace(self, sid):
