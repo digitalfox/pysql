@@ -515,7 +515,7 @@ class PysqlShell(cmd.Cmd):
                             _("SQL request was loaded in your history. Use up arrow to get it now") \
                             + RESET
             else:
-                msg = _("Request %s does not exist. ") % name + \
+                msg = _("Request %s does not exist. ") % arg + \
                       _("""Type "lib" without argument to see all requests""")
                 raise PysqlException(msg)
         elif nArgs > 1:
