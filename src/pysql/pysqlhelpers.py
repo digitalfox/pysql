@@ -298,6 +298,33 @@ def upperIfNoQuotes(aString):
     else:
         return aString.upper()
 
+
+def getFromClause(line):
+    """Extract the "from" clause of an sql request
+    @param line: sql text
+    @return: dictionary with key as alias (table name if no alias) and table as value"""
+
+    tables = {} # alias/table
+    fromClause = []
+    inFrom = False
+    for word in line.split():
+        if word.lower() in ("where", "order", "group", "values", "set"):
+            inFrom = False
+        elif inFrom:
+            fromClause.append(word)
+        elif word.lower() == "from":
+            inFrom = True
+
+    for tableDef in " ".join(fromClause).split(","):
+        tableDef = tableDef.strip()
+        if tableDef.count(" ") == 1:
+            tableName, tableAlias = tableDef.split()
+            tables[tableAlias] = tableName
+        else:
+            tables[tableDef] = tableDef
+
+    return tables
+
 class WaitCursor(Thread):
     """A waiting cursor for long operation that
     catch output and flush it after waiting"""

@@ -15,7 +15,7 @@ import sys
 # Common test pysql tools
 import testhelpers
 testhelpers.setup()
- 
+
 # Pysql imports
 import pysqlhelpers
 from pysqlexception import PysqlException
@@ -28,7 +28,7 @@ class TestAddWildCardIfNeeded(unittest.TestCase):
 
     def test_result_with_various_wildcard(self):
         for wildcard in ("", "%", "$", "*"):
-            self.assertEqual(wildcard+"cou cou"+wildcard,
+            self.assertEqual(wildcard + "cou cou" + wildcard,
                              pysqlhelpers.addWildCardIfNeeded("cou cou", wildcard=wildcard))
             self.assertEqual("cou%scou" % wildcard,
                              pysqlhelpers.addWildCardIfNeeded("cou%scou" % wildcard, wildcard=wildcard))
@@ -78,7 +78,7 @@ class TestRemoveComment(unittest.TestCase):
     def test_remove_one_line_comment(self):
         for line in ("--foo", "-- foo", "--foo ", "--foo--", "--foo --", "--", "-- ", "---", "----", "---- foo ",
                      "/**/", "/* */", "/** */", "/* **/", "/***/", "/* lala */", "/*lala */", "/* lala*/", "/*lala*/"):
-            unCommentedLine, comment=pysqlhelpers.removeComment(line)
+            unCommentedLine, comment = pysqlhelpers.removeComment(line)
             self.assertFalse(comment)
             self.failUnlessEqual(unCommentedLine.strip(), "")
 
@@ -90,7 +90,7 @@ class TestRemoveComment(unittest.TestCase):
                                  ("sql", "sql--"),
                                  ("sql", "sql--------"),
                                  ("sql", "sql-- lala --")):
-            unCommentedLine, comment=pysqlhelpers.removeComment(question)
+            unCommentedLine, comment = pysqlhelpers.removeComment(question)
             self.assertFalse(comment)
             self.failUnlessEqual(unCommentedLine, answer)
 
@@ -101,8 +101,8 @@ class TestRemoveComment(unittest.TestCase):
                               ("sql", ("/*", "nice comment", "*/", "sql")),
                               ("sql /*+ smart hint */ sql", ("sql /*+ smart hint */", "sql")),
                               ("sql   /*+ smart hint */  sql", ("sql /* bla */ /*+ smart hint */ /*", "*/", "sql"))):
-            result=[]
-            comment=False
+            result = []
+            comment = False
             for line in lines:
                 unCommentedLine, comment = pysqlhelpers.removeComment(line, comment)
                 if unCommentedLine:
@@ -120,10 +120,10 @@ class TestWarn(unittest.TestCase):
     def test_warn(self):
         for message in ("", "blabla", "ééà€", u"blabal"):
             #TODO: handle unicode case
-            stdout=sys.stdout
-            sys.stdout=TemporaryFile()
+            stdout = sys.stdout
+            sys.stdout = TemporaryFile()
             pysqlhelpers.warn(message)
-            sys.stdout=stdout # restore stdout
+            sys.stdout = stdout # restore stdout
 
 class TestPrintStackTrace(unittest.TestCase):
     def test_print_stack_trace(self):
@@ -131,16 +131,29 @@ class TestPrintStackTrace(unittest.TestCase):
 
 class TestSetTitle(unittest.TestCase):
     def test_set_title(self):
-        codec=locale.getpreferredencoding()
+        codec = locale.getpreferredencoding()
         for title in ("", "blabla", u"éééé", u"ééàà€€", "éééààà€€€"):
             pysqlhelpers.setTitle(title, codec)
 
 class TestGetTitle(unittest.TestCase):
     def test_get_title(self):
-        codec=locale.getpreferredencoding()
+        codec = locale.getpreferredencoding()
         for title in ("", "blabla", u"éééé", u"ééàà€€", "éééààà€€€"):
             pysqlhelpers.setTitle(title, codec)
             self.failIfEqual(title, pysqlhelpers.getTitle())
+
+class TestGetFromClause(unittest.TestCase):
+    def test_simple_from(self):
+        for tables, line in (({"dual" : "dual" }, "select * from dual"),
+                             ({"d" : "dual" }, "select * from dual d"),
+                             ({"dual" : "dual", "emp" : "emp" }, "select * from dual, emp"),
+                             ({"d" : "dual", "emp" : "emp" }, "select * from dual d, emp"),
+                             ({"dual" : "dual" }, "select * from dual where dummy='X'"),
+                             ({"dual" : "dual" }, "select * from dual order by 1"),
+                             ({"dual" : "dual" }, "select dummy, count(1) from dual group by dummy"),):
+            self.failUnlessEqual(tables, pysqlhelpers.getFromClause(line))
+
+
 
 if __name__ == '__main__':
     unittest.main()

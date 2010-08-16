@@ -28,7 +28,7 @@ from pysqlconf import PysqlConf
 from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
 from pysqlhelpers import itemLength, removeComment, printStackTrace, setTitle, getTitle, getTermWidth, WaitCursor
 from pysqloptionparser import PysqlOptionParser
-from pysqlcomplete import CompleteGatheringWorker
+from pysqlcomplete import CompleteGatheringWorker, completeColumns
 
 class PysqlShell(cmd.Cmd):
     """Main class that handle user interaction"""
@@ -335,12 +335,27 @@ class PysqlShell(cmd.Cmd):
         """pysql specific completion with self.completeList"""
         if not self.useCompletion:
             return
+
+        # Decode line from user encoding to unicode
+        line = line.decode(self.conf.getCodec())
+
+        # Separates text from his prefix
+        if text.count(".") == 1:
+            prefix, text = text.split(".")
+            prefix += "." # Doesn't forget the dot for the prefix
+        else:
+            prefix = ""
+
         # Keyword detection not very smart... but work for simple case
         lastKeyWord = line[:begidx].split()[-1].lower()
+
+        # Columns
         if   lastKeyWord in ["select", "where", "by",
                      "sum(", "abs(", "round(", "upper(", "lower(", "set"]:
-            themes = ["columns"]
-        elif lastKeyWord in ["update"]:
+            return completeColumns(self.db, line, text)
+
+        # Simple completion
+        if lastKeyWord in ["update"]:
             themes = ["table"]
         elif lastKeyWord in ["from", "into"]:
             themes = ["table", "view", "synonym"]
@@ -361,12 +376,7 @@ class PysqlShell(cmd.Cmd):
         else:
             themes = ["table", "view", "synonym", "columns",
                 "directory", "sequence", "user"]
-        # Separates text from his prefix
-        if text.count(".") == 1:
-            prefix, text = text.split(".")
-            prefix += "." # Doesn't forget the dot for the prefix
-        else:
-            prefix = ""
+
         return self.__getCompletionItems(text, themes, prefix)
 
     def complete_connect(self, text, line, begidx, endidx):
