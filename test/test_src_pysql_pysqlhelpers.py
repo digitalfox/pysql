@@ -154,6 +154,9 @@ class TestGetFromClause(unittest.TestCase):
             self.failUnlessEqual(tables, pysqlhelpers.getFromClause(line))
 
 
+    def test_imbricated_from(self):
+        for tables, line in (({"dual" : "dual" }, "select * from (select * from dual);"),):
+            self.failUnlessEqual(tables, pysqlhelpers.getFromClause(line))
 
 if __name__ == '__main__':
     unittest.main()

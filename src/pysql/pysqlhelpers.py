@@ -311,12 +311,17 @@ def getFromClause(line):
         if word.lower() in ("where", "order", "group", "values", "set"):
             inFrom = False
         elif inFrom:
-            fromClause.append(word)
+            if word.lower().lstrip("(") == "select":
+                # Imbricated request
+                #FIXME: too much simple. We need a real sql parser
+                inFrom = False
+            else:
+                fromClause.append(word)
         elif word.lower() == "from":
             inFrom = True
 
     for tableDef in " ".join(fromClause).split(","):
-        tableDef = tableDef.strip()
+        tableDef = tableDef.strip(";").strip(")").strip()
         if tableDef.count(" ") == 1:
             tableName, tableAlias = tableDef.split()
             tables[tableAlias] = tableName
