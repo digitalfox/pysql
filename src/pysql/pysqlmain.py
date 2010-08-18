@@ -86,23 +86,23 @@ from pysqlhelpers import printStackTrace, printComponentsVersion
 
 def main():
     """Pysql main function"""
-    rc=0 # Return code
+    rc = 0 # Return code
 
     # Options & args stuf
-    (options, argv)=parseOptions()
+    (options, argv) = parseOptions()
 
     # i18n stuff
-    if os.name=="nt":
+    if os.name == "nt":
         # Windows stuff is never like everybody...
-        i18nPath=join(dirname(sys.argv[0]), "share", "locale")
+        i18nPath = join(dirname(sys.argv[0]), "share", "locale")
     else:
         # Unix std path
-        i18nPath=join(dirname(sys.argv[0]), pardir, "share", "locale")
+        i18nPath = join(dirname(sys.argv[0]), pardir, "share", "locale")
     # Loads message catalog
     gettext.install("pysql", i18nPath, unicode=1)
 
     # Loads config (first time)
-    conf=PysqlConf.getConfig()
+    conf = PysqlConf.getConfig()
 
     # Sets the locale
     setLocale(conf)
@@ -129,15 +129,17 @@ def main():
                 print "(press enter key to exit)"
                 sys.stdin.readline()
                 sys.exit(1)
-            # Default is to launch pysql in standard mode (local client)
-            shell=PysqlShell(silent=options.silent, argv=argv)
-            if options.oneTryLogin and shell.db==None:
-                rc=1
+            # Now we can import PysqlShell (and subsequent modules that depends on cx_Oracle)
+            from pysqlshell import PysqlShell
+            # Default is to launch pysql in standard mode (local client) 
+            shell = PysqlShell(silent=options.silent, argv=argv)
+            if options.oneTryLogin and shell.db == None:
+                rc = 1
             else:
                 shell.loop()
-                rc=shell.rc
+                rc = shell.rc
         # Bye
-        if os.name=="nt" and not options.version:
+        if os.name == "nt" and not options.version:
             # Don't exit too fast for windows users, else they don't see error sum up
             print _("(press any key to exit)")
             sys.stdin.readline()
@@ -157,17 +159,17 @@ def main():
 def setLocale(conf):
     """Sets the right encoding"""
     try:
-        codec=locale.getpreferredencoding()
+        codec = locale.getpreferredencoding()
     except:
         # default to latin-1
-        codec="latin-1"
+        codec = "latin-1"
     if codec is None:
-        codec="latin-1"
+        codec = "latin-1"
     # Tests if codec exists
     try:
         str().encode(codec)
     except LookupError:
-        codec="latin-1"
+        codec = "latin-1"
 
     # Stores codec in config
     conf.setCodec(codec)
@@ -178,7 +180,7 @@ def setLocale(conf):
 
 def parseOptions():
     """Parses pysql command argument using optparse python module"""
-    parser=OptionParser()
+    parser = OptionParser()
 
     # Version
     parser.add_option("-v", "--version", dest="version", action="store_true",
