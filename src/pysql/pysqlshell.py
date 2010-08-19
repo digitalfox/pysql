@@ -1819,6 +1819,8 @@ class PysqlShell(cmd.Cmd):
     def __connect(self, connectString, mode=""):
         """Calls the PysqlDb class to connect to Oracle"""
 
+        self.fetching = False # forget about any previous opened cursor
+
         if connectString == "/" and mode == "sysdba":
             self.db = PysqlDb("/", "sysdba")
             self.__setPrompt()
