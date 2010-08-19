@@ -1438,7 +1438,6 @@ class PysqlShell(cmd.Cmd):
         """Time request execution time"""
         self.__checkConnection()
         self.__checkArg(arg, ">=3")
-        self.__animateCursor()
         start = time()
         self.__executeSQL(arg, output="null")
         elapsed = time() - start
