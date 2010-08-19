@@ -1848,7 +1848,7 @@ class PysqlShell(cmd.Cmd):
         connectString = user + "/" + passwd + "@" + sid
         self.db = PysqlDb(connectString, mode)
         self.__setPrompt()
-        if self.db:
+        if self.db and self.useCompletion:
             # Connected, let's gather in background all terms useful for completion
             CompleteGatheringWorker(connectString, self.completeLists).start()
 
