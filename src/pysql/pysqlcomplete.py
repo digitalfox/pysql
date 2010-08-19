@@ -9,7 +9,7 @@
 # pylint: disable-msg=E1101
 
 # Python imports:
-import os, re
+import os, re, time
 from threading import Thread
 
 # Pysql imports:
@@ -52,7 +52,7 @@ class CompleteGatheringWorker(Thread):
         @type connect_string: str
         @param completeLists: pointer to completions lists
         @type completeLists: dict. keys are themed, values list of words or dict"""
-        self.db = PysqlDb(connect_string)
+        self.connect_string = connect_string
         self.completeLists = completeLists
         Thread.__init__(self)
         self.setDaemon(True)
@@ -60,7 +60,10 @@ class CompleteGatheringWorker(Thread):
 
     def run(self):
         """Method executed when the thread object start() method is called"""
+        time.sleep(0.5) # Small delay to let primary connection goes first
+        self.db = PysqlDb(self.connect_string)
         self.gatherSID()
+        time.sleep(0.5) # Another small delay to let primary connection goes first
         self.gatherSimpleObjects()
 
     def gatherSID(self):

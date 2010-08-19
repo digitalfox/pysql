@@ -126,7 +126,7 @@ class PysqlShell(cmd.Cmd):
             sys.stdin.readline()
             sys.exit(1)
         # readline is a separate module for Windows
-        if os.name=="nt":
+        if os.name == "nt":
             try:
                 import readline
             except ImportError:
@@ -1850,7 +1850,7 @@ class PysqlShell(cmd.Cmd):
         self.__setPrompt()
         if self.db:
             # Connected, let's gather in background all terms useful for completion
-            CompleteGatheringWorker(connectString, self.completeLists).run()
+            CompleteGatheringWorker(connectString, self.completeLists).start()
 
     def __disconnect(self):
         """Disconnects from Oracle and update prompt"""
