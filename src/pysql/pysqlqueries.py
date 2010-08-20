@@ -393,7 +393,10 @@ sessionStatSql = {
                                 where a.sql_address = b.address ( + )
                                 and a.sql_hash_value = b.hash_value ( + )
                                 and a.Sid=:1
-                                order by b.piece"""
+                                order by b.piece""",
+    "longops":               u"""select target "Target", message "Message", start_time "Start time", start_time + elapsed_seconds/(60*60*24) "End time",  round(100*sofar/totalwork,2) "Progress (%)" 
+                                from v$session_longops 
+                                where time_remaining!=0 and sid = :1 order by start_time"""
 }
 
 # Queries used in pysqlgraphics

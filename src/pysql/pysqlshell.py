@@ -1110,6 +1110,9 @@ class PysqlShell(cmd.Cmd):
             print CYAN + "*****" + _("Locks") + "*****" + RESET
             result = pysqlfunctions.sessionStat(self.db, sessionId, stat="locks")
             self.__displayTab(result, self.db.getDescription())
+            print CYAN + "*****" + _("Long operations") + "*****" + RESET
+            result = pysqlfunctions.sessionStat(self.db, sessionId, stat="longops")
+            self.__displayTab(result, self.db.getDescription())
 
     def parser_kill(self):
         parser = PysqlOptionParser()
