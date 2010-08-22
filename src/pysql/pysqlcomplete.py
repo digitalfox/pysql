@@ -21,16 +21,17 @@ import pysqlhelpers
 
 
 
-def completeColumns(db, line, text):
+def completeColumns(db, line, text, refList):
     """Find columns list to complete on
     @param line: line of sql text
     @param text: word we are currently completing
+    @param refList: list of known tables/views/synonym of the current schema
     @return: list of columns (unicode)"""
-    # Try to find table name
-    tables = pysqlhelpers.getFromClause(line)
+    # Try to find tables/views name
+    tables = pysqlhelpers.getKnownTablesViews(line.upper(), refList)
     columns = []
-    for alias, name in tables.items():
-        oraObject = OraObject(objectName=name)
+    for table in tables:
+        oraObject = OraObject(objectName=table)
         oraObject.guessInfos(db)
         if oraObject is None:
             continue

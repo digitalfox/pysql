@@ -158,5 +158,22 @@ class TestGetFromClause(unittest.TestCase):
         for tables, line in (({"dual" : "dual" }, "select * from (select * from dual);"),):
             self.failUnlessEqual(tables, pysqlhelpers.getFromClause(line))
 
+
+class TestGetKnownTablesViews(unittest.TestCase):
+    def test_simple(self):
+        refList = ("dual", "emp")
+        for tables, line in ((["dual", ], "select * from dual"),
+                             (["dual", ], "select * from dual;"),
+                             (["dual", ], "select * from dual d"),
+                             (["dual", ], "select * from (select * from dual)"),
+                             (["dual", "emp"], "select * from dual, emp"),
+                             (["dual", "emp"], "select * from dual d, emp"),
+                             (["dual", ], "select * from dual where dummy='X'"),
+                             (["dual", ], "select * from dual order by 1"),
+                             (["dual", ], "select dummy, count(1) from dual group by dummy"),):
+            result = pysqlhelpers.getKnownTablesViews(line, refList)
+            result.sort()
+            self.failUnlessEqual(tables, result)
+
 if __name__ == '__main__':
     unittest.main()

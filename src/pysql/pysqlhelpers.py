@@ -330,6 +330,21 @@ def getFromClause(line):
 
     return tables
 
+def getKnownTablesViews(line, refList):
+    """As getFromClause is much too simple, make something simplier:
+    just extract names if a table or view have this name. No sql parsing at all...
+    @param line: sql query
+    @param refList: list of tables/view names to watch for"""
+    result = set()
+    for token in line.split():
+        token = token.strip(",").strip(";").strip(")").strip()
+        if "." in token:
+            # Remove what could be a schema name
+            token = token.split(".", 1)[1]
+        if token in refList:
+            result.add(token)
+    return list(result)
+
 class WaitCursor(Thread):
     """A waiting cursor for long operation that
     catch output and flush it after waiting"""

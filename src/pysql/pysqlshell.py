@@ -352,7 +352,8 @@ class PysqlShell(cmd.Cmd):
         # Columns
         if   lastKeyWord in ["select", "where", "by",
                      "sum(", "abs(", "round(", "upper(", "lower(", "set"]:
-            return completeColumns(self.db, line, text)
+            refList = self.completeLists["table"] + self.completeLists["view"] + self.completeLists["synonym"]
+            return completeColumns(self.db, line, text, refList)
 
         # Simple completion
         if lastKeyWord in ["update"]:
