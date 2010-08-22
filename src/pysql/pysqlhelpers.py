@@ -345,6 +345,21 @@ def getKnownTablesViews(line, refList):
             result.add(token)
     return list(result)
 
+def getLastKeyword(line):
+    """@return: the last sql keyword of the line"""
+    keywords = ["select", "update", "delete", # DML
+                "alter", "create", "drop", # DDL
+                "where", "order by", "group by", "having", "from", "into", # sql grammar
+                "sum", "abs", "round", "upper", "lower", "set", # Functions
+                "table", "index", "view", "synonym", "trigger", "tablespace", # objects
+                "datafile", "columns", "user", "sequence"] # objects
+    lastKeyword = None
+    for token in line.lower().split():
+        token = token.strip(",").strip(";").strip(")").strip("(").strip()
+        if token in keywords:
+            lastKeyword = token
+    return lastKeyword
+
 class WaitCursor(Thread):
     """A waiting cursor for long operation that
     catch output and flush it after waiting"""

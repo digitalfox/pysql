@@ -26,7 +26,8 @@ import pysqlaudit
 from pysqlexception import PysqlException, PysqlNotImplemented, PysqlOptionParserNormalExitException
 from pysqlconf import PysqlConf
 from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
-from pysqlhelpers import itemLength, removeComment, printStackTrace, setTitle, getTitle, getTermWidth, WaitCursor
+from pysqlhelpers import itemLength, removeComment, printStackTrace, setTitle, getTitle, \
+                         getTermWidth, WaitCursor, getLastKeyword
 from pysqloptionparser import PysqlOptionParser
 from pysqlcomplete import CompleteGatheringWorker, completeColumns
 
@@ -346,12 +347,12 @@ class PysqlShell(cmd.Cmd):
         else:
             prefix = ""
 
-        # Keyword detection not very smart... but work for simple case
-        lastKeyWord = line[:begidx].split()[-1].lower()
+        # Keyword detection
+        lastKeyWord = getLastKeyword(line[:begidx])
 
         # Columns
         if   lastKeyWord in ["select", "where", "by",
-                     "sum(", "abs(", "round(", "upper(", "lower(", "set"]:
+                     "sum", "abs", "round", "upper", "lower", "set"]:
             refList = self.completeLists["table"] + self.completeLists["view"] + self.completeLists["synonym"]
             return completeColumns(self.db, line, text, refList)
 
