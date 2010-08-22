@@ -19,6 +19,12 @@ try:
     from cx_Oracle import LOB
 except:
     pass
+try:
+    import setproctitle
+    HAVE_SETPROCTITLE = True
+except ImportError:
+    HAVE_SETPROCTITLE = False
+
 
 # Pysql imports:
 from pysqlexception import PysqlException, PysqlActionDenied
@@ -241,10 +247,13 @@ def printComponentsVersion():
     print "    Python release: %s" % sys.version.replace("\n", " ")
 
 def setTitle(title, codec):
-    """Sets the window title
+    """Sets the window title and optionnaly process title
     @param title: window title
     @type title: unicode string
     @param codec: codec used to encode string"""
+    if HAVE_SETPROCTITLE:
+        setproctitle.setproctitle(title)
+
     if os.name == 'posix' and os.environ["TERM"] == 'xterm' and os.getenv("PYDEVDEBUG", "0") == "0":
         title = "\033]0;%s\007" % title
         sys.stdout.write(title.encode(codec, "replace"))
