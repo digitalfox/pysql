@@ -1871,7 +1871,6 @@ class PysqlShell(cmd.Cmd):
         @param finishedQuery: if true mark prompt with a * to notify a query is finished
         @type blank: bool
         @type finishedQuery: bool"""
-        #TODO: do not update title for every line
         codec = self.conf.getCodec()
         if blank or not self.showPrompt:
             prompt = ""
@@ -1881,7 +1880,7 @@ class PysqlShell(cmd.Cmd):
             if self.db is None:
                 prompt = self.notConnectedPrompt
                 # Update the title (without color else it is a huge mess)
-                setTitle(_("Pysql - Not connected"), codec)
+                setTitle(u"Pysql", codec)
             else:
                 if self.db.getDSN() == "None":
                     prompt = self.db.getConnectString() + " "
@@ -1889,7 +1888,9 @@ class PysqlShell(cmd.Cmd):
                     prompt = self.db.getUsername() + "@" + self.db.getDSN() + " "
                 if finishedQuery:
                     prompt += "* "
-                setTitle("Pysql - %s" % prompt, codec)
+                if prompt != self.prompt:
+                    # Update title only if prompt was changed
+                    setTitle("Pysql - %s" % prompt, codec)
         self.prompt = prompt.encode(codec, "replace")
 
     def __searchObjet(self, objectType, objectName):

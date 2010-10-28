@@ -223,7 +223,7 @@ def warn(message):
 
 def printStackTrace():
     """Print stack trace with debug information"""
-     # Just a hook for a more pleasant error handling
+    # Just a hook for a more pleasant error handling
     print "------------------8<-------------------------------------"
     traceback.print_exc()
     print "------------------8<-------------------------------------"
