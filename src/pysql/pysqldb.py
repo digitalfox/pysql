@@ -13,7 +13,7 @@ and backgound queries (BgQuery)
 from cx_Oracle import connect, DatabaseError, InterfaceError, LOB, STRING, SYSDBA, SYSOPER
 import sys
 from threading import Thread
-from datetime import datetime, date
+from datetime import datetime, timedelta, date
 
 # Pysql imports:
 from pysqlexception import PysqlException, PysqlActionDenied, PysqlNotImplemented
@@ -311,7 +311,7 @@ class PysqlDb:
         elif isinstance(data, (int, float)):
             # Nothing to do
             return data
-        elif isinstance(data, datetime):
+        elif isinstance(data, (datetime, timedelta)):
             #TODO: use user define format or Oracle settings
             # Don't use strftime because it does not support year < 1900
             data = unicode(data)

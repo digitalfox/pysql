@@ -110,7 +110,7 @@ def itemLength(item):
     """Compute length of a result set item"""
     if item is None:
         return 0
-    elif isinstance(item, (int, float, long, datetime.datetime)):
+    elif isinstance(item, (int, float, long, datetime.datetime, datetime.timedelta)):
         return len(str(item))
     elif isinstance(item, LOB):
         return item.size()
