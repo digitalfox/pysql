@@ -229,7 +229,7 @@ class PysqlShell(cmd.Cmd):
             else:
                 return ""
 
-        if (line[-1] in [";", "&", "/"] and not self.plBloc) or (line[-1] == "/" and self.plBloc):
+        if (line[-1] in [";", "&"] and not self.plBloc) or (line.strip() == "/" and self.plBloc):
             # End of command line detected
             # Removes trailing / and ;
             line = line.rstrip(";")
@@ -1097,6 +1097,7 @@ class PysqlShell(cmd.Cmd):
             if result and result[0][0]:
                 result = "".join([i[0] for i in result]) # Merge all in one string
                 result = sub("\s+", " ", result) # Strip extra spaces
+                result = result.lstrip() # and leading spaces
                 print result
                 try:
                     if not result.upper().startswith("ALTER"):
