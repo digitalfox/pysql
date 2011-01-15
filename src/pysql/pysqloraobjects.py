@@ -452,6 +452,16 @@ class OraIndex(OraSegment):
 
         return result
 
+    def getTablespace(self, db):
+        """Gets tablespace name
+        @return: Returns the name of the tablespace"""
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
+        else:
+            owner = self.getOwner()
+        result = db.executeAll(indexSql["tablespaceFromOwnerAndName"], [owner, self.getName()])
+        return result[0][0]
+
     def getIndexedColumns(self, db):
         """Returns indexed columns as a list of (column_name, column_position)"""
         if self.getOwner() == "":
@@ -459,6 +469,19 @@ class OraIndex(OraSegment):
         else:
             owner = self.getOwner()
         return db.executeAll(indexSql["indexedColumnsFromOwnerAndName"], [owner, self.getName()])
+
+    def isPartitioned(self, db):
+        """Gets True if the index is partitioned
+        @return: true if index is partitioned, false otherwise"""
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
+        else:
+            owner = self.getOwner()
+        result = db.executeAll(indexSql["isPartitionedFromOwnerAndName"], [owner, self.getName()])
+        if len(result) == 0:
+            return ""
+        else:
+            return (result[0][0] == "YES")
 
 class OraMaterializedView(OraTabular, OraSegment):
     """Oracle materialized view"""
@@ -691,6 +714,16 @@ class OraTable(OraTabular, OraSegment):
     def __init__(self, tableOwner="", tableName=""):
         """Table creation"""
         OraObject.__init__(self, tableOwner, tableName, u"TABLE")
+
+    def getTablespace(self, db):
+        """Gets tablespace name
+        @return: Returns the name of the tablespace"""
+        if self.getOwner() == "":
+            owner = db.getUsername().upper()
+        else:
+            owner = self.getOwner()
+            result = db.executeAll(tableSql["tablespaceFromOwnerAndName"], [owner, self.getName()])
+            return result[0][0]
 
     def getIndexedColumns(self, db):
         """Gets all table's indexed columns

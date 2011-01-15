@@ -111,7 +111,15 @@ indexSql = {
                                               from  ALL_IND_COLUMNS
                                               where index_owner=:1
                                               and index_name=:2
-                                              order by COLUMN_POSITION"""
+                                              order by COLUMN_POSITION""",
+    "isPartitionedFromOwnerAndName" :  u"""select partitioned
+                                              from all_indexes
+                                              where owner=:1
+                                              and index_name=:2""",
+    "tablespaceFromOwnerAndName" :     u"""select tablespace_name
+                                              from all_indexes
+                                              where owner=:1
+                                              and index_name=:2"""
     }
 
 metadataSql = {
@@ -208,6 +216,10 @@ tableSql = {
                                               count(distinct dbms_rowid.rowid_block_number(rowid))
                                               from %s.%s""",
     "isPartitionedFromOwnerAndName" :    u"""select partitioned
+                                              from all_tables
+                                              where owner=:1
+                                              and table_name=:2""",
+    "tablespaceFromOwnerAndName" :      u"""select tablespace_name
                                               from all_tables
                                               where owner=:1
                                               and table_name=:2"""
@@ -394,8 +406,8 @@ sessionStatSql = {
                                 and a.sql_hash_value = b.hash_value ( + )
                                 and a.Sid=:1
                                 order by b.piece""",
-    "longops":               u"""select target "Target", message "Message", start_time "Start time", start_time + elapsed_seconds/(60*60*24) "End time",  round(100*sofar/totalwork,2) "Progress (%)" 
-                                from v$session_longops 
+    "longops":               u"""select target "Target", message "Message", start_time "Start time", start_time + elapsed_seconds/(60*60*24) "End time",  round(100*sofar/totalwork,2) "Progress (%)"
+                                from v$session_longops
                                 where time_remaining!=0 and sid = :1 order by start_time"""
 }
 
@@ -549,7 +561,7 @@ lockSql = {
     "sessions" : u"""select s1.username || '-' || s1.program || ' ( SID=' || s1.sid || ' )',
                             s2.username || '-' || s2.program || ' ( SID=' || s2.sid || ' )'
                      from v$lock l1, v$session s1, v$lock l2, v$session s2
-                     where s1.sid=l1.sid and s2.sid=l2.sid and l1.BLOCK=1 
+                     where s1.sid=l1.sid and s2.sid=l2.sid and l1.BLOCK=1
                      and l2.request > 0 and l1.id1 = l2.id1 and l2.id2 = l2.id2"""
 }
 

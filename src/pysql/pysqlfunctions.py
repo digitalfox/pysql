@@ -301,6 +301,15 @@ def desc(db, objectName, printDetails=True, printStats=False, sort=False):
             print CYAN + _("Status") + "\t\t: " + BOLD + RED + oraObject.getStatus() + RESET
         else:
             print CYAN + _("Status") + "\t\t: " + oraObject.getStatus() + RESET
+        if oraObject.getType() in ("TABLE", "TABLE PARTITION", "INDEX", "INDEX PARTITION"):
+            try:
+                print CYAN + _("Tablespace") + "\t: " + oraObject.getTablespace(db) + RESET
+            except PysqlException:
+                print CYAN + _("Tablespace") + "\t: " + _("<unable to get tablepsace name>") + RESET
+            try:
+                print CYAN + _("Partitioned?") + "\t: " + (oraObject.isPartitioned(db) and _("Yes") or _("No")) + RESET
+            except PysqlException:
+                print CYAN + _("Partitioned?") + "\t: " + _("<unable to get partition information>") + RESET
         if oraObject.getType() in ("TABLE", "TABLE PARTITION", "VIEW", "MATERIALIZED VIEW"):
             try:
                 print CYAN + _("Comment") + "\t: " + oraObject.getComment(db) + RESET
