@@ -350,10 +350,10 @@ class OraDatafile(OraObject):
     def getTablespace(self, db):
         """@return: tablespace"""
         result = db.executeAll(datafileSql["tablespaceFromName"], [self.getName()])
-        if len(result) == 0:
-            return None
-        else:
+        if result:
             return OraTablespace(tablespaceName=result[0][0])
+        else:
+            raise PysqlException(_("unable to get tablespace"))
 
     def getAllocatedBytes(self, db):
         """@return: number of bytes currently allocated in the data file"""
@@ -453,14 +453,17 @@ class OraIndex(OraSegment):
         return result
 
     def getTablespace(self, db):
-        """Gets tablespace name
-        @return: Returns the name of the tablespace"""
+        """Gets tablespace object
+        @return: Returns object tablespace"""
         if self.getOwner() == "":
             owner = db.getUsername().upper()
         else:
             owner = self.getOwner()
         result = db.executeAll(indexSql["tablespaceFromOwnerAndName"], [owner, self.getName()])
-        return result[0][0]
+        if result:
+            return OraTablespace(tablespaceName=result[0][0])
+        else:
+            raise PysqlException(_("unable to get tablespace"))
 
     def getIndexedColumns(self, db):
         """Returns indexed columns as a list of (column_name, column_position)"""
@@ -722,8 +725,11 @@ class OraTable(OraTabular, OraSegment):
             owner = db.getUsername().upper()
         else:
             owner = self.getOwner()
-            result = db.executeAll(tableSql["tablespaceFromOwnerAndName"], [owner, self.getName()])
-            return result[0][0]
+        result = db.executeAll(tableSql["tablespaceFromOwnerAndName"], [owner, self.getName()])
+        if result:
+            return OraTablespace(tablespaceName=result[0][0])
+        else:
+            raise PysqlException(_("unable to get tablespace"))
 
     def getIndexedColumns(self, db):
         """Gets all table's indexed columns

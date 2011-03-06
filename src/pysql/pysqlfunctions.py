@@ -303,7 +303,7 @@ def desc(db, objectName, printDetails=True, printStats=False, sort=False):
             print CYAN + _("Status") + "\t\t: " + oraObject.getStatus() + RESET
         if oraObject.getType() in ("TABLE", "TABLE PARTITION", "INDEX", "INDEX PARTITION"):
             try:
-                print CYAN + _("Tablespace") + "\t: " + oraObject.getTablespace(db) + RESET
+                print CYAN + _("Tablespace") + "\t: " + oraObject.getTablespace(db).getName() + RESET
             except PysqlException:
                 print CYAN + _("Tablespace") + "\t: " + _("<unable to get tablepsace name>") + RESET
             try:
