@@ -350,7 +350,7 @@ class OraDatafile(OraObject):
     def getTablespace(self, db):
         """@return: tablespace"""
         result = db.executeAll(datafileSql["tablespaceFromName"], [self.getName()])
-        if result:
+        if result and result[0] and result[0][0]:
             return OraTablespace(tablespaceName=result[0][0])
         else:
             raise PysqlException(_("unable to get tablespace"))
@@ -460,7 +460,7 @@ class OraIndex(OraSegment):
         else:
             owner = self.getOwner()
         result = db.executeAll(indexSql["tablespaceFromOwnerAndName"], [owner, self.getName()])
-        if result:
+        if result and result[0] and result[0][0]:
             return OraTablespace(tablespaceName=result[0][0])
         else:
             raise PysqlException(_("unable to get tablespace"))
@@ -726,7 +726,7 @@ class OraTable(OraTabular, OraSegment):
         else:
             owner = self.getOwner()
         result = db.executeAll(tableSql["tablespaceFromOwnerAndName"], [owner, self.getName()])
-        if result:
+        if result and result[0] and result[0][0]:
             return OraTablespace(tablespaceName=result[0][0])
         else:
             raise PysqlException(_("unable to get tablespace"))
