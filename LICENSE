@@ -19,7 +19,7 @@ GNU General Public License for more details.
 Additional permission under GNU GPL version 3 section 7:
 
 If you modify this Program, or any covered work, by linking or combining
-it with cx_Oracle and Oracle driver (or a modified version of that library),
+it with Oracle Database driver (or a modified version of that library),
 containing parts covered by the terms of their respective license,
 the licensors of Pysql grant you additional permission to convey the
 resulting work.
