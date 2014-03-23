@@ -12,8 +12,7 @@ import cmd
 import sys
 import os
 import readline
-from re import findall, match, sub
-from os.path import expandvars
+from re import match, sub
 from time import sleep, time
 from getpass import getpass
 import csv

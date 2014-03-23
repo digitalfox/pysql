@@ -8,6 +8,7 @@
 
 # Python imports:
 import os
+from os.path import join
 import sys
 import traceback
 from re import match, sub
@@ -29,7 +30,7 @@ except ImportError:
 # Pysql imports:
 from .pysqlexception import PysqlException, PysqlActionDenied
 from .pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
-from . import pysqlupdate
+
 
 # Help functions
 def addWildCardIfNeeded(aString, wildcard="%"):
@@ -204,6 +205,7 @@ def removeComment(line, comment=False):
         line = ""
     return (line, comment)
 
+
 def which(progName):
     """Mimics the Unix which command
     @param progName: program name that will be search through PATH
@@ -214,12 +216,14 @@ def which(progName):
             return fullpath
     return None
 
+
 def warn(message):
     """Just print a formated warning message on screen if PYSQL_WARNING env var is set (whatever value)
     @param message: unicode or str message. Conversion will done with print and default encoding
     """
     if "PYSQL_WARNING" in os.environ:
         print("%s==>Warning:%s %s%s" % (RED, BOLD, message, RESET))
+
 
 def printStackTrace():
     """Print stack trace with debug information"""
@@ -232,9 +236,10 @@ def printStackTrace():
     print(RED + BOLD + "Please, send the text above to pysql@digitalfox.org" + RESET)
     print()
 
+
 def printComponentsVersion():
     try:
-        pysqlVersion = pysqlupdate.currentVersion()
+        pysqlVersion = currentVersion()
     except PysqlException:
         pysqlVersion = RED + BOLD + "missing" + RESET
     try:
@@ -370,6 +375,19 @@ def getLastKeyword(line):
         if token in keywords:
             lastKeyword = token
     return lastKeyword
+
+def currentVersion():
+    """@return: current pysql version according to 'version' file"""
+    try:
+        # TODO: handle windows case
+        if join("src", "pysql") in __file__:
+            version = join(dirname(__file__), pardir, pardir, "version")
+        else:
+            version = "/usr/share/pysql/version"
+        return open(version, mode="r", encoding="utf-8").readline().strip("\n")
+    except:
+        raise PysqlException(_("Unable to read 'version' file. Do you remove or change it ?"))
+
 
 class WaitCursor(Thread):
     """A waiting cursor for long operation that

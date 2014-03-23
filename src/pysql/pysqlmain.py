@@ -79,9 +79,7 @@ from optparse import OptionParser
 from .pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
 
 # Pysql imports:
-from .pysqlconf import PysqlConf
 from .pysqlexception import PysqlException
-from . import pysqlupdate
 from .pysqlhelpers import printStackTrace, printComponentsVersion
 
 
@@ -109,12 +107,7 @@ def main():
     # setLocale(conf)
 
     try:
-        if options.update:
-            try:
-                pysqlupdate.checkForUpdate(options.proxyHost, options.proxyUser, options.proxyPassword)
-            except KeyboardInterrupt:
-                print(_("Aborting update"))
-        elif options.version:
+        if options.version:
             printComponentsVersion()
         else:
             try:
@@ -191,16 +184,6 @@ def parseOptions():
     # Login
     parser.add_option("-L", "--Login", dest="oneTryLogin", action="store_true",
               help="exits if login attempt failed, instead of starting not connected")
-
-    # Update mode
-    parser.add_option("-u", "--update", dest="update", action="store_true",
-              help="checks if PySQL update are available")
-    parser.add_option("-H", "--proxyHost", dest="proxyHost", type="string", default=None,
-              help="proxy hostname for PySQL update. \t\tExample: 'http://my-proxy.mydomain:8080'")
-    parser.add_option("-U", "--proxyUser", dest="proxyUser", type="string", default="",
-              help="proxy username if authentication is required")
-    parser.add_option("-P", "--proxyPassword", dest="proxyPassword", type="string", default="",
-              help="proxy password if authentication is required")
 
     return parser.parse_args()
 
