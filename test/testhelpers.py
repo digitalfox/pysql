@@ -9,7 +9,7 @@ import gettext
 import sys
 import os
 from os.path import abspath, dirname, join, pardir
-from tempfile import TemporaryFile
+from io import StringIO
 
 
 def setup():
@@ -20,15 +20,15 @@ def setup():
     gettext.install("pysql", "")
 
     # Add pysql module path
-    sys.path.append(abspath(join(dirname(__file__), pardir, "src", "pysql")))
+    sys.path.append(abspath(join(dirname(__file__), pardir, "src")))
 
     # Set locale
     # Loads config (first time)
-    from pysqlconf import PysqlConf
+    from pysql.pysqlconf import PysqlConf
     conf = PysqlConf.getConfig()
 
     # Sets the locale
-    import pysqlmain
+    from pysql import pysqlmain
     pysqlmain.setLocale(conf)
 
 
@@ -39,7 +39,7 @@ class CapturedStdout:
     def __init__(self):
         """Capture stdout"""
         self.backupStdout = sys.stdout
-        self.tmpFile = TemporaryFile()
+        self.tmpFile = StringIO()
         sys.stdout = self.tmpFile
 
     def readlines(self, reset=True):

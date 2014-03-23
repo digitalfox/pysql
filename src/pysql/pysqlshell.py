@@ -1985,12 +1985,10 @@ class PysqlShell(cmd.Cmd):
                 if header and i == 0 and transpose:
                     # colorize the first column
                     sys.stdout.write(GREY + BOLD)
-                # Quite stupid to test this for each line...
-                # TODO: Should be done one time before looping on each line
                 if isinstance(line[i], (int, float)):
                     sys.stdout.write(str(line[i])[:width[i]].rjust(width[i]))
                 else:
-                    sys.stdout.write(line[i][:width[i]].ljust(width[i]).replace('\r', ' '))
+                    sys.stdout.write(str(line[i])[:width[i]].ljust(width[i]).replace('\r', ' '))
                 if header and i == 0 and transpose:
                     print(RESET, end=' ')
                 sys.stdout.write(colsep)  # Adds colsep

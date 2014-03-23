@@ -15,8 +15,8 @@ import testhelpers
 testhelpers.setup()
 
 # Pysql imports
-import pysqlshell
-from pysqlexception import PysqlException
+from pysql import pysqlshell
+from pysql.pysqlexception import PysqlException
 
 CONNECT_STRING = ""
 

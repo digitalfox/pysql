@@ -17,8 +17,8 @@ import testhelpers
 testhelpers.setup()
 
 # Pysql imports
-import pysqlhelpers
-from pysqlexception import PysqlException
+from pysql import pysqlhelpers
+from pysql.pysqlexception import PysqlException
 
 
 class TestAddWildCardIfNeeded(unittest.TestCase):
@@ -117,13 +117,15 @@ class TestWhich(unittest.TestCase):
         self.assertEqual(pysqlhelpers.which("gabuzomeuhhh"), None)
         self.assertEqual(pysqlhelpers.which(""), None)
 
+
 class TestWarn(unittest.TestCase):
     def test_warn(self):
         for message in ("", "blabla", "ééà€", "blabal"):
             # TODO: handle unicode case
             stdout = sys.stdout
-            sys.stdout = TemporaryFile()
+            sys.stdout = TemporaryFile(encoding="utf-8", mode="w")
             pysqlhelpers.warn(message)
+            sys.stdout.close()
             sys.stdout = stdout  # restore stdout
 
 class TestPrintStackTrace(unittest.TestCase):
@@ -132,15 +134,13 @@ class TestPrintStackTrace(unittest.TestCase):
 
 class TestSetTitle(unittest.TestCase):
     def test_set_title(self):
-        codec = locale.getpreferredencoding()
         for title in ("", "blabla", "éééé", "ééàà€€", "éééààà€€€"):
-            pysqlhelpers.setTitle(title, codec)
+            pysqlhelpers.setTitle(title)
 
 class TestGetTitle(unittest.TestCase):
     def test_get_title(self):
-        codec = locale.getpreferredencoding()
         for title in ("", "blabla", "éééé", "ééàà€€", "éééààà€€€"):
-            pysqlhelpers.setTitle(title, codec)
+            pysqlhelpers.setTitle(title)
             self.assertNotEqual(title, pysqlhelpers.getTitle())
 
 class TestGetFromClause(unittest.TestCase):
