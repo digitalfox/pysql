@@ -67,8 +67,9 @@ class CompleteGatheringWorker(Thread):
 
     def gatherSID(self):
         try:
-            tnsnames = open(os.path.expandvars("$ORACLE_HOME/network/admin/tnsnames.ora"), encoding="utf-8").readlines()
-            self.completeLists["SID"] = sum([re.findall("^(\w+)\s*=", line) for line in tnsnames], [])
+            tnsnames = open(os.path.expandvars("$ORACLE_HOME/network/admin/tnsnames.ora"), encoding="utf-8")
+            self.completeLists["SID"] = sum([re.findall("^(\w+)\s*=", line) for line in tnsnames.readlines()], [])
+            tnsnames.close()
         except Exception as e:
             # Do not raise a PysqlException (useless)
             print(RED + BOLD + _("Cannot open tnsnames.ora file (%s)") % e + RESET)

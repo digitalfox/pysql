@@ -272,16 +272,19 @@ def getTitle():
         # An escape code (echo  -e '\e[21t') can get it
         # but is often disabled for safety reason...
         # Default to basic title
-        title = "%s@%s" % (os.environ.get("USER", "user"), os.popen("hostname").readline().strip())
+        hostname = os.popen("hostname")
+        title = "%s@%s" % (os.environ.get("USER", "user"), hostname.readline().strip())
+        hostname.close()
         if "DISPLAY" in os.environ:
             # Use X windows to get title
-            xtitle = os.popen("xprop -id $WINDOWID WM_NAME").readline().strip()
+            xtitle = os.popen("xprop -id $WINDOWID WM_NAME")
             if not ("WM_NAMEAborted" in title or "WM_NAMEAbandon" in title):
                 try:
-                    title = xtitle.split("=")[1].lstrip(' ').strip('"')
+                    title = xtitle.readline().strip().split("=")[1].lstrip(' ').strip('"')
                 except IndexError:
                     # DISPLAY is not correctly set
                     pass
+            xtitle.close()
     elif os.name == "nt":
         # Term title need pywin32 on windows... Too much deps for simple need
         # Using default name instead
@@ -296,7 +299,9 @@ def getTermWidth():
     """Gets the terminal width. Works only on Unix system.
     @return: terminal width or "120" is system not supported"""
     if os.name == "posix":
-        result = os.popen("tput cols").readline().strip()
+        tput = os.popen("tput cols")
+        result = tput.readline().strip()
+        tput.close()
         if result:
             return int(result)
     else:
