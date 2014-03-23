@@ -1936,6 +1936,9 @@ class PysqlShell(cmd.Cmd):
         # Disables shrinking if isn't a tty
             shrink = False
 
+        # Convert Array from list of tuple to list of list
+        array = [list(i) for i in array]
+
         nbLine = len(array)
         if len(array) == 0:
             print(CYAN + _("(no result)") + RESET)
