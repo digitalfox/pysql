@@ -9,7 +9,8 @@
 # pylint: disable-msg=E1101
 
 # Python imports:
-import os, re, time
+import re
+import time
 from threading import Thread
 
 # Pysql imports:
@@ -18,7 +19,6 @@ from .pysqlcolor import *
 from .pysqlqueries import gatherCompleteSql
 from .pysqloraobjects import OraObject
 from . import pysqlhelpers
-
 
 
 def completeColumns(db, line, text, refList):
@@ -39,7 +39,7 @@ def completeColumns(db, line, text, refList):
             oraObject = oraObject.getTarget(db)
         columns.extend([i[0] for i in oraObject.getTableColumns(db)])
 
-    #TODO: filter on proper table
+    # TODO: filter on proper table
     return [c for c in columns if c.startswith(text.upper())]
 
 
@@ -58,18 +58,17 @@ class CompleteGatheringWorker(Thread):
         Thread.__init__(self)
         self.setDaemon(True)
 
-
     def run(self):
         """Method executed when the thread object start() method is called"""
-        time.sleep(0.5) # Small delay to let primary connection goes first
+        time.sleep(0.5)  # Small delay to let primary connection goes first
         self.db = PysqlDb(self.connect_string)
         self.gatherSID()
-        time.sleep(0.5) # Another small delay to let primary connection goes first
+        time.sleep(0.5)  # Another small delay to let primary connection goes first
         self.gatherSimpleObjects()
 
     def gatherSID(self):
         try:
-            tnsnames = file(os.path.expandvars("$ORACLE_HOME/network/admin/tnsnames.ora")).readlines()
+            tnsnames = open(os.path.expandvars("$ORACLE_HOME/network/admin/tnsnames.ora"), encoding="utf-8").readlines()
             self.completeLists["SID"] = sum([re.findall("^(\w+)\s*=", line) for line in tnsnames], [])
         except Exception as e:
             # Do not raise a PysqlException (useless)

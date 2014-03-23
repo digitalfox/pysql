@@ -1393,12 +1393,13 @@ class PysqlShell(cmd.Cmd):
                 fileName = arg
             else:
                 fileName = arg + ".sql"
-            script = file(fileName, "r")  # File is closed by GC
+            script = open(fileName, mode="r", encoding="utf-8")
             for line in script.readlines():
                 line = line.rstrip("\n")
                 line = self.precmd(line)
                 self.onecmd(line)
                 self.postcmd(None, line)
+            script.close()
         except IOError as e:
             raise PysqlException(e)
 
@@ -2132,7 +2133,7 @@ class PysqlShell(cmd.Cmd):
     def __toCsv(self, result, fileName, header=True):
         """Writes query result to a file"""
         try:
-            fileHandle = file(fileName, "w")
+            fileHandle = open(fileName, mode="w", encoding="utf-8")
             csv_writer = csv.writer(fileHandle, dialect="excel")
             if header:
                 csv_writer.writerow(self.db.getDescription())  # Header

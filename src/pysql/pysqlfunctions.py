@@ -10,7 +10,7 @@
 # pylint: disable-msg=E1101
 
 # Python imports:
-import os, re
+import re
 from os import getenv, unlink
 from difflib import ndiff
 
@@ -28,6 +28,7 @@ from .pysqlcolor import *
 from .pysqlconf import PysqlConf
 from .pysqldb import PysqlDb
 from .pysqlhelpers import colorDiff, convert, addWildCardIfNeeded, generateWhere
+
 
 # High level pysql functions
 def count(db, objectName):
@@ -48,15 +49,16 @@ def count(db, objectName):
         raise PysqlException(_("Cannot count rows of such object : %s") % oraObject.getType())
     return oraObject.getRowCount(db)
 
+
 def compare(schemaA, schemaB):
     """Compares two Oracle schema and return the difference"""
     # First, compare list of tables
-    tables = {}         # Store list of schema tables (key is schema)
-    dbList = {}         # Store list of connect object to schema (key is schema)
-    inAnotInB = []      # List of tables found in schema A but no present in schema B
-    inBnotInA = []      # List of tables found in schema B but no present in schema A
-    inAandB = []        # List of tables found in both schema A and schema B
-    diffForAandB = {}   # Store common tables diff (key is table name)
+    tables = {}  # Store list of schema tables (key is schema)
+    dbList = {}  # Store list of connect object to schema (key is schema)
+    inAnotInB = []  # List of tables found in schema A but no present in schema B
+    inBnotInA = []  # List of tables found in schema B but no present in schema A
+    inAandB = []  # List of tables found in both schema A and schema B
+    diffForAandB = {}  # Store common tables diff (key is table name)
 
     for schema in (schemaA, schemaB):
         dbList[schema] = PysqlDb(schema)
@@ -76,13 +78,14 @@ def compare(schemaA, schemaB):
         elif item[0] == "+":
             inBnotInA.append(item[2:])
         elif item[0] == "?":
-            pass # diff helper control caracter to detail previous line.
+            pass  # diff helper control caracter to detail previous line.
         else:
             raise PysqlException(_("unknown diff control caracter (%s)") % item[0])
     # Compare tables found in both schema A and schema B
     for tableName in inAandB:
         diffForAandB[tableName] = compareTables(schemaA, schemaB, tableName, tableName, dbList, data=False)
     return (inAnotInB, inBnotInA, diffForAandB)
+
 
 def compareTables(schemaA, schemaB, tableNameA, tableNameB, dbList=None, data=False):
     """
@@ -100,7 +103,7 @@ def compareTables(schemaA, schemaB, tableNameA, tableNameB, dbList=None, data=Fa
         dbList["A"] = dbList[schemaA]
         dbList["B"] = dbList[schemaB]
     else:
-        dbList = {} # Create new hash to store list of connect object to schema (key is schema)
+        dbList = {}  # Create new hash to store list of connect object to schema (key is schema)
         dbList["A"] = PysqlDb(schemaA)
         dbList["B"] = PysqlDb(schemaB)
 
@@ -108,6 +111,7 @@ def compareTables(schemaA, schemaB, tableNameA, tableNameB, dbList=None, data=Fa
         return compareTableData(schemaA, schemaB, tableNameA, tableNameB, dbList)
     else:
         return compareTableStructure(schemaA, schemaB, tableNameA, tableNameB, dbList)
+
 
 def compareTableStructure(schemaA, schemaB, tableNameA, tableNameB, dbList):
     """
@@ -118,9 +122,9 @@ def compareTableStructure(schemaA, schemaB, tableNameA, tableNameB, dbList):
     @tableNameB: name of the table in schema B
     @dbList:     hash list of PysqlDb object (keys are A & B).
     """
-    tableDesc = {}      # Store the current table desc for each schema (key is schema)
+    tableDesc = {}  # Store the current table desc for each schema (key is schema)
     for schema, tableName in (("A", tableNameA), ("B", tableNameB)):
-        #BUG: format is ugly. use/merge with __displayTab algo ??
+        # BUG: format is ugly. use/merge with __displayTab algo ??
         tableDesc[schema] = ["     ".join([str(i) for i in line])
                             for line in desc(dbList[schema], tableName, None, False)[1]]
         if not tableDesc[schema]:
@@ -131,6 +135,7 @@ def compareTableStructure(schemaA, schemaB, tableNameA, tableNameB, dbList):
     else:
         result = colorDiff(ndiff(tableDesc["A"], tableDesc["B"]))
     return result
+
 
 def compareTableData(schemaA, schemaB, tableNameA, tableNameB, dbList):
     """
@@ -143,8 +148,8 @@ def compareTableData(schemaA, schemaB, tableNameA, tableNameB, dbList):
     """
     # Check that table structure (columns names & type) are similar
     tableStruct = {}  # Store table structure (columns names & tupe) for each schema (key is schema)
-    tablePK = {}      # Store table primary key list for each schema (key is schema)
-    tableNCol = {}    # Store table number of column for each schema (key is schema)
+    tablePK = {}  # Store table primary key list for each schema (key is schema)
+    tableNCol = {}  # Store table number of column for each schema (key is schema)
     for schema, tableName in (("A", tableNameA), ("B", tableNameB)):
         table = OraObject(dbList[schema].getUsername(), tableName)
         table.guessInfos(dbList[schema])
@@ -162,47 +167,47 @@ def compareTableData(schemaA, schemaB, tableNameA, tableNameB, dbList):
         raise PysqlException(
          _("Unable to compare data of tables that do not have same structure (columns name and type)"))
 
-    if tablePK["A"] == tablePK["B"] and tablePK["A"]: # identical and not None
+    if tablePK["A"] == tablePK["B"] and tablePK["A"]:  # identical and not None
         order = "order by %s" % (", ".join(tablePK["A"]))
     else:
         order = "order by %s" % ", ".join(str(i + 1) for i in range(tableNCol["A"]))
     for schema, tableName in (("A", tableNameA), ("B", tableNameB)):
         # test cursor size. Should make a quick bench to choose the good one
         dbList[schema].execute("select * from %s %s" % (tableName, order), fetch=False, cursorSize=10000)
-    result = {}     # Store current fecth. Key is A or B
-    moreRows = {}   # Flag to indicate there's more rows in cursor. Key is A or B
+    result = {}  # Store current fecth. Key is A or B
+    moreRows = {}  # Flag to indicate there's more rows in cursor. Key is A or B
     moreRows["A"] = True
     moreRows["B"] = True
-    diff = []       # Store diff lines in this list
+    diff = []  # Store diff lines in this list
     while moreRows["A"] and moreRows["B"]:
         for schema in ("A", "B"):
             result[schema], moreRows[schema] = dbList[schema].fetchNext()
             if result[schema]:
-                #TODO: performance of this part is very very bad
+                # TODO: performance of this part is very very bad
                 result[schema] = ["     ".join([str(i) for i in line])
                             for line in result[schema]]
         for line in colorDiff(ndiff(result["A"], result["B"])):
             if line[0] != " ":
                 if diff and line[2:] == diff[-1][2:]:
-                    diff.pop() # simple double removing for one line decay only
+                    diff.pop()  # simple double removing for one line decay only
                 else:
                     diff.append(line)
     for sign, schema in (("-", "A"), ("+", "B")):
         while moreRows[schema]:
             result[schema], moreRows[schema] = dbList[schema].fetchNext()
             result[schema] = ["     ".join([str(i) for i in line])
-                            for line in result[schema]] # This code should be factorised with above
+                            for line in result[schema]]  # This code should be factorised with above
             diff.append("%s %s" % (sign, result[schema]))
     # Make a second pass to remove doublon accross two resultset
-    #BUG: does not work in all case
+    # BUG: does not work in all case
     oldSign = ""
     newSign = ""
     oldBuffer = []
     newBuffer = []
-    newBlock = True # Flag to indicate we have to start a new matching block
+    newBlock = True  # Flag to indicate we have to start a new matching block
     i = 0
-    diff.append(" ") # Add a mark to allow final lines processing
-    toBeRemoved = []   # List of item index to be removed
+    diff.append(" ")  # Add a mark to allow final lines processing
+    toBeRemoved = []  # List of item index to be removed
     for line in diff:
         newSign = line[0]
         if oldSign == newSign or newBlock:
@@ -223,6 +228,7 @@ def compareTableData(schemaA, schemaB, tableNameA, tableNameB, dbList):
     diff = [diff[i] for i in range(len(diff) - 1) if i not in toBeRemoved]
     return diff
 
+
 def ddl(db, objectName):
     """Gets the ddl of an object
     @return: ddl as string"""
@@ -232,6 +238,7 @@ def ddl(db, objectName):
         return None
     else:
         return oraObject.getDDL(db)
+
 
 def desc(db, objectName, printDetails=True, printStats=False, sort=False):
     """Describes an object
@@ -245,7 +252,7 @@ def desc(db, objectName, printDetails=True, printStats=False, sort=False):
 
     # Reads conf
     conf = PysqlConf.getConfig()
-    unit = conf.get("unit") # Unit used to format data
+    unit = conf.get("unit")  # Unit used to format data
 
     # Look for object type if given
     matchResult = re.match("(.*) \((.+)\)", objectName)
@@ -257,7 +264,6 @@ def desc(db, objectName, printDetails=True, printStats=False, sort=False):
 
     # Gets the object type and owner
     oraObjectSet = oraObject.guessInfos(db, interactive=True)
-
 
     if len(oraObjectSet) == 1:
         oraObject = oraObjectSet.pop()
@@ -346,17 +352,17 @@ def desc(db, objectName, printDetails=True, printStats=False, sort=False):
                 print(CYAN + _("Avg row length") + "\t: " + _("<unable to get average row length") + RESET)
 
     # Evaluates object type (among the 24 defined)
-    if oraObject.getType() in ("TABLE" , "TABLE PARTITION"):
+    if oraObject.getType() in ("TABLE", "TABLE PARTITION"):
         header = [_("Name"), _("Type"), _("Null?"), _("Comments"), _("Indexes")]
         columns = oraObject.getTableColumns(db, sort)
 
         # Gets indexed columns of the table
         indexedColumns = oraObject.getIndexedColumns(db)
         # Format index this way: index_name(index_position)
-        #TODO: handle database encoding instead of using just str()
+        # TODO: handle database encoding instead of using just str()
         indexedColumns = [[i[0], i[1] + "(" + str(i[2]) + ")"] for i in indexedColumns]
         for column in columns:
-            column = list(column) # change tuple to list
+            column = list(column)  # change tuple to list
             indexInfo = [i[1] for i in indexedColumns if i[0] == column[0]]
             column.append(", ".join(indexInfo))
             result.append(column)
@@ -474,7 +480,7 @@ def desc(db, objectName, printDetails=True, printStats=False, sort=False):
         totalTables = 0
         totalIndexes = 0
         defaultTbs = oraObject.getDefaultTablespace(db)
-        #tempTbs = oraObject.getTempTablespace(db)
+        # tempTbs = oraObject.getTempTablespace(db)
         for tablespace in oraObject.getTablespaces():
             name = tablespace.getName()
             nbTables = oraObject.getNbTables(db, tablespace=tablespace.getName())
@@ -493,6 +499,7 @@ def desc(db, objectName, printDetails=True, printStats=False, sort=False):
     else:
         raise PysqlException(_("Type not handled: %s") % oraObject.getType())
     return (header, result)
+
 
 def edit(db, objectName, content=""):
     """Edits properties of an Oracle object
@@ -531,6 +538,7 @@ def edit(db, objectName, content=""):
         raise PysqlNotImplemented()
     return True
 
+
 def editor(content=""):
     """Edits content with systemp editor
     @arg content: initial data to edit. Default is empty string
@@ -551,7 +559,7 @@ def editor(content=""):
     try:
         # Writes actual properties to temp file
         filePath = os.path.join(tempDir, "pysql-" + str(os.getpid()) + ".tmp")
-        tmp = file(filePath, "w")
+        tmp = open(filePath, mode="w", encoding="utf-8")
         tmp.write(content)
         tmp.close()
         # Lets the user edit it
@@ -559,7 +567,7 @@ def editor(content=""):
         if exitStatus != 0:
             raise PysqlException(_("Editor exited with status %s") % exitStatus)
         # Updates properties with new value
-        tmp = file(filePath, "r")
+        tmp = open(filePath, mode="r", encoding="utf-8")
         content = tmp.read()
         tmp.close()
         unlink(filePath)
@@ -570,6 +578,7 @@ def editor(content=""):
     else:
         return content
 
+
 def explain(db, statement):
     """Computes and displays explain plan for statement
     @param statement: sql statement to be explained
@@ -579,6 +588,7 @@ def explain(db, statement):
     db.execute("explain plan for %s" % statement)
     return db.executeAll("""select plan_table_output
                 from table(dbms_xplan.display('PLAN_TABLE',null,'serial'))""")
+
 
 def objectsLock(db):
     """Displays locks on objects
@@ -591,6 +601,7 @@ def objectsLock(db):
         raise PysqlActionDenied(_("Insufficient privileges"))
     return (header, result)
 
+
 def sessionsLock(db):
     """Displays sessions lock that block other sessions
     @return: resultset in tabular format
@@ -601,7 +612,6 @@ def sessionsLock(db):
     except PysqlException:
         raise PysqlActionDenied(_("Insufficient privileges"))
     return (header, result)
-
 
 
 def sessions(db, all=False, search=None):
@@ -633,6 +643,7 @@ def sessions(db, all=False, search=None):
         raise PysqlActionDenied(_("Insufficient privileges"))
     return (header, result)
 
+
 def sessionStat(db, sid, stat=None):
     """Displays detailed statistics for one session
     @param stat: can be ios, locks, waitEvents, openCurors, details
@@ -642,6 +653,7 @@ def sessionStat(db, sid, stat=None):
         return None
     else:
         return db.executeAll(sessionStatSql[stat], [sid])
+
 
 def killSession(db, session, immediate=False):
     """Kills the given sessions
@@ -659,6 +671,7 @@ def killSession(db, session, immediate=False):
     except PysqlException:
         raise PysqlActionDenied(_("Insufficient privileges"))
 
+
 def showParameter(db, param=""):
     """Shows the session parameters matching the pattern 'param'
     @param param: pattern to be matched
@@ -667,7 +680,7 @@ def showParameter(db, param=""):
     """
     param = addWildCardIfNeeded(param)
     header = [_("Name"), _("Type"), _("Value"), _("#"), _("Session?"), _("System?"), _("Comments")]
-    #TODO: move this request to pysqlQueries
+    # TODO: move this request to pysqlQueries
     try:
         result = db.executeAll("""select name
             , decode(type, 1, 'BOOLEAN', 2, 'STRING', 3, 'INTEGER', 4, 'PFILE'
@@ -687,6 +700,7 @@ def showParameter(db, param=""):
         raise PysqlActionDenied(_("Insufficient privileges"))
     return (header, result)
 
+
 def showServerParameter(db, param=""):
     """Shows the server parameters matching the pattern 'param'
     @param param: pattern to be matched
@@ -695,7 +709,7 @@ def showServerParameter(db, param=""):
     """
     param = addWildCardIfNeeded(param)
     header = [_("Name"), _("Type"), _("Value"), _("#"), _("Used?"), _("Comments")]
-    #TODO: move this request to pysqlQueries
+    # TODO: move this request to pysqlQueries
     try:
         result = db.executeAll("""select distinct sp.name
             , decode(p.type, 1, 'BOOLEAN', 2, 'STRING', 3, 'INTEGER', 4, 'PFILE'
@@ -714,6 +728,7 @@ def showServerParameter(db, param=""):
     except PysqlException:
         raise PysqlActionDenied(_("Insufficient privileges"))
     return (header, result)
+
 
 # Oracle object searching
 def searchObject(db, objectType, objectName, objectOwner):

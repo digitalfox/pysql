@@ -116,8 +116,6 @@ class PysqlDb:
         returns a list of record (a cursor.fetchall())
         Use a private cursor not to pollute execute on.
         So the getDescription does not work for executeAll"""
-        sql = self.encodeSql(sql)
-        param = self.encodeSql(param)
         try:
             if self.cursor is None:
                 self.cursor = self.connection.cursor()
@@ -127,7 +125,7 @@ class PysqlDb:
             else:
                 self.cursor.prepare(sql)
                 self.cursor.execute(None, param)
-            return self.decodeData(self.cursor.fetchall())
+            return self.cursor.fetchall()
         except (DatabaseError, InterfaceError) as e:
             raise PysqlException(_("Cannot execute query: %s") % e)
 
@@ -138,7 +136,6 @@ class PysqlDb:
          For insert/update/delete, return the number of record processed
          @param fetch: for select queries, start fetching (default is true)
          @param cursorSize: if defined, overide the config cursor size"""
-        sql = self.encodeSql(sql)
         if not sys.stdin.isatty():
             fetch = False
         try:
@@ -152,7 +149,7 @@ class PysqlDb:
             if sql.upper().startswith("SELECT") and fetch:
                 return self.fetchNext()
             elif sql.upper().startswith("SELECT") and not fetch:
-                return (self.decodeData(self.cursor.fetchall()), False)
+                return (self.cursor.fetchall(), False)
             else:
                 return self.getRowCount()
         except (DatabaseError, InterfaceError) as e:
@@ -162,7 +159,6 @@ class PysqlDb:
         """Validates the syntax of the DML query given in parameter.
         @param sql: SQL query to validate
         @return: None but raise PysqlException if sql cannot be validated"""
-        sql = self.encodeSql(sql)
         try:
             if self.cursor is None:
                 self.cursor = self.connection.cursor()
@@ -218,7 +214,7 @@ class PysqlDb:
                 result = self.cursor.fetchmany(nbLines)
                 if len(result) == nbLines:
                     moreRows = True
-                return (self.decodeData(result), moreRows)
+                return (result, moreRows)
             else:
                 raise PysqlException(_("No result set. Execute a query before fetching result !"))
         except (DatabaseError, InterfaceError) as e:
@@ -269,72 +265,6 @@ class PysqlDb:
             self.connection.close()
         except (DatabaseError, InterfaceError) as e:
             raise PysqlException(_("Cannot close connection: %s") % e)
-
-    def encodeSql(self, sql):
-        """Encode sql request in the proper encoding.
-        @param sql: sql request in unicode format or list of unicode string
-        @return: sql text encoded
-        """
-        if self.connection:
-            encoding = self.connection.nencoding
-        else:
-            raise PysqlException(_("Cannot encode data, not connected to Oracle"))
-        if sql is None:
-            return None
-        if isinstance(sql, list):
-            # Recurse to encode each item
-            return [self.encodeSql(i) for i in sql]
-
-        if isinstance(sql, str):
-            warn(_("string '%s' is already encoded") % sql)
-            return sql
-        try:
-            sql = sql.encode(encoding)
-        except UnicodeEncodeError:
-            sql = sql.encode(encoding, "replace")
-            warn(_("Got unicode error while encoding '%s'") % sql)
-        return sql
-
-    def decodeData(self, data):
-        """Encode data fetch out database to unicode
-        @param data: str or list or str
-        @return: encoded data"""
-        # TODO: factorise code with encodeSql function
-        if self.connection:
-            encoding = self.connection.nencoding
-        else:
-            raise PysqlException("Cannot decode data, not connected to Oracle")
-        if data is None:  # This correspond to the NULL Oracle object
-            return None
-        elif isinstance(data, (list, tuple)):
-            # Recurse to decode each item
-            return [self.decodeData(i) for i in data]
-        elif isinstance(data, (int, float)):
-            # Nothing to do
-            return data
-        elif isinstance(data, (datetime, timedelta)):
-            # TODO: use user define format or Oracle settings
-            # Don't use strftime because it does not support year < 1900
-            data = str(data)
-        elif isinstance(data, date):
-            # TODO: use user define format or Oracle settings
-            # Don't use strftime because it does not support year < 1900
-            data = str(data)
-        elif isinstance(data, LOB):
-            data = data.read(1, data.size())
-        elif isinstance(data, str):
-            warn(_("Warning, string '%s' is already Unicode") % data)
-            return data
-
-        # Decode data
-        try:
-            data = data.decode(encoding)
-        except UnicodeDecodeError:
-            data = data.decode(encoding, "ignore")
-            warn(_("Can't decode '%s' with %s codec. Check your NLS_LANG variable") % (data, encoding))
-        except AttributeError:
-            warn(_("Cannot decode %s object") % type(data))
-        return data
 
 
 class BgQuery(Thread):
