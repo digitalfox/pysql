@@ -68,11 +68,19 @@ Developpement conventions:
 @license: GNU GPL V3
 """
 
+# Check python version
+import sys
+
+if sys.version_info.major != 3:
+    sys.stdout.write("Python 3 is required. Use pysql <= 0.16 if you want to stick with python 2\n")
+    sys.exit(1)
+if sys.version_info.minor < 4:
+    sys.stdout.write("Python 3.4 or newer is recommended. pysql has not been tested with 3.0, 3.1, 3.2 and 3.3\n")
+
 # Python imports:
 import gettext
 import locale
 import os
-import sys
 from os.path import dirname, join, pardir
 from optparse import OptionParser
 
