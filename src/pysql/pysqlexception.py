@@ -10,30 +10,31 @@
 from time import ctime, time
 from re import match
 
+
 class PysqlException(Exception):
     """Pysql Exceptions"""
     def __init__(self, exception):
         # instance members
-        self.oraCode=""
-        self.msg=""
-        self.time=None
+        self.oraCode = ""
+        self.msg = ""
+        self.time = None
 
         # TimeStamp exception
-        self.time=time()
+        self.time = time()
 
         # Sets default message
-        self.msg=str(exception)
+        self.msg = str(exception)
 
         # Gets ORA error code if this is an Oracle exception
         if isinstance(exception, PysqlException):
-            self.msg=exception.msg
-            self.oraCode=exception.oraCode
-            self.time=exception.time
+            self.msg = exception.msg
+            self.oraCode = exception.oraCode
+            self.time = exception.time
         else:
-            result=match("(.*)(ORA-\d+): (.*)", str(exception))
+            result = match("(.*)(ORA-\d+): (.*)", str(exception))
             if result:
-                self.oraCode=result.group(2)
-                self.msg=result.group(1)+result.group(3)
+                self.oraCode = result.group(2)
+                self.msg = result.group(1) + result.group(3)
 
         # Calls father constructor
         Exception.__init__(self, exception)
@@ -43,20 +44,23 @@ class PysqlException(Exception):
         return ctime(self.time)
 
     def __str__(self):
-        if self.oraCode=="":
+        if self.oraCode == "":
             return self.msg
         else:
-            return self.oraCode +"-" + self.msg
+            return self.oraCode + "-" + self.msg
+
 
 class PysqlNotImplemented(PysqlException):
     """Indicates function not yet implemented"""
     def __init__(self):
         PysqlException.__init__(self, _("Not yet implemented"))
 
+
 class PysqlActionDenied(PysqlException):
     """Indicates user is not granted to perform this action"""
     def __init__(self, message):
         PysqlException.__init__(self, _("Action denied: %s") % message)
+
 
 class PysqlOptionParserNormalExitException(Exception):
     """

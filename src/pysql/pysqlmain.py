@@ -83,11 +83,11 @@ from .pysqlconf import PysqlConf
 from .pysqlexception import PysqlException
 from . import pysqlupdate
 from .pysqlhelpers import printStackTrace, printComponentsVersion
-import imp
+
 
 def main():
     """Pysql main function"""
-    rc = 0 # Return code
+    rc = 0  # Return code
 
     # Options & args stuf
     (options, argv) = parseOptions()
@@ -100,13 +100,13 @@ def main():
         # Unix std path
         i18nPath = join(dirname(sys.argv[0]), pardir, "share", "locale")
     # Loads message catalog
-    gettext.install("pysql", i18nPath, str=1)
+    gettext.install("pysql", i18nPath)
 
     # Loads config (first time)
-    conf = PysqlConf.getConfig()
+    # conf = PysqlConf.getConfig()
 
     # Sets the locale
-    setLocale(conf)
+    # setLocale(conf)
 
     try:
         if options.update:
@@ -132,7 +132,7 @@ def main():
                 sys.exit(1)
             # Now we can import PysqlShell (and subsequent modules that depends on cx_Oracle)
             from .pysqlshell import PysqlShell
-            # Default is to launch pysql in standard mode (local client) 
+            # Default is to launch pysql in standard mode (local client)
             shell = PysqlShell(silent=options.silent, argv=argv)
             if options.oneTryLogin and shell.db == None:
                 rc = 1
@@ -175,9 +175,6 @@ def setLocale(conf):
     # Stores codec in config
     conf.setCodec(codec)
 
-    # Sets default encoding for stdout
-    imp.reload(sys)
-    sys.setdefaultencoding(codec)
 
 def parseOptions():
     """Parses pysql command argument using optparse python module"""

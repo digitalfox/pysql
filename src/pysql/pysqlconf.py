@@ -19,6 +19,7 @@ import readline
 from .pysqlexception import PysqlException
 from .pysqlcolor import BOLD, CYAN, GREEN, RED, RESET
 
+
 class PysqlConf:
     """ Handles configuration stuff"""
 
@@ -68,7 +69,7 @@ class PysqlConf:
 
         # Tries to load previous sqlLibrary from disk
         try:
-            self.sqlLibrary = pickle.load(file(self.sqlLibPath))
+            self.sqlLibrary = pickle.load(open(self.sqlLibPath, mode="rb"))
         except Exception as e:
             # Cannot load any previous sqlLibrary, start from a clear one
             pass
@@ -108,11 +109,11 @@ class PysqlConf:
         # Reads config file
         self.configParser = ConfigParser()
         try:
-            self.configParser.readfp(open(self.configPath))
+            self.configParser.readfp(open(self.configPath, encoding="utf-8"))
         except Exception as e:
             # Silently create empty conf and only complain if this fails
             try:
-                file(self.configPath, "w")
+                open(self.configPath, mode="w", encoding="utf-8")
             except Exception as e:
                 print(RED + BOLD + _("Failed to create personnal configuration file"))
                 print("%s" % e + RESET)
@@ -281,7 +282,7 @@ class PysqlConf:
         """Writes config to disk"""
         if self.changed:
             try:
-                configFile = file(self.configPath, "w")
+                configFile = open(self.configPath, mode="w", encoding="utf-8")
                 self.configParser.write(configFile)
                 configFile.close()
                 self.setChanged(False)
@@ -294,7 +295,7 @@ class PysqlConf:
     def writeSqlLibrary(self):
         """Writes user sql library to disk"""
         try:
-            pickle.dump(self.sqlLibrary, file(self.sqlLibPath, "w"))
+            pickle.dump(self.sqlLibrary, open(self.sqlLibPath, mode="wb"))
         except Exception as e:
             raise PysqlException(_("Fail to save user sql library to %s. Error was:\n\t%s")
                         % (self.sqlLibPath, e))
@@ -303,13 +304,14 @@ class PysqlConf:
         """Writes shell history to disk"""
         try:
             # Open r/w and close file to create one if needed
-            historyFile = file(self.historyPath, "w")
+            historyFile = open(self.historyPath, mode="w", encoding="utf-8")
             historyFile.close()
             readline.set_history_length(1000)
             readline.write_history_file(self.historyPath)
         except Exception as e:
             raise PysqlException(_("Fail to save history to %s. Error was:\n\t%s")
                         % (self.historyPath, e))
+
     def setChanged(self, state):
         """Indicates if config data has changed. This is used
         to detect if it is necessary to save config file to disk"""

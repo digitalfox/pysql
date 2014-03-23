@@ -31,6 +31,7 @@ from .pysqlhelpers import itemLength, removeComment, printStackTrace, setTitle, 
 from .pysqloptionparser import PysqlOptionParser
 from .pysqlcomplete import CompleteGatheringWorker, completeColumns
 
+
 class PysqlShell(cmd.Cmd):
     """Main class that handle user interaction"""
 
@@ -38,28 +39,28 @@ class PysqlShell(cmd.Cmd):
         """Shell initialisation"""
 
         # Instance attributes
-        self.db = None                # Db connection object
-        self.fetching = False         # Indicate if a request is running
-        self.multilineCmd = False     # Indicate if the user is in a multiline command
-        self.plBloc = False           # Indicate if the user is in a PL/SQL bloc
-        self.comment = False          # Indicate if the user is in an SQL multiline comment
-        self.cmdBuffer = []           # Command buffer for multiline command (list of line)
-        self.lastStatement = ""       # Last statement executed
-        self.tnsnamesAvailable = None # possible to read tnsnames.ora for completion?
-        self.conf = None              # Handle to pysql configuration instance
-        self.cmds = []                # List of defined cmds
-        self.bgQueries = []           # List of bg queries threads
-        self.exceptions = []          # List of PysqlException encountered
-        self.useCompletion = True     # Indicate if we should use completion with "tab"
+        self.db = None  # Db connection object
+        self.fetching = False  # Indicate if a request is running
+        self.multilineCmd = False  # Indicate if the user is in a multiline command
+        self.plBloc = False  # Indicate if the user is in a PL/SQL bloc
+        self.comment = False  # Indicate if the user is in an SQL multiline comment
+        self.cmdBuffer = []  # Command buffer for multiline command (list of line)
+        self.lastStatement = ""  # Last statement executed
+        self.tnsnamesAvailable = None  # possible to read tnsnames.ora for completion?
+        self.conf = None  # Handle to pysql configuration instance
+        self.cmds = []  # List of defined cmds
+        self.bgQueries = []  # List of bg queries threads
+        self.exceptions = []  # List of PysqlException encountered
+        self.useCompletion = True  # Indicate if we should use completion with "tab"
         self.showBanner = not silent  # Indicate if intro banner should be displayed
         self.showPrompt = not silent  # Indicate if prompt should be displayed
-        self.trace = {}               # Store session trace statistics between two call to trace command
-        self.rc = 0                   # Shell exit code
-        self.oldTermName = ""         # Old terminal name
-        self.waitCursor = None        # Waiting cursor thread handler
-        self.tty = sys.stdin.isatty() # Indicate if user interactivity is possible or not.
-        self.allowAnimatedCursor = True # Enable or not animated cursor. Useful for test.
-        self.completeLists = {}       # Completionlist dictionary
+        self.trace = {}  # Store session trace statistics between two call to trace command
+        self.rc = 0  # Shell exit code
+        self.oldTermName = ""  # Old terminal name
+        self.waitCursor = None  # Waiting cursor thread handler
+        self.tty = sys.stdin.isatty()  # Indicate if user interactivity is possible or not.
+        self.allowAnimatedCursor = True  # Enable or not animated cursor. Useful for test.
+        self.completeLists = {}  # Completionlist dictionary
 
         self.notConnectedPrompt = RED + _("(not connected) ") + RESET
 
@@ -96,15 +97,15 @@ class PysqlShell(cmd.Cmd):
                 self.__setPrompt()
             except KeyboardInterrupt:
                 print(RED + BOLD + _("Break !") + RESET)
-                #TODO: validates this case (direct call of __exit() is not good)
+                # TODO: validates this case (direct call of __exit() is not good)
                 self.__exit()
 
     def preloop(self):
         """Prepares shell interactive loop"""
         # Builds the list of commands
         self.cmds = [i[3:] for i in self.get_names() if i.startswith("do_")]
-        self.cmds.remove("explain") # explain command use multine
-        self.cmds.remove("csv") # so does csv
+        self.cmds.remove("explain")  # explain command use multine
+        self.cmds.remove("csv")  # so does csv
         if self.showBanner:
             banner = _("\nWelcome to pysql shell\n")
             banner += _("""Type "help" for some help.\nUse Tab for completion\n""")
@@ -148,7 +149,7 @@ class PysqlShell(cmd.Cmd):
     def postloop(self):
         """End of command loop"""
         # Restore original terminal title
-        setTitle(self.oldTermName, self.conf.getCodec())
+        setTitle(self.oldTermName)
 
     def emptyline(self):
         """Fetches next result if a request is running
@@ -171,7 +172,7 @@ class PysqlShell(cmd.Cmd):
         except PysqlException as e:
             print(RED + BOLD + "*** " + _("Pysql error") + " ***\n\t%s" % e + RESET)
             self.exceptions.append(e)
-            if e.oraCode == "ORA-03114": # Not connected to Oracle
+            if e.oraCode == "ORA-03114":  # Not connected to Oracle
                 self.db = None
         except KeyboardInterrupt:
             print(RED + BOLD + _("Break !") + RESET)
@@ -183,9 +184,6 @@ class PysqlShell(cmd.Cmd):
     def precmd(self, line):
         """Hook executed just before any command execution.
         This is used to parse command and dispatch it to Oracle or internal pysql functions"""
-
-        # Decode line from user encoding to unicode
-        line = line.decode(self.conf.getCodec())
 
         if self.conf.get("echo") == "yes":
             # Echo line to stdout
@@ -237,13 +235,13 @@ class PysqlShell(cmd.Cmd):
             self.cmdBuffer.append(line)
             line = " ".join(self.cmdBuffer)
             self.cmdBuffer = []
-            self.__setPrompt() # back to std prompt
+            self.__setPrompt()  # back to std prompt
             if self.multilineCmd:
                 # Puts the whole command line into history
                 try:
                     length = readline.get_current_history_length()
                     if length > 1:
-                        readline.replace_history_item(length - 1, line) # put the complete cmd in history
+                        readline.replace_history_item(length - 1, line)  # put the complete cmd in history
                 except AttributeError:
                     # Windows readline does not have those advanced functions... Sad world
                     pass
@@ -267,7 +265,7 @@ class PysqlShell(cmd.Cmd):
                 # Bufferise the command and wait for the rest
                 self.multilineCmd = True
                 self.cmdBuffer.append(line)
-                self.fetching = False # Cancel previous fetching if any
+                self.fetching = False  # Cancel previous fetching if any
                 self.__setPrompt(multiline=True)
                 try:
                     length = readline.get_current_history_length()
@@ -286,7 +284,7 @@ class PysqlShell(cmd.Cmd):
         Used to notify running and finished background queries
         @return: stop flag to end loop"""
         if self.waitCursor:
-            self.waitCursor.stop() # Stop any running cursor
+            self.waitCursor.stop()  # Stop any running cursor
             self.waitCursor = None
         if self.multilineCmd:
             self.__setPrompt(multiline=True)
@@ -337,13 +335,10 @@ class PysqlShell(cmd.Cmd):
         if not self.useCompletion:
             return
 
-        # Decode line from user encoding to unicode
-        line = line.decode(self.conf.getCodec())
-
         # Separates text from his prefix
         if text.count(".") == 1:
             prefix, text = text.split(".")
-            prefix += "." # Doesn't forget the dot for the prefix
+            prefix += "."  # Doesn't forget the dot for the prefix
         else:
             prefix = ""
 
@@ -473,11 +468,11 @@ class PysqlShell(cmd.Cmd):
     def do_history(self, arg):
         """Display shell history"""
         self.__checkArg(arg, "<=1")
-        #TODO: move depth to pysqlConfig
-        #BUG: if history is short stupid things are printed !
-        depth = 20 # Number of history item to be displayed
+        # TODO: move depth to pysqlConfig
+        # BUG: if history is short stupid things are printed !
+        depth = 20  # Number of history item to be displayed
         try:
-            length = readline.get_current_history_length() # Length of current history in readline buffer
+            length = readline.get_current_history_length()  # Length of current history in readline buffer
         except AttributeError:
             message = _("History not available on Windows platform (readline limitation)")
             raise PysqlException(message)
@@ -622,10 +617,10 @@ class PysqlShell(cmd.Cmd):
     def do_compare(self, arg):
         """Compares schema or object structure and data"""
         self.__checkArg(arg, ">=2")
-        schemaNames = [] # Password striped connection string to schema
+        schemaNames = []  # Password striped connection string to schema
         tableNames = []
-        schemas = []     # Complete connect string to schema
-        withData = False # Compares only structure (false) or data ?
+        schemas = []  # Complete connect string to schema
+        withData = False  # Compares only structure (false) or data ?
 
         arg = arg.split()
 
@@ -739,9 +734,9 @@ class PysqlShell(cmd.Cmd):
         _("10g or upper is required. ") +
         _("Before starting, please ensure that you have the required license to use it."))
         # Oracle only supports TEXT but HTML and XML will be added in next releases
-        #parser.add_option("-t", "--type", dest="type",
-                          #default="TEXT",
-                          #help=_("output type: HTML | XML | TEXT (default)"))
+        # parser.add_option("-t", "--type", dest="type",
+                          # default="TEXT",
+                          # help=_("output type: HTML | XML | TEXT (default)"))
         parser.add_option("-l", "--level", dest="level",
                           default="TYPICAL",
                           help=_("level: BASIC | TYPICAL (default) | ALL"))
@@ -771,11 +766,11 @@ class PysqlShell(cmd.Cmd):
         # Not a tty, so command line must be complete.
             if options.begin_snap == "0" or options.end_snap == "0":
                 raise PysqlException(_("Missing arguments. Please, specify snaphsot identifiers."))
-        self.__animateCursor() # Only after user interaction
+        self.__animateCursor()  # Only after user interaction
         result = pysqlaudit.addmReport(self.db,
                                         options.begin_snap,
                                         options.end_snap,
-                                        #text=options.text,
+                                        # text=options.text,
                                         level=options.level)
         if options.filename == "":
             self.__toScreen(result, moreRows=False, header=False)
@@ -818,7 +813,7 @@ class PysqlShell(cmd.Cmd):
         # Not a tty, so command line must be complete.
             if options.begin_snap == "0" or options.end_snap == "0":
                 raise PysqlException(_("Missing arguments. Please, specify snaphsot identifiers."))
-        self.__animateCursor() # Only after user interaction
+        self.__animateCursor()  # Only after user interaction
         result = pysqlaudit.awrReport(self.db,
                                         options.type,
                                         options.begin_snap,
@@ -835,9 +830,9 @@ class PysqlShell(cmd.Cmd):
         parser.set_description(_("Generates tuning advice report for an SQL query. ") +
         _("10g or upper is required. "))
         # Oracle only supports TEXT but HTML and XML will be added in next releases
-        #parser.add_option("-t", "--type", dest="type",
-                          #default="TEXT",
-                          #help=_("output type: HTML | XML | TEXT (default)"))
+        # parser.add_option("-t", "--type", dest="type",
+                          # default="TEXT",
+                          # help=_("output type: HTML | XML | TEXT (default)"))
         parser.add_option("-l", "--level", dest="level",
                           default="TYPICAL",
                           help=_("level: BASIC | TYPICAL (default) | ALL"))
@@ -852,9 +847,9 @@ class PysqlShell(cmd.Cmd):
         options, args = parser.parse_args(arg)
         self.__checkConnection()
         self.__checkArg(arg, ">1")
-        self.__animateCursor() # Only after user interaction
+        self.__animateCursor()  # Only after user interaction
         result = pysqlaudit.sqlTune(self.db, " ".join(args),
-                                    #text=options.text,
+                                    # text=options.text,
                                     level=options.level)
         if options.filename == "":
             self.__toScreen(result, moreRows=False, header=False)
@@ -877,7 +872,7 @@ class PysqlShell(cmd.Cmd):
                           default="%",
                           help=_("filters by user"))
         parser.add_option("-n", "--nbLines", dest="nbLines",
-                          default= -1,
+                          default=-1,
                           help=_("filters resultset to the n first rows"))
         parser.add_option("-o", "--output-file", dest="filename",
                           default="",
@@ -1095,9 +1090,9 @@ class PysqlShell(cmd.Cmd):
             print(CYAN + "*****" + _("Current statement") + "*****" + RESET)
             result = pysqlfunctions.sessionStat(self.db, sessionId, stat="currentStatement")
             if result and result[0][0]:
-                result = "".join([i[0] for i in result]) # Merge all in one string
-                result = sub("\s+", " ", result) # Strip extra spaces
-                result = result.lstrip() # and leading spaces
+                result = "".join([i[0] for i in result])  # Merge all in one string
+                result = sub("\s+", " ", result)  # Strip extra spaces
+                result = result.lstrip()  # and leading spaces
                 print(result)
                 try:
                     if not result.upper().startswith("ALTER"):
@@ -1199,7 +1194,7 @@ class PysqlShell(cmd.Cmd):
         """Display PL/SQL package call tree"""
         self.__checkConnection()
         self.__checkArg(arg, "==1")
-        #raise PysqlNotImplemented()
+        # raise PysqlNotImplemented()
         pysqlgraphics.pkgTree(self.db, arg)
 
     # Oracle object searching (in alphabectic order)
@@ -1398,7 +1393,7 @@ class PysqlShell(cmd.Cmd):
                 fileName = arg
             else:
                 fileName = arg + ".sql"
-            script = file(fileName, "r") # File is closed by GC
+            script = file(fileName, "r")  # File is closed by GC
             for line in script.readlines():
                 line = line.rstrip("\n")
                 line = self.precmd(line)
@@ -1825,7 +1820,7 @@ class PysqlShell(cmd.Cmd):
     def __connect(self, connectString, mode=""):
         """Calls the PysqlDb class to connect to Oracle"""
 
-        self.fetching = False # forget about any previous opened cursor
+        self.fetching = False  # forget about any previous opened cursor
 
         if connectString == "/" and mode == "sysdba":
             self.db = PysqlDb("/", "sysdba")
@@ -1872,7 +1867,6 @@ class PysqlShell(cmd.Cmd):
         @param finishedQuery: if true mark prompt with a * to notify a query is finished
         @type blank: bool
         @type finishedQuery: bool"""
-        codec = self.conf.getCodec()
         if blank or not self.showPrompt:
             prompt = ""
         elif multiline:
@@ -1881,7 +1875,7 @@ class PysqlShell(cmd.Cmd):
             if self.db is None:
                 prompt = self.notConnectedPrompt
                 # Update the title (without color else it is a huge mess)
-                setTitle("Pysql", codec)
+                setTitle("Pysql")
             else:
                 if self.db.getDSN() == "None":
                     prompt = self.db.getConnectString() + " "
@@ -1891,8 +1885,8 @@ class PysqlShell(cmd.Cmd):
                     prompt += "* "
                 if prompt != self.prompt:
                     # Update title only if prompt was changed
-                    setTitle("Pysql - %s" % prompt, codec)
-        self.prompt = prompt.encode(codec, "replace")
+                    setTitle("Pysql - %s" % prompt)
+        self.prompt = prompt
 
     def __searchObjet(self, objectType, objectName):
         """Searches Oracle object"""
@@ -1901,7 +1895,7 @@ class PysqlShell(cmd.Cmd):
         try:
             (objectOwner, objectName) = objectName.split(".")
         except ValueError:
-            objectOwner = self.db.getUsername()     # Default is current user
+            objectOwner = self.db.getUsername()  # Default is current user
         objectOwner = objectOwner.upper()
         # If no name if given, searches for all
         if objectName == "":
@@ -1919,16 +1913,16 @@ class PysqlShell(cmd.Cmd):
         termWidth = self.conf.get("termWidth")
         if termWidth == "auto":
             termWidth = getTermWidth()
-        #BUG: columnize does not support unicode.
+        # BUG: columnize does not support unicode.
         listOfString = [i.encode(self.conf.getCodec(), "replace") for i in listOfString]
         self.columnize(listOfString, displaywidth=termWidth)
 
     def __displayTab(self, array, header=None):
         """Displays in tabular the array using correct width for each column"""
-        termWidth = self.conf.get("termWidth") # Terminal maximum width
+        termWidth = self.conf.get("termWidth")  # Terminal maximum width
         if termWidth == "auto":
             termWidth = getTermWidth()
-        widthMin = int(self.conf.get("widthMin"))   # Minimum size of the column
+        widthMin = int(self.conf.get("widthMin"))  # Minimum size of the column
         transpose = (self.conf.get("transpose") == "yes")
         colsep = self.conf.get("colsep")
         if colsep == "space":
@@ -1946,7 +1940,7 @@ class PysqlShell(cmd.Cmd):
         if len(array) == 0:
             print(CYAN + _("(no result)") + RESET)
             return
-        nbColumn = len(array[0]) # Yes, we suppose it to be a real array
+        nbColumn = len(array[0])  # Yes, we suppose it to be a real array
 
         if header:
             # Adds description header
@@ -1964,12 +1958,12 @@ class PysqlShell(cmd.Cmd):
         for i in range(nbLine):
             for j in range(nbColumn):
                 if array[i][j] is None:
-                    #array[i][j] = "NULL"
+                    # array[i][j] = "NULL"
                     array[i][j] = ""
 
         # Computes width max of each column (comprehension list are cool)
         width = [max([itemLength(i[j]) for i in array]) for j in range(nbColumn)]
-        shrinked = False     # have we shrinked the result set ?
+        shrinked = False  # have we shrinked the result set ?
         widthMax = max(width)
         if shrink:
             while sum(width) + nbColumn >= termWidth and widthMax > widthMin:
@@ -1995,14 +1989,14 @@ class PysqlShell(cmd.Cmd):
                     # colorize the first column
                     sys.stdout.write(GREY + BOLD)
                 # Quite stupid to test this for each line...
-                #TODO: Should be done one time before looping on each line
+                # TODO: Should be done one time before looping on each line
                 if isinstance(line[i], (int, float)):
                     sys.stdout.write(str(line[i])[:width[i]].rjust(width[i]))
                 else:
                     sys.stdout.write(line[i][:width[i]].ljust(width[i]).replace('\r', ' '))
                 if header and i == 0 and transpose:
                     print(RESET, end=' ')
-                sys.stdout.write(colsep) # Adds colsep
+                sys.stdout.write(colsep)  # Adds colsep
             print(RESET)
         if shrinked:
             # Warns the user
@@ -2023,7 +2017,7 @@ class PysqlShell(cmd.Cmd):
         @type argTest: str
         @return: None
         """
-        #TODO: move this to helpers
+        # TODO: move this to helpers
         if match("=\d+", argTest):
             # Bouh, replace the single = by ==
             argTest = "=" + argTest
@@ -2141,7 +2135,7 @@ class PysqlShell(cmd.Cmd):
             fileHandle = file(fileName, "w")
             csv_writer = csv.writer(fileHandle, dialect="excel")
             if header:
-                csv_writer.writerow(self.db.getDescription()) # Header
+                csv_writer.writerow(self.db.getDescription())  # Header
             for line in result:
                 csv_writer.writerow(line)
         except Exception as e:

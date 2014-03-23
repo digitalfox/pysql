@@ -9,7 +9,7 @@ and backgound queries (BgQuery)
 
 # pylint: disable-msg=E0611
 
-#Python imports:
+# Python imports:
 from cx_Oracle import connect, DatabaseError, InterfaceError, LOB, STRING, SYSDBA, SYSOPER
 import sys
 from threading import Thread
@@ -27,12 +27,13 @@ try:
     from cx_Oracle import PRELIM_AUTH, DBSHUTDOWN_ABORT, DBSHUTDOWN_IMMEDIATE, DBSHUTDOWN_TRANSACTIONAL, DBSHUTDOWN_FINAL
 except ImportError:
     CX_STARTUP_SHUTDOWN = False
-    PRELIM_AUTH = 0 # Means that PRELIM_AUTH is not used.
+    PRELIM_AUTH = 0  # Means that PRELIM_AUTH is not used.
+
 
 class PysqlDb:
     """ Handles database interface"""
-    MAXIMUM_FETCH_SIZE = 10000      # Maximum size of a result set to fetch in one time
-    FETCHALL_FETCH_SIZE = 30        # Size of cursor for fetching all type queries
+    MAXIMUM_FETCH_SIZE = 10000  # Maximum size of a result set to fetch in one time
+    FETCHALL_FETCH_SIZE = 30  # Size of cursor for fetching all type queries
 
     def __init__(self, connectString, mode=""):
         # Instance attributs
@@ -43,7 +44,7 @@ class PysqlDb:
         self.conf = PysqlConf.getConfig()
 
         # Keep connection string to allow future connection
-        self.connectString = connectString.encode(self.conf.getCodec(), "ignore")
+        self.connectString = connectString
 
         # Connect to Oracle
         try:
@@ -263,7 +264,7 @@ class PysqlDb:
 
     def close(self):
         """Releases object connection"""
-        #self.cursor.close()
+        # self.cursor.close()
         try:
             self.connection.close()
         except (DatabaseError, InterfaceError) as e:
@@ -298,12 +299,12 @@ class PysqlDb:
         """Encode data fetch out database to unicode
         @param data: str or list or str
         @return: encoded data"""
-        #TODO: factorise code with encodeSql function
+        # TODO: factorise code with encodeSql function
         if self.connection:
             encoding = self.connection.nencoding
         else:
             raise PysqlException("Cannot decode data, not connected to Oracle")
-        if data is None: # This correspond to the NULL Oracle object
+        if data is None:  # This correspond to the NULL Oracle object
             return None
         elif isinstance(data, (list, tuple)):
             # Recurse to decode each item
@@ -312,11 +313,11 @@ class PysqlDb:
             # Nothing to do
             return data
         elif isinstance(data, (datetime, timedelta)):
-            #TODO: use user define format or Oracle settings
+            # TODO: use user define format or Oracle settings
             # Don't use strftime because it does not support year < 1900
             data = str(data)
         elif isinstance(data, date):
-            #TODO: use user define format or Oracle settings
+            # TODO: use user define format or Oracle settings
             # Don't use strftime because it does not support year < 1900
             data = str(data)
         elif isinstance(data, LOB):

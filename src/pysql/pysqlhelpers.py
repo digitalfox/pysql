@@ -46,11 +46,11 @@ def colorDiff(diff):
     """
     result = []
     for item in diff:
-        if item[0] == "?": # Get diff hint to colorise the previous line
-            previous = result[-1] # The line above we want to colorise
+        if item[0] == "?":  # Get diff hint to colorise the previous line
+            previous = result[-1]  # The line above we want to colorise
             i = 0
-            coloring = False # flag to start/stop coloring
-            newPrevious = [] # the new previous line with color
+            coloring = False  # flag to start/stop coloring
+            newPrevious = []  # the new previous line with color
             for character in item:
                 if character == "\n":
                     # End of change. Add end of previous
@@ -66,10 +66,10 @@ def colorDiff(diff):
                             coloring = False
                     newPrevious.append(previous[i])
                 i += 1
-            newPrevious.append(RESET) # Always stop color at end of line
-            result[-1] = "".join(newPrevious) # Create new colorize line
+            newPrevious.append(RESET)  # Always stop color at end of line
+            result[-1] = "".join(newPrevious)  # Create new colorize line
         else:
-            result.append(item) # Just store simple line (equal, + or -)
+            result.append(item)  # Just store simple line (equal, + or -)
     return result
 
 
@@ -178,10 +178,10 @@ def removeComment(line, comment=False):
     @type comment: bool
     @return: line modified (str) and a flag (bool) that indicate if we are in a multiline comment"""
     # Remove one line comment (-- or /* */)
-    line = sub("\/\*\*\/", " ", line)         # Remove /**/ pattern
-    line = sub("\/\*[^+|].*?\*\/", " ", line) # Remove /* ... */ except /*+ ... */
-    line = sub("--[^+|].*$", "", line)        # Remove -- ... except --+ ...
-    line = sub("--$", "", line)               # Remove -- at the end of line (stupid but allowed)
+    line = sub("\/\*\*\/", " ", line)  # Remove /**/ pattern
+    line = sub("\/\*[^+|].*?\*\/", " ", line)  # Remove /* ... */ except /*+ ... */
+    line = sub("--[^+|].*$", "", line)  # Remove -- ... except --+ ...
+    line = sub("--$", "", line)  # Remove -- at the end of line (stupid but allowed)
 
     if line == "--":
         return "", comment
@@ -191,7 +191,7 @@ def removeComment(line, comment=False):
     if match(".*/\*[^+].*", line) or match(".*/\*$", line):
         # Remove commented part
         line = sub("/\*[^+|].*", "", line)
-        line = sub("/\*$", "", line) # previous regexp does not match */ at end of line
+        line = sub("/\*$", "", line)  # previous regexp does not match */ at end of line
         # Starting multiline comment
         comment = True
     # comment */ (a /* was give before)
@@ -246,7 +246,8 @@ def printComponentsVersion():
     print("    cx Oracle release: %s" % cxVersion)
     print("    Python release: %s" % sys.version.replace("\n", " "))
 
-def setTitle(title, codec):
+
+def setTitle(title):
     """Sets the window title and optionnaly process title
     @param title: window title
     @type title: unicode string
@@ -256,9 +257,10 @@ def setTitle(title, codec):
 
     if os.name == 'posix' and os.environ["TERM"] == 'xterm' and os.getenv("PYDEVDEBUG", "0") == "0":
         title = "\033]0;%s\007" % title
-        sys.stdout.write(title.encode(codec, "replace"))
+        print(title)
     elif os.name == "nt":
-        os.system("title %s" % title.encode(codec, "replace"))
+        os.system("title %s" % title)
+
 
 def getTitle():
     """Gets the window title
@@ -313,7 +315,7 @@ def getFromClause(line):
     @param line: sql text
     @return: dictionary with key as alias (table name if no alias) and table as value"""
 
-    tables = {} # alias/table
+    tables = {}  # alias/table
     fromClause = []
     inFrom = False
     for word in line.split():
@@ -322,7 +324,7 @@ def getFromClause(line):
         elif inFrom:
             if word.lower().lstrip("(") == "select":
                 # Imbricated request
-                #FIXME: too much simple. We need a real sql parser
+                # FIXME: too much simple. We need a real sql parser
                 inFrom = False
             else:
                 fromClause.append(word)
@@ -356,12 +358,12 @@ def getKnownTablesViews(line, refList):
 
 def getLastKeyword(line):
     """@return: the last sql keyword of the line"""
-    keywords = ["select", "update", "delete", # DML
-                "alter", "create", "drop", # DDL
-                "where", "order by", "group by", "having", "from", "into", # sql grammar
-                "sum", "abs", "round", "upper", "lower", "set", # Functions
-                "table", "index", "view", "synonym", "trigger", "tablespace", # objects
-                "datafile", "columns", "user", "sequence"] # objects
+    keywords = ["select", "update", "delete",  # DML
+                "alter", "create", "drop",  # DDL
+                "where", "order by", "group by", "having", "from", "into",  # sql grammar
+                "sum", "abs", "round", "upper", "lower", "set",  # Functions
+                "table", "index", "view", "synonym", "trigger", "tablespace",  # objects
+                "datafile", "columns", "user", "sequence"]  # objects
     lastKeyword = None
     for token in line.lower().split():
         token = token.strip(",").strip(";").strip(")").strip("(").strip()
@@ -374,13 +376,13 @@ class WaitCursor(Thread):
     catch output and flush it after waiting"""
     def __init__(self):
         self.state = "WAIT"
-        self.lock = Lock()           # Lock used to synchronise IO and cursor stop
+        self.lock = Lock()  # Lock used to synchronise IO and cursor stop
         Thread.__init__(self)
 
     def run(self):
         """Method executed when the thread object start() method is called"""
 
-        realStdout = sys.stdout # Backup stdout
+        realStdout = sys.stdout  # Backup stdout
         tmpStdout = StringIO()  # Store here all data output during waiting state
         sys.stdout = tmpStdout  # Capture stdout
         cursorState = ("-", "\\", "|", "/")
@@ -401,4 +403,4 @@ class WaitCursor(Thread):
 
     def stop(self):
         self.state = "STOP"
-        self.lock.acquire() # Wait end of IO flush before returning
+        self.lock.acquire()  # Wait end of IO flush before returning
