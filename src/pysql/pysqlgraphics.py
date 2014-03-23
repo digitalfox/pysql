@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 """ This module defines all high level graphical functions of pysql
@@ -14,15 +13,16 @@ import os
 import sys
 import re
 import subprocess
-from math import floor, log, sqrt
+from math import floor, sqrt
 
 # Pysql imports:
 from .pysqlqueries import datamodelSql, dependenciesSql, diskusageSql
-from .pysqlexception import PysqlException, PysqlActionDenied
+from .pysqlexception import PysqlException
 from .pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
 from .pysqlconf import PysqlConf
 from .pysqloraobjects import OraObject
 from .pysqlhelpers import convert, generateWhere, getProg, removeComment, which
+
 
 # High level pysql graphical functions
 def datamodel(db, userName, tableFilter=None, withColumns=True):
@@ -44,14 +44,14 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
 
     # Reads conf
     conf = PysqlConf.getConfig()
-    format = conf.get("graph_format") # Output format of the picture
-    fontname = conf.get("graph_fontname") # Font used for table names
-    fontsize = conf.get("graph_fontsize") # Font size for table names
-    fontcolor = conf.get("graph_fontcolor") # Color of table and column names
-    tablecolor = conf.get("graph_tablecolor") # Color of tables
-    bordercolor = conf.get("graph_bordercolor") # Color of tables borders
-    linkcolor = conf.get("graph_linkcolor") # Color of links between tables
-    linklabel = conf.get("graph_linklabel") # Display constraints name or not
+    format = conf.get("graph_format")  # Output format of the picture
+    fontname = conf.get("graph_fontname")  # Font used for table names
+    fontsize = conf.get("graph_fontsize")  # Font size for table names
+    fontcolor = conf.get("graph_fontcolor")  # Color of table and column names
+    tablecolor = conf.get("graph_tablecolor")  # Color of tables
+    bordercolor = conf.get("graph_bordercolor")  # Color of tables borders
+    linkcolor = conf.get("graph_linkcolor")  # Color of links between tables
+    linklabel = conf.get("graph_linklabel")  # Display constraints name or not
 
     # Gets picture generator
     prog = getProg(find_graphviz(), conf.get("graph_program"), "fdp")
@@ -67,7 +67,7 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
     nbTables = len(tables)
     if nbTables == 0:
         raise PysqlException(_("No table found. Your filter clause is too restrictive or the schema is empty"))
-    tableList = ", ".join(["'%s'" % table[0] for table in tables]) # Table list formated to be used in SQL query
+    tableList = ", ".join(["'%s'" % table[0] for table in tables])  # Table list formated to be used in SQL query
     print(CYAN + _("Extracting %d tables...      ") % nbTables + RESET, end=' ')
     current = 0
     for table in tables:
@@ -85,9 +85,9 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
                 content += """\n<TR><TD ALIGN="LEFT" PORT="%s_%s">""" % (tableName, columnName)
                 content += """<FONT FACE="%s" POINT-SIZE="%f" COLOR="%s">""" % \
                          (fontname, fontsize - 2, fontcolor)
-                if column[2] is None: # Normal field
+                if column[2] is None:  # Normal field
                     content += " "
-                else: # Primary key field
+                else:  # Primary key field
                     content += "PK%d" % int(column[2])
                 content += " %s (%s)" % (columnName, columnType)
                 content += "</FONT></TD></TR>"
@@ -139,9 +139,9 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
 
     # Reads conf
     conf = PysqlConf.getConfig()
-    format = conf.get("graph_format") # Output format of the picture
-    fontname = conf.get("graph_fontname") # Font used for object names
-    fontsize = conf.get("graph_fontsize") # Font size for object names
+    format = conf.get("graph_format")  # Output format of the picture
+    fontname = conf.get("graph_fontname")  # Font used for object names
+    fontsize = conf.get("graph_fontsize")  # Font size for object names
 
     # Gets picture generator
     prog = getProg(find_graphviz(), conf.get("graph_program"), "dot")
@@ -243,14 +243,14 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
 
     # Reads conf
     conf = PysqlConf.getConfig()
-    unit = conf.get("unit") # Unit used to format data
-    format = conf.get("graph_format") # Output format of the picture
-    fontname = conf.get("graph_fontname") # Font used for table names
-    fontsize = conf.get("graph_fontsize") # Font size for table names
-    fontcolor = conf.get("graph_fontcolor") # Color of table and column names
-    tablecolor = conf.get("graph_tablecolor") # Color of tables
-    indexcolor = conf.get("graph_indexcolor") # Color of indexes
-    bordercolor = conf.get("graph_bordercolor") # Color of borders
+    unit = conf.get("unit")  # Unit used to format data
+    format = conf.get("graph_format")  # Output format of the picture
+    fontname = conf.get("graph_fontname")  # Font used for table names
+    fontsize = conf.get("graph_fontsize")  # Font size for table names
+    fontcolor = conf.get("graph_fontcolor")  # Color of table and column names
+    tablecolor = conf.get("graph_tablecolor")  # Color of tables
+    indexcolor = conf.get("graph_indexcolor")  # Color of indexes
+    bordercolor = conf.get("graph_bordercolor")  # Color of borders
 
     # Gets picture generator
     prog = getProg(find_graphviz(), conf.get("graph_program"), "fdp")
@@ -335,8 +335,8 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
         for tab in tabList:
             name = tab[0]
             bytes = tab[1]
-            numRows = tab[2]      # unused
-            avgRowLen = tab[3]    # unused
+            numRows = tab[2]  # unused
+            avgRowLen = tab[3]  # unused
 
             # Mathematics at work
             width = 0.2
@@ -359,9 +359,9 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
         for idx in idxList:
             name = idx[0]
             bytes = idx[1]
-            numRows = idx[2]      # unused
-            distinctKeys = idx[3] # unused
-            tabName = idx[4]      # unused
+            numRows = idx[2]  # unused
+            distinctKeys = idx[3]  # unused
+            tabName = idx[4]  # unused
 
             # Mathematics at work again)
             width = 0.2
@@ -379,8 +379,8 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
                                 fontname=fontname, fontcolor=fontcolor, fixedsize="false", \
                                 fontsize=str(fontsize - 2 - floor((len(label) - 7) / 15)), \
                                 nodesep="0.01", height=str(height), width=str(max(width, 1))))
-            #Moving index near by its table (unused because it widens the graph)
-            #subGraph.add_edge(Edge(src=name, dst=tabName, constraint="false", style="invis"))
+            # Moving index near by its table (unused because it widens the graph)
+            # subGraph.add_edge(Edge(src=name, dst=tabName, constraint="false", style="invis"))
 
     filename = "du_" + userName + "." + format
     generateImage(graph, filename, prog, format)
@@ -399,10 +399,10 @@ def pkgTree(db, packageName):
 
     # Reads conf
     conf = PysqlConf.getConfig()
-    format = conf.get("graph_format") # Output format of the picture
-    fontname = conf.get("graph_fontname") # Font used for functions names
-    fontsize = conf.get("graph_fontsize") # Font size for functions names
-    fontcolor = conf.get("graph_fontcolor") # Color of functions names
+    format = conf.get("graph_format")  # Output format of the picture
+    fontname = conf.get("graph_fontname")  # Font used for functions names
+    fontsize = conf.get("graph_fontsize")  # Font size for functions names
+    fontcolor = conf.get("graph_fontcolor")  # Color of functions names
 
     # Gets picture generator
     prog = getProg(find_graphviz(), conf.get("graph_program"), "fdp")
@@ -416,7 +416,7 @@ def pkgTree(db, packageName):
     verbs = []
 
     # Tries to resolve synonym and describe the target
-    #TODO: factorise this code!!
+    # TODO: factorise this code!!
     if package.getType() == "SYNONYM":
         package = package.getTarget(db)
         if package.getType() == "SYNONYM":
@@ -461,7 +461,7 @@ def pkgTree(db, packageName):
         result = re.match("\s*(FUNCTION|PROCEDURE)\s+(.+?)[\s|\(]+", line, re.I)
         if result:
             currentVerb = result.group(2)
-            continue # else we get a circular reference below ;-)
+            continue  # else we get a circular reference below ;-)
         result = re.match(".*\s(%s).*" % verbs, line, re.I)
         if result:
             if graph.get_edge(currentVerb.upper(), result.group(1).upper()) is None:
@@ -508,8 +508,8 @@ def generateImage(graph, filename, prog, format):
     try:
         graph.write(filepath, prog=prog, format=format)
     except (IOError, OSError, pydot.InvocationException) as e:
-        sys.stdout = sys.__stdout__     # Restores STDOUT
+        sys.stdout = sys.__stdout__  # Restores STDOUT
         raise PysqlException(_("Graphviz failed to generate image:\n%s") % e)
-    sys.stdout = oldstdout         # Restores STDOUT
+    sys.stdout = oldstdout  # Restores STDOUT
     print(GREEN + _("Image saved as ") + filepath + RESET)
 

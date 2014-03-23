@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 """pysqlhelpers module test suite
@@ -19,6 +19,7 @@ testhelpers.setup()
 # Pysql imports
 import pysqlhelpers
 from pysqlexception import PysqlException
+
 
 class TestAddWildCardIfNeeded(unittest.TestCase):
     def test_result_with_default_wildcard(self):
@@ -119,15 +120,15 @@ class TestWhich(unittest.TestCase):
 class TestWarn(unittest.TestCase):
     def test_warn(self):
         for message in ("", "blabla", "ééà€", "blabal"):
-            #TODO: handle unicode case
+            # TODO: handle unicode case
             stdout = sys.stdout
             sys.stdout = TemporaryFile()
             pysqlhelpers.warn(message)
-            sys.stdout = stdout # restore stdout
+            sys.stdout = stdout  # restore stdout
 
 class TestPrintStackTrace(unittest.TestCase):
     def test_print_stack_trace(self):
-        pass # TODO: implement your test here
+        pass  # TODO: implement your test here
 
 class TestSetTitle(unittest.TestCase):
     def test_set_title(self):

@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 """ This module defines all high level audit functions of pysql
@@ -7,9 +6,6 @@
 """
 
 # pylint: disable-msg=E1101
-
-# Python imports:
-import os
 
 # Pysql imports:
 from .pysqlqueries import *
@@ -195,7 +191,7 @@ def duReport(db, segmentType, tbs="%", user="%", nbRows=-1):
     # Generates report
     if segmentType.lower() == "table":
         header = [_("Owner"), _("Tablespace"), _("Table"), _("Part?"), _("#Cols"), _("#Rows"), _("Size(blk)"), _("Size(MB)"), _("Size(%)")]
-        result = db.executeAll(durptSql["tablesForTbsAndUser"],  [str(size), tbs, user])
+        result = db.executeAll(durptSql["tablesForTbsAndUser"], [str(size), tbs, user])
     elif segmentType.lower() == "index":
         header = [_("Owner"), _("Tablespace"), _("Index"), _("Part?"), _("Level"), _("Keys"), _("Size(blk)"), _("Size(MB)"), _("Size(%)")]
         result = db.executeAll(durptSql["indexesForTbsAndUser"], [str(size), tbs, user])
@@ -222,7 +218,7 @@ def assmReport(db, name):
     lostBlocks = allocatedBlocks - neededBlocks
 
     header = [_("Owner"), _("Name"), _("Allocated"), _("Needed"), _("Lost"), _("Lost(%)")]
-    result = [[table.getOwner(), table.getName(), allocatedBlocks, neededBlocks, lostBlocks, round(100*float(lostBlocks)/allocatedBlocks, 1)]]
+    result = [[table.getOwner(), table.getName(), allocatedBlocks, neededBlocks, lostBlocks, round(100 * float(lostBlocks) / allocatedBlocks, 1)]]
 
     return (result, header)
 

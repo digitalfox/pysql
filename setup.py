@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 """Setup script used to build and install Pysql
@@ -28,9 +28,9 @@ scripts=["src/bin/pysql"]
 # Version
 try:
     version=file(join(dirname(__file__), "version")).readline().rstrip().rstrip("\n")
-except Exception, e:
-    print "Warning, cannot read version file (%s)" % e
-    print "Defaulting to 'snapshot'"
+except Exception as e:
+    print("Warning, cannot read version file (%s)" % e)
+    print("Defaulting to 'snapshot'")
     version="snaphot"
 
 # Windows post install script
