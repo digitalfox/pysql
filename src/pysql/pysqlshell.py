@@ -1849,7 +1849,7 @@ class PysqlShell(cmd.Cmd):
         self.__setPrompt()
         if self.db and self.useCompletion:
             # Connected, let's gather in background all terms useful for completion
-            CompleteGatheringWorker(connectString, self.completeLists).start()
+            CompleteGatheringWorker(connectString, mode, self.completeLists).start()
 
     def __disconnect(self):
         """Disconnects from Oracle and update prompt"""

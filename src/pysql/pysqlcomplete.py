@@ -46,13 +46,16 @@ class CompleteGatheringWorker(Thread):
     """Background thread that will collect all completion terms
     from conf and dictionary"""
 
-    def __init__(self, connect_string, completeLists):
+    def __init__(self, connect_string, mode, completeLists):
         """
         @param connect_string: Oracle connection string to database
         @type connect_string: str
+        @param mode: oracle connection mode (empty or sysdba or sysoper)
+        @type mode: str
         @param completeLists: pointer to completions lists
         @type completeLists: dict. keys are themed, values list of words or dict"""
         self.connect_string = connect_string
+        self.mode = mode
         self.completeLists = completeLists
         Thread.__init__(self)
         self.setDaemon(True)
@@ -60,7 +63,7 @@ class CompleteGatheringWorker(Thread):
     def run(self):
         """Method executed when the thread object start() method is called"""
         time.sleep(0.5)  # Small delay to let primary connection goes first
-        self.db = PysqlDb(self.connect_string)
+        self.db = PysqlDb(self.connect_string, self.mode)
         self.gatherSID()
         time.sleep(0.5)  # Another small delay to let primary connection goes first
         self.gatherSimpleObjects()
