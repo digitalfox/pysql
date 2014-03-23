@@ -76,13 +76,14 @@ import sys
 from os.path import dirname, join, pardir
 from optparse import OptionParser
 
-from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
+from .pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
 
 # Pysql imports:
-from pysqlconf import PysqlConf
-from pysqlexception import PysqlException
-import pysqlupdate
-from pysqlhelpers import printStackTrace, printComponentsVersion
+from .pysqlconf import PysqlConf
+from .pysqlexception import PysqlException
+from . import pysqlupdate
+from .pysqlhelpers import printStackTrace, printComponentsVersion
+import imp
 
 def main():
     """Pysql main function"""
@@ -99,7 +100,7 @@ def main():
         # Unix std path
         i18nPath = join(dirname(sys.argv[0]), pardir, "share", "locale")
     # Loads message catalog
-    gettext.install("pysql", i18nPath, unicode=1)
+    gettext.install("pysql", i18nPath, str=1)
 
     # Loads config (first time)
     conf = PysqlConf.getConfig()
@@ -112,7 +113,7 @@ def main():
             try:
                 pysqlupdate.checkForUpdate(options.proxyHost, options.proxyUser, options.proxyPassword)
             except KeyboardInterrupt:
-                print _("Aborting update")
+                print(_("Aborting update"))
         elif options.version:
             printComponentsVersion()
         else:
@@ -120,17 +121,17 @@ def main():
                 import cx_Oracle
             except ImportError:
                 # Untranslatable error message (i18n still not initialized at this step)
-                print RED + BOLD + "cx_Oracle module cannot be loaded." + RESET
-                print
-                print "Please, ensure you correctly install it from: " + CYAN + "http://cx-oracle.sf.net" + RESET
-                print "And that have the according Oracle client installation."
-                print "Get it from the Oracle site : http://www.oracle.com"
-                print
-                print "(press enter key to exit)"
+                print(RED + BOLD + "cx_Oracle module cannot be loaded." + RESET)
+                print()
+                print("Please, ensure you correctly install it from: " + CYAN + "http://cx-oracle.sf.net" + RESET)
+                print("And that have the according Oracle client installation.")
+                print("Get it from the Oracle site : http://www.oracle.com")
+                print()
+                print("(press enter key to exit)")
                 sys.stdin.readline()
                 sys.exit(1)
             # Now we can import PysqlShell (and subsequent modules that depends on cx_Oracle)
-            from pysqlshell import PysqlShell
+            from .pysqlshell import PysqlShell
             # Default is to launch pysql in standard mode (local client) 
             shell = PysqlShell(silent=options.silent, argv=argv)
             if options.oneTryLogin and shell.db == None:
@@ -141,17 +142,17 @@ def main():
         # Bye
         if os.name == "nt" and not options.version:
             # Don't exit too fast for windows users, else they don't see error sum up
-            print _("(press any key to exit)")
+            print(_("(press any key to exit)"))
             sys.stdin.readline()
-    except StandardError, e:
+    except Exception as e:
         # Just a hook for a more pleasant error handling
-        print "\n==> Unrecoverable error during initialisation. Exiting <=="
+        print("\n==> Unrecoverable error during initialisation. Exiting <==")
         printStackTrace()
-        print _("(press enter key to exit)")
+        print(_("(press enter key to exit)"))
         sys.stdin.readline()
-    except PysqlException, e:
-        print "*** " + _("Pysql error") + " ***"
-        print "\t%s" % e
+    except PysqlException as e:
+        print("*** " + _("Pysql error") + " ***")
+        print("\t%s" % e)
 
     # Bye!
     sys.exit(rc)
@@ -175,7 +176,7 @@ def setLocale(conf):
     conf.setCodec(codec)
 
     # Sets default encoding for stdout
-    reload(sys)
+    imp.reload(sys)
     sys.setdefaultencoding(codec)
 
 def parseOptions():

@@ -12,12 +12,12 @@
 import os
 
 # Pysql imports:
-from pysqlqueries import *
-from pysqlexception import PysqlException, PysqlNotImplemented, PysqlActionDenied
-from pysqloraobjects import *
-from pysqlcolor import *
-from pysqlconf import PysqlConf
-from pysqldb import PysqlDb
+from .pysqlqueries import *
+from .pysqlexception import PysqlException, PysqlNotImplemented, PysqlActionDenied
+from .pysqloraobjects import *
+from .pysqlcolor import *
+from .pysqlconf import PysqlConf
+from .pysqldb import PysqlDb
 
 # High level pysql audit functions
 def listSnapshotId(db, numDays=1):
@@ -25,8 +25,8 @@ def listSnapshotId(db, numDays=1):
     @arg db: connection object
     @arg numDays: the number of days of snapshots"""
     try:
-        return db.executeAll(perfSql["snapshots"], [unicode(numDays)])
-    except Exception, e:
+        return db.executeAll(perfSql["snapshots"], [str(numDays)])
+    except Exception as e:
         raise PysqlActionDenied(_("Insufficient privileges"))
 
 def addmReport(db, begin_snap="0", end_snap="0", type="TEXT", level="TYPICAL"):
@@ -39,7 +39,7 @@ def addmReport(db, begin_snap="0", end_snap="0", type="TEXT", level="TYPICAL"):
     try:
         dbid = db.executeAll(perfSql["db_id"])[0][0]
         inum = db.executeAll(perfSql["instance_num"])[0][0]
-    except Exception, e:
+    except Exception as e:
         raise PysqlActionDenied(_("Insufficient privileges"))
 
     if begin_snap == "0" or end_snap == "0":
@@ -87,12 +87,12 @@ END;
     # Creates task
     try:
         db.execute(sql)
-    except Exception, e:
+    except Exception as e:
         raise PysqlException(_("Insufficient privileges"))
     # Gets task name
     task_name = db.getServerOuput()[0]
     # Generates report from task
-    result = db.executeAll(perfSql["addm_report_text"], [unicode(task_name), unicode(type.upper()), unicode(level.upper())])
+    result = db.executeAll(perfSql["addm_report_text"], [str(task_name), str(type.upper()), str(level.upper())])
     return result
 
 def awrReport(db, type="txt", begin_snap="0", end_snap="0"):
@@ -106,7 +106,7 @@ def awrReport(db, type="txt", begin_snap="0", end_snap="0"):
     try:
         dbid = db.executeAll(perfSql["db_id"])[0][0]
         inum = db.executeAll(perfSql["instance_num"])[0][0]
-    except Exception, e:
+    except Exception as e:
         raise PysqlActionDenied(_("Insufficient privileges"))
 
     if begin_snap == "0" or end_snap == "0":
@@ -118,7 +118,7 @@ def awrReport(db, type="txt", begin_snap="0", end_snap="0"):
             result = db.executeAll(perfSql["awr_report_html"], [dbid, inum, begin_snap, end_snap])
         else:
             result = db.executeAll(perfSql["awr_report_text"], [dbid, inum, begin_snap, end_snap])
-    except Exception, e:
+    except Exception as e:
         raise PysqlActionDenied(_("Insufficient privileges"))
     return result
 
@@ -163,15 +163,15 @@ END;
     # Creates task
     try:
         db.execute(sql)
-    except PysqlException, e:
+    except PysqlException as e:
         raise PysqlException(_("Insufficient privileges"))
     # Gets task name
     task_name = db.getServerOuput()[0]
     # Generates report from task
     try:
-        result = db.executeAll(perfSql["sqltune_text"], [unicode(task_name), unicode(type.upper()), unicode(level.upper())])
-    except PysqlException, e:
-        if str(e).count(unicode(task_name)) > 0:
+        result = db.executeAll(perfSql["sqltune_text"], [str(task_name), str(type.upper()), str(level.upper())])
+    except PysqlException as e:
+        if str(e).count(str(task_name)) > 0:
             raise PysqlException(_("Insufficient privileges"))
         else:
             raise e
@@ -189,16 +189,16 @@ def duReport(db, segmentType, tbs="%", user="%", nbRows=-1):
     # Gets storage size used considering user and tablespace restrictions
     try:
         size = db.executeAll(durptSql["nbTotalBlocks"], [tbs, user])[0][0]
-    except PysqlException, e:
+    except PysqlException as e:
         raise PysqlActionDenied(_("Insufficient privileges"))
 
     # Generates report
     if segmentType.lower() == "table":
         header = [_("Owner"), _("Tablespace"), _("Table"), _("Part?"), _("#Cols"), _("#Rows"), _("Size(blk)"), _("Size(MB)"), _("Size(%)")]
-        result = db.executeAll(durptSql["tablesForTbsAndUser"],  [unicode(size), tbs, user])
+        result = db.executeAll(durptSql["tablesForTbsAndUser"],  [str(size), tbs, user])
     elif segmentType.lower() == "index":
         header = [_("Owner"), _("Tablespace"), _("Index"), _("Part?"), _("Level"), _("Keys"), _("Size(blk)"), _("Size(MB)"), _("Size(%)")]
-        result = db.executeAll(durptSql["indexesForTbsAndUser"], [unicode(size), tbs, user])
+        result = db.executeAll(durptSql["indexesForTbsAndUser"], [str(size), tbs, user])
     else:
         raise PysqlException(_("Internal error: type %s not supported") % segmentType)
 
@@ -213,11 +213,11 @@ def assmReport(db, name):
     table.guessInfos(db)
     try:
         neededBlocks = table.getNeededBlocks(db)
-    except PysqlException, e:
+    except PysqlException as e:
         raise PysqlException(_("Table %s does not exist") % table.getName())
     try:
         allocatedBlocks = table.getUsedBlocks(db)
-    except PysqlException, e:
+    except PysqlException as e:
         raise PysqlActionDenied(_("Insufficient privileges"))
     lostBlocks = allocatedBlocks - neededBlocks
 

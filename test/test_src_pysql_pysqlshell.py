@@ -18,18 +18,18 @@ testhelpers.setup()
 import pysqlshell
 from pysqlexception import PysqlException
 
-CONNECT_STRING=""
+CONNECT_STRING = ""
 
 try:
     import readline
-    READLINE=True
+    READLINE = True
 except Exception, e:
-    if os.name=="posix":
+    if os.name == "posix":
         print "Cannot use readline: %s" % e
-        READLINE=False
+        READLINE = False
     else:
         print "Skipping readline tests on non Unix platform"
-        READLINE=False
+        READLINE = False
 
 
 class TestShellCommands(unittest.TestCase):
@@ -37,23 +37,23 @@ class TestShellCommands(unittest.TestCase):
     This class only defines common shell test method"""
     def setUp(self):
         # Capture stdout - This must be done before shell init
-        self.capturedStdout=testhelpers.CapturedStdout()
-        self.shell=pysqlshell.PysqlShell(argv=[CONNECT_STRING,])
-        self.shell.allowAnimatedCursor=False # Disable animated cursor for tests
-        self.shell.preloop() # Needed to populate command list (self.cmds)
+        self.capturedStdout = testhelpers.CapturedStdout()
+        self.shell = pysqlshell.PysqlShell(argv=[CONNECT_STRING, ])
+        self.shell.allowAnimatedCursor = False  # Disable animated cursor for tests
+        self.shell.preloop()  # Needed to populate command list (self.cmds)
 
     def exeCmd(self, line):
         """Execute precmd, onecmd then postcmd shell method"""
-        line=self.shell.precmd(line)
-        stop=self.shell.onecmd(line)
-        stop=self.shell.postcmd(stop, line)
+        line = self.shell.precmd(line)
+        stop = self.shell.onecmd(line)
+        stop = self.shell.postcmd(stop, line)
 
     def lastExceptionOraCode(self):
         """@return: Oracle error code of last exception or None if last exceptions was not an Oracle one or
         no exception occurs at all"""
-        if len(self.shell.exceptions)==0:
+        if len(self.shell.exceptions) == 0:
             return None
-        lastException=self.shell.exceptions[-1]
+        lastException = self.shell.exceptions[-1]
         if lastException.oraCode:
             return lastException.oraCode
         else:
@@ -67,12 +67,12 @@ class TestShellCommands(unittest.TestCase):
 class TestConnectedShellCommands(TestShellCommands):
     """Test commands that need an Oracle connection"""
     def setUp(self):
-        TestShellCommands.setUp(self) # Father constructor
+        TestShellCommands.setUp(self)  # Father constructor
         if not CONNECT_STRING:
             self.fail("You must provide a connection string for connected tests")
-        if not self.shell.db: 
+        if not self.shell.db:
             self.fail("No Oracle connection")
-        self.capturedStdout.reset() # Remove shell init banner
+        self.capturedStdout.reset()  # Remove shell init banner
 
     def _create_test_table(self):
         # Create test table
@@ -96,10 +96,10 @@ class TestConnectedShellCommands(TestShellCommands):
         self.assertEqual(self.capturedStdout.readlines(), ["Background query launched"])
 
         self.exeCmd("bg")
-        self.exeCmd("bg 1")
+        self.exeCmd("bg 2")
         self.failIf(self.capturedStdout.gotPsyqlException())
 
-        self.exeCmd("bg 1")
+        self.exeCmd("bg 3")
         self.failUnless(self.capturedStdout.gotPsyqlException())
 
     def test_do_connect(self):
@@ -111,7 +111,7 @@ class TestConnectedShellCommands(TestShellCommands):
 
         for cmd in ("connect %s sysdba", "connect %s as sysdba"):
             self.exeCmd(cmd % CONNECT_STRING)
-            if self.capturedStdout.gotPsyqlException() and self.lastExceptionOraCode()!="ORA-01031":
+            if self.capturedStdout.gotPsyqlException() and self.lastExceptionOraCode() != "ORA-01031":
                 self.fail("Cannot connect as sysdba or bad ORA code")
 
     def test_do_disconnect(self):
@@ -145,13 +145,13 @@ class TestConnectedShellCommands(TestShellCommands):
 
     def test_do_count(self):
         self.exeCmd("count user_tables")
-        count=self.capturedStdout.readlines()[0]
+        count = self.capturedStdout.readlines()[0]
         self.exeCmd("select count(*) from user_tables;")
-        count2=self.capturedStdout.readlines()[2].strip()
+        count2 = self.capturedStdout.readlines()[2].strip()
         self.failUnlessEqual(count, count2)
 
     def test_do_compare(self):
-        #TODO: to be done
+        # TODO: to be done
         pass
 
     def test_do_describe(self):
@@ -166,7 +166,7 @@ class TestConnectedShellCommands(TestShellCommands):
         self.exeCmd("desc")
         self.failUnless(self.capturedStdout.gotPsyqlException())
 
-        #TODO: add more test on describe like resolution order
+        # TODO: add more test on describe like resolution order
 
     def _test_do_datamodel(self):
         for option in ("", "-u system", "-c", "-u system -c", "-u system REPCAT% or DEF%"):
@@ -197,8 +197,8 @@ class TestNotConnectedShellCommands(TestShellCommands):
 
         if READLINE:
             # This will match the "help" command position
-            position=int(readline.get_current_history_length())
-            readline.replace_history_item(position-1, "help")
+            position = int(readline.get_current_history_length())
+            readline.replace_history_item(position - 1, "help")
             self.exeCmd("history")
             self.failIf(self.capturedStdout.gotPsyqlException())
 
@@ -217,7 +217,7 @@ class TestNotConnectedShellCommands(TestShellCommands):
         if READLINE:
             self.exeCmd("lib gabuzomeu poupou")
             self.exeCmd("lib gabuzomeu")
-            position=int(readline.get_current_history_length())
+            position = int(readline.get_current_history_length())
             self.assertEqual(readline.get_history_item(position), "poupou")
             self.exeCmd("lib gabuzomeu remove")
             self.failIf(self.capturedStdout.gotPsyqlException())
@@ -228,8 +228,8 @@ class TestCompleters(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    if len(sys.argv)>1:
-        CONNECT_STRING=sys.argv.pop()
+    if len(sys.argv) > 1:
+        CONNECT_STRING = sys.argv.pop()
     else:
         print "You must provide connect string as argument"
         sys.exit(1)

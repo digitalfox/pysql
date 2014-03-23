@@ -17,12 +17,12 @@ import subprocess
 from math import floor, log, sqrt
 
 # Pysql imports:
-from pysqlqueries import datamodelSql, dependenciesSql, diskusageSql
-from pysqlexception import PysqlException, PysqlActionDenied
-from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
-from pysqlconf import PysqlConf
-from pysqloraobjects import OraObject
-from pysqlhelpers import convert, generateWhere, getProg, removeComment, which
+from .pysqlqueries import datamodelSql, dependenciesSql, diskusageSql
+from .pysqlexception import PysqlException, PysqlActionDenied
+from .pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
+from .pysqlconf import PysqlConf
+from .pysqloraobjects import OraObject
+from .pysqlhelpers import convert, generateWhere, getProg, removeComment, which
 
 # High level pysql graphical functions
 def datamodel(db, userName, tableFilter=None, withColumns=True):
@@ -68,7 +68,7 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
     if nbTables == 0:
         raise PysqlException(_("No table found. Your filter clause is too restrictive or the schema is empty"))
     tableList = ", ".join(["'%s'" % table[0] for table in tables]) # Table list formated to be used in SQL query
-    print CYAN + _("Extracting %d tables...      ") % nbTables + RESET,
+    print(CYAN + _("Extracting %d tables...      ") % nbTables + RESET, end=' ')
     current = 0
     for table in tables:
         tableName = table[0]
@@ -98,12 +98,12 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
         sys.stdout.write("\b\b\b\b\b%4.1f%%" % round(100 * float(current) / nbTables, 1))
         sys.stdout.flush()
 
-    print
+    print()
     # Links between tables (foreign key -> primary key)
     # Only extract links from considered tables
     links = db.executeAll(datamodelSql["constraintsFromOwner"] % (userName, tableList, tableList))
     nbLinks = len(links)
-    print (CYAN + _("Extracting %d links...      ") % nbLinks + RESET),
+    print((CYAN + _("Extracting %d links...      ") % nbLinks + RESET), end=' ')
     current = 0
     for link in links:
         if linklabel == "yes":
@@ -114,7 +114,7 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
         current += 1
         sys.stdout.write("\b\b\b\b\b%4.1f%%" % round(100 * float(current) / nbLinks, 1))
 
-    print
+    print()
     filename = db.getDSN() + "_" + userName + "." + format
     generateImage(graph, filename, prog, format)
     viewImage(filename)
@@ -219,9 +219,9 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
             nextObjectList = []
 
         if len(nodeList) > maxNodes:
-            print RED + _("Warning: reach max node, references lookup stopped on direction %s") % currentDir + RESET
+            print(RED + _("Warning: reach max node, references lookup stopped on direction %s") % currentDir + RESET)
         if depth > maxDepth:
-            print RED + _("Warning: reach max recursion limit, references lookup stopped on direction %s") % currentDir + RESET
+            print(RED + _("Warning: reach max recursion limit, references lookup stopped on direction %s") % currentDir + RESET)
 
     filename = "dep_" + objectOwner + "." + objectName + "." + format
     generateImage(graph, filename, prog, format)
@@ -264,7 +264,7 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
     tbsBytes = 0
     tbsList = []
     for tablespace in tablespaces:
-        tablespaceName = unicode(tablespace[0])
+        tablespaceName = str(tablespace[0])
 
         # Tables from current tablespace
         if userName == db.getUsername().upper():
@@ -272,16 +272,16 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
         else:
             tables = db.executeAll(diskusageSql["TablesFromOwnerAndTbs"], [userName, tablespaceName])
         tabList = []
-        print CYAN + _("Extracting %3d tables from tablespace %s") % (len(tables), tablespaceName) + RESET
+        print(CYAN + _("Extracting %3d tables from tablespace %s") % (len(tables), tablespaceName) + RESET)
         for table in tables:
             tableName = table[0]
             if table[1] is None:
-                print RED + _("""Warning: table "%s" removed because no statistics have been found""") \
-                           % (tablespaceName + "/" + tableName) + RESET
+                print(RED + _("""Warning: table "%s" removed because no statistics have been found""") \
+                           % (tablespaceName + "/" + tableName) + RESET)
                 continue
             if table[1] == 0:
-                print RED + _("""Warning: table "%s" removed because it is empty""") \
-                           % (tablespaceName + "/" + tableName) + RESET
+                print(RED + _("""Warning: table "%s" removed because it is empty""") \
+                           % (tablespaceName + "/" + tableName) + RESET)
                 continue
             numRows = int(table[1])
             avgRowLen = float(table[2])
@@ -296,16 +296,16 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
             else:
                 indexes = db.executeAll(diskusageSql["IndexesFromOwnerAndTbs"], [userName, tablespaceName])
             idxList = []
-            print CYAN + _("Extracting %3d indexes from tablespace %s") % (len(indexes), tablespaceName) + RESET
+            print(CYAN + _("Extracting %3d indexes from tablespace %s") % (len(indexes), tablespaceName) + RESET)
             for index in indexes:
                 indexName = index[0]
                 if index[1] is None:
-                    print RED + _("""Warning: index "%s" removed because no statistics have been found""") \
-                            % (tablespaceName + "/" + indexName) + RESET
+                    print(RED + _("""Warning: index "%s" removed because no statistics have been found""") \
+                            % (tablespaceName + "/" + indexName) + RESET)
                     continue
                 if index[1] == 0:
-                    print RED + _("""Warning: index "%s" removed because it is empty""") \
-                            % (tablespaceName + "/" + indexName) + RESET
+                    print(RED + _("""Warning: index "%s" removed because it is empty""") \
+                            % (tablespaceName + "/" + indexName) + RESET)
                     continue
                 numRows = int(index[1])
                 distinctKeys = int(index[2])
@@ -314,7 +314,7 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
                 tbsBytes += bytes
                 idxList += [[indexName, bytes, numRows, distinctKeys, tabName]]
         else:
-            print CYAN + _("Not extracting indexes from tablespace %s (ignored)") % (tablespaceName) + RESET
+            print(CYAN + _("Not extracting indexes from tablespace %s (ignored)") % (tablespaceName) + RESET)
             idxList = []
         tbsList += [[tablespaceName, tbsBytes, tabList, idxList]]
 
@@ -331,7 +331,7 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
                           label="%s\\n(%d %s)" % (tbsName, convert(tbsBytes, unit), unit.upper()))
         graph.add_subgraph(subGraph)
 
-        print CYAN + _("Displaying %3d tables for tablespace %s") % (len(tabList), tbsName) + RESET
+        print(CYAN + _("Displaying %3d tables for tablespace %s") % (len(tabList), tbsName) + RESET)
         for tab in tabList:
             name = tab[0]
             bytes = tab[1]
@@ -355,7 +355,7 @@ through the PyDot API (http://www.dkbza.org/pydot.html)
                                    fontsize=str(fontsize - 2 - floor((len(label) - 7) / 15)), \
                                    nodesep="0.01", height=str(height), width=str(max(width, 1))))
 
-        print CYAN + _("Displaying %3d indexes for tablespace %s") % (len(idxList), tbsName) + RESET
+        print(CYAN + _("Displaying %3d indexes for tablespace %s") % (len(idxList), tbsName) + RESET)
         for idx in idxList:
             name = idx[0]
             bytes = idx[1]
@@ -426,12 +426,12 @@ def pkgTree(db, packageName):
         raise PysqlException(_("This is not a package or package not found"))
 
     # Gets package body content
-    package.setType(u"PACKAGE BODY")
-    print CYAN + _("Extracting package source...") + RESET
+    package.setType("PACKAGE BODY")
+    print(CYAN + _("Extracting package source...") + RESET)
     content = package.getSQLAsList(db)
 
     # Removes comments
-    print CYAN + _("Parsing source and building graph...") + RESET
+    print(CYAN + _("Parsing source and building graph...") + RESET)
     newContent = []
     comment = False
     for line in content:
@@ -500,16 +500,16 @@ def generateImage(graph, filename, prog, format):
 @param filename: image filename (str)
 @param format: image format (str)
 """
-    print CYAN + _("Generating picture using %s filter...") % prog + RESET
+    print(CYAN + _("Generating picture using %s filter...") % prog + RESET)
     filepath = os.getcwd() + os.sep + filename
     import pydot
     oldstdout = sys.stdout
     sys.stdout = open(os.devnull, 'a')  # Mutes STDOUT
     try:
         graph.write(filepath, prog=prog, format=format)
-    except (IOError, OSError, pydot.InvocationException), e:
+    except (IOError, OSError, pydot.InvocationException) as e:
         sys.stdout = sys.__stdout__     # Restores STDOUT
         raise PysqlException(_("Graphviz failed to generate image:\n%s") % e)
     sys.stdout = oldstdout         # Restores STDOUT
-    print GREEN + _("Image saved as ") + filepath + RESET
+    print(GREEN + _("Image saved as ") + filepath + RESET)
 

@@ -11,7 +11,7 @@ Kindly borrowed from Yokadi Option parser (http://github.com/agateau/yokadi/)
 """
 from optparse import OptionParser
 import sys
-from pysqlexception import PysqlException, PysqlOptionParserNormalExitException
+from .pysqlexception import PysqlException, PysqlOptionParserNormalExitException
 
 
 class PysqlOptionParser(OptionParser):
@@ -19,13 +19,13 @@ class PysqlOptionParser(OptionParser):
         OptionParser.__init__(self, add_help_option=False)
 
     def parse_args(self, line):
-        argv = line.split(u" ")
+        argv = line.split(" ")
         # Splitting an empty line gives us [""], not an empty array
-        if argv == [u""]:
+        if argv == [""]:
             argv = []
 
         # Remove extra spaces
-        argv = [i for i in argv if i is not u""]
+        argv = [i for i in argv if i is not ""]
 
         return OptionParser.parse_args(self, argv)
 

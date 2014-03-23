@@ -11,13 +11,13 @@ that handles all pysql configuration stuff
 import sys
 import os
 from os.path import expandvars, join
-import cPickle
-from ConfigParser import ConfigParser
+import pickle
+from configparser import ConfigParser
 import readline
 
 # Pysql imports:
-from pysqlexception import PysqlException
-from pysqlcolor import BOLD, CYAN, GREEN, RED, RESET
+from .pysqlexception import PysqlException
+from .pysqlcolor import BOLD, CYAN, GREEN, RED, RESET
 
 class PysqlConf:
     """ Handles configuration stuff"""
@@ -62,14 +62,14 @@ class PysqlConf:
         # Tries to load previous history list from disk
         try:
             readline.read_history_file(self.historyPath)
-        except Exception, e:
+        except Exception as e:
             # Cannot load any previous history. Start from a clear one
             pass
 
         # Tries to load previous sqlLibrary from disk
         try:
-            self.sqlLibrary = cPickle.load(file(self.sqlLibPath))
-        except Exception, e:
+            self.sqlLibrary = pickle.load(file(self.sqlLibPath))
+        except Exception as e:
             # Cannot load any previous sqlLibrary, start from a clear one
             pass
 
@@ -103,19 +103,19 @@ class PysqlConf:
         # Searches for config file in $HOME (Unix) or %HOMEPATH% (Windows)
 
         if self.__isReadWrite(self.configPath) and sys.stdin.isatty() and sys.stdout.isatty():
-            print CYAN + _("Using config file %s") % self.configPath + RESET
+            print(CYAN + _("Using config file %s") % self.configPath + RESET)
 
         # Reads config file
         self.configParser = ConfigParser()
         try:
             self.configParser.readfp(open(self.configPath))
-        except Exception, e:
+        except Exception as e:
             # Silently create empty conf and only complain if this fails
             try:
                 file(self.configPath, "w")
-            except Exception, e:
-                print RED + BOLD + _("Failed to create personnal configuration file")
-                print "%s" % e + RESET
+            except Exception as e:
+                print(RED + BOLD + _("Failed to create personnal configuration file"))
+                print("%s" % e + RESET)
 
         # Host codec used to display on and read from string on terminal
         self.codec = None
@@ -171,24 +171,24 @@ class PysqlConf:
                             pass
                         result[key] = [value, ""]
         # Populates with default value
-        for (key, value) in self.default.items():
-            if result.has_key(key):
+        for (key, value) in list(self.default.items()):
+            if key in result:
                 result[key] = [result[key][0], value]
             else:
                 result[key] = ["", value]
 
         # Transforms dict into list
-        result = [[i[0]] + i[1] for i in result.items()]
+        result = [[i[0]] + i[1] for i in list(result.items())]
         # Alphabetic sort
         result.sort()
         return result
 
     def getDefault(self, key):
         """Returns the default value for a parameter. If no default value is defined, return None"""
-        if self.default.has_key(key):
+        if key in self.default:
             return self.default[key]
         else:
-            print "(DEBUG) Key %s has no default value !" % key
+            print("(DEBUG) Key %s has no default value !" % key)
             return None
 
     def verify(self, key, value):
@@ -258,7 +258,7 @@ class PysqlConf:
         elif key in ("graph_bordercolor", "graph_linkcolor", "graph_indexcolor", "graph_tablecolor"):
             return True
         else:
-            print "(DEBUG) Key %s does not exist or does not have a verify routine !" % key
+            print("(DEBUG) Key %s does not exist or does not have a verify routine !" % key)
             return False
 
     def set(self, key, value):
@@ -268,7 +268,7 @@ class PysqlConf:
         if self.configParser is not None:
             if not self.configParser.has_section("PYSQL"):
                 self.configParser.add_section("PYSQL")
-                print GREEN + _("(Config file created)") + RESET
+                print(GREEN + _("(Config file created)") + RESET)
             if self.verify(key, value):
                 self.configParser.set("PYSQL", key, value)
                 self.setChanged(True)
@@ -285,17 +285,17 @@ class PysqlConf:
                 self.configParser.write(configFile)
                 configFile.close()
                 self.setChanged(False)
-                print GREEN + _("(config file saved successfully)") + RESET
-            except Exception, e:
+                print(GREEN + _("(config file saved successfully)") + RESET)
+            except Exception as e:
                 raise PysqlException(_("fail to write file: %s") % e)
         else:
-            print CYAN + _("(no need to save)") + RESET
+            print(CYAN + _("(no need to save)") + RESET)
 
     def writeSqlLibrary(self):
         """Writes user sql library to disk"""
         try:
-            cPickle.dump(self.sqlLibrary, file(self.sqlLibPath, "w"))
-        except Exception, e:
+            pickle.dump(self.sqlLibrary, file(self.sqlLibPath, "w"))
+        except Exception as e:
             raise PysqlException(_("Fail to save user sql library to %s. Error was:\n\t%s")
                         % (self.sqlLibPath, e))
 
@@ -307,7 +307,7 @@ class PysqlConf:
             historyFile.close()
             readline.set_history_length(1000)
             readline.write_history_file(self.historyPath)
-        except Exception, e:
+        except Exception as e:
             raise PysqlException(_("Fail to save history to %s. Error was:\n\t%s")
                         % (self.historyPath, e))
     def setChanged(self, state):

@@ -13,11 +13,11 @@ import os, re, time
 from threading import Thread
 
 # Pysql imports:
-from pysqldb import PysqlDb
-from pysqlcolor import *
-from pysqlqueries import gatherCompleteSql
-from pysqloraobjects import OraObject
-import pysqlhelpers
+from .pysqldb import PysqlDb
+from .pysqlcolor import *
+from .pysqlqueries import gatherCompleteSql
+from .pysqloraobjects import OraObject
+from . import pysqlhelpers
 
 
 
@@ -71,9 +71,9 @@ class CompleteGatheringWorker(Thread):
         try:
             tnsnames = file(os.path.expandvars("$ORACLE_HOME/network/admin/tnsnames.ora")).readlines()
             self.completeLists["SID"] = sum([re.findall("^(\w+)\s*=", line) for line in tnsnames], [])
-        except Exception, e:
+        except Exception as e:
             # Do not raise a PysqlException (useless)
-            print RED + BOLD + _("Cannot open tnsnames.ora file (%s)") % e + RESET
+            print(RED + BOLD + _("Cannot open tnsnames.ora file (%s)") % e + RESET)
 
     def gatherSimpleObjects(self):
         for objectType in ("table", "view", "index", "synonym", "sequence",

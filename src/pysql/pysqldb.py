@@ -16,10 +16,10 @@ from threading import Thread
 from datetime import datetime, timedelta, date
 
 # Pysql imports:
-from pysqlexception import PysqlException, PysqlActionDenied, PysqlNotImplemented
-from pysqlconf import PysqlConf
-from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
-from pysqlhelpers import warn
+from .pysqlexception import PysqlException, PysqlActionDenied, PysqlNotImplemented
+from .pysqlconf import PysqlConf
+from .pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
+from .pysqlhelpers import warn
 
 # Aditionnal cx_Oracle Import
 CX_STARTUP_SHUTDOWN = True
@@ -50,18 +50,18 @@ class PysqlDb:
             if mode == "sysoper":
                 try:
                     self.connection = connect(self.connectString, mode=SYSOPER)
-                except (DatabaseError), e:
-                    print CYAN + _("Connected to an idle instance") + RESET
+                except (DatabaseError) as e:
+                    print(CYAN + _("Connected to an idle instance") + RESET)
                     self.connection = connect(self.connectString, mode=SYSOPER | PRELIM_AUTH)
             elif mode == "sysdba":
                 try:
                     self.connection = connect(self.connectString, mode=SYSDBA)
-                except (DatabaseError), e:
-                    print CYAN + _("Connected to an idle instance") + RESET
+                except (DatabaseError) as e:
+                    print(CYAN + _("Connected to an idle instance") + RESET)
                     self.connection = connect(self.connectString, mode=SYSDBA | PRELIM_AUTH)
             else:
                 self.connection = connect(self.connectString)
-        except (DatabaseError, RuntimeError, InterfaceError), e:
+        except (DatabaseError, RuntimeError, InterfaceError) as e:
             raise PysqlException(_("Cannot connect to Oracle: %s") % e)
 
     def startup(self, mode="normal"):
@@ -75,7 +75,7 @@ class PysqlDb:
             self.cursor.execute("alter database mount")
             if mode == "normal":
                 self.cursor.execute("alter database open")
-        except DatabaseError, e:
+        except DatabaseError as e:
             raise PysqlException(_("Cannot start instance up: %s") % e)
 
     def shutdown(self, mode="normal"):
@@ -93,21 +93,21 @@ class PysqlDb:
                 self.connection.shutdown(mode=DBSHUTDOWN_TRANSACTIONAL)
                 self.connection.shutdown(mode=DBSHUTDOWN_FINAL)
             self.connection = connect("/", mode=SYSDBA | PRELIM_AUTH)
-        except DatabaseError, e:
+        except DatabaseError as e:
             raise PysqlException(_("Cannot shut instance down: %s") % e)
 
     def commit(self):
         """Commit pending transaction"""
         try:
             self.connection.commit()
-        except DatabaseError, e:
+        except DatabaseError as e:
             raise PysqlException(_("Cannot commit: %s") % e)
 
     def rollback(self):
         """Rollback pending transaction"""
         try:
             self.connection.rollback()
-        except DatabaseError, e:
+        except DatabaseError as e:
             raise PysqlException(_("Cannot rollback: %s") % e)
 
     def executeAll(self, sql, param=[]):
@@ -127,7 +127,7 @@ class PysqlDb:
                 self.cursor.prepare(sql)
                 self.cursor.execute(None, param)
             return self.decodeData(self.cursor.fetchall())
-        except (DatabaseError, InterfaceError), e:
+        except (DatabaseError, InterfaceError) as e:
             raise PysqlException(_("Cannot execute query: %s") % e)
 
     def execute(self, sql, fetch=True, cursorSize=None):
@@ -154,7 +154,7 @@ class PysqlDb:
                 return (self.decodeData(self.cursor.fetchall()), False)
             else:
                 return self.getRowCount()
-        except (DatabaseError, InterfaceError), e:
+        except (DatabaseError, InterfaceError) as e:
             raise PysqlException(_("Cannot execute query: %s") % e)
 
     def validate(self, sql):
@@ -178,7 +178,7 @@ class PysqlDb:
                 return True
             else:
                 raise PysqlException(_("Can only validate DML queries"))
-        except (DatabaseError, InterfaceError), e:
+        except (DatabaseError, InterfaceError) as e:
             raise PysqlException(_("Cannot validate query: %s") % e)
 
     def getCursor(self):
@@ -220,7 +220,7 @@ class PysqlDb:
                 return (self.decodeData(result), moreRows)
             else:
                 raise PysqlException(_("No result set. Execute a query before fetching result !"))
-        except (DatabaseError, InterfaceError), e:
+        except (DatabaseError, InterfaceError) as e:
             raise PysqlException(_("Error while fetching results: %s") % e)
 
     def getServerOuput(self):
@@ -244,12 +244,12 @@ class PysqlDb:
     def getUsername(self):
         """Gets the name of the user connected to the database
         @return: username (unicode)"""
-        return unicode(self.connection.username)
+        return str(self.connection.username)
 
     def getDSN(self):
         """Gets the database service name
         @return: databse service name (unicode)"""
-        return unicode(self.connection.dsn)
+        return str(self.connection.dsn)
 
     def getConnectString(self):
         """Gets the connection string used to create this instance
@@ -259,14 +259,14 @@ class PysqlDb:
     def getVersion(self):
         """Gets the version number of the database server
         @return: db server version (unicode)"""
-        return unicode(self.connection.version)
+        return str(self.connection.version)
 
     def close(self):
         """Releases object connection"""
         #self.cursor.close()
         try:
             self.connection.close()
-        except (DatabaseError, InterfaceError), e:
+        except (DatabaseError, InterfaceError) as e:
             raise PysqlException(_("Cannot close connection: %s") % e)
 
     def encodeSql(self, sql):
@@ -314,14 +314,14 @@ class PysqlDb:
         elif isinstance(data, (datetime, timedelta)):
             #TODO: use user define format or Oracle settings
             # Don't use strftime because it does not support year < 1900
-            data = unicode(data)
+            data = str(data)
         elif isinstance(data, date):
             #TODO: use user define format or Oracle settings
             # Don't use strftime because it does not support year < 1900
-            data = unicode(data)
+            data = str(data)
         elif isinstance(data, LOB):
             data = data.read(1, data.size())
-        elif isinstance(data, unicode):
+        elif isinstance(data, str):
             warn(_("Warning, string '%s' is already Unicode") % data)
             return data
 
@@ -360,8 +360,8 @@ class BgQuery(Thread):
         """Method executed when the thread object start() method is called"""
         try:
             (self.result, self.moreRows) = self.db.execute(self.query)
-        except PysqlException, e:
-            self.error = unicode(e)
+        except PysqlException as e:
+            self.error = str(e)
             self.exceptions.append(e)
             self.result = None
             self.moreRows = False

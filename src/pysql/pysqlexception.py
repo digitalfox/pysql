@@ -22,7 +22,7 @@ class PysqlException(Exception):
         self.time=time()
 
         # Sets default message
-        self.msg=unicode(exception)
+        self.msg=str(exception)
 
         # Gets ORA error code if this is an Oracle exception
         if isinstance(exception, PysqlException):
@@ -30,7 +30,7 @@ class PysqlException(Exception):
             self.oraCode=exception.oraCode
             self.time=exception.time
         else:
-            result=match("(.*)(ORA-\d+): (.*)", unicode(exception))
+            result=match("(.*)(ORA-\d+): (.*)", str(exception))
             if result:
                 self.oraCode=result.group(2)
                 self.msg=result.group(1)+result.group(3)

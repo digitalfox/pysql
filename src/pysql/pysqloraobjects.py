@@ -10,9 +10,9 @@
 # pylint: disable-msg=E1101
 
 # Pysql imports:
-from pysqlqueries import *
-from pysqlexception import PysqlException, PysqlNotImplemented, PysqlActionDenied
-import pysqlhelpers
+from .pysqlqueries import *
+from .pysqlexception import PysqlException, PysqlNotImplemented, PysqlActionDenied
+from . import pysqlhelpers
 
 class OraObject:
     """Father of all pysql Oracle objects"""
@@ -162,7 +162,7 @@ class OraObject:
                     self.guessStatus(db)
                     return True
             # Default to public
-            owner = u"PUBLIC"
+            owner = "PUBLIC"
 
         objectType = db.executeAll(guessInfoSql["typeFromNameAndOwner"], [name, owner])
         for type in objectType:
@@ -176,7 +176,7 @@ class OraObject:
                 return True
 
         # Try SYS objects
-        owner = u"SYS"
+        owner = "SYS"
         try:
             objectType = db.executeAll(guessInfoSql["typeFromNameAndSYS"], [name])
         except PysqlException:
@@ -287,7 +287,7 @@ class OraTabular(OraObject):
         owner = self.getOwner()
         if owner == "":
             owner = db.getUsername().upper()
-        return db.executeAll(u"""select count(*) from %s."%s" """ % (owner, self.getName()))[0][0]
+        return db.executeAll("""select count(*) from %s."%s" """ % (owner, self.getName()))[0][0]
 
     def getComment(self, db):
         """@return: db comment of the object"""
@@ -345,7 +345,7 @@ class OraDatafile(OraObject):
     """Datafile"""
     def __init__(self, datafileOwner="", datafileName=""):
         """Datafile creation"""
-        OraObject.__init__(self, datafileOwner, datafileName, u"DATA FILE")
+        OraObject.__init__(self, datafileOwner, datafileName, "DATA FILE")
 
     def getTablespace(self, db):
         """@return: tablespace"""
@@ -383,7 +383,7 @@ class OraDBLink(OraObject):
     """Database link"""
     def __init__(self, dbLinkOwner="", dbLinkName=""):
         """Directory creation"""
-        OraObject.__init__(self, dbLinkOwner, dbLinkName, u"DATABASE LINK")
+        OraObject.__init__(self, dbLinkOwner, dbLinkName, "DATABASE LINK")
 
     def getRemoteHost(self, db):
         """@return: host of the db link"""
@@ -413,7 +413,7 @@ class OraDirectory(OraObject):
     """Oracle directory object"""
     def __init__(self, directoryOwner="", directoryName=""):
         """Directory creation"""
-        OraObject.__init__(self, directoryOwner, directoryName, u"DIRECTORY")
+        OraObject.__init__(self, directoryOwner, directoryName, "DIRECTORY")
 
     def getPath(self, db):
         """Gets the OS path of the directory object
@@ -428,7 +428,7 @@ class OraIndex(OraSegment):
     """Oracle index"""
     def __init__(self, indexOwner="", indexName=""):
         """Index creation"""
-        OraObject.__init__(self, indexOwner, indexName, u"INDEX")
+        OraObject.__init__(self, indexOwner, indexName, "INDEX")
 
     def getProperties(self, db):
         """Returns index following properties :
@@ -490,7 +490,7 @@ class OraMaterializedView(OraTabular, OraSegment):
     """Oracle materialized view"""
     def __init__(self, mviewOwner="", mviewName=""):
         """Materialized view creation"""
-        OraObject.__init__(self, mviewOwner, mviewName, u"MATERIALIZED VIEW")
+        OraObject.__init__(self, mviewOwner, mviewName, "MATERIALIZED VIEW")
 
     def getSQL(self, db):
         """@return: SQL code behind the materialized view"""
@@ -539,7 +539,7 @@ class OraStoredObject(OraObject):
 class OraProcedure(OraStoredObject):
     """Oracle stored procedure"""
     def __init__(self, procedureOwner, procedureName):
-        OraObject.__init__(self, procedureOwner, procedureName, u"PROCEDURE")
+        OraObject.__init__(self, procedureOwner, procedureName, "PROCEDURE")
 
     def getSource(self, db):
         """Gets source code
@@ -558,7 +558,7 @@ class OraProcedure(OraStoredObject):
 class OraFunction(OraStoredObject):
     """Oracle stored function"""
     def __init__(self, procedureOwner, procedureName):
-        OraObject.__init__(self, procedureOwner, procedureName, u"FUNCTION")
+        OraObject.__init__(self, procedureOwner, procedureName, "FUNCTION")
 
     def getSource(self, db):
         """Gets source code
@@ -577,7 +577,7 @@ class OraFunction(OraStoredObject):
 class OraPackage(OraStoredObject):
     """Oracle Package"""
     def __init__(self, packageOwner, packageName):
-        OraObject.__init__(self, packageOwner, packageName, u"PACKAGE")
+        OraObject.__init__(self, packageOwner, packageName, "PACKAGE")
 
     def getProcedures(self, db):
         """Gets procedure names
@@ -610,13 +610,13 @@ class OraPackage(OraStoredObject):
 class OraPackageBody(OraStoredObject):
     """Oracle stored package body"""
     def __init__(self, packageOwner, packageName):
-        OraObject.__init__(self, packageOwner, packageName, u"PACKAGE BODY")
+        OraObject.__init__(self, packageOwner, packageName, "PACKAGE BODY")
 
 class OraSequence(OraObject):
     """Oracle sequence"""
     def __init__(self, sequenceOwner="", sequenceName=""):
         """Sequence creation"""
-        OraObject.__init__(self, sequenceOwner, sequenceName, u"SEQUENCE")
+        OraObject.__init__(self, sequenceOwner, sequenceName, "SEQUENCE")
 
     def getLast(self, db):
         """Gets the last value of the sequence object
@@ -673,11 +673,11 @@ class OraSequence(OraObject):
 
 class OraSynonym(OraObject):
     """Oracle synonym"""
-    def __init__(self, synonymOwner=u"PUBLIC", synonymName=""):
+    def __init__(self, synonymOwner="PUBLIC", synonymName=""):
         """Synonym creation"""
         self.setName(synonymName)
         self.setOwner(synonymOwner)
-        self.setType(u"SYNONYM")
+        self.setType("SYNONYM")
 
     def getTarget(self, db, recursionStep=0):
         """Finds the oracle object targeted by this synonym.
@@ -703,8 +703,8 @@ class OraSynonym(OraObject):
             recursionStep += 1
             # Checks that we do not recurse too much
             if recursionStep > recursionLimit:
-                print "[DEBUG] More than %d synonyms imbricated... Maybe a circular reference?" \
-                        % recursionLimit
+                print("[DEBUG] More than %d synonyms imbricated... Maybe a circular reference?" \
+                        % recursionLimit)
                 return oraObject
             else:
                 # Recurses to find the real target
@@ -716,7 +716,7 @@ class OraTable(OraTabular, OraSegment):
     """Oracle table"""
     def __init__(self, tableOwner="", tableName=""):
         """Table creation"""
-        OraObject.__init__(self, tableOwner, tableName, u"TABLE")
+        OraObject.__init__(self, tableOwner, tableName, "TABLE")
 
     def getTablespace(self, db):
         """Gets tablespace name
@@ -833,7 +833,7 @@ class OraTablespace(OraObject):
 
     def __init__(self, tablespaceOwner="", tablespaceName=""):
         """Tablespace creation"""
-        OraObject.__init__(self, tablespaceOwner, tablespaceName, u"TABLESPACE")
+        OraObject.__init__(self, tablespaceOwner, tablespaceName, "TABLESPACE")
         self.datafiles = []
 
     def updateDatafileList(self, db):
@@ -882,7 +882,7 @@ class OraTrigger(OraObject):
 
     def __init__(self, triggerOwner="", triggerName=""):
         """Trigger creation"""
-        OraObject.__init__(self, triggerOwner, triggerName, u"TRIGGER")
+        OraObject.__init__(self, triggerOwner, triggerName, "TRIGGER")
         self.table = None
 
     def updateTable(self, db):
@@ -953,7 +953,7 @@ class OraUser(OraObject):
     """User"""
     def __init__(self, userOwner="", userName=""):
         """Directory creation"""
-        OraObject.__init__(self, userOwner, userName, u"USER")
+        OraObject.__init__(self, userOwner, userName, "USER")
         self.tablespaces = []
 
     def updateTablespaceList(self, db):
@@ -995,7 +995,7 @@ class OraUser(OraObject):
         else:
             return result[0][0]
 
-    def getNbTables(self, db, tablespace=u"%"):
+    def getNbTables(self, db, tablespace="%"):
         """@return: number of tables owned by the user"""
         self.setName(self.getName().upper())
         result = db.executeAll(userSql["nbTablesFromNameAndTbs"], [self.getName(), tablespace])
@@ -1004,7 +1004,7 @@ class OraUser(OraObject):
         else:
             return result[0][0]
 
-    def getNbIndexes(self, db, tablespace=u"%"):
+    def getNbIndexes(self, db, tablespace="%"):
         """@return: number of indexes owned by the user"""
         self.setName(self.getName().upper())
         result = db.executeAll(userSql["nbIndexesFromNameAndTbs"], [self.getName(), tablespace])
@@ -1022,7 +1022,7 @@ class OraView(OraTabular):
     """Oracle view"""
     def __init__(self, viewOwner="", viewName=""):
         """View creation"""
-        OraObject.__init__(self, viewOwner, viewName, u"VIEW")
+        OraObject.__init__(self, viewOwner, viewName, "VIEW")
 
     def getSQL(self, db):
         """@return: SQL code behind the view"""

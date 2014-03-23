@@ -12,7 +12,7 @@ import sys
 import traceback
 from re import match, sub
 import datetime
-from cStringIO import StringIO
+from io import StringIO
 from time import sleep
 from threading import Thread, Lock
 try:
@@ -27,9 +27,9 @@ except ImportError:
 
 
 # Pysql imports:
-from pysqlexception import PysqlException, PysqlActionDenied
-from pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
-import pysqlupdate
+from .pysqlexception import PysqlException, PysqlActionDenied
+from .pysqlcolor import BOLD, CYAN, GREEN, GREY, RED, RESET
+from . import pysqlupdate
 
 # Help functions
 def addWildCardIfNeeded(aString, wildcard="%"):
@@ -100,7 +100,7 @@ def getProg(availables, given, default):
     @arg default: program used if user choose default"""
     if given == "auto":
         given = default
-    if not availables.has_key(given):
+    if given not in availables:
         raise PysqlActionDenied(given +
                                 _(" is not installed. Get it at http://www.graphviz.org/Download.php"))
     else:
@@ -110,7 +110,7 @@ def itemLength(item):
     """Compute length of a result set item"""
     if item is None:
         return 0
-    elif isinstance(item, (int, float, long, datetime.datetime, datetime.timedelta)):
+    elif isinstance(item, (int, float, datetime.datetime, datetime.timedelta)):
         return len(str(item))
     elif isinstance(item, LOB):
         return item.size()
@@ -218,19 +218,19 @@ def warn(message):
     """Just print a formated warning message on screen if PYSQL_WARNING env var is set (whatever value)
     @param message: unicode or str message. Conversion will done with print and default encoding
     """
-    if os.environ.has_key("PYSQL_WARNING"):
-        print "%s==>Warning:%s %s%s" % (RED, BOLD, message, RESET)
+    if "PYSQL_WARNING" in os.environ:
+        print("%s==>Warning:%s %s%s" % (RED, BOLD, message, RESET))
 
 def printStackTrace():
     """Print stack trace with debug information"""
     # Just a hook for a more pleasant error handling
-    print "------------------8<-------------------------------------"
+    print("------------------8<-------------------------------------")
     traceback.print_exc()
-    print "------------------8<-------------------------------------"
+    print("------------------8<-------------------------------------")
     printComponentsVersion()
-    print
-    print RED + BOLD + "Please, send the text above to pysql@digitalfox.org" + RESET
-    print
+    print()
+    print(RED + BOLD + "Please, send the text above to pysql@digitalfox.org" + RESET)
+    print()
 
 def printComponentsVersion():
     try:
@@ -242,9 +242,9 @@ def printComponentsVersion():
         cxVersion = cx_Oracle.version
     except Exception:
         cxVersion = RED + BOLD + "missing" + RESET
-    print BOLD + "PySQL release: %s" % pysqlVersion + RESET
-    print "    cx Oracle release: %s" % cxVersion
-    print "    Python release: %s" % sys.version.replace("\n", " ")
+    print(BOLD + "PySQL release: %s" % pysqlVersion + RESET)
+    print("    cx Oracle release: %s" % cxVersion)
+    print("    Python release: %s" % sys.version.replace("\n", " "))
 
 def setTitle(title, codec):
     """Sets the window title and optionnaly process title
@@ -269,7 +269,7 @@ def getTitle():
         # but is often disabled for safety reason...
         # Default to basic title
         title = "%s@%s" % (os.environ.get("USER", "user"), os.popen("hostname").readline().strip())
-        if os.environ.has_key("DISPLAY"):
+        if "DISPLAY" in os.environ:
             # Use X windows to get title
             xtitle = os.popen("xprop -id $WINDOWID WM_NAME").readline().strip()
             if not ("WM_NAMEAborted" in title or "WM_NAMEAbandon" in title):

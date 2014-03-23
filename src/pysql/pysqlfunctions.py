@@ -21,13 +21,13 @@ except ImportError:
     from md5 import md5
 
 # Pysql imports:
-from pysqlqueries import *
-from pysqlexception import PysqlException, PysqlNotImplemented, PysqlActionDenied
-from pysqloraobjects import *
-from pysqlcolor import *
-from pysqlconf import PysqlConf
-from pysqldb import PysqlDb
-from pysqlhelpers import colorDiff, convert, addWildCardIfNeeded, generateWhere
+from .pysqlqueries import *
+from .pysqlexception import PysqlException, PysqlNotImplemented, PysqlActionDenied
+from .pysqloraobjects import *
+from .pysqlcolor import *
+from .pysqlconf import PysqlConf
+from .pysqldb import PysqlDb
+from .pysqlhelpers import colorDiff, convert, addWildCardIfNeeded, generateWhere
 
 # High level pysql functions
 def count(db, objectName):
@@ -220,7 +220,7 @@ def compareTableData(schemaA, schemaB, tableNameA, tableNameB, dbList):
             newBuffer = [line[2:]]
         oldSign = newSign
         i += 1
-    diff = [diff[i] for i in xrange(len(diff) - 1) if i not in toBeRemoved]
+    diff = [diff[i] for i in range(len(diff) - 1) if i not in toBeRemoved]
     return diff
 
 def ddl(db, objectName):
@@ -262,18 +262,18 @@ def desc(db, objectName, printDetails=True, printStats=False, sort=False):
     if len(oraObjectSet) == 1:
         oraObject = oraObjectSet.pop()
     elif len(oraObjectSet) > 1:
-        print CYAN + _("Got multiple result:") + "\n-" + RESET,
-        print "\n- ".join([str(x) for x in oraObjectSet])
+        print(CYAN + _("Got multiple result:") + "\n-" + RESET, end=' ')
+        print("\n- ".join([str(x) for x in oraObjectSet]))
         # Looking for own object
         ownOraObjects = [o for o in oraObjectSet if o.getOwner() == db.getUsername().upper()]
         publicOraObjects = [o for o in oraObjectSet if o.getOwner() == "PUBLIC"]
         if len(ownOraObjects) == 1:
             oraObject = ownOraObjects.pop()
-            print BOLD + RED + _("Defaulting to own object: %s") % oraObject + RESET
+            print(BOLD + RED + _("Defaulting to own object: %s") % oraObject + RESET)
         # Looking for public objects
         elif len(publicOraObjects) == 1:
             oraObject = publicOraObjects.pop()
-            print BOLD + RED + _("Defaulting to public object: %s") % oraObject + RESET
+            print(BOLD + RED + _("Defaulting to public object: %s") % oraObject + RESET)
     else:
         # No result
         return ([], [])
@@ -294,56 +294,56 @@ def desc(db, objectName, printDetails=True, printStats=False, sort=False):
 
     # Displays some information about the object
     if printDetails:
-        print CYAN + _("Name") + "\t: " + oraObject.getName() + RESET
-        print CYAN + _("Type") + "\t: " + oraObject.getType() + RESET
-        print CYAN + _("Owner") + "\t: " + oraObject.getOwner() + RESET
+        print(CYAN + _("Name") + "\t: " + oraObject.getName() + RESET)
+        print(CYAN + _("Type") + "\t: " + oraObject.getType() + RESET)
+        print(CYAN + _("Owner") + "\t: " + oraObject.getOwner() + RESET)
         if oraObject.getStatus() in ("INVALID", "OFFLINE", "UNUSED"):
-            print CYAN + _("Status") + "\t\t: " + BOLD + RED + oraObject.getStatus() + RESET
+            print(CYAN + _("Status") + "\t\t: " + BOLD + RED + oraObject.getStatus() + RESET)
         else:
-            print CYAN + _("Status") + "\t\t: " + oraObject.getStatus() + RESET
+            print(CYAN + _("Status") + "\t\t: " + oraObject.getStatus() + RESET)
         if oraObject.getType() in ("TABLE", "TABLE PARTITION", "INDEX", "INDEX PARTITION"):
             try:
-                print CYAN + _("Tablespace") + "\t: " + oraObject.getTablespace(db).getName() + RESET
+                print(CYAN + _("Tablespace") + "\t: " + oraObject.getTablespace(db).getName() + RESET)
             except PysqlException:
-                print CYAN + _("Tablespace") + "\t: " + _("<unable to get tablepsace name>") + RESET
+                print(CYAN + _("Tablespace") + "\t: " + _("<unable to get tablepsace name>") + RESET)
             try:
-                print CYAN + _("Partitioned?") + "\t: " + (oraObject.isPartitioned(db) and _("Yes") or _("No")) + RESET
+                print(CYAN + _("Partitioned?") + "\t: " + (oraObject.isPartitioned(db) and _("Yes") or _("No")) + RESET)
             except PysqlException:
-                print CYAN + _("Partitioned?") + "\t: " + _("<unable to get partition information>") + RESET
+                print(CYAN + _("Partitioned?") + "\t: " + _("<unable to get partition information>") + RESET)
         if oraObject.getType() in ("TABLE", "TABLE PARTITION", "VIEW", "MATERIALIZED VIEW"):
             try:
-                print CYAN + _("Comment") + "\t: " + oraObject.getComment(db) + RESET
+                print(CYAN + _("Comment") + "\t: " + oraObject.getComment(db) + RESET)
             except PysqlException:
-                print CYAN + _("Comment") + "\t: " + _("<unable to get comment>") + RESET
+                print(CYAN + _("Comment") + "\t: " + _("<unable to get comment>") + RESET)
         if oraObject.getType() not in ("DATA FILE", "TABLESPACE", "USER"):
             try:
-                print CYAN + _("Created on") + "\t: " + oraObject.getCreated(db) + RESET
+                print(CYAN + _("Created on") + "\t: " + oraObject.getCreated(db) + RESET)
             except PysqlException:
-                print CYAN + _("Created on") + "\t: " + _("<unable to get date of creation>") + RESET
+                print(CYAN + _("Created on") + "\t: " + _("<unable to get date of creation>") + RESET)
             try:
-                print CYAN + _("Last DDL on") + "\t: " + oraObject.getLastDDL(db) + RESET
+                print(CYAN + _("Last DDL on") + "\t: " + oraObject.getLastDDL(db) + RESET)
             except PysqlException:
-                print CYAN + _("Last DDL on") + "\t: " + _("<unable to get date of last DDL modification>") + RESET
+                print(CYAN + _("Last DDL on") + "\t: " + _("<unable to get date of last DDL modification>") + RESET)
 
     # Displays some statistics about the object
     if printStats:
         if oraObject.getType() in ("TABLE", "TABLE PARTITION"):
             try:
-                print ORANGE + _("Last analyzed on") + ": " + str(oraObject.getLastAnalyzed(db)) + RESET
+                print(ORANGE + _("Last analyzed on") + ": " + str(oraObject.getLastAnalyzed(db)) + RESET)
             except PysqlException:
-                print CYAN + _("Last analyzed on") + "\t: " + _("<unable to get date of last statistics computation>") + RESET
+                print(CYAN + _("Last analyzed on") + "\t: " + _("<unable to get date of last statistics computation>") + RESET)
             try:
-                print ORANGE + _("Nb rows") + "\t\t: " + str(oraObject.getNumRows(db)) + RESET
+                print(ORANGE + _("Nb rows") + "\t\t: " + str(oraObject.getNumRows(db)) + RESET)
             except PysqlException:
-                print CYAN + _("Nb rows") + "\t: " + _("<unable to get number of rows>") + RESET
+                print(CYAN + _("Nb rows") + "\t: " + _("<unable to get number of rows>") + RESET)
             try:
-                print ORANGE + _("Nb used blocks") + "\t: " + str(oraObject.getUsedBlocks(db)) + RESET
+                print(ORANGE + _("Nb used blocks") + "\t: " + str(oraObject.getUsedBlocks(db)) + RESET)
             except PysqlException:
-                print ORANGE + _("Nb used blocks") + "\t: " + _("<unable to get number of used blocks>") + RESET
+                print(ORANGE + _("Nb used blocks") + "\t: " + _("<unable to get number of used blocks>") + RESET)
             try:
-                print ORANGE + _("Avg row length") + "\t: " + str(oraObject.getAvgRowLength(db)) + RESET
+                print(ORANGE + _("Avg row length") + "\t: " + str(oraObject.getAvgRowLength(db)) + RESET)
             except PysqlException:
-                print CYAN + _("Avg row length") + "\t: " + _("<unable to get average row length") + RESET
+                print(CYAN + _("Avg row length") + "\t: " + _("<unable to get average row length") + RESET)
 
     # Evaluates object type (among the 24 defined)
     if oraObject.getType() in ("TABLE" , "TABLE PARTITION"):
@@ -380,7 +380,7 @@ def desc(db, objectName, printDetails=True, printStats=False, sort=False):
         else:
             used = 0
         if printDetails:
-            print CYAN + _("Tablespace: ") + oraObject.getTablespace(db).getName() + RESET
+            print(CYAN + _("Tablespace: ") + oraObject.getTablespace(db).getName() + RESET)
         result = [[oraObject.getTablespace(db).getName(), round(size, 2), round(free, 2), round(used, 2)]]
 
     elif oraObject.getType() == "DATABASE LINK":
@@ -480,14 +480,14 @@ def desc(db, objectName, printDetails=True, printStats=False, sort=False):
             nbTables = oraObject.getNbTables(db, tablespace=tablespace.getName())
             nbIndexes = oraObject.getNbIndexes(db, tablespace=tablespace.getName())
             if name == defaultTbs:
-                defstr = u"*"
+                defstr = "*"
             else:
-                defstr = u""
+                defstr = ""
             result.append([name, defstr, nbTables, nbIndexes])
             totalTables += nbTables
             totalIndexes += nbIndexes
         if len(oraObject.getTablespaces()) > 1:
-            result[0] = ["> " + _("TOTAL"), u"", totalTables, totalIndexes]
+            result[0] = ["> " + _("TOTAL"), "", totalTables, totalIndexes]
         else:
             result.pop(0)
     else:
@@ -563,7 +563,7 @@ def editor(content=""):
         content = tmp.read()
         tmp.close()
         unlink(filePath)
-    except IOError, e:
+    except IOError as e:
         raise PysqlException(_("Error while using temporary file (%s)") % e)
     if checkSum == md5(content).hexdigest():
         return None
@@ -577,7 +577,7 @@ def explain(db, statement):
     """
     # Compute the explain plan
     db.execute("explain plan for %s" % statement)
-    return db.executeAll(u"""select plan_table_output
+    return db.executeAll("""select plan_table_output
                 from table(dbms_xplan.display('PLAN_TABLE',null,'serial'))""")
 
 def objectsLock(db):
@@ -651,9 +651,9 @@ def killSession(db, session, immediate=False):
     @type immediate: bool
     @return: None but raises an exception if session does not exist
     """
-    sql = u"""alter system kill session '%s'""" % session
+    sql = """alter system kill session '%s'""" % session
     if immediate:
-        sql += u" immediate"
+        sql += " immediate"
     try:
         db.execute(sql)
     except PysqlException:
@@ -733,7 +733,7 @@ def searchObject(db, objectType, objectName, objectOwner):
         raise PysqlException(_("SQL entry not defined for searchObjectSql: %s") % objectType)
     # Returns a dict with key=schemaNAme and Value=list of object
     for (owner, name) in objects:
-        if result.has_key(owner):
+        if owner in result:
             result[owner].append(name)
         else:
             result[owner] = [name]
