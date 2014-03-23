@@ -480,7 +480,6 @@ class PysqlShell(cmd.Cmd):
             # Display history
             for i in range(depth):
                 position = length - depth + i
-                # Data is already encoded
                 print("%d: %s " % (position, readline.get_history_item(position)))
         elif len(arg) == 1:
             # Executes the nth command
@@ -1380,7 +1379,6 @@ class PysqlShell(cmd.Cmd):
         self.__checkArg(arg, "==0")
         print(os.getcwd())
 
-
     # Script execution
     def do_script(self, arg):
         """Execute an external sql file, similar to sql*plus @"""
@@ -1909,12 +1907,9 @@ class PysqlShell(cmd.Cmd):
 
     def __displayCol(self, listOfString):
         """Displays on column the list of strings"""
-        # If terminal width is not set, use a default of 120 (should read real term width !)
         termWidth = self.conf.get("termWidth")
         if termWidth == "auto":
             termWidth = getTermWidth()
-        # BUG: columnize does not support unicode.
-        listOfString = [i.encode(self.conf.getCodec(), "replace") for i in listOfString]
         self.columnize(listOfString, displaywidth=termWidth)
 
     def __displayTab(self, array, header=None):

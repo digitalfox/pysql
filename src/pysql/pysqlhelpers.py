@@ -8,7 +8,7 @@
 
 # Python imports:
 import os
-from os.path import join
+from os.path import join, dirname, pardir
 import sys
 import traceback
 from re import match, sub
@@ -219,15 +219,14 @@ def which(progName):
 
 def warn(message):
     """Just print a formated warning message on screen if PYSQL_WARNING env var is set (whatever value)
-    @param message: unicode or str message. Conversion will done with print and default encoding
+    @param message: str message
     """
     if "PYSQL_WARNING" in os.environ:
         print("%s==>Warning:%s %s%s" % (RED, BOLD, message, RESET))
 
 
 def printStackTrace():
-    """Print stack trace with debug information"""
-    # Just a hook for a more pleasant error handling
+    """Print stack trace with debug information. Just a hook for a more pleasant error handling."""
     print("------------------8<-------------------------------------")
     traceback.print_exc()
     print("------------------8<-------------------------------------")
@@ -255,8 +254,7 @@ def printComponentsVersion():
 def setTitle(title):
     """Sets the window title and optionnaly process title
     @param title: window title
-    @type title: unicode string
-    @param codec: codec used to encode string"""
+    @type title: unicode string"""
     if HAVE_SETPROCTITLE:
         setproctitle.setproctitle(title)
 
@@ -294,6 +292,7 @@ def getTitle():
         title = "terminal"
     return title
 
+
 def getTermWidth():
     """Gets the terminal width. Works only on Unix system.
     @return: terminal width or "120" is system not supported"""
@@ -304,6 +303,7 @@ def getTermWidth():
     else:
         # Unsupported system, use default 120
         return 120
+
 
 def upperIfNoQuotes(aString):
     """Used for Oracle owner and name case policy

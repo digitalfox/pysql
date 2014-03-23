@@ -16,7 +16,7 @@ def setup():
     os.environ["PYDEVDEBUG"]="1"
 
     # Setup gettext to avoid error with the global _() function
-    gettext.install("pysql", "", unicode=1)
+    gettext.install("pysql", "", str=1)
 
     # Add pysql module path
     sys.path.append(abspath(join(dirname(__file__), pardir, "src", "pysql")))

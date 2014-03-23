@@ -18,7 +18,7 @@ class OraObject:
     """Father of all pysql Oracle objects"""
     def __init__(self, objectOwner="", objectName="", objectType="", objectStatus=""):
         """Object creation"""
-        self.setOwner(objectOwner) # Set owner first because setName may override
+        self.setOwner(objectOwner)  # Set owner first because setName may override
         self.setName(objectName)
         self.setType(objectType)
         self.setStatus(objectStatus)
@@ -70,7 +70,7 @@ class OraObject:
             raise PysqlException("Object name must be defined!")
         if objectName.startswith("/"):
             # This should be a datafile
-            #TODO: check if fully compliant with Windows
+            # TODO: check if fully compliant with Windows
             self.objectName = objectName
         elif objectName.count(".") == 1:
             (owner, name) = objectName.split(".")
@@ -143,8 +143,8 @@ class OraObject:
         @type interactive: bool
         @return: True if type and owner are guessed. In interactive mode, returns list of objects found
         """
-        #TODO: this code should be factorized
-        result = set() # Store here all guessInfos results
+        # TODO: this code should be factorized
+        result = set()  # Store here all guessInfos results
         currentUsername = db.getUsername().upper()
         name = self.getName()
         owner = self.getOwner()
@@ -213,7 +213,7 @@ class OraObject:
                 result = set([o for o in result if o.getType() == self.getType()])
             return result
         else:
-            #Giving up.
+            # Giving up.
             return False
 
     def getCreated(self, db):
@@ -229,7 +229,7 @@ class OraObject:
                 result = db.executeAll(tabularSql["createdFromOwnerAndName"],
                                      [self.getOwner(), self.getName()])
         if len(result) == 1:
-            #TODO: use database encoding instead of just using str()
+            # TODO: use database encoding instead of just using str()
             return str(result[0][0])
         else:
             raise PysqlException(_("Cannot get the date of creation on object %s") % self.getName())
@@ -247,7 +247,7 @@ class OraObject:
                 result = db.executeAll(tabularSql["lastDDLFromOwnerAndName"],
                                      [self.getOwner(), self.getName()])
         if len(result) == 1:
-            #TODO: use database encoding instead of just using str()
+            # TODO: use database encoding instead of just using str()
             return str(result[0][0])
         else:
             raise PysqlException(_("Cannot get the date of last DDL modification on object %s") % self.getName())
@@ -264,7 +264,8 @@ class OraObject:
         if len(result) == 0:
             return None
         else:
-            return result[0][0]
+            return str(result[0][0])
+
 
 ##############################################################################
 class OraSegment(OraObject):
@@ -302,7 +303,7 @@ class OraTabular(OraObject):
                 result = db.executeAll(tabularSql["commentFromOwnerAndName"],
                                      [self.getOwner(), self.getName()])
         if len(result) == 1:
-            #TODO: use database encoding instead of just using str()
+            # TODO: use database encoding instead of just using str()
             return str(result[0][0])
         else:
             raise PysqlException(_("Cannot get the comment on object %s") % self.getName())
@@ -684,7 +685,7 @@ class OraSynonym(OraObject):
         If the target is a synonym, recurse to find the real object.
         @return: Returns the synonym target as an OraObject object
         """
-        recursionLimit = 4 # Maximum recursion allowed
+        recursionLimit = 4  # Maximum recursion allowed
         if self.getOwner() == "":
             owner = db.getUsername().upper()
         else:

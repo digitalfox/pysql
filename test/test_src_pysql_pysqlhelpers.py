@@ -80,7 +80,7 @@ class TestRemoveComment(unittest.TestCase):
                      "/**/", "/* */", "/** */", "/* **/", "/***/", "/* lala */", "/*lala */", "/* lala*/", "/*lala*/"):
             unCommentedLine, comment = pysqlhelpers.removeComment(line)
             self.assertFalse(comment)
-            self.failUnlessEqual(unCommentedLine.strip(), "")
+            self.assertEqual(unCommentedLine.strip(), "")
 
     def test_remove_one_line_comment_with_sql(self):
         for answer, question in (("sql ", "sql -- lala"),
@@ -92,7 +92,7 @@ class TestRemoveComment(unittest.TestCase):
                                  ("sql", "sql-- lala --")):
             unCommentedLine, comment = pysqlhelpers.removeComment(question)
             self.assertFalse(comment)
-            self.failUnlessEqual(unCommentedLine, answer)
+            self.assertEqual(unCommentedLine, answer)
 
     def test_remove_multiline_comment(self):
         for anwser, lines in (("sql  sql", ("sql /*", "nice comment", "another comment */", "sql")),
@@ -107,18 +107,18 @@ class TestRemoveComment(unittest.TestCase):
                 unCommentedLine, comment = pysqlhelpers.removeComment(line, comment)
                 if unCommentedLine:
                     result.append(unCommentedLine)
-            self.failUnlessEqual(" ".join(result), anwser)
+            self.assertEqual(" ".join(result), anwser)
 
 
 class TestWhich(unittest.TestCase):
     def test_which(self):
-        self.failUnlessEqual(pysqlhelpers.which("cp"), "/usr/bin/cp")
-        self.failUnlessEqual(pysqlhelpers.which("gabuzomeuhhh"), None)
-        self.failUnlessEqual(pysqlhelpers.which(""), None)
+        self.assertEqual(pysqlhelpers.which("cp"), "/usr/bin/cp")
+        self.assertEqual(pysqlhelpers.which("gabuzomeuhhh"), None)
+        self.assertEqual(pysqlhelpers.which(""), None)
 
 class TestWarn(unittest.TestCase):
     def test_warn(self):
-        for message in ("", "blabla", "ééà€", u"blabal"):
+        for message in ("", "blabla", "ééà€", "blabal"):
             #TODO: handle unicode case
             stdout = sys.stdout
             sys.stdout = TemporaryFile()
@@ -132,15 +132,15 @@ class TestPrintStackTrace(unittest.TestCase):
 class TestSetTitle(unittest.TestCase):
     def test_set_title(self):
         codec = locale.getpreferredencoding()
-        for title in ("", "blabla", u"éééé", u"ééàà€€", "éééààà€€€"):
+        for title in ("", "blabla", "éééé", "ééàà€€", "éééààà€€€"):
             pysqlhelpers.setTitle(title, codec)
 
 class TestGetTitle(unittest.TestCase):
     def test_get_title(self):
         codec = locale.getpreferredencoding()
-        for title in ("", "blabla", u"éééé", u"ééàà€€", "éééààà€€€"):
+        for title in ("", "blabla", "éééé", "ééàà€€", "éééààà€€€"):
             pysqlhelpers.setTitle(title, codec)
-            self.failIfEqual(title, pysqlhelpers.getTitle())
+            self.assertNotEqual(title, pysqlhelpers.getTitle())
 
 class TestGetFromClause(unittest.TestCase):
     def test_simple_from(self):
@@ -151,12 +151,12 @@ class TestGetFromClause(unittest.TestCase):
                              ({"dual" : "dual" }, "select * from dual where dummy='X'"),
                              ({"dual" : "dual" }, "select * from dual order by 1"),
                              ({"dual" : "dual" }, "select dummy, count(1) from dual group by dummy"),):
-            self.failUnlessEqual(tables, pysqlhelpers.getFromClause(line))
+            self.assertEqual(tables, pysqlhelpers.getFromClause(line))
 
 
     def test_imbricated_from(self):
         for tables, line in (({"dual" : "dual" }, "select * from (select * from dual);"),):
-            self.failUnlessEqual(tables, pysqlhelpers.getFromClause(line))
+            self.assertEqual(tables, pysqlhelpers.getFromClause(line))
 
 
 class TestGetKnownTablesViews(unittest.TestCase):
@@ -173,7 +173,7 @@ class TestGetKnownTablesViews(unittest.TestCase):
                              (["dual", ], "select dummy, count(1) from dual group by dummy"),):
             result = pysqlhelpers.getKnownTablesViews(line, refList)
             result.sort()
-            self.failUnlessEqual(tables, result)
+            self.assertEqual(tables, result)
 
 if __name__ == '__main__':
     unittest.main()
