@@ -99,23 +99,17 @@ def awrReport(db, type="txt", begin_snap="0", end_snap="0"):
     @arg end_snap: snapshot"""
 
     # Gets database id and instance number
-    try:
-        dbid = db.executeAll(perfSql["db_id"])[0][0]
-        inum = db.executeAll(perfSql["instance_num"])[0][0]
-    except Exception as e:
-        raise PysqlActionDenied(_("Insufficient privileges"))
+    dbid = db.executeAll(perfSql["db_id"])[0][0]
+    inum = db.executeAll(perfSql["instance_num"])[0][0]
 
     if begin_snap == "0" or end_snap == "0":
         raise PysqlActionDenied(_("Invalid snapshot pair: (%s ; %s)") % (begin_snap, end_snap))
 
     # Generates report
-    try:
-        if type.upper() == "HTML":
-            result = db.executeAll(perfSql["awr_report_html"], [dbid, inum, begin_snap, end_snap])
-        else:
-            result = db.executeAll(perfSql["awr_report_text"], [dbid, inum, begin_snap, end_snap])
-    except Exception as e:
-        raise PysqlActionDenied(_("Insufficient privileges"))
+    if type.upper() == "HTML":
+        result = db.executeAll(perfSql["awr_report_html"], [dbid, inum, begin_snap, end_snap])
+    else:
+        result = db.executeAll(perfSql["awr_report_text"], [dbid, inum, begin_snap, end_snap])
     return result
 
 def sqlTune(db, statement, type="TEXT", level="TYPICAL"):
