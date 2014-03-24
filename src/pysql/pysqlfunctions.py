@@ -553,8 +553,6 @@ def editor(content=""):
         tempDir = getenv("TEMP", ".")
     else:
         raise PysqlException(_("No editors are supported on this platform. Sorry."))
-    # Computes actual properties md5
-    checkSum = md5(content).hexdigest()
     try:
         # Writes actual properties to temp file
         filePath = os.path.join(tempDir, "pysql-" + str(os.getpid()) + ".tmp")
@@ -567,15 +565,15 @@ def editor(content=""):
             raise PysqlException(_("Editor exited with status %s") % exitStatus)
         # Updates properties with new value
         tmp = open(filePath, mode="r", encoding="utf-8")
-        content = tmp.read()
+        newContent = tmp.read()
         tmp.close()
         unlink(filePath)
     except IOError as e:
         raise PysqlException(_("Error while using temporary file (%s)") % e)
-    if checkSum == md5(content).hexdigest():
+    if newContent == content:
         return None
     else:
-        return content
+        return newContent
 
 
 def explain(db, statement):
