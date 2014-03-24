@@ -652,21 +652,30 @@ def sessionStat(db, sid, stat=None):
         return db.executeAll(sessionStatSql[stat], [sid])
 
 
-def killSession(db, session, immediate=False):
+def killSession(db, sid, serial, immediate=False):
     """Kills the given sessions
-    @param session: 'session-id,session-serial'
-    @type session: str
+    @param sid: Oracle session-id
+    @type sid: str
+    @param serial: Oracle session serial, can be None, it is guessed if there's only one serial for this SID
+    @param serial: str or None
     @param immediate: sends the immediate option to kill
     @type immediate: bool
     @return: None but raises an exception if session does not exist
     """
-    sql = """alter system kill session '%s'""" % session
+    # TODO: guess serial from sid
+    if serial is None:
+        result = db.executeAll(sessionStatSql["serialFromSid"], [sid, ])
+        if len(result) == 1:
+            serial = result[0][0]
+        elif len(result) == 0:
+            raise PysqlException(_("This SID does not exit"))
+        else:
+            raise PysqlException(_("Multiple serial for this Sid. Please indicate the proper serial"))
+    sql = """alter system kill session '%s,%s'""" % (sid, serial)
     if immediate:
         sql += " immediate"
-    try:
-        db.execute(sql)
-    except PysqlException:
-        raise PysqlActionDenied(_("Insufficient privileges"))
+
+    db.execute(sql)
 
 
 def showParameter(db, param=""):

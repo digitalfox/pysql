@@ -1124,8 +1124,13 @@ class PysqlShell(cmd.Cmd):
         self.__checkConnection()
         parser = self.parser_kill()
         options, args = parser.parse_args(arg)
-        self.__checkArg(args, "==2")
-        pysqlfunctions.killSession(self.db, ",".join(args), immediate=options.immediate)
+        self.__checkArg(args, ">=1")
+        sid = args[0]
+        if len(args) > 1:
+            serial = args[1]
+        else:
+            serial = None
+        pysqlfunctions.killSession(self.db, sid, serial, immediate=options.immediate)
         print(GREEN + _("Kill signal has been sent to the session") + RESET)
 
     def do_lock(self, arg):

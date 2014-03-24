@@ -407,7 +407,8 @@ sessionStatSql = {
                                 order by b.piece""",
     "longops":               """select target "Target", message "Message", start_time "Start time", start_time + elapsed_seconds/(60*60*24) "End time",  round(100*sofar/totalwork,2) "Progress (%)"
                                 from v$session_longops
-                                where time_remaining!=0 and sid = :1 order by start_time"""
+                                where time_remaining!=0 and sid = :1 order by start_time""",
+    "serialFromSid":         """select serial# from v$session where SID = :1 """
 }
 
 # Queries used in pysqlgraphics
