@@ -49,18 +49,18 @@ class PysqlDb:
         try:
             if mode == "sysoper":
                 try:
-                    self.connection = connect(self.connectString, mode=SYSOPER)
+                    self.connection = connect(self.connectString, mode=SYSOPER, threaded=True)
                 except (DatabaseError) as e:
                     print(CYAN + _("Connected to an idle instance") + RESET)
-                    self.connection = connect(self.connectString, mode=SYSOPER | PRELIM_AUTH)
+                    self.connection = connect(self.connectString, mode=SYSOPER | PRELIM_AUTH, threaded=True)
             elif mode == "sysdba":
                 try:
-                    self.connection = connect(self.connectString, mode=SYSDBA)
+                    self.connection = connect(self.connectString, mode=SYSDBA, threaded=True)
                 except (DatabaseError) as e:
                     print(CYAN + _("Connected to an idle instance") + RESET)
-                    self.connection = connect(self.connectString, mode=SYSDBA | PRELIM_AUTH)
+                    self.connection = connect(self.connectString, mode=SYSDBA | PRELIM_AUTH, threaded=True)
             else:
-                self.connection = connect(self.connectString)
+                self.connection = connect(self.connectString, threaded=True)
         except (DatabaseError, RuntimeError, InterfaceError) as e:
             raise PysqlException(_("Cannot connect to Oracle: %s") % e)
 
@@ -70,7 +70,7 @@ class PysqlDb:
             raise PysqlException(_("Your Oracle and/or cx_Oracle version is too old to support startup option"))
         try:
             self.connection.startup()
-            self.connection = connect("/", mode=SYSDBA)
+            self.connection = connect("/", mode=SYSDBA, threaded=True)
             self.cursor = self.connection.cursor()
             self.cursor.execute("alter database mount")
             if mode == "normal":
@@ -92,7 +92,7 @@ class PysqlDb:
             else:
                 self.connection.shutdown(mode=DBSHUTDOWN_TRANSACTIONAL)
                 self.connection.shutdown(mode=DBSHUTDOWN_FINAL)
-            self.connection = connect("/", mode=SYSDBA | PRELIM_AUTH)
+            self.connection = connect("/", mode=SYSDBA | PRELIM_AUTH, threaded=True)
         except DatabaseError as e:
             raise PysqlException(_("Cannot shut instance down: %s") % e)
 
