@@ -410,13 +410,13 @@ class PysqlShell(cmd.Cmd):
         """Completion for command get"""
         if not self.useCompletion:
             return
-        return self.__getCompletionItems(text, ["parameters"])
+        return self.__getCompletionItems(text, ["parameters", ])
 
     def complete_set(self, text, line, begidx, endidx):
         """Completion for command set"""
         if not self.useCompletion:
             return
-        return self.__getCompletionItems(text, ["parameters"])
+        return self.__getCompletionItems(text, ["parameters", ])
 
     def complete_library(self, text, line, begidx, endidx):
         """Completion for library command"""

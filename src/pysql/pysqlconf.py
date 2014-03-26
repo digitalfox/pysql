@@ -123,6 +123,7 @@ class PysqlConf:
     def getConfig(cls):
         """Factory for configuration instance singleton
         @return: PysqlConf instance"""
+        # TODO: add locking. Not thread safe
         if cls.configInstance is None:
             cls.configInstance = PysqlConf()
         return cls.configInstance

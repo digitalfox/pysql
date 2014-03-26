@@ -14,6 +14,7 @@ from threading import Thread
 
 # Pysql imports:
 from .pysqldb import PysqlDb
+from .pysqlconf import PysqlConf
 from .pysqlcolor import *
 from .pysqlqueries import gatherCompleteSql
 from .pysqloraobjects import OraObject
@@ -62,6 +63,7 @@ class CompleteGatheringWorker(Thread):
 
     def run(self):
         """Method executed when the thread object start() method is called"""
+        self.gatherParameters()
         time.sleep(0.5)  # Small delay to let primary connection goes first
         self.db = PysqlDb(self.connect_string, self.mode)
         self.gatherSID()
@@ -82,3 +84,6 @@ class CompleteGatheringWorker(Thread):
                            "directory", "trigger", "user"):
             objects = self.db.executeAll(gatherCompleteSql[objectType])
             self.completeLists[objectType] = [i[0] for i in objects]
+
+    def gatherParameters(self):
+        self.completeLists["parameters"] = [i[0].upper() for i in PysqlConf.getConfig().getAll()]
