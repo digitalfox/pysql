@@ -289,7 +289,9 @@ class BgQuery(Thread):
     def run(self):
         """Method executed when the thread object start() method is called"""
         try:
-            (self.result, self.moreRows) = self.db.execute(self.query)
+            result = self.db.execute(self.query)
+            if self.query.upper().startswith("SELECT"):
+                (self.result, self.moreRows) = result
         except PysqlException as e:
             self.error = str(e)
             self.exceptions.append(e)
